@@ -1,0 +1,2430 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Sổ tay họp tiếng Hàn</title>
+<meta name="description" content="Thẻ ghi nhớ, trắc nghiệm và danh sách từ vựng – câu mẫu Việt–Hàn cho buổi họp tuần.">
+<meta name="theme-color" content="#2C7769">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Họp tiếng Hàn">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%232C7769'/%3E%3Ctext x='32' y='44' font-size='34' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3E%ED%95%9C%3C/text%3E%3C/svg%3E">
+<style>html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Gowun+Batang:wght@400;700&display=swap">
+<style>
+/* Layout: one centered study column — deck chips, progress meter, then the active mode (flashcards / quiz / list). */
+:root {
+  --bg: #F1F5F3;
+  --surface: #FFFFFF;
+  --sunk: #E6EDEA;
+  --ink: #17252A;
+  --muted: #586967;
+  --line: #D2DCD8;
+  --accent: #2C7769;
+  --accent-ink: #FFFFFF;
+  --accent-soft: #DCEEE8;
+  --x: #C2410C;
+  --x-soft: #FBE6DA;
+  --hard: #B42318;
+  --hard-soft: #FBE3E0;
+  --med: #9A5B05;
+  --med-soft: #F8EDD3;
+  --easy: #2D7A4C;
+  --easy-soft: #DCF0E3;
+  --new: #A9B6B3;
+  --hl1: #FFE38A; --hl2: #BFE3FF; --hl3: #FFC9DA; --hl4: #C9EDC0;
+  --shadow: 0 1px 2px rgb(23 37 42 / .06), 0 10px 28px rgb(23 37 42 / .07);
+  --ui: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ko: "Gowun Batang", "Noto Serif KR", "Apple SD Gothic Neo", "Malgun Gothic", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1615; --surface: #16211F; --sunk: #1D2A28; --ink: #E4EEEB; --muted: #9AAEA9; --line: #2A3A37;
+    --accent: #6CC2AC; --accent-ink: #0E1615; --accent-soft: #1D3A33;
+    --x: #F08A5D; --x-soft: #3A2419;
+    --hard: #F07167; --hard-soft: #3A1E1C; --med: #E2B04A; --med-soft: #372B14; --easy: #6FCF97; --easy-soft: #183223;
+    --new: #4A5B58; --hl1: #5E4E10; --hl2: #1D4560; --hl3: #5A2638; --hl4: #2A4E25; --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 10px 28px rgb(0 0 0 / .25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1615; --surface: #16211F; --sunk: #1D2A28; --ink: #E4EEEB; --muted: #9AAEA9; --line: #2A3A37;
+  --accent: #6CC2AC; --accent-ink: #0E1615; --accent-soft: #1D3A33;
+  --x: #F08A5D; --x-soft: #3A2419;
+  --hard: #F07167; --hard-soft: #3A1E1C; --med: #E2B04A; --med-soft: #372B14; --easy: #6FCF97; --easy-soft: #183223;
+  --new: #4A5B58; --hl1: #5E4E10; --hl2: #1D4560; --hl3: #5A2638; --hl4: #2A4E25; --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 10px 28px rgb(0 0 0 / .25);
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--ui);
+  font-size: 15px;
+  line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 20px 48px;
+}
+button, select, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.app { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+
+/* Header */
+.top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 16px; }
+.eyebrow { margin: 0 0 4px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+h1 { margin: 0; font-size: clamp(24px, 5vw, 32px); line-height: 1.15; font-weight: 700; text-wrap: balance; }
+.subko { margin: 4px 0 0; font-family: var(--ko); font-size: 17px; color: var(--accent); }
+.sync { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px 5px 10px; }
+.sync::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--new); }
+.sync[data-s="cloud"]::before { background: var(--easy); }
+.sync[data-s="saving"]::before, .sync[data-s="loading"]::before { background: var(--med); }
+.sync[data-s="local"]::before, .sync[data-s="stale"]::before, .sync[data-s="error"]::before { background: var(--x); }
+
+/* Decks */
+.decks { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 6px 12px; font-size: 14px; }
+.chip .n { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.chip .xn { font-size: 11px; font-weight: 700; color: var(--x); background: var(--x-soft); border-radius: 999px; padding: 0 6px; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.chip[aria-pressed="true"] .n { color: inherit; opacity: .75; }
+
+/* Stats */
+.stats { display: flex; flex-direction: column; gap: 8px; }
+.meter { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: var(--sunk); }
+.meter span { display: block; height: 100%; transition: width .3s ease; }
+.meter .h { background: var(--hard); } .meter .m { background: var(--med); } .meter .e { background: var(--easy); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.legend b { color: var(--ink); font-weight: 600; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+
+/* Toolbar */
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+.tabs { display: inline-flex; background: var(--sunk); border-radius: 12px; padding: 3px; gap: 2px; }
+.tabs button { border: 0; background: transparent; border-radius: 9px; padding: 7px 14px; font-weight: 500; color: var(--muted); }
+.tabs button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgb(0 0 0 / .08); }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.filters select, .ghost { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 6px 10px; font-size: 14px; }
+.ghost:hover { border-color: var(--accent); }
+
+/* Flashcard */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); min-height: 300px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; user-select: none; -webkit-user-select: none; }
+.card-top, .card-bottom { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.meta { font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.pills { display: inline-flex; gap: 6px; }
+.pill { font-size: 12px; font-weight: 600; border-radius: 999px; padding: 2px 9px; }
+.pill.x { color: var(--x); background: var(--x-soft); }
+.pill.h { color: var(--hard); background: var(--hard-soft); }
+.pill.m { color: var(--med); background: var(--med-soft); }
+.pill.e { color: var(--easy); background: var(--easy-soft); }
+.ctx { margin: 0; font-size: 13px; color: var(--muted); border-left: 2px solid var(--line); padding-left: 10px; }
+.ctx.ko { font-family: var(--ko); font-size: 15px; }
+.stage { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 14px; text-align: center; padding: 8px 0; min-width: 0; }
+.prompt, .answer { margin: 0; text-wrap: balance; overflow-wrap: anywhere; max-width: 36ch; }
+.prompt { font-size: clamp(20px, 4.6vw, 27px); font-weight: 500; line-height: 1.35; }
+.prompt.ko { font-family: var(--ko); font-weight: 700; font-size: clamp(22px, 5.2vw, 31px); }
+.prompt.long { font-size: clamp(17px, 3.9vw, 21px); }
+.prompt.ko.long { font-size: clamp(19px, 4.4vw, 24px); }
+.prompt.small { font-size: 15px; font-weight: 400; color: var(--muted); }
+.prompt.ko.small { font-size: 16px; font-weight: 400; }
+.answer { font-size: clamp(20px, 4.6vw, 27px); font-weight: 600; line-height: 1.4; color: var(--accent); }
+.answer.ko { font-family: var(--ko); font-weight: 700; font-size: clamp(23px, 5.4vw, 33px); }
+.answer.long { font-size: clamp(17px, 3.9vw, 22px); }
+.answer.ko.long { font-size: clamp(20px, 4.6vw, 26px); }
+.hint { font-size: 13px; color: var(--muted); }
+/* Korean wraps between words, never inside one */
+.prompt.ko, .answer.ko, .opt.ko, .qprompt.ko, .row .ko, .subko, .ctx.ko { word-break: keep-all; overflow-wrap: break-word; }
+/* Tap-to-highlight phrase pairs */
+.ph { border-radius: 4px; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.ph.tap { cursor: pointer; text-decoration: underline dotted; text-decoration-color: var(--muted); text-decoration-thickness: 1px; text-underline-offset: 5px; }
+.ph.hl1, .ph.hl2, .ph.hl3, .ph.hl4 { color: var(--ink); text-decoration: none; padding: 0 3px; }
+.ph.hl1 { background: var(--hl1); } .ph.hl2 { background: var(--hl2); } .ph.hl3 { background: var(--hl3); } .ph.hl4 { background: var(--hl4); }
+.hl-list { display: flex; flex-direction: column; gap: 6px; border-top: 1px solid var(--line); padding-top: 10px; cursor: default; }
+.hl-title { margin: 0; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.hl-item { display: flex; align-items: center; gap: 6px 10px; flex-wrap: wrap; font-size: 14px; }
+.hl-item .sw { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.hl-item .k { font-family: var(--ko); font-weight: 700; font-size: 16px; word-break: keep-all; }
+.hl-item .p { color: var(--muted); font-style: italic; }
+.hl-item .speak { width: 30px; height: 30px; margin-left: auto; }
+.row .src { display: block; margin-top: 4px; font-size: 12px; color: var(--muted); }
+.pron { margin: 0; font-size: 15px; font-style: italic; color: var(--muted); line-height: 1.45; max-width: 40ch; overflow-wrap: anywhere; }
+.pron::before { content: "Đọc: "; font-style: normal; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; font-weight: 600; }
+.row .pron { font-size: 13px; margin-top: 2px; max-width: none; }
+.quiz .pron { max-width: none; }
+.pron-toggle { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 5px 10px; color: var(--ink); font-size: 14px; }
+.speak { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; width: 38px; height: 38px; display: inline-grid; place-items: center; color: var(--accent); flex: none; }
+.speak:hover { border-color: var(--accent); }
+.speak svg { width: 18px; height: 18px; }
+.no-tts .speak, .no-tts .tts-only { display: none; }
+.voice { border: 1px solid var(--line); background: var(--surface); border-radius: 14px; padding: 10px 14px; }
+.voice summary { cursor: pointer; font-weight: 600; font-size: 14px; }
+.voice-grid { display: grid; gap: 10px; margin-top: 10px; }
+.voice-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.voice-row label { min-width: 84px; font-size: 14px; color: var(--muted); }
+.voice-row select { flex: 1 1 220px; min-width: 0; max-width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 6px 10px; font-size: 14px; }
+.voice-note { margin: 0; font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+
+.navrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.navrow button { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 9px 16px; font-weight: 500; }
+.navrow button:disabled { opacity: .4; cursor: default; }
+.counter { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 14px; }
+
+.raterow { display: flex; flex-wrap: wrap; gap: 10px; align-items: stretch; }
+.xbtn { border: 1.5px solid var(--x); color: var(--x); background: transparent; border-radius: 12px; padding: 9px 14px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; }
+.xbtn .mark { font-size: 16px; line-height: 1; }
+.xbtn[aria-pressed="true"] { background: var(--x); color: var(--surface); }
+.levels { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; min-width: 220px; }
+.levels button { border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 9px 6px; font-weight: 600; }
+.levels [data-lv="h"] { color: var(--hard); } .levels [data-lv="m"] { color: var(--med); } .levels [data-lv="e"] { color: var(--easy); }
+.levels [data-lv="h"][aria-pressed="true"] { background: var(--hard-soft); border-color: var(--hard); }
+.levels [data-lv="m"][aria-pressed="true"] { background: var(--med-soft); border-color: var(--med); }
+.levels [data-lv="e"][aria-pressed="true"] { background: var(--easy-soft); border-color: var(--easy); }
+.keys { margin: 0; font-size: 12px; color: var(--muted); }
+.keys kbd { font-family: var(--ui); font-size: 11px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; background: var(--surface); }
+
+.empty { background: var(--surface); border: 1px dashed var(--line); border-radius: 18px; padding: 28px 20px; text-align: center; color: var(--muted); display: flex; flex-direction: column; gap: 12px; align-items: center; }
+.empty p { margin: 0; }
+.primary { border: 0; background: var(--accent); color: var(--accent-ink); border-radius: 12px; padding: 9px 16px; font-weight: 600; }
+
+/* Quiz */
+.quiz { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+.qprompt { margin: 0; font-size: clamp(18px, 4.2vw, 24px); font-weight: 600; line-height: 1.4; text-wrap: balance; }
+.qprompt.ko { font-family: var(--ko); font-weight: 700; }
+.options { display: grid; gap: 8px; }
+.opt { text-align: left; border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 11px 14px; line-height: 1.45; }
+.opt.ko { font-family: var(--ko); font-size: 17px; }
+.opt:hover:not(:disabled) { border-color: var(--accent); }
+.opt:disabled { cursor: default; }
+.opt.right { border-color: var(--easy); background: var(--easy-soft); }
+.opt.wrong { border-color: var(--hard); background: var(--hard-soft); }
+.feedback { margin: 0; font-weight: 600; min-height: 1.5em; }
+.feedback.ok { color: var(--easy); } .feedback.bad { color: var(--hard); }
+.qfoot { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
+.check { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.score { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+/* List */
+.search { width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 12px; padding: 10px 14px; font-size: 15px; }
+.list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.row { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 14px; align-items: center; }
+.row .vi { margin: 0; font-size: 14px; }
+.row .ko { margin: 2px 0 0; font-family: var(--ko); font-size: 17px; font-weight: 700; color: var(--accent); }
+.row .tag { display: block; margin-top: 4px; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.ctrl { display: flex; gap: 6px; align-items: center; }
+.ctrl .xs { border: 1.5px solid var(--x); color: var(--x); background: transparent; border-radius: 9px; width: 34px; height: 32px; font-weight: 800; }
+.ctrl .xs[aria-pressed="true"] { background: var(--x); color: var(--surface); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; }
+.seg button { border: 0; background: var(--surface); padding: 0 9px; height: 32px; font-size: 13px; font-weight: 600; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg [data-lv="h"] { color: var(--hard); } .seg [data-lv="m"] { color: var(--med); } .seg [data-lv="e"] { color: var(--easy); }
+.seg [data-lv="h"][aria-pressed="true"] { background: var(--hard-soft); }
+.seg [data-lv="m"][aria-pressed="true"] { background: var(--med-soft); }
+.seg [data-lv="e"][aria-pressed="true"] { background: var(--easy-soft); }
+.ctrl .speak { width: 32px; height: 32px; }
+.listinfo { margin: 0; font-size: 13px; color: var(--muted); }
+.touch-keys { display: none; }
+@media (hover: none) and (pointer: coarse) { .desk-keys { display: none; } .touch-keys { display: block; } }
+
+@media (max-width: 520px) {
+  .row { grid-template-columns: minmax(0, 1fr); }
+  .tabs { width: 100%; } .tabs button { flex: 1; padding-inline: 4px; font-size: 13px; }
+}
+
+/* Footer */
+.foot { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 14px; font-size: 13px; color: var(--muted); }
+.confirm { display: inline-flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.danger { border: 0; background: var(--hard); color: var(--surface); border-radius: 10px; padding: 6px 12px; font-weight: 600; }
+/* ---- Additions: more study modes, sets, sync, speed ---- */
+.sync { cursor: pointer; font: inherit; font-size: 13px; text-align: left; max-width: 100%; }
+.sync:hover { border-color: var(--accent); }
+.tabs { flex-wrap: wrap; }
+@media (max-width: 520px) {
+  .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .tabs button { padding: 8px 4px; }
+}
+.rate-wrap { display: inline-flex; align-items: center; gap: 8px; }
+.rate-l { font-size: 13px; color: var(--muted); }
+.seg.rate button { color: var(--muted); }
+.seg.rate button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); }
+.counter-wrap { display: inline-flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.autoplay { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 5px 10px; font-size: 13px; }
+.autoplay[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.field { width: 100%; border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 12px; padding: 10px 12px; font-size: 16px; min-width: 0; }
+.field.small { width: auto; font-size: 14px; padding: 6px 10px; border-radius: 10px; }
+textarea.field { resize: vertical; line-height: 1.5; }
+.field:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px var(--accent-soft); }
+.flabel { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+.flabel > span { font-weight: 600; }
+.wform { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.wform .field { flex: 1 1 220px; }
+.btnrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.ghost:disabled, .primary:disabled { opacity: .5; cursor: default; }
+.stagebox { display: flex; flex-direction: column; gap: 12px; }
+.prompt-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.prompt-row .qprompt { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.reveal { background: var(--sunk); border-radius: 12px; padding: 10px 14px; display: flex; flex-direction: column; gap: 4px; }
+.reveal-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.reveal-a { margin: 0; font-size: 18px; font-weight: 600; color: var(--accent); overflow-wrap: anywhere; }
+.reveal-a.ko, .reveal-k, .tf-shown.ko, .mt-ans .ko, .mt-row .ko, .sumlist .ko { font-family: var(--ko); word-break: keep-all; overflow-wrap: break-word; }
+.reveal-k { margin: 0; font-size: 16px; }
+.reveal .hint, .reveal .pron { margin: 0; }
+.sumbig { margin: 0; font-size: 28px; font-weight: 700; line-height: 1.2; }
+.sumlist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.listen-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.listen-row .primary { font-size: 17px; padding: 12px 22px; }
+.checks { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.opt.chosen { border-color: var(--accent); background: var(--accent-soft); }
+.tfb[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.tq { border-top: 1px solid var(--line); padding-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.tq-head { margin: 0; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.tq.ok .tq-head { color: var(--easy); } .tq.bad .tq-head { color: var(--hard); }
+.tq.ok .tq-head::after { content: " · Đúng"; } .tq.bad .tq-head::after { content: " · Sai"; }
+.tf-shown { margin: 0; font-size: 17px; font-weight: 600; color: var(--accent); overflow-wrap: anywhere; }
+.mt-row { display: flex; gap: 10px; align-items: center; border-radius: 10px; padding: 4px; }
+.mt-row .mt-sel { width: 72px; flex: none; }
+.mt-row.ok { background: var(--easy-soft); } .mt-row.bad { background: var(--hard-soft); }
+.mt-row .fix { color: var(--hard); font-weight: 700; }
+.mt-ans { list-style: none; margin: 0; padding: 10px 12px; background: var(--sunk); border-radius: 12px; display: flex; flex-direction: column; gap: 4px; }
+.tscore { border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.tscore p { margin: 0; }
+.tscore.good { background: var(--easy-soft); } .tscore.mid { background: var(--med-soft); } .tscore.low { background: var(--hard-soft); }
+.mgrid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 620px) { .mgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.tile { min-height: 86px; border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 8px; font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; transition: background .15s, border-color .15s, opacity .2s; }
+.tile.ko { font-family: var(--ko); font-size: 15px; word-break: keep-all; }
+.tile.sel { border-color: var(--accent); background: var(--accent-soft); }
+.tile.bad { border-color: var(--hard); background: var(--hard-soft); }
+.tile.gone { visibility: hidden; }
+.panel h2 { margin: 0; font-size: 17px; }
+.panel { gap: 12px; }
+.sgroup { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+.shead { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.shead .n { color: var(--muted); font-size: 13px; }
+.sctl { margin-left: auto; display: inline-flex; gap: 6px; flex-wrap: wrap; }
+.eform { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.row .eform { grid-column: 1 / -1; }
+.notice { margin: 0; background: var(--accent-soft); color: var(--ink); border-radius: 12px; padding: 10px 14px; font-weight: 500; }
+.howto { margin-top: 6px; }
+.howto summary { cursor: pointer; font-size: 13.5px; color: var(--accent); font-weight: 600; }
+.howto ol { padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.rules { background: var(--sunk); border-radius: 10px; padding: 10px; font-size: 12.5px; overflow-x: auto; margin: 6px 0; }
+#syncOffBox, #syncOnBox { display: flex; flex-direction: column; gap: 10px; }
+#syncOffBox[hidden], #syncOnBox[hidden] { display: none; }
+#syncQrBox { display: flex; flex-direction: column; gap: 8px; }
+.qr { background: #fff; padding: 10px; border-radius: 12px; width: 220px; max-width: 100%; }
+.qr svg { display: block; width: 100%; height: auto; }
+code { font-size: 12.5px; background: var(--sunk); border-radius: 6px; padding: 1px 6px; overflow-wrap: anywhere; }
+.dim { color: var(--muted); font-size: 12px; overflow-wrap: anywhere; }
+.voice-row .field { flex: 1 1 220px; }
+.nv[hidden] { display: none !important; }
+.nv { display: flex; flex-direction: column; gap: 10px; }
+@media (max-width: 520px) {
+  .decks { flex-wrap: nowrap; overflow-x: auto; margin-inline: -16px; padding: 2px 16px 6px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .decks::-webkit-scrollbar { display: none; }
+  .chip { flex: none; }
+}
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<script src="qrcode.js" defer></script>
+</head>
+<body>
+<div class="app" id="app">
+  <header class="top">
+    <div>
+      <p class="eyebrow">VIKO · Họp tuần với 부팀장님</p>
+      <h1>Sổ tay họp tiếng Hàn</h1>
+      <p class="subko">주간 회의 표현집</p>
+    </div>
+    <button type="button" class="sync" id="sync" data-s="local" aria-live="polite">Chỉ lưu trên máy này</button>
+  </header>
+
+  <nav class="decks" id="decks" aria-label="Chủ đề"></nav>
+
+  <section class="stats" aria-label="Mức độ thuộc">
+    <div class="meter" id="meter" aria-hidden="true"><span class="h"></span><span class="m"></span><span class="e"></span></div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <div class="toolbar">
+    <div class="tabs" role="tablist" aria-label="Cách học">
+      <button type="button" role="tab" data-mode="cards" id="tab-cards">Thẻ ghi nhớ</button>
+      <button type="button" role="tab" data-mode="learn" id="tab-learn">Học</button>
+      <button type="button" role="tab" data-mode="write" id="tab-write">Viết</button>
+      <button type="button" role="tab" data-mode="test" id="tab-test">Kiểm tra</button>
+      <button type="button" role="tab" data-mode="match" id="tab-match">Ghép thẻ</button>
+      <button type="button" role="tab" data-mode="quiz" id="tab-quiz">Trắc nghiệm</button>
+      <button type="button" role="tab" data-mode="list" id="tab-list">Danh sách</button>
+      <button type="button" role="tab" data-mode="words" id="tab-words">Từ đã tô</button>
+      <button type="button" role="tab" data-mode="sets" id="tab-sets">Học phần</button>
+    </div>
+    <div class="filters">
+      <select id="status" aria-label="Lọc theo trạng thái">
+        <option value="all">Tất cả thẻ</option>
+        <option value="x">Đã đánh dấu X</option>
+        <option value="h">Khó</option>
+        <option value="m">Vừa</option>
+        <option value="e">Dễ</option>
+        <option value="new">Chưa đánh giá</option>
+        <option value="hl">Có tô sáng</option>
+      </select>
+      <select id="order" aria-label="Thứ tự">
+        <option value="default">Thứ tự gốc</option>
+        <option value="hard">X và Khó trước</option>
+        <option value="shuffle">Trộn ngẫu nhiên</option>
+      </select>
+      <button type="button" class="ghost" id="reshuffle" hidden>Trộn lại</button>
+      <button type="button" class="ghost" id="dir" aria-label="Đổi chiều học">Việt → Hàn</button>
+      <label class="check pron-toggle"><input type="checkbox" id="showPron" checked> Phiên âm</label>
+      <label class="check pron-toggle tts-only"><input type="checkbox" id="autoRead" checked> Tự đọc tiếng Việt</label>
+      <span class="rate-wrap tts-only"><span class="rate-l">Tốc độ đọc</span><span class="seg rate" role="group" aria-label="Tốc độ đọc"><button type="button" data-rate="slow">Chậm</button><button type="button" data-rate="mid">Vừa</button><button type="button" data-rate="fast">Nhanh</button></span></span>
+    </div>
+  </div>
+
+  <details class="voice tts-only" id="voicePanel">
+    <summary>Giọng đọc</summary>
+    <div class="voice-grid">
+      <div class="voice-row"><label for="voiceKo">Tiếng Hàn</label><select id="voiceKo"></select><button type="button" class="ghost" data-test="ko">Nghe thử</button></div>
+      <div class="voice-row"><label for="voiceVi">Tiếng Việt</label><select id="voiceVi"></select><button type="button" class="ghost" data-test="vi">Nghe thử</button></div>
+      <p class="voice-note" id="voiceStatus"></p>
+      <p class="voice-note"><b>Cách có giọng tự nhiên trên máy này:</b> <span id="voiceGuide"></span></p>
+      <p class="voice-note">Tốc độ Chậm / Vừa / Nhanh chỉnh ở thanh công cụ phía trên, áp dụng cho mọi chế độ.</p>
+      <p class="voice-note" id="voiceMissing" hidden></p>
+    </div>
+  </details>
+
+  <details class="voice" id="syncPanel">
+    <summary>Đồng bộ máy tính ↔ điện thoại</summary>
+    <div class="voice-grid">
+      <div id="syncOffBox">
+        <p class="voice-note">Bật một lần trên máy tính, sau đó quét mã QR bằng điện thoại. Từ đó dấu X, mức Khó / Vừa / Dễ, từ đã tô, tiến độ Học và thẻ tự tạo tự đồng bộ giữa các máy, gần như tức thì.</p>
+        <div class="voice-row"><label for="syncUrl">Địa chỉ CSDL</label><input class="field" id="syncUrl" type="url" placeholder="https://…firebasedatabase.app" autocomplete="off"></div>
+        <div class="voice-row"><label for="syncCode">Mã đồng bộ</label><input class="field" id="syncCode" type="text" placeholder="Để trống để tạo mã mới" autocomplete="off" autocapitalize="off"></div>
+        <div class="btnrow"><button type="button" class="primary" id="syncOn">Bật đồng bộ</button></div>
+        <p class="voice-note" id="syncMsg" aria-live="polite"></p>
+        <details class="howto"><summary>Cách tạo địa chỉ CSDL miễn phí (khoảng 3 phút, làm một lần)</summary>
+          <ol class="voice-note">
+            <li>Vào <b>console.firebase.google.com</b>, đăng nhập bằng tài khoản Google, bấm <b>Tạo dự án</b> (đặt tên tuỳ ý, có thể tắt Google Analytics).</li>
+            <li>Ở menu trái chọn <b>Build › Realtime Database › Create Database</b>, chọn vị trí <b>Singapore</b>, chọn <b>Start in locked mode</b>.</li>
+            <li>Mở tab <b>Rules</b>, xoá hết rồi dán đoạn dưới đây, bấm <b>Publish</b>.</li>
+            <li>Mở tab <b>Data</b>, sao chép địa chỉ ở đầu trang (dạng https://…firebasedatabase.app), dán vào ô “Địa chỉ CSDL” ở trên và bấm <b>Bật đồng bộ</b>.</li>
+          </ol>
+          <pre class="rules" id="syncRules"></pre>
+          <button type="button" class="ghost" id="syncCopyRules">Sao chép Rules</button>
+        </details>
+      </div>
+      <div id="syncOnBox" hidden>
+        <p class="voice-note">Đang đồng bộ với mã <code id="syncCodeShow"></code><br><span class="dim" id="syncUrlShow"></span></p>
+        <p class="voice-note" id="syncFileNote" hidden>Bạn đang mở trang từ tệp trên máy. Để liên kết điện thoại, hãy mở trang từ link web (ví dụ link Netlify) rồi tạo mã QR ở đó.</p>
+        <div class="btnrow">
+          <button type="button" class="primary" id="syncShowQr">Liên kết điện thoại / máy khác</button>
+          <button type="button" class="ghost" id="syncCopy">Sao chép link liên kết</button>
+          <button type="button" class="ghost" id="syncNow">Đồng bộ ngay</button>
+          <button type="button" class="ghost" id="syncOffBtn">Tắt đồng bộ trên máy này</button>
+        </div>
+        <div id="syncQrBox" hidden>
+          <p class="voice-note">Quét mã này bằng camera điện thoại (hoặc gửi link bên dưới qua Zalo cho chính bạn). Mở link là điện thoại tự liên kết, không cần nhập gì.</p>
+          <div class="qr" id="syncQr"></div>
+          <input class="field" id="syncLinkText" readonly>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <!-- Flashcards -->
+  <section id="view-cards">
+    <div id="cardWrap" style="display:flex;flex-direction:column;gap:12px">
+      <div class="card" id="card" role="button" tabindex="0" aria-label="Lật thẻ">
+        <div class="card-top"><span class="meta" id="cMeta"></span><span class="pills" id="cPills"></span></div>
+        <p class="ctx" id="cCtx" hidden></p>
+        <div class="stage">
+          <p class="prompt" id="cPrompt"></p>
+          <p class="answer" id="cAnswer" hidden></p>
+          <p class="pron" id="cPron" hidden></p>
+        </div>
+        <div class="hl-list" id="cHl" hidden></div>
+        <div class="card-bottom">
+          <span class="hint" id="cHint"></span>
+          <button type="button" class="speak" id="cSpeak" aria-label="Nghe tiếng Hàn" title="Nghe tiếng Hàn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor" stroke="none"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="navrow">
+        <button type="button" id="prev">← Trước</button>
+        <span class="counter-wrap"><span class="counter" id="counter"></span><button type="button" class="ghost autoplay" id="autoPlay" aria-pressed="false">▶ Tự phát</button></span>
+        <button type="button" id="next">Tiếp →</button>
+      </div>
+      <div class="raterow">
+        <button type="button" class="xbtn" id="cX" aria-pressed="false"><span class="mark">X</span> Học lại</button>
+        <div class="levels" role="group" aria-label="Mức độ thuộc">
+          <button type="button" data-lv="h" aria-pressed="false">Khó</button>
+          <button type="button" data-lv="m" aria-pressed="false">Vừa</button>
+          <button type="button" data-lv="e" aria-pressed="false">Dễ</button>
+        </div>
+      </div>
+      <p class="keys touch-keys">Vuốt trái / phải trên thẻ để chuyển thẻ · chạm chỗ trống để lật thẻ · chạm vào chữ để tô sáng</p>
+      <p class="keys desk-keys">Phím tắt: <kbd>Space</kbd> lật thẻ · <kbd>←</kbd> <kbd>→</kbd> chuyển thẻ · <kbd>1</kbd> Khó · <kbd>2</kbd> Vừa · <kbd>3</kbd> Dễ · <kbd>X</kbd> đánh dấu học lại</p>
+    </div>
+    <div class="empty" id="cardEmpty" hidden>
+      <p>Không có thẻ nào khớp bộ lọc này.</p>
+      <button type="button" class="primary" data-clear>Xem tất cả thẻ</button>
+    </div>
+  </section>
+
+  <!-- Quiz -->
+  <section id="view-quiz" hidden>
+    <div class="quiz" id="quizBox">
+      <div class="card-top"><span class="meta" id="qMeta"></span><span class="score" id="qScore"></span></div>
+      <p class="ctx" id="qCtx" hidden></p>
+      <p class="qprompt" id="qPrompt"></p>
+      <div class="options" id="qOpts"></div>
+      <p class="feedback" id="qFb" aria-live="polite"></p>
+      <p class="pron" id="qPron" hidden></p>
+      <div class="raterow" id="qRate" hidden>
+        <button type="button" class="xbtn" id="qX" aria-pressed="false"><span class="mark">X</span> Học lại</button>
+        <div class="levels" role="group" aria-label="Mức độ thuộc" id="qLevels">
+          <button type="button" data-lv="h" aria-pressed="false">Khó</button>
+          <button type="button" data-lv="m" aria-pressed="false">Vừa</button>
+          <button type="button" data-lv="e" aria-pressed="false">Dễ</button>
+        </div>
+      </div>
+      <div class="qfoot">
+        <label class="check"><input type="checkbox" id="autoX" checked> Tự đánh dấu X khi chọn sai</label>
+        <button type="button" class="primary" id="qNext">Câu tiếp</button>
+      </div>
+    </div>
+    <div class="empty" id="quizEmpty" hidden>
+      <p>Không có thẻ nào khớp bộ lọc này.</p>
+      <button type="button" class="primary" data-clear>Xem tất cả thẻ</button>
+    </div>
+  </section>
+
+  <!-- List -->
+  <section id="view-list" hidden style="display:flex;flex-direction:column;gap:10px">
+    <input type="search" class="search" id="search" placeholder="Tìm theo tiếng Việt hoặc tiếng Hàn" aria-label="Tìm thẻ">
+    <p class="listinfo" id="listInfo"></p>
+    <ol class="list" id="list"></ol>
+  </section>
+
+  <!-- Learn -->
+  <section id="view-learn" class="nv" hidden>
+    <div class="quiz" id="learnBox">
+      <div class="meter" id="lBar" aria-hidden="true"><span class="e"></span><span class="m"></span></div>
+      <div class="legend" id="lLegend"></div>
+      <div id="lStage" class="stagebox"></div>
+      <div class="qfoot">
+        <label class="check"><input type="checkbox" id="lMcOnly"> Chỉ dùng trắc nghiệm (không gõ)</label>
+        <label class="check"><input type="checkbox" class="looseChk" checked> Bỏ qua dấu tiếng Việt khi chấm</label>
+      </div>
+    </div>
+    <div class="empty" id="learnEmpty" hidden><p>Không có thẻ nào khớp bộ lọc này.</p><button type="button" class="primary" data-clear-all="1">Xem tất cả thẻ</button></div>
+  </section>
+
+  <!-- Write -->
+  <section id="view-write" class="nv" hidden>
+    <div class="quiz" id="writeBox">
+      <div class="qfoot">
+        <select class="field small" id="wKind" aria-label="Kiểu luyện viết"><option value="tr">Dịch và gõ đáp án</option><option value="ls">Nghe và viết lại tiếng Hàn</option></select>
+        <label class="check"><input type="checkbox" class="looseChk" checked> Bỏ qua dấu tiếng Việt khi chấm</label>
+      </div>
+      <div id="wStage" class="stagebox"></div>
+    </div>
+    <div class="empty" id="writeEmpty" hidden><p>Không có thẻ nào khớp bộ lọc này.</p><button type="button" class="primary" data-clear-all="1">Xem tất cả thẻ</button></div>
+  </section>
+
+  <!-- Test -->
+  <section id="view-test" class="nv" hidden>
+    <div id="testBox" style="display:flex;flex-direction:column;gap:12px">
+      <div class="quiz" id="tSetup">
+        <p class="meta">Tạo bài kiểm tra</p>
+        <p class="hint" id="tInfo"></p>
+        <label class="flabel"><span>Số câu</span><input class="field small" id="tN" type="number" min="1" inputmode="numeric"></label>
+        <div class="checks">
+          <label class="check"><input type="checkbox" id="tTf" checked> Đúng / Sai</label>
+          <label class="check"><input type="checkbox" id="tMc" checked> Trắc nghiệm</label>
+          <label class="check"><input type="checkbox" id="tWr" checked> Tự luận (gõ)</label>
+          <label class="check"><input type="checkbox" id="tMt" checked> Ghép nối</label>
+        </div>
+        <div class="btnrow"><button type="button" class="primary" id="tGo">Bắt đầu làm bài</button></div>
+      </div>
+      <div class="quiz" id="tPaper" hidden></div>
+    </div>
+    <div class="empty" id="testEmpty" hidden><p>Không có thẻ nào khớp bộ lọc này.</p><button type="button" class="primary" data-clear-all="1">Xem tất cả thẻ</button></div>
+  </section>
+
+  <!-- Match -->
+  <section id="view-match" class="nv" hidden>
+    <div class="quiz" id="matchBox">
+      <div class="card-top"><span class="meta">Ghép thẻ</span><span class="score" id="mTime">0.0 giây</span></div>
+      <p class="hint" id="mInfo"></p>
+      <div class="mgrid" id="mGrid" hidden></div>
+      <div class="qfoot"><span class="score" id="mBest"></span><button type="button" class="primary" id="mStart">Bắt đầu</button></div>
+    </div>
+    <div class="empty" id="matchEmpty" hidden><p>Cần ít nhất 2 thẻ trong bộ lọc để chơi.</p><button type="button" class="primary" data-clear-all="1">Xem tất cả thẻ</button></div>
+  </section>
+
+  <!-- Sets -->
+  <section id="view-sets" class="nv" hidden>
+    <div id="setsBox" style="display:flex;flex-direction:column;gap:12px"></div>
+  </section>
+
+  <!-- Highlighted phrases -->
+  <section id="view-words" hidden style="display:flex;flex-direction:column;gap:10px">
+    <p class="listinfo" id="wordsInfo"></p>
+    <ol class="list" id="words"></ol>
+  </section>
+
+  <footer class="foot">
+    <span id="footNote">Tiến độ luôn lưu trên máy này; bật Đồng bộ để máy tính và điện thoại dùng chung. Xuất / Nhập là cách sao lưu thủ công.</span>
+    <span class="confirm">
+      <button type="button" class="ghost" id="exportBtn" title="Tải tệp tiến độ để chuyển sang máy khác">Xuất tiến độ</button>
+      <button type="button" class="ghost" id="importBtn" title="Nạp tệp tiến độ đã xuất">Nhập tiến độ</button>
+      <input type="file" id="importFile" accept="application/json,.json" hidden>
+    </span>
+    <span class="confirm" id="resetBox">
+      <button type="button" class="ghost" id="resetAsk">Xóa tiến độ</button>
+    </span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  /* Điền sẵn địa chỉ CSDL + mã đồng bộ ở đây thì mọi máy mở link sẽ tự đồng bộ, không cần quét mã. */
+  var SYNC_PRESET = { url: 'https://so-tay-hop-tieng-han-default-rtdb.asia-southeast1.firebasedatabase.app', code: 'tu8gn6qtjfgceksjmycv9pi6' };
+
+  /* ---------- Content (from the meeting-prep doc) ---------- */
+  var DECKS = [
+    { id: 'mo', name: 'Mở đầu & kết thúc' },
+    { id: 'vs', name: 'Vệ sinh nhà máy' },
+    { id: 'qc', name: 'Phòng QC' },
+    { id: 't4', name: 'Gia nhiệt T-400' },
+    { id: 'tn', name: 'Thí nghiệm' },
+    { id: 'th', name: 'Tình huống hỏi–đáp' },
+    { id: 'cn', name: 'Câu cứu nguy' }
+  ];
+  var KIND = { w: 'Từ vựng', s: 'Câu mẫu', q: 'Sếp hỏi', a: 'Bạn trả lời' };
+  var RAW = {
+    mo: [
+      ['s', 'Thưa anh, em xin báo cáo các việc trong tuần này.', '부팀장님, 이번 주 업무 보고드리겠습니다.', 'Mở đầu'],
+      ['s', 'Hôm nay em báo cáo 4 nội dung: vệ sinh nhà máy, thi công phòng QC, đường ống gia nhiệt bể T-400 và thí nghiệm.', '오늘은 공장 청소, QC실 공사, T-400 탱크 가열 배관, 시험 분석, 이렇게 네 가지를 보고드리겠습니다.', 'Nêu chủ đề'],
+      ['s', 'Trước tiên là về vệ sinh nhà máy.', '먼저 공장 청소에 대해 말씀드리겠습니다.', 'Bắt đầu mục 1'],
+      ['s', 'Tiếp theo là về thi công phòng QC.', '다음은 QC실 공사입니다.', 'Chuyển ý'],
+      ['s', 'Thứ ba là đường ống gia nhiệt bể T-400.', '세 번째는 T-400 탱크 가열 배관입니다.', 'Chuyển ý'],
+      ['s', 'Cuối cùng là kết quả thí nghiệm.', '마지막으로 시험 분석 결과입니다.', 'Chuyển ý'],
+      ['s', 'Em đã gửi tài liệu liên quan qua tin nhắn, anh xem giúp em.', '관련 자료는 메시지로 보내드렸습니다. 확인 부탁드립니다.', 'Đưa tài liệu'],
+      ['s', 'Phần này em cần anh quyết định.', '이 부분은 부팀장님의 결정이 필요합니다.', 'Xin quyết định'],
+      ['s', 'Em báo cáo xong. Anh có câu hỏi gì không ạ?', '이상으로 보고를 마치겠습니다. 궁금하신 점 있으신가요?', 'Kết thúc'],
+      ['s', 'Cảm ơn anh.', '감사합니다.', 'Cảm ơn']
+    ],
+    vs: [
+      ['w', 'Vệ sinh nhà máy', '공장 청소'],
+      ['w', 'Đơn vị / nhà thầu vệ sinh', '청소 업체'],
+      ['w', 'Báo giá', '견적 / 견적서'],
+      ['w', 'Phạm vi công việc', '작업 범위'],
+      ['w', 'Khu sản xuất / khu bồn chứa / nhà kho', '생산 구역 / 탱크 구역 / 창고'],
+      ['w', 'Dầu tràn, vết dầu', '기름 유출, 기름 얼룩'],
+      ['w', 'Cặn, bùn', '슬러지'],
+      ['w', 'Rãnh thoát nước', '배수로'],
+      ['w', 'Máy xịt rửa áp lực cao', '고압 세척기'],
+      ['w', 'Hóa chất tẩy rửa', '세척제'],
+      ['w', 'Đồ bảo hộ', '보호구'],
+      ['w', 'Rác thải nguy hại / rác thải công nghiệp', '유해폐기물 / 산업폐기물'],
+      ['w', 'Lịch vệ sinh định kỳ', '정기 청소 일정'],
+      ['w', 'Ảnh trước và sau khi vệ sinh', '청소 전후 사진'],
+      ['w', 'Nghiệm thu', '검수'],
+      ['s', 'Bên em đã nhận báo giá vệ sinh nhà máy từ [ ] đơn vị.', '공장 청소 견적을 [ ]개 업체로부터 받았습니다.'],
+      ['s', 'Phạm vi gồm khu sản xuất, khu bồn chứa, nhà kho và rãnh thoát nước.', '작업 범위는 생산 구역, 탱크 구역, 창고, 배수로입니다.'],
+      ['s', 'Đơn vị [A] báo giá [ ] đồng, làm trong [ ] ngày.', '[A] 업체 견적은 [ ]동이며, 작업 기간은 [ ]일입니다.'],
+      ['s', 'Em đề xuất chọn đơn vị [A] vì giá hợp lý và có kinh nghiệm vệ sinh nhà máy hóa chất.', '가격이 합리적이고 화학 공장 청소 경험이 있어서 [A] 업체를 추천드립니다.'],
+      ['s', 'Dự kiến vệ sinh vào ngày [ ], sắp xếp để không ảnh hưởng sản xuất.', '[ ]일에 청소할 예정이며, 생산에 영향이 없도록 일정을 조율하겠습니다.'],
+      ['s', 'Khu vực quanh bồn còn nhiều dầu tràn và cặn bám.', '탱크 주변에 기름 유출과 슬러지가 많이 남아 있습니다.'],
+      ['s', 'Rác thải nguy hại sau khi vệ sinh sẽ giao cho Thiên Phước thu gom theo hợp đồng.', '청소 후 나오는 유해폐기물은 계약에 따라 티엔프억 업체가 수거합니다.'],
+      ['s', 'Sau khi vệ sinh, em sẽ gửi ảnh trước và sau.', '청소가 끝나면 전후 사진을 보내드리겠습니다.'],
+      ['s', 'Em đề nghị làm lịch vệ sinh định kỳ hàng tháng.', '매월 정기 청소 일정을 만드는 것을 제안드립니다.']
+    ],
+    qc: [
+      ['w', 'Phòng QC / phòng thí nghiệm', 'QC실 / 실험실'],
+      ['w', 'Cải tạo, sửa chữa phòng', '리모델링, 개보수'],
+      ['w', 'Thi công', '시공, 공사'],
+      ['w', 'Bản vẽ thiết kế / mặt bằng bố trí', '설계 도면 / 배치도'],
+      ['w', 'Vách ngăn / trần thạch cao', '칸막이 / 석고 천장'],
+      ['w', 'Sàn epoxy', '에폭시 바닥'],
+      ['w', 'Điện chiếu sáng / ổ cắm', '조명 전기 / 콘센트'],
+      ['w', 'Máy lạnh', '에어컨'],
+      ['w', 'Tủ hút khí độc / quạt hút', '흄후드 / 배기팬'],
+      ['w', 'Bồn rửa, cấp thoát nước', '싱크대, 급배수'],
+      ['w', 'Bàn thí nghiệm / tủ đựng hóa chất', '실험대 / 시약장'],
+      ['w', 'Máy đo độ ẩm', '수분 측정기'],
+      ['w', 'Tiến độ (phần trăm hoàn thành)', '공정률, 진행 상황'],
+      ['w', 'Phát sinh chi phí', '추가 비용 발생'],
+      ['w', 'Nghiệm thu bàn giao / bản vẽ hoàn công', '준공 검수 및 인계 / 준공 도면'],
+      ['s', 'Thi công phòng QC hiện đạt khoảng [ ]%.', 'QC실 공사는 현재 약 [ ]% 진행되었습니다.'],
+      ['s', 'Tuần này đã hoàn thành vách ngăn và trần.', '이번 주에 칸막이와 천장 공사를 완료했습니다.'],
+      ['s', 'Tuần sau sẽ làm điện, máy lạnh và sàn epoxy.', '다음 주에는 전기, 에어컨, 에폭시 바닥 공사를 진행할 예정입니다.'],
+      ['s', 'Dự kiến hoàn thành và bàn giao vào ngày [ ].', '[ ]일에 완공 및 인계할 예정입니다.'],
+      ['s', 'Có phát sinh [ ] đồng do thêm ổ cắm và đường thoát nước.', '콘센트와 배수 라인 추가로 [ ]동의 추가 비용이 발생했습니다.'],
+      ['s', 'Phòng QC cần tủ hút để làm thí nghiệm với axit cho an toàn.', '산을 사용하는 시험을 안전하게 하려면 QC실에 흄후드가 필요합니다.'],
+      ['s', 'Em đã yêu cầu nhà thầu gửi bản vẽ hoàn công.', '시공업체에 준공 도면을 요청했습니다.'],
+      ['s', 'Báo giá thiết bị thí nghiệm chưa có, em đang lấy thêm báo giá.', '실험 장비 견적은 아직 없어서 추가로 받고 있습니다.']
+    ],
+    t4: [
+      ['w', 'Bể T-400', 'T-400 탱크'],
+      ['w', 'Đường ống gia nhiệt / ống xoắn gia nhiệt', '가열 배관 / 가열 코일'],
+      ['w', 'Hơi nước / nước ngưng (condensate)', '스팀 / 응축수'],
+      ['w', 'Đường nước nóng cấp / đường nước nóng hồi', '온수 공급 라인 / 온수 환수 라인'],
+      ['w', 'Bồn nước hồi 3 m³', '3 m³ 응축수 회수 탱크'],
+      ['w', 'Lò hơi / công suất hơi', '보일러 / 스팀 용량'],
+      ['w', 'Bẫy hơi', '스팀 트랩'],
+      ['w', 'Van điều khiển nhiệt độ / cảm biến nhiệt độ', '온도 조절 밸브 / 온도 센서'],
+      ['w', 'Bọc cách nhiệt (bảo ôn)', '보온'],
+      ['w', 'Thử áp / rò rỉ', '압력 시험 / 누설'],
+      ['w', 'Tách dầu khỏi cặn / lắng', '슬러지에서 기름 분리 / 침전'],
+      ['w', 'Thu hồi dầu', '기름 회수'],
+      ['w', 'Thiết kế gốc / so sánh báo giá', '기존 설계 / 견적 비교'],
+      ['w', 'Khảo sát hiện trường', '현장 조사'],
+      ['w', 'Tạm ứng / thanh toán đợt cuối', '선금 / 잔금'],
+      ['s', 'Mục đích là gia nhiệt T-400 để dầu tách khỏi cặn nhanh hơn, bể trống sớm cho mẻ tiếp theo.', '목적은 T-400을 가열해서 기름이 슬러지에서 더 빨리 분리되게 하고, 다음 배치를 위해 탱크를 빨리 비우는 것입니다.'],
+      ['s', 'Hiện khi sản lượng cao, phần dầu chưa tách kịp bị bỏ đi cùng cặn.', '현재 생산량이 많을 때는 분리되지 못한 기름이 슬러지와 함께 버려집니다.'],
+      ['s', 'Thiết kế là ống xoắn khoảng 6.200 × 6.400 mm đặt trong bể.', '설계는 약 6,200 × 6,400mm 크기의 코일을 탱크 안에 설치하는 방식입니다.'],
+      ['s', 'Nguồn nhiệt tận dụng nước ngưng từ các thiết bị khác trong xưởng.', '열원은 공장 내 다른 설비의 응축수를 재활용합니다.'],
+      ['s', 'Báo giá gốc: bộ gia nhiệt 250 triệu, bồn nước hồi 3 m³ là 32 triệu, tổng 282 triệu chưa VAT, thi công 25 ngày.', '기존 견적은 가열 장치 2억 5천만 동, 3 m³ 회수 탱크 3,200만 동으로, 부가세 별도 총 2억 8,200만 동이며 공사 기간은 25일입니다.'],
+      ['s', 'Theo chỉ đạo của anh, em đã liên hệ [ ] nhà thầu khác để báo giá cùng thiết kế.', '부팀장님 지시에 따라 같은 설계로 다른 업체 [ ]곳에 견적을 요청했습니다.'],
+      ['s', 'Hiện đã nhận [ ] báo giá, còn [ ] đơn vị đang khảo sát hiện trường.', '현재 [ ]곳의 견적을 받았고, [ ]곳은 현장 조사 중입니다.'],
+      ['s', 'Em sẽ lập bảng so sánh giá, vật liệu, thời gian thi công và bảo hành.', '가격, 자재, 공사 기간, 보증 조건을 비교표로 정리하겠습니다.'],
+      ['s', 'Cần xác nhận lò hơi còn đủ công suất cho T-400.', '보일러 용량이 T-400까지 충분한지 확인이 필요합니다.'],
+      ['s', 'Sau khi lắp sẽ thử áp và kiểm tra rò rỉ trước khi vận hành.', '설치 후 운전 전에 압력 시험과 누설 점검을 하겠습니다.']
+    ],
+    tn: [
+      ['w', 'Thí nghiệm, phân tích mẫu / lấy mẫu', '시료 분석 / 시료 채취'],
+      ['w', 'Mẫu Refined CNSL / cặn Cardanol', '정제 CNSL 시료 / 카다놀 슬러지'],
+      ['w', 'Phòng thí nghiệm bên ngoài', '외부 시험기관'],
+      ['w', 'Chỉ tiêu phân tích', '분석 항목'],
+      ['w', 'Độ ẩm (hàm lượng nước)', '수분 함량'],
+      ['w', 'Tạp chất', '불순물'],
+      ['w', 'Độ nhớt / tỷ trọng', '점도 / 비중'],
+      ['w', 'Nhiệt trị / hàm lượng tro', '발열량 / 회분'],
+      ['w', 'Lưu huỳnh / điểm chớp cháy', '황 함량 / 인화점'],
+      ['w', 'Phiếu kết quả phân tích (COA)', '분석 성적서'],
+      ['w', 'Tiêu chuẩn (spec) / đạt / không đạt', '규격 / 적합 / 부적합'],
+      ['w', 'Chi phí phân tích / thời gian trả kết quả', '분석 비용 / 결과 회신 기간'],
+      ['w', 'Khử nước lại', '재탈수'],
+      ['s', 'Em đã gửi mẫu Refined CNSL và cặn Cardanol đến SGS Việt Nam để phân tích.', '정제 CNSL과 카다놀 슬러지 시료를 SGS 베트남에 분석 의뢰했습니다.'],
+      ['s', 'Chi phí phân tích là 14.882.400 đồng, thanh toán bằng chuyển khoản.', '분석 비용은 14,882,400동이며, 계좌이체로 결제했습니다.'],
+      ['s', 'Chỉ tiêu phân tích gồm độ ẩm, tạp chất, độ nhớt, tỷ trọng.', '분석 항목은 수분, 불순물, 점도, 비중 등입니다.'],
+      ['s', 'Dự kiến có kết quả sau [ ] ngày làm việc.', '결과는 영업일 기준 [ ]일 후에 나올 예정입니다.'],
+      ['s', 'Độ ẩm là [ ]%, đạt tiêu chuẩn 0,2%.', '수분은 [ ]%로, 0.2% 규격에 적합합니다.'],
+      ['s', 'Kết quả chưa đạt, em đề xuất khử nước lại.', '규격에 부적합해서 재탈수를 제안드립니다.'],
+      ['s', 'Kết quả cặn Cardanol dùng để đánh giá còn bao nhiêu dầu có thể thu hồi.', '카다놀 슬러지 결과로 회수 가능한 기름 양을 평가하겠습니다.'],
+      ['s', 'Khi có phiếu kết quả, em sẽ gửi kèm bản dịch tiếng Hàn.', '성적서가 나오면 한국어 번역본과 함께 보내드리겠습니다.']
+    ],
+    th: [
+      ['q', 'Tổng chi phí bao nhiêu?', '총 비용은 얼마예요?', 'Chi phí'],
+      ['a', 'Tổng cộng [ ] đồng, đã gồm VAT.', '부가세 포함 총 [ ]동입니다.', 'Chi phí'],
+      ['q', 'Có làm rẻ hơn được không?', '더 싸게 할 수는 없어요?', 'Chi phí'],
+      ['a', 'Em sẽ đàm phán lại với nhà thầu và báo lại mức giảm.', '업체와 다시 협상해서 얼마나 낮출 수 있는지 다시 보고드리겠습니다.', 'Chi phí'],
+      ['q', 'Đã lấy mấy báo giá? Tại sao chọn đơn vị này?', '견적은 몇 곳 받았어요? 왜 이 업체를 선택했어요?', 'Nhà thầu'],
+      ['a', 'Em lấy [ ] báo giá. Đơn vị này tốt nhất khi so giá, kinh nghiệm và thời gian thi công.', '[ ]곳에서 견적을 받았습니다. 가격, 경험, 공사 기간을 비교했을 때 이 업체가 가장 좋았습니다.', 'Nhà thầu'],
+      ['q', 'Điều kiện thanh toán thế nào? Bảo hành bao lâu?', '결제 조건은요? 보증 기간은 얼마나 돼요?', 'Nhà thầu'],
+      ['a', 'Tạm ứng 50%, hoàn thành thanh toán 50%. Bảo hành [12] tháng.', '선금 50%, 완료 후 잔금 50%입니다. 보증 기간은 [12]개월입니다.', 'Nhà thầu'],
+      ['q', 'Có phát sinh chi phí không?', '추가 비용이 있어요?', 'Chi phí'],
+      ['a', 'Hiện chưa có. Nếu có, em sẽ báo anh trước khi làm.', '현재까지는 없습니다. 발생하면 작업 전에 먼저 보고드리겠습니다.', 'Chi phí'],
+      ['q', 'Lấy thêm báo giá nữa đi.', '견적을 더 받아 보세요.', 'Nhà thầu'],
+      ['a', 'Dạ, em sẽ lấy thêm báo giá và báo cáo lại.', '알겠습니다. 다른 업체 견적을 더 받아서 다시 보고드리겠습니다.', 'Nhà thầu'],
+      ['q', 'Khi nào xong? Có ảnh hưởng sản xuất không?', '언제 끝나요? 생산에 영향이 있어요?', 'Tiến độ'],
+      ['a', 'Dự kiến xong ngày [ ]. Em sẽ làm vào ngày không sản xuất để không ảnh hưởng.', '[ ]일에 완료할 예정입니다. 생산이 없는 날에 작업해서 영향이 없도록 하겠습니다.', 'Tiến độ'],
+      ['q', 'Tại sao chậm tiến độ?', '왜 공사가 늦어졌어요?', 'Tiến độ'],
+      ['a', 'Vật tư về trễ nên chậm khoảng [ ] ngày. Em đã yêu cầu nhà thầu tăng người để bù lại.', '자재 입고가 늦어져서 약 [ ]일 지연되었습니다. 업체에 인원을 늘려서 만회하도록 요청했습니다.', 'Tiến độ'],
+      ['q', 'Ai giám sát thi công? An toàn thế nào?', '공사 감독은 누가 해요? 안전은 어떻게 관리해요?', 'An toàn'],
+      ['a', 'Em kiểm tra hiện trường mỗi ngày và báo cáo bằng ảnh. Trước khi làm có hướng dẫn an toàn, mặc đồ bảo hộ và xin phép khi hàn cắt.', '제가 매일 현장을 확인하고 사진으로 보고드리겠습니다. 작업 전 안전 교육, 보호구 착용, 화기 작업 허가를 진행하겠습니다.', 'An toàn'],
+      ['q', 'Gia nhiệt T-400 thì hiệu quả là gì?', 'T-400을 가열하면 효과가 뭐예요?', 'T-400'],
+      ['a', 'Dầu tách nhanh hơn, bể trống sớm hơn và giảm lượng dầu bị bỏ đi cùng cặn.', '기름 분리가 빨라져서 탱크를 더 빨리 비울 수 있고, 슬러지와 함께 버려지는 기름도 줄일 수 있습니다.', 'T-400'],
+      ['q', 'Lò hơi có đủ hơi không?', '보일러 스팀이 충분해요?', 'T-400'],
+      ['a', 'Em đang kiểm tra theo công suất lò 3 tấn/giờ, sẽ tổng hợp và báo cáo lại.', '현재 보일러 용량 시간당 3톤 기준으로 확인하고 있습니다. 정리해서 다시 보고드리겠습니다.', 'T-400'],
+      ['q', 'Khi nào có kết quả thí nghiệm?', '시험 결과는 언제 나와요?', 'Thí nghiệm'],
+      ['a', 'Khoảng [ ] ngày làm việc nữa. Có kết quả em gửi anh ngay.', '영업일 기준 [ ]일 정도 걸립니다. 결과가 나오면 바로 보내드리겠습니다.', 'Thí nghiệm'],
+      ['q', 'Nếu không đạt thì sao?', '부적합이면 어떻게 해요?', 'Thí nghiệm'],
+      ['a', 'Em sẽ tìm nguyên nhân, xử lý lại rồi gửi mẫu kiểm tra lại.', '원인을 분석하고 재처리한 뒤 다시 시험을 의뢰하겠습니다.', 'Thí nghiệm'],
+      ['q', 'Tại sao phải gửi SGS, không tự kiểm?', '왜 SGS에 맡겨야 해요? 우리가 직접 못 해요?', 'Thí nghiệm'],
+      ['a', 'Khách hàng cần phiếu kết quả của bên thứ ba, và phòng QC của mình chưa đủ thiết bị.', '고객에게 제출할 공인 성적서가 필요하고, 우리 QC실에는 아직 장비가 부족하기 때문입니다.', 'Thí nghiệm']
+    ],
+    cn: [
+      ['s', 'Xin lỗi, anh nói lại được không ạ?', '죄송하지만 다시 한번 말씀해 주시겠어요?'],
+      ['s', 'Anh nói chậm hơn một chút được không ạ?', '조금만 천천히 말씀해 주시겠어요?'],
+      ['s', 'Ý anh là [ ] phải không ạ?', '[ ]라는 말씀이신가요?'],
+      ['s', 'Số liệu này em chưa nắm chính xác, em kiểm tra rồi báo lại.', '그 수치는 지금 정확히 모르겠습니다. 확인해서 다시 보고드리겠습니다.'],
+      ['s', 'Em sẽ xác nhận với nhà thầu và báo lại trong hôm nay.', '업체에 확인해서 오늘 안으로 보고드리겠습니다.'],
+      ['s', 'Phần này em sẽ hỏi anh Thọ / anh Đô rồi báo lại.', '이 부분은 토 님 / 도 팀장님께 여쭤보고 다시 보고드리겠습니다.'],
+      ['s', 'Cho em thêm thời gian đến ngày [ ] ạ.', '[ ]일까지 시간을 조금 더 주시면 감사하겠습니다.'],
+      ['s', 'Em hiểu rồi, em sẽ làm theo ý anh.', '알겠습니다. 말씀하신 대로 하겠습니다.'],
+      ['s', 'Sau buổi họp em gửi tài liệu qua tin nhắn.', '회의 후에 자료를 메시지로 보내드리겠습니다.'],
+      ['s', 'Em ghi lại để không quên.', '잊지 않도록 메모하겠습니다.']
+    ]
+  };
+
+  /* Vietnamese-style reading of each Korean line (phiên âm), keyed by the Korean text */
+  var PRON = {"부팀장님, 이번 주 업무 보고드리겠습니다.": "bu-thim-chang-nim, i-bơn chu ơm-mu bô-gô-đư-ri-ghêt-sưm-ni-đa.", "오늘은 공장 청소, QC실 공사, T-400 탱크 가열 배관, 시험 분석, 이렇게 네 가지를 보고드리겠습니다.": "ô-nư-rưn công-chang chơng-sô, QC-sil công-sa, T-400 theng-khư ca-yơl be-goan, si-hơm bun-sơk, i-rơ-khê nê ca-chi-rưl bô-gô-đư-ri-ghêt-sưm-ni-đa.", "먼저 공장 청소에 대해 말씀드리겠습니다.": "mơn-chơ công-chang chơng-sô-ê te-he mal-sưm-đư-ri-ghêt-sưm-ni-đa.", "다음은 QC실 공사입니다.": "ta-ư-mưn QC-sil công-sa-im-ni-đa.", "세 번째는 T-400 탱크 가열 배관입니다.": "sê bơn-che-nưn T-400 theng-khư ca-yơl be-goa-nim-ni-đa.", "마지막으로 시험 분석 결과입니다.": "ma-chi-ma-gư-rô si-hơm bun-sơk kyơl-goa-im-ni-đa.", "관련 자료는 메시지로 보내드렸습니다. 확인 부탁드립니다.": "coal-lyơn cha-ryô-nưn mê-si-chi-rô bô-ne-đư-ryơt-sưm-ni-đa. hoa-ghin bu-thak-tư-rim-ni-đa.", "이 부분은 부팀장님의 결정이 필요합니다.": "i bu-bu-nưn bu-thim-chang-ni-mê kyơl-chơng-i pi-ryô-ham-ni-đa.", "이상으로 보고를 마치겠습니다. 궁금하신 점 있으신가요?": "i-sang-ư-rô bô-gô-rưl ma-chi-ghêt-sưm-ni-đa. cung-gưm-ha-sin chơm i-sư-sin-ga-yô?", "감사합니다.": "cam-sa-ham-ni-đa.", "공장 청소": "công-chang chơng-sô", "청소 업체": "chơng-sô ơp-chê", "견적 / 견적서": "kyơn-chơk / kyơn-chơk-sơ", "작업 범위": "cha-gơp bơ-muy", "생산 구역 / 탱크 구역 / 창고": "seng-san cu-yơk / theng-khư cu-yơk / chang-gô", "기름 유출, 기름 얼룩": "ki-rưm yu-chul, ki-rưm ơl-luk", "슬러지": "sưl-lơ-chi", "배수로": "be-su-rô", "고압 세척기": "cô-ap sê-chơk-ki", "세척제": "sê-chơk-chê", "보호구": "bô-hô-gu", "유해폐기물 / 산업폐기물": "yu-he-pê-ghi-mul / sa-nơp-pê-ghi-mul", "정기 청소 일정": "chơng-ghi chơng-sô il-chơng", "청소 전후 사진": "chơng-sô chơn-hu sa-chin", "검수": "cơm-su", "공장 청소 견적을 [ ]개 업체로부터 받았습니다.": "công-chang chơng-sô kyơn-chơ-gưl [ ]-ke ơp-chê-rô-bu-thơ ba-đat-sưm-ni-đa.", "작업 범위는 생산 구역, 탱크 구역, 창고, 배수로입니다.": "cha-gơp bơ-muy-nưn seng-san cu-yơk, theng-khư cu-yơk, chang-gô, be-su-rô-im-ni-đa.", "[A] 업체 견적은 [ ]동이며, 작업 기간은 [ ]일입니다.": "[A] ơp-chê kyơn-chơ-gưn [ ]-tông-i-myơ, cha-gơp ki-ga-nưn [ ]-i-rim-ni-đa.", "가격이 합리적이고 화학 공장 청소 경험이 있어서 [A] 업체를 추천드립니다.": "ca-ghyơ-ghi ham-ni-chơ-ghi-gô hoa-hak công-chang chơng-sô kyơng-hơ-mi i-sơ-sơ [A] ơp-chê-rưl chu-chơn-đư-rim-ni-đa.", "[ ]일에 청소할 예정이며, 생산에 영향이 없도록 일정을 조율하겠습니다.": "[ ]-i-rê chơng-sô-hal yê-chơng-i-myơ, seng-sa-nê yơng-hyang-i ơp-tô-rôk il-chơng-ưl chô-yul-ha-ghêt-sưm-ni-đa.", "탱크 주변에 기름 유출과 슬러지가 많이 남아 있습니다.": "theng-khư chu-byơ-nê ki-rưm yu-chul-goa sưl-lơ-chi-ga ma-ni na-ma it-sưm-ni-đa.", "청소 후 나오는 유해폐기물은 계약에 따라 티엔프억 업체가 수거합니다.": "chơng-sô hu na-ô-nưn yu-he-pê-ghi-mu-rưn kê-ya-ghê ta-ra thi-ên-pư-ơk ơp-chê-ga su-gơ-ham-ni-đa.", "청소가 끝나면 전후 사진을 보내드리겠습니다.": "chơng-sô-ga cưn-na-myơn chơn-hu sa-chi-nưl bô-ne-đư-ri-ghêt-sưm-ni-đa.", "매월 정기 청소 일정을 만드는 것을 제안드립니다.": "me-uơl chơng-ghi chơng-sô il-chơng-ưl man-đư-nưn cơ-sưl chê-an-đư-rim-ni-đa.", "QC실 / 실험실": "QC-sil / sil-hơm-sil", "리모델링, 개보수": "ri-mô-đêl-ling, ke-bô-su", "시공, 공사": "si-gông, công-sa", "설계 도면 / 배치도": "sơl-ghê tô-myơn / be-chi-đô", "칸막이 / 석고 천장": "khan-ma-ghi / sơk-cô chơn-chang", "에폭시 바닥": "ê-pôk-si ba-đak", "조명 전기 / 콘센트": "chô-myơng chơn-ghi / khôn-sên-thư", "에어컨": "ê-ơ-khơn", "흄후드 / 배기팬": "hyum-hu-đư / be-ghi-pen", "싱크대, 급배수": "sing-khư-đe, cưp-pe-su", "실험대 / 시약장": "sil-hơm-đe / si-yak-chang", "수분 측정기": "su-bun chưk-chơng-ghi", "공정률, 진행 상황": "công-chơng-nyul, chin-heng sang-hoang", "추가 비용 발생": "chu-ga bi-yông bal-seng", "준공 검수 및 인계 / 준공 도면": "chun-gông cơm-su mit in-ghê / chun-gông tô-myơn", "QC실 공사는 현재 약 [ ]% 진행되었습니다.": "QC-sil công-sa-nưn hyơn-che yak [ ]% chin-heng-đuê-ơt-sưm-ni-đa.", "이번 주에 칸막이와 천장 공사를 완료했습니다.": "i-bơn chu-ê khan-ma-ghi-oa chơn-chang công-sa-rưl oal-lyô-het-sưm-ni-đa.", "다음 주에는 전기, 에어컨, 에폭시 바닥 공사를 진행할 예정입니다.": "ta-ưm chu-ê-nưn chơn-ghi, ê-ơ-khơn, ê-pôk-si ba-đak công-sa-rưl chin-heng-hal yê-chơng-im-ni-đa.", "[ ]일에 완공 및 인계할 예정입니다.": "[ ]-i-rê oan-gông mit in-ghê-hal yê-chơng-im-ni-đa.", "콘센트와 배수 라인 추가로 [ ]동의 추가 비용이 발생했습니다.": "khôn-sên-thư-oa be-su ra-in chu-ga-rô [ ]-tông-ê chu-ga bi-yông-i bal-seng-het-sưm-ni-đa.", "산을 사용하는 시험을 안전하게 하려면 QC실에 흄후드가 필요합니다.": "sa-nưl sa-yông-ha-nưn si-hơ-mưl an-chơn-ha-ghê ha-ryơ-myơn QC-si-rê hyum-hu-đư-ga pi-ryô-ham-ni-đa.", "시공업체에 준공 도면을 요청했습니다.": "si-gông-ơp-chê-ê chun-gông tô-myơ-nưl yô-chơng-het-sưm-ni-đa.", "실험 장비 견적은 아직 없어서 추가로 받고 있습니다.": "sil-hơm chang-bi kyơn-chơ-gưn a-chik ơp-sơ-sơ chu-ga-rô bat-cô it-sưm-ni-đa.", "T-400 탱크": "T-400 theng-khư", "가열 배관 / 가열 코일": "ca-yơl be-goan / ca-yơl khô-il", "스팀 / 응축수": "sư-thim / ưng-chuk-su", "온수 공급 라인 / 온수 환수 라인": "ôn-su công-gưp ra-in / ôn-su hoan-su ra-in", "3 m³ 응축수 회수 탱크": "3 m³ ưng-chuk-su huê-su theng-khư", "보일러 / 스팀 용량": "bô-il-lơ / sư-thim yông-nyang", "스팀 트랩": "sư-thim thư-rep", "온도 조절 밸브 / 온도 센서": "ôn-đô chô-chơl bel-bư / ôn-đô sên-sơ", "보온": "bô-ôn", "압력 시험 / 누설": "am-nyơk si-hơm / nu-sơl", "슬러지에서 기름 분리 / 침전": "sưl-lơ-chi-ê-sơ ki-rưm bul-li / chim-chơn", "기름 회수": "ki-rưm huê-su", "기존 설계 / 견적 비교": "ki-chôn sơl-ghê / kyơn-chơk bi-ghyô", "현장 조사": "hyơn-chang chô-sa", "선금 / 잔금": "sơn-gưm / chan-gưm", "목적은 T-400을 가열해서 기름이 슬러지에서 더 빨리 분리되게 하고, 다음 배치를 위해 탱크를 빨리 비우는 것입니다.": "môk-chơ-gưn T-400-ưl ca-yơl-he-sơ ki-rư-mi sưl-lơ-chi-ê-sơ tơ pal-li bul-li-đuê-ghê ha-gô, ta-ưm be-chi-rưl uy-he theng-khư-rưl pal-li bi-u-nưn cơ-sim-ni-đa.", "현재 생산량이 많을 때는 분리되지 못한 기름이 슬러지와 함께 버려집니다.": "hyơn-che seng-san-nyang-i ma-nưl te-nưn bul-li-đuê-chi mô-than ki-rư-mi sưl-lơ-chi-oa ham-kê bơ-ryơ-chim-ni-đa.", "설계는 약 6,200 × 6,400mm 크기의 코일을 탱크 안에 설치하는 방식입니다.": "sơl-ghê-nưn yak 6,200 × 6,400mm khư-ghi-ê khô-i-rưl theng-khư a-nê sơl-chi-ha-nưn bang-si-ghim-ni-đa.", "열원은 공장 내 다른 설비의 응축수를 재활용합니다.": "yơ-ruơ-nưn công-chang ne ta-rưn sơl-bi-ê ưng-chuk-su-rưl che-hoa-ryông-ham-ni-đa.", "기존 견적은 가열 장치 2억 5천만 동, 3 m³ 회수 탱크 3,200만 동으로, 부가세 별도 총 2억 8,200만 동이며 공사 기간은 25일입니다.": "ki-chôn kyơn-chơ-gưn ca-yơl chang-chi 2-ơk 5-chơn-man tông, 3 m³ huê-su theng-khư 3,200-man tông-ư-rô, bu-ga-sê byơl-đô chông 2-ơk 8,200-man tông-i-myơ công-sa ki-ga-nưn 25-i-rim-ni-đa.", "부팀장님 지시에 따라 같은 설계로 다른 업체 [ ]곳에 견적을 요청했습니다.": "bu-thim-chang-nim chi-si-ê ta-ra ca-thưn sơl-ghê-rô ta-rưn ơp-chê [ ]-cô-sê kyơn-chơ-gưl yô-chơng-het-sưm-ni-đa.", "현재 [ ]곳의 견적을 받았고, [ ]곳은 현장 조사 중입니다.": "hyơn-che [ ]-cô-sê kyơn-chơ-gưl ba-đat-cô, [ ]-cô-sưn hyơn-chang chô-sa chung-im-ni-đa.", "가격, 자재, 공사 기간, 보증 조건을 비교표로 정리하겠습니다.": "ca-ghyơk, cha-che, công-sa ki-gan, bô-chưng chô-gơ-nưl bi-ghyô-pyô-rô chơng-ni-ha-ghêt-sưm-ni-đa.", "보일러 용량이 T-400까지 충분한지 확인이 필요합니다.": "bô-il-lơ yông-nyang-i T-400-ca-chi chung-bun-han-chi hoa-ghi-ni pi-ryô-ham-ni-đa.", "설치 후 운전 전에 압력 시험과 누설 점검을 하겠습니다.": "sơl-chi hu un-chơn chơ-nê am-nyơk si-hơm-goa nu-sơl chơm-gơ-mưl ha-ghêt-sưm-ni-đa.", "시료 분석 / 시료 채취": "si-ryô bun-sơk / si-ryô che-chuy", "정제 CNSL 시료 / 카다놀 슬러지": "chơng-chê CNSL si-ryô / kha-đa-nôl sưl-lơ-chi", "외부 시험기관": "uê-bu si-hơm-ghi-goan", "분석 항목": "bun-sơk hang-môk", "수분 함량": "su-bun ham-nyang", "불순물": "bul-sun-mul", "점도 / 비중": "chơm-đô / bi-chung", "발열량 / 회분": "ba-ryơl-lyang / huê-bun", "황 함량 / 인화점": "hoang ham-nyang / in-hoa-chơm", "분석 성적서": "bun-sơk sơng-chơk-sơ", "규격 / 적합 / 부적합": "kyu-ghyơk / chơ-khap / bu-chơ-khap", "분석 비용 / 결과 회신 기간": "bun-sơk bi-yông / kyơl-goa huê-sin ki-gan", "재탈수": "che-thal-su", "정제 CNSL과 카다놀 슬러지 시료를 SGS 베트남에 분석 의뢰했습니다.": "chơng-chê CNSL-coa kha-đa-nôl sưl-lơ-chi si-ryô-rưl SGS bê-thư-na-mê bun-sơk ưi-ruê-het-sưm-ni-đa.", "분석 비용은 14,882,400동이며, 계좌이체로 결제했습니다.": "bun-sơk bi-yông-ưn 14,882,400-tông-i-myơ, kê-choa-i-chê-rô kyơl-chê-het-sưm-ni-đa.", "분석 항목은 수분, 불순물, 점도, 비중 등입니다.": "bun-sơk hang-mô-gưn su-bun, bul-sun-mul, chơm-đô, bi-chung tưng-im-ni-đa.", "결과는 영업일 기준 [ ]일 후에 나올 예정입니다.": "kyơl-goa-nưn yơng-ơ-bil ki-chun [ ]-il hu-ê na-ôl yê-chơng-im-ni-đa.", "수분은 [ ]%로, 0.2% 규격에 적합합니다.": "su-bu-nưn [ ]%-rô, 0.2% kyu-ghyơ-ghê chơ-kha-pam-ni-đa.", "규격에 부적합해서 재탈수를 제안드립니다.": "kyu-ghyơ-ghê bu-chơ-kha-pe-sơ che-thal-su-rưl chê-an-đư-rim-ni-đa.", "카다놀 슬러지 결과로 회수 가능한 기름 양을 평가하겠습니다.": "kha-đa-nôl sưl-lơ-chi kyơl-goa-rô huê-su ca-nưng-han ki-rưm yang-ưl pyơng-ga-ha-ghêt-sưm-ni-đa.", "성적서가 나오면 한국어 번역본과 함께 보내드리겠습니다.": "sơng-chơk-sơ-ga na-ô-myơn han-gu-gơ bơ-nyơk-pôn-goa ham-kê bô-ne-đư-ri-ghêt-sưm-ni-đa.", "총 비용은 얼마예요?": "chông bi-yông-ưn ơl-ma-yê-yô?", "부가세 포함 총 [ ]동입니다.": "bu-ga-sê pô-ham chông [ ]-tông-im-ni-đa.", "더 싸게 할 수는 없어요?": "tơ sa-ghê hal su-nưn ơp-sơ-yô?", "업체와 다시 협상해서 얼마나 낮출 수 있는지 다시 보고드리겠습니다.": "ơp-chê-oa ta-si hyơp-sang-he-sơ ơl-ma-na nat-chul su in-nưn-chi ta-si bô-gô-đư-ri-ghêt-sưm-ni-đa.", "견적은 몇 곳 받았어요? 왜 이 업체를 선택했어요?": "kyơn-chơ-gưn myơt côt ba-đa-sơ-yô? oe i ơp-chê-rưl sơn-the-khe-sơ-yô?", "[ ]곳에서 견적을 받았습니다. 가격, 경험, 공사 기간을 비교했을 때 이 업체가 가장 좋았습니다.": "[ ]-cô-sê-sơ kyơn-chơ-gưl ba-đat-sưm-ni-đa. ca-ghyơk, kyơng-hơm, công-sa ki-ga-nưl bi-ghyô-he-sưl te i ơp-chê-ga ca-chang chô-at-sưm-ni-đa.", "결제 조건은요? 보증 기간은 얼마나 돼요?": "kyơl-chê chô-gơ-nư-nyô? bô-chưng ki-ga-nưn ơl-ma-na toe-yô?", "선금 50%, 완료 후 잔금 50%입니다. 보증 기간은 [12]개월입니다.": "sơn-gưm 50%, oal-lyô hu chan-gưm 50%-im-ni-đa. bô-chưng ki-ga-nưn [12]-ke-uơ-rim-ni-đa.", "추가 비용이 있어요?": "chu-ga bi-yông-i i-sơ-yô?", "현재까지는 없습니다. 발생하면 작업 전에 먼저 보고드리겠습니다.": "hyơn-che-ca-chi-nưn ơp-sưm-ni-đa. bal-seng-ha-myơn cha-gơp chơ-nê mơn-chơ bô-gô-đư-ri-ghêt-sưm-ni-đa.", "견적을 더 받아 보세요.": "kyơn-chơ-gưl tơ ba-đa bô-sê-yô.", "알겠습니다. 다른 업체 견적을 더 받아서 다시 보고드리겠습니다.": "al-ghêt-sưm-ni-đa. ta-rưn ơp-chê kyơn-chơ-gưl tơ ba-đa-sơ ta-si bô-gô-đư-ri-ghêt-sưm-ni-đa.", "언제 끝나요? 생산에 영향이 있어요?": "ơn-chê cưn-na-yô? seng-sa-nê yơng-hyang-i i-sơ-yô?", "[ ]일에 완료할 예정입니다. 생산이 없는 날에 작업해서 영향이 없도록 하겠습니다.": "[ ]-i-rê oal-lyô-hal yê-chơng-im-ni-đa. seng-sa-ni ơm-nưn na-rê cha-gơ-pe-sơ yơng-hyang-i ơp-tô-rôk ha-ghêt-sưm-ni-đa.", "왜 공사가 늦어졌어요?": "oe công-sa-ga nư-chơ-chơ-sơ-yô?", "자재 입고가 늦어져서 약 [ ]일 지연되었습니다. 업체에 인원을 늘려서 만회하도록 요청했습니다.": "cha-che ip-cô-ga nư-chơ-chơ-sơ yak [ ]-il chi-yơn-đuê-ơt-sưm-ni-đa. ơp-chê-ê i-nuơ-nưl nưl-lyơ-sơ man-huê-ha-đô-rôk yô-chơng-het-sưm-ni-đa.", "공사 감독은 누가 해요? 안전은 어떻게 관리해요?": "công-sa cam-đô-gưn nu-ga he-yô? an-chơ-nưn ơ-tơ-khê coal-li-he-yô?", "제가 매일 현장을 확인하고 사진으로 보고드리겠습니다. 작업 전 안전 교육, 보호구 착용, 화기 작업 허가를 진행하겠습니다.": "chê-ga me-il hyơn-chang-ưl hoa-ghin-ha-gô sa-chi-nư-rô bô-gô-đư-ri-ghêt-sưm-ni-đa. cha-gơp chơn an-chơn kyô-yuk, bô-hô-gu cha-ghyông, hoa-ghi cha-gơp hơ-ga-rưl chin-heng-ha-ghêt-sưm-ni-đa.", "T-400을 가열하면 효과가 뭐예요?": "T-400-ưl ca-yơl-ha-myơn hyô-goa-ga muơ-yê-yô?", "기름 분리가 빨라져서 탱크를 더 빨리 비울 수 있고, 슬러지와 함께 버려지는 기름도 줄일 수 있습니다.": "ki-rưm bul-li-ga pal-la-chơ-sơ theng-khư-rưl tơ pal-li bi-ul su it-cô, sưl-lơ-chi-oa ham-kê bơ-ryơ-chi-nưn ki-rưm-đô chu-ril su it-sưm-ni-đa.", "보일러 스팀이 충분해요?": "bô-il-lơ sư-thi-mi chung-bun-he-yô?", "현재 보일러 용량 시간당 3톤 기준으로 확인하고 있습니다. 정리해서 다시 보고드리겠습니다.": "hyơn-che bô-il-lơ yông-nyang si-gan-đang 3-thôn ki-chu-nư-rô hoa-ghin-ha-gô it-sưm-ni-đa. chơng-ni-he-sơ ta-si bô-gô-đư-ri-ghêt-sưm-ni-đa.", "시험 결과는 언제 나와요?": "si-hơm kyơl-goa-nưn ơn-chê na-oa-yô?", "영업일 기준 [ ]일 정도 걸립니다. 결과가 나오면 바로 보내드리겠습니다.": "yơng-ơ-bil ki-chun [ ]-il chơng-đô cơl-lim-ni-đa. kyơl-goa-ga na-ô-myơn ba-rô bô-ne-đư-ri-ghêt-sưm-ni-đa.", "부적합이면 어떻게 해요?": "bu-chơ-kha-bi-myơn ơ-tơ-khê he-yô?", "원인을 분석하고 재처리한 뒤 다시 시험을 의뢰하겠습니다.": "uơ-ni-nưl bun-sơ-kha-gô che-chơ-ri-han tuy ta-si si-hơ-mưl ưi-ruê-ha-ghêt-sưm-ni-đa.", "왜 SGS에 맡겨야 해요? 우리가 직접 못 해요?": "oe SGS-ê mat-kyơ-ya he-yô? u-ri-ga chik-chơp môt he-yô?", "고객에게 제출할 공인 성적서가 필요하고, 우리 QC실에는 아직 장비가 부족하기 때문입니다.": "cô-ghe-ghê-ghê chê-chul-hal công-in sơng-chơk-sơ-ga pi-ryô-ha-gô, u-ri QC-si-rê-nưn a-chik chang-bi-ga bu-chô-kha-ghi te-mu-nim-ni-đa.", "죄송하지만 다시 한번 말씀해 주시겠어요?": "chuê-sông-ha-chi-man ta-si han-bơn mal-sưm-he chu-si-ghê-sơ-yô?", "조금만 천천히 말씀해 주시겠어요?": "chô-gưm-man chơn-chơn-hi mal-sưm-he chu-si-ghê-sơ-yô?", "[ ]라는 말씀이신가요?": "[ ]-ra-nưn mal-sư-mi-sin-ga-yô?", "그 수치는 지금 정확히 모르겠습니다. 확인해서 다시 보고드리겠습니다.": "cư su-chi-nưn chi-gưm chơng-hoa-khi mô-rư-ghêt-sưm-ni-đa. hoa-ghin-he-sơ ta-si bô-gô-đư-ri-ghêt-sưm-ni-đa.", "업체에 확인해서 오늘 안으로 보고드리겠습니다.": "ơp-chê-ê hoa-ghin-he-sơ ô-nưl a-nư-rô bô-gô-đư-ri-ghêt-sưm-ni-đa.", "이 부분은 토 님 / 도 팀장님께 여쭤보고 다시 보고드리겠습니다.": "i bu-bu-nưn thô nim / tô thim-chang-nim-kê yơ-chuơ-bô-gô ta-si bô-gô-đư-ri-ghêt-sưm-ni-đa.", "[ ]일까지 시간을 조금 더 주시면 감사하겠습니다.": "[ ]-il-ca-chi si-ga-nưl chô-gưm tơ chu-si-myơn cam-sa-ha-ghêt-sưm-ni-đa.", "알겠습니다. 말씀하신 대로 하겠습니다.": "al-ghêt-sưm-ni-đa. mal-sưm-ha-sin te-rô ha-ghêt-sưm-ni-đa.", "회의 후에 자료를 메시지로 보내드리겠습니다.": "huê-i hu-ê cha-ryô-rưl mê-si-chi-rô bô-ne-đư-ri-ghêt-sưm-ni-đa.", "잊지 않도록 메모하겠습니다.": "it-chi an-thô-rôk mê-mô-ha-ghêt-sưm-ni-đa."};
+
+  /* Phrase pairs per card: [Vietnamese phrase, Korean phrase, reading] — used for tap-to-highlight */
+  var ALIGN = {"mo-0": [["Thưa anh", "부팀장님", "bu-thim-chang-nim"], ["xin báo cáo", "보고드리겠습니다", "bô-gô-đư-ri-ghêt-sưm-ni-đa"], ["các việc", "업무", "ơm-mu"], ["trong tuần này", "이번 주", "i-bơn chu"]], "mo-1": [["Hôm nay", "오늘은", "ô-nư-rưn"], ["báo cáo", "보고드리겠습니다", "bô-gô-đư-ri-ghêt-sưm-ni-đa"], ["4 nội dung", "네 가지", "nê ca-chi"], ["vệ sinh nhà máy", "공장 청소", "công-chang chơng-sô"], ["thi công phòng QC", "QC실 공사", "QC-sil công-sa"], ["đường ống gia nhiệt bể T-400", "T-400 탱크 가열 배관", "T-400 theng-khư ca-yơl be-goan"], ["thí nghiệm", "시험 분석", "si-hơm bun-sơk"]], "mo-2": [["Trước tiên", "먼저", "mơn-chơ"], ["về", "에 대해", "ê te-he"], ["vệ sinh nhà máy", "공장 청소", "công-chang chơng-sô"]], "mo-3": [["Tiếp theo", "다음은", "ta-ư-mưn"], ["là", "입니다", "im-ni-đa"], ["thi công", "공사", "công-sa"], ["phòng QC", "QC실", "QC-sil"]], "mo-4": [["Thứ ba", "세 번째는", "sê bơn-che-nưn"], ["là", "입니다", "im-ni-đa"], ["đường ống gia nhiệt", "가열 배관", "ca-yơl be-goan"], ["bể T-400", "T-400 탱크", "T-400 theng-khư"]], "mo-5": [["Cuối cùng", "마지막으로", "ma-chi-ma-gư-rô"], ["là", "입니다", "im-ni-đa"], ["kết quả", "결과", "kyơl-goa"], ["thí nghiệm", "시험 분석", "si-hơm bun-sơk"]], "mo-6": [["đã gửi", "보내드렸습니다", "bô-ne-đư-ryơt-sưm-ni-đa"], ["tài liệu", "자료는", "cha-ryô-nưn"], ["liên quan", "관련", "coal-lyơn"], ["qua tin nhắn", "메시지로", "mê-si-chi-rô"], ["xem giúp em", "확인 부탁드립니다", "hoa-ghin bu-thak-tư-rim-ni-đa"]], "mo-7": [["Phần này", "이 부분은", "i bu-bu-nưn"], ["cần", "필요합니다", "pi-ryô-ham-ni-đa"], ["anh", "부팀장님의", "bu-thim-chang-ni-mê"], ["quyết định", "결정이", "kyơl-chơng-i"]], "mo-8": [["báo cáo xong", "보고를 마치겠습니다", "bô-gô-rưl ma-chi-ghêt-sưm-ni-đa"], ["có", "있으신가요", "i-sư-sin-ga-yô"], ["câu hỏi", "궁금하신 점", "cung-gưm-ha-sin chơm"]], "mo-9": [["Cảm ơn anh", "감사합니다", "cam-sa-ham-ni-đa"]], "vs-0": [["Vệ sinh nhà máy", "공장 청소", "công-chang chơng-sô"]], "vs-1": [["Đơn vị / nhà thầu vệ sinh", "청소 업체", "chơng-sô ơp-chê"]], "vs-2": [["Báo giá", "견적 / 견적서", "kyơn-chơk / kyơn-chơk-sơ"]], "vs-3": [["Phạm vi công việc", "작업 범위", "cha-gơp bơ-muy"]], "vs-4": [["Khu sản xuất", "생산 구역", "seng-san cu-yơk"], ["khu bồn chứa", "탱크 구역", "theng-khư cu-yơk"], ["nhà kho", "창고", "chang-gô"]], "vs-5": [["Dầu tràn", "기름 유출", "ki-rưm yu-chul"], ["vết dầu", "기름 얼룩", "ki-rưm ơl-luk"]], "vs-6": [["Cặn, bùn", "슬러지", "sưl-lơ-chi"]], "vs-7": [["Rãnh thoát nước", "배수로", "be-su-rô"]], "vs-8": [["Máy xịt rửa áp lực cao", "고압 세척기", "cô-ap sê-chơk-ki"]], "vs-9": [["Hóa chất tẩy rửa", "세척제", "sê-chơk-chê"]], "vs-10": [["Đồ bảo hộ", "보호구", "bô-hô-gu"]], "vs-11": [["Rác thải nguy hại", "유해폐기물", "yu-he-pê-ghi-mul"], ["rác thải công nghiệp", "산업폐기물", "sa-nơp-pê-ghi-mul"]], "vs-12": [["Lịch vệ sinh định kỳ", "정기 청소 일정", "chơng-ghi chơng-sô il-chơng"]], "vs-13": [["Ảnh trước và sau khi vệ sinh", "청소 전후 사진", "chơng-sô chơn-hu sa-chin"]], "vs-14": [["Nghiệm thu", "검수", "cơm-su"]], "vs-15": [["đã nhận", "받았습니다", "ba-đat-sưm-ni-đa"], ["báo giá", "견적을", "kyơn-chơ-gưl"], ["vệ sinh nhà máy", "공장 청소", "công-chang chơng-sô"], ["[ ] đơn vị", "[ ]개 업체", "[ ]-ke ơp-chê"], ["từ", "로부터", "rô-bu-thơ"]], "vs-16": [["Phạm vi", "작업 범위는", "cha-gơp bơ-muy-nưn"], ["khu sản xuất", "생산 구역", "seng-san cu-yơk"], ["khu bồn chứa", "탱크 구역", "theng-khư cu-yơk"], ["nhà kho", "창고", "chang-gô"], ["rãnh thoát nước", "배수로", "be-su-rô"]], "vs-17": [["Đơn vị [A]", "[A] 업체", "[A] ơp-chê"], ["báo giá", "견적은", "kyơn-chơ-gưn"], ["[ ] đồng", "[ ]동", "[ ]-tông"], ["làm trong", "작업 기간은", "cha-gơp ki-ga-nưn"], ["[ ] ngày", "[ ]일", "[ ]-il"]], "vs-18": [["đề xuất chọn", "추천드립니다", "chu-chơn-đư-rim-ni-đa"], ["đơn vị [A]", "[A] 업체를", "[A] ơp-chê-rưl"], ["giá", "가격이", "ca-ghyơ-ghi"], ["hợp lý", "합리적이고", "ham-ni-chơ-ghi-gô"], ["có kinh nghiệm", "경험이 있어서", "kyơng-hơ-mi i-sơ-sơ"], ["vệ sinh nhà máy hóa chất", "화학 공장 청소", "hoa-hak công-chang chơng-sô"]], "vs-19": [["Dự kiến", "예정이며", "yê-chơng-i-myơ"], ["vệ sinh", "청소할", "chơng-sô-hal"], ["vào ngày [ ]", "[ ]일에", "[ ]-i-rê"], ["sắp xếp", "일정을 조율하겠습니다", "il-chơng-ưl chô-yul-ha-ghêt-sưm-ni-đa"], ["không ảnh hưởng", "영향이 없도록", "yơng-hyang-i ơp-tô-rôk"], ["sản xuất", "생산에", "seng-sa-nê"]], "vs-20": [["quanh bồn", "탱크 주변에", "theng-khư chu-byơ-nê"], ["còn", "남아 있습니다", "na-ma it-sưm-ni-đa"], ["nhiều", "많이", "ma-ni"], ["dầu tràn", "기름 유출", "ki-rưm yu-chul"], ["cặn bám", "슬러지가", "sưl-lơ-chi-ga"]], "vs-21": [["Rác thải nguy hại", "유해폐기물은", "yu-he-pê-ghi-mu-rưn"], ["sau khi vệ sinh", "청소 후", "chơng-sô hu"], ["Thiên Phước", "티엔프억 업체가", "thi-ên-pư-ơk ơp-chê-ga"], ["thu gom", "수거합니다", "su-gơ-ham-ni-đa"], ["theo hợp đồng", "계약에 따라", "kê-ya-ghê ta-ra"]], "vs-22": [["Sau khi vệ sinh", "청소가 끝나면", "chơng-sô-ga cưn-na-myơn"], ["sẽ gửi", "보내드리겠습니다", "bô-ne-đư-ri-ghêt-sưm-ni-đa"], ["ảnh", "사진을", "sa-chi-nưl"], ["trước và sau", "전후", "chơn-hu"]], "vs-23": [["đề nghị", "제안드립니다", "chê-an-đư-rim-ni-đa"], ["làm", "만드는", "man-đư-nưn"], ["lịch vệ sinh định kỳ", "정기 청소 일정을", "chơng-ghi chơng-sô il-chơng-ưl"], ["hàng tháng", "매월", "me-uơl"]], "qc-0": [["Phòng QC", "QC실", "QC-sil"], ["phòng thí nghiệm", "실험실", "sil-hơm-sil"]], "qc-1": [["Cải tạo", "리모델링", "ri-mô-đêl-ling"], ["sửa chữa phòng", "개보수", "ke-bô-su"]], "qc-2": [["Thi công", "시공, 공사", "si-gông, công-sa"]], "qc-3": [["Bản vẽ thiết kế", "설계 도면", "sơl-ghê tô-myơn"], ["mặt bằng bố trí", "배치도", "be-chi-đô"]], "qc-4": [["Vách ngăn", "칸막이", "khan-ma-ghi"], ["trần thạch cao", "석고 천장", "sơk-cô chơn-chang"]], "qc-5": [["Sàn epoxy", "에폭시 바닥", "ê-pôk-si ba-đak"]], "qc-6": [["Điện chiếu sáng", "조명 전기", "chô-myơng chơn-ghi"], ["ổ cắm", "콘센트", "khôn-sên-thư"]], "qc-7": [["Máy lạnh", "에어컨", "ê-ơ-khơn"]], "qc-8": [["Tủ hút khí độc", "흄후드", "hyum-hu-đư"], ["quạt hút", "배기팬", "be-ghi-pen"]], "qc-9": [["Bồn rửa", "싱크대", "sing-khư-đe"], ["cấp thoát nước", "급배수", "cưp-pe-su"]], "qc-10": [["Bàn thí nghiệm", "실험대", "sil-hơm-đe"], ["tủ đựng hóa chất", "시약장", "si-yak-chang"]], "qc-11": [["Máy đo độ ẩm", "수분 측정기", "su-bun chưk-chơng-ghi"]], "qc-12": [["Tiến độ (phần trăm hoàn thành)", "공정률, 진행 상황", "công-chơng-nyul, chin-heng sang-hoang"]], "qc-13": [["Phát sinh chi phí", "추가 비용 발생", "chu-ga bi-yông bal-seng"]], "qc-14": [["Nghiệm thu bàn giao", "준공 검수 및 인계", "chun-gông cơm-su mit in-ghê"], ["bản vẽ hoàn công", "준공 도면", "chun-gông tô-myơn"]], "qc-15": [["Thi công", "공사는", "công-sa-nưn"], ["phòng QC", "QC실", "QC-sil"], ["hiện", "현재", "hyơn-che"], ["đạt", "진행되었습니다", "chin-heng-đuê-ơt-sưm-ni-đa"], ["khoảng [ ]%", "약 [ ]%", "yak [ ]%"]], "qc-16": [["Tuần này", "이번 주에", "i-bơn chu-ê"], ["đã hoàn thành", "완료했습니다", "oal-lyô-het-sưm-ni-đa"], ["vách ngăn", "칸막이와", "khan-ma-ghi-oa"], ["trần", "천장", "chơn-chang"]], "qc-17": [["Tuần sau", "다음 주에는", "ta-ưm chu-ê-nưn"], ["sẽ làm", "진행할 예정입니다", "chin-heng-hal yê-chơng-im-ni-đa"], ["điện", "전기", "chơn-ghi"], ["máy lạnh", "에어컨", "ê-ơ-khơn"], ["sàn epoxy", "에폭시 바닥", "ê-pôk-si ba-đak"]], "qc-18": [["Dự kiến", "예정입니다", "yê-chơng-im-ni-đa"], ["hoàn thành", "완공", "oan-gông"], ["bàn giao", "인계할", "in-ghê-hal"], ["vào ngày [ ]", "[ ]일에", "[ ]-i-rê"]], "qc-19": [["Có phát sinh", "추가 비용이 발생했습니다", "chu-ga bi-yông-i bal-seng-het-sưm-ni-đa"], ["[ ] đồng", "[ ]동의", "[ ]-tông-ê"], ["do thêm", "추가로", "chu-ga-rô"], ["ổ cắm", "콘센트와", "khôn-sên-thư-oa"], ["đường thoát nước", "배수 라인", "be-su ra-in"]], "qc-20": [["Phòng QC", "QC실에", "QC-si-rê"], ["cần", "필요합니다", "pi-ryô-ham-ni-đa"], ["tủ hút", "흄후드가", "hyum-hu-đư-ga"], ["làm thí nghiệm", "시험을", "si-hơ-mưl"], ["với axit", "산을 사용하는", "sa-nưl sa-yông-ha-nưn"], ["cho an toàn", "안전하게 하려면", "an-chơn-ha-ghê ha-ryơ-myơn"]], "qc-21": [["đã yêu cầu", "요청했습니다", "yô-chơng-het-sưm-ni-đa"], ["nhà thầu", "시공업체에", "si-gông-ơp-chê-ê"], ["bản vẽ hoàn công", "준공 도면을", "chun-gông tô-myơ-nưl"]], "qc-22": [["Báo giá", "견적은", "kyơn-chơ-gưn"], ["thiết bị thí nghiệm", "실험 장비", "sil-hơm chang-bi"], ["chưa có", "아직 없어서", "a-chik ơp-sơ-sơ"], ["đang lấy thêm", "추가로 받고 있습니다", "chu-ga-rô bat-cô it-sưm-ni-đa"]], "t4-0": [["Bể T-400", "T-400 탱크", "T-400 theng-khư"]], "t4-1": [["Đường ống gia nhiệt", "가열 배관", "ca-yơl be-goan"], ["ống xoắn gia nhiệt", "가열 코일", "ca-yơl khô-il"]], "t4-2": [["Hơi nước", "스팀", "sư-thim"], ["nước ngưng (condensate)", "응축수", "ưng-chuk-su"]], "t4-3": [["Đường nước nóng cấp", "온수 공급 라인", "ôn-su công-gưp ra-in"], ["đường nước nóng hồi", "온수 환수 라인", "ôn-su hoan-su ra-in"]], "t4-4": [["Bồn nước hồi 3 m³", "3 m³ 응축수 회수 탱크", "3 m³ ưng-chuk-su huê-su theng-khư"]], "t4-5": [["Lò hơi", "보일러", "bô-il-lơ"], ["công suất hơi", "스팀 용량", "sư-thim yông-nyang"]], "t4-6": [["Bẫy hơi", "스팀 트랩", "sư-thim thư-rep"]], "t4-7": [["Van điều khiển nhiệt độ", "온도 조절 밸브", "ôn-đô chô-chơl bel-bư"], ["cảm biến nhiệt độ", "온도 센서", "ôn-đô sên-sơ"]], "t4-8": [["Bọc cách nhiệt (bảo ôn)", "보온", "bô-ôn"]], "t4-9": [["Thử áp", "압력 시험", "am-nyơk si-hơm"], ["rò rỉ", "누설", "nu-sơl"]], "t4-10": [["Tách dầu khỏi cặn", "슬러지에서 기름 분리", "sưl-lơ-chi-ê-sơ ki-rưm bul-li"], ["lắng", "침전", "chim-chơn"]], "t4-11": [["Thu hồi dầu", "기름 회수", "ki-rưm huê-su"]], "t4-12": [["Thiết kế gốc", "기존 설계", "ki-chôn sơl-ghê"], ["so sánh báo giá", "견적 비교", "kyơn-chơk bi-ghyô"]], "t4-13": [["Khảo sát hiện trường", "현장 조사", "hyơn-chang chô-sa"]], "t4-14": [["Tạm ứng", "선금", "sơn-gưm"], ["thanh toán đợt cuối", "잔금", "chan-gưm"]], "t4-15": [["Mục đích", "목적은", "môk-chơ-gưn"], ["gia nhiệt T-400", "T-400을 가열해서", "T-400-ưl ca-yơl-he-sơ"], ["dầu", "기름이", "ki-rư-mi"], ["tách", "분리되게", "bul-li-đuê-ghê"], ["khỏi cặn", "슬러지에서", "sưl-lơ-chi-ê-sơ"], ["nhanh hơn", "더 빨리", "tơ pal-li"], ["bể trống sớm", "탱크를 빨리 비우는", "theng-khư-rưl pal-li bi-u-nưn"], ["cho mẻ tiếp theo", "다음 배치를 위해", "ta-ưm be-chi-rưl uy-he"]], "t4-16": [["Hiện", "현재", "hyơn-che"], ["khi sản lượng cao", "생산량이 많을 때는", "seng-san-nyang-i ma-nưl te-nưn"], ["phần dầu", "기름이", "ki-rư-mi"], ["chưa tách kịp", "분리되지 못한", "bul-li-đuê-chi mô-than"], ["bị bỏ đi", "버려집니다", "bơ-ryơ-chim-ni-đa"], ["cùng cặn", "슬러지와 함께", "sưl-lơ-chi-oa ham-kê"]], "t4-17": [["Thiết kế", "설계는", "sơl-ghê-nưn"], ["ống xoắn", "코일을", "khô-i-rưl"], ["khoảng 6.200 × 6.400 mm", "약 6,200 × 6,400mm 크기의", "yak 6,200 × 6,400mm khư-ghi-ê"], ["đặt", "설치하는", "sơl-chi-ha-nưn"], ["trong bể", "탱크 안에", "theng-khư a-nê"]], "t4-18": [["Nguồn nhiệt", "열원은", "yơ-ruơ-nưn"], ["tận dụng", "재활용합니다", "che-hoa-ryông-ham-ni-đa"], ["nước ngưng", "응축수를", "ưng-chuk-su-rưl"], ["các thiết bị khác", "다른 설비의", "ta-rưn sơl-bi-ê"], ["trong xưởng", "공장 내", "công-chang ne"]], "t4-19": [["Báo giá gốc", "기존 견적은", "ki-chôn kyơn-chơ-gưn"], ["bộ gia nhiệt", "가열 장치", "ca-yơl chang-chi"], ["250 triệu", "2억 5천만 동", "2-ơk 5-chơn-man tông"], ["bồn nước hồi 3 m³", "3 m³ 회수 탱크", "3 m³ huê-su theng-khư"], ["32 triệu", "3,200만 동", "3,200-man tông"], ["tổng 282 triệu", "총 2억 8,200만 동", "chông 2-ơk 8,200-man tông"], ["chưa VAT", "부가세 별도", "bu-ga-sê byơl-đô"], ["thi công 25 ngày", "공사 기간은 25일", "công-sa ki-ga-nưn 25-il"]], "t4-20": [["Theo chỉ đạo của anh", "부팀장님 지시에 따라", "bu-thim-chang-nim chi-si-ê ta-ra"], ["đã liên hệ", "요청했습니다", "yô-chơng-het-sưm-ni-đa"], ["[ ] nhà thầu khác", "다른 업체 [ ]곳에", "ta-rưn ơp-chê [ ]-cô-sê"], ["báo giá", "견적을", "kyơn-chơ-gưl"], ["cùng thiết kế", "같은 설계로", "ca-thưn sơl-ghê-rô"]], "t4-21": [["Hiện", "현재", "hyơn-che"], ["đã nhận", "받았고", "ba-đat-cô"], ["[ ] báo giá", "[ ]곳의 견적을", "[ ]-cô-sê kyơn-chơ-gưl"], ["[ ] đơn vị", "[ ]곳은", "[ ]-cô-sưn"], ["đang khảo sát hiện trường", "현장 조사 중입니다", "hyơn-chang chô-sa chung-im-ni-đa"]], "t4-22": [["sẽ lập", "정리하겠습니다", "chơng-ni-ha-ghêt-sưm-ni-đa"], ["bảng so sánh", "비교표로", "bi-ghyô-pyô-rô"], ["giá", "가격", "ca-ghyơk"], ["vật liệu", "자재", "cha-che"], ["thời gian thi công", "공사 기간", "công-sa ki-gan"], ["bảo hành", "보증 조건을", "bô-chưng chô-gơ-nưl"]], "t4-23": [["Cần", "필요합니다", "pi-ryô-ham-ni-đa"], ["xác nhận", "확인이", "hoa-ghi-ni"], ["lò hơi", "보일러", "bô-il-lơ"], ["còn đủ", "충분한지", "chung-bun-han-chi"], ["công suất", "용량이", "yông-nyang-i"], ["cho T-400", "T-400까지", "T-400-ca-chi"]], "t4-24": [["Sau khi lắp", "설치 후", "sơl-chi hu"], ["thử áp", "압력 시험과", "am-nyơk si-hơm-goa"], ["kiểm tra rò rỉ", "누설 점검을", "nu-sơl chơm-gơ-mưl"], ["trước khi vận hành", "운전 전에", "un-chơn chơ-nê"]], "tn-0": [["Thí nghiệm, phân tích mẫu", "시료 분석", "si-ryô bun-sơk"], ["lấy mẫu", "시료 채취", "si-ryô che-chuy"]], "tn-1": [["Mẫu Refined CNSL", "정제 CNSL 시료", "chơng-chê CNSL si-ryô"], ["cặn Cardanol", "카다놀 슬러지", "kha-đa-nôl sưl-lơ-chi"]], "tn-2": [["Phòng thí nghiệm bên ngoài", "외부 시험기관", "uê-bu si-hơm-ghi-goan"]], "tn-3": [["Chỉ tiêu phân tích", "분석 항목", "bun-sơk hang-môk"]], "tn-4": [["Độ ẩm (hàm lượng nước)", "수분 함량", "su-bun ham-nyang"]], "tn-5": [["Tạp chất", "불순물", "bul-sun-mul"]], "tn-6": [["Độ nhớt", "점도", "chơm-đô"], ["tỷ trọng", "비중", "bi-chung"]], "tn-7": [["Nhiệt trị", "발열량", "ba-ryơl-lyang"], ["hàm lượng tro", "회분", "huê-bun"]], "tn-8": [["Lưu huỳnh", "황 함량", "hoang ham-nyang"], ["điểm chớp cháy", "인화점", "in-hoa-chơm"]], "tn-9": [["Phiếu kết quả phân tích (COA)", "분석 성적서", "bun-sơk sơng-chơk-sơ"]], "tn-10": [["Tiêu chuẩn (spec)", "규격", "kyu-ghyơk"], ["đạt", "적합", "chơ-khap"], ["không đạt", "부적합", "bu-chơ-khap"]], "tn-11": [["Chi phí phân tích", "분석 비용", "bun-sơk bi-yông"], ["thời gian trả kết quả", "결과 회신 기간", "kyơl-goa huê-sin ki-gan"]], "tn-12": [["Khử nước lại", "재탈수", "che-thal-su"]], "tn-13": [["đã gửi", "의뢰했습니다", "ưi-ruê-het-sưm-ni-đa"], ["mẫu", "시료를", "si-ryô-rưl"], ["Refined CNSL", "정제 CNSL", "chơng-chê CNSL"], ["cặn Cardanol", "카다놀 슬러지", "kha-đa-nôl sưl-lơ-chi"], ["SGS Việt Nam", "SGS 베트남에", "SGS bê-thư-na-mê"], ["phân tích", "분석", "bun-sơk"]], "tn-14": [["Chi phí phân tích", "분석 비용은", "bun-sơk bi-yông-ưn"], ["14.882.400 đồng", "14,882,400동", "14,882,400-tông"], ["thanh toán", "결제했습니다", "kyơl-chê-het-sưm-ni-đa"], ["bằng chuyển khoản", "계좌이체로", "kê-choa-i-chê-rô"]], "tn-15": [["Chỉ tiêu phân tích", "분석 항목은", "bun-sơk hang-mô-gưn"], ["độ ẩm", "수분", "su-bun"], ["tạp chất", "불순물", "bul-sun-mul"], ["độ nhớt", "점도", "chơm-đô"], ["tỷ trọng", "비중", "bi-chung"]], "tn-16": [["Dự kiến", "예정입니다", "yê-chơng-im-ni-đa"], ["có", "나올", "na-ôl"], ["kết quả", "결과는", "kyơl-goa-nưn"], ["sau [ ] ngày làm việc", "영업일 기준 [ ]일 후에", "yơng-ơ-bil ki-chun [ ]-il hu-ê"]], "tn-17": [["Độ ẩm", "수분은", "su-bu-nưn"], ["[ ]%", "[ ]%로", "[ ]%-rô"], ["đạt", "적합합니다", "chơ-kha-pam-ni-đa"], ["tiêu chuẩn 0,2%", "0.2% 규격에", "0.2% kyu-ghyơ-ghê"]], "tn-18": [["chưa đạt", "부적합해서", "bu-chơ-kha-pe-sơ"], ["đề xuất", "제안드립니다", "chê-an-đư-rim-ni-đa"], ["khử nước lại", "재탈수를", "che-thal-su-rưl"]], "tn-19": [["Kết quả cặn Cardanol", "카다놀 슬러지 결과로", "kha-đa-nôl sưl-lơ-chi kyơl-goa-rô"], ["đánh giá", "평가하겠습니다", "pyơng-ga-ha-ghêt-sưm-ni-đa"], ["bao nhiêu dầu", "기름 양을", "ki-rưm yang-ưl"], ["có thể thu hồi", "회수 가능한", "huê-su ca-nưng-han"]], "tn-20": [["Khi có phiếu kết quả", "성적서가 나오면", "sơng-chơk-sơ-ga na-ô-myơn"], ["sẽ gửi kèm", "함께 보내드리겠습니다", "ham-kê bô-ne-đư-ri-ghêt-sưm-ni-đa"], ["bản dịch tiếng Hàn", "한국어 번역본과", "han-gu-gơ bơ-nyơk-pôn-goa"]], "th-0": [["Tổng chi phí", "총 비용은", "chông bi-yông-ưn"], ["bao nhiêu", "얼마예요", "ơl-ma-yê-yô"]], "th-1": [["Tổng cộng [ ] đồng", "총 [ ]동입니다", "chông [ ]-tông-im-ni-đa"], ["đã gồm VAT", "부가세 포함", "bu-ga-sê pô-ham"]], "th-2": [["Có làm", "할 수는", "hal su-nưn"], ["rẻ hơn", "더 싸게", "tơ sa-ghê"], ["được không", "없어요", "ơp-sơ-yô"]], "th-3": [["đàm phán lại", "다시 협상해서", "ta-si hyơp-sang-he-sơ"], ["với nhà thầu", "업체와", "ơp-chê-oa"], ["báo lại", "다시 보고드리겠습니다", "ta-si bô-gô-đư-ri-ghêt-sưm-ni-đa"], ["mức giảm", "얼마나 낮출 수 있는지", "ơl-ma-na nat-chul su in-nưn-chi"]], "th-4": [["Đã lấy", "받았어요", "ba-đa-sơ-yô"], ["mấy", "몇 곳", "myơt côt"], ["báo giá", "견적은", "kyơn-chơ-gưn"], ["Tại sao", "왜", "oe"], ["chọn", "선택했어요", "sơn-the-khe-sơ-yô"], ["đơn vị này", "이 업체를", "i ơp-chê-rưl"]], "th-5": [["lấy", "받았습니다", "ba-đat-sưm-ni-đa"], ["[ ] báo giá", "[ ]곳에서 견적을", "[ ]-cô-sê-sơ kyơn-chơ-gưl"], ["Đơn vị này", "이 업체가", "i ơp-chê-ga"], ["tốt nhất", "가장 좋았습니다", "ca-chang chô-at-sưm-ni-đa"], ["khi so", "비교했을 때", "bi-ghyô-he-sưl te"], ["giá", "가격", "ca-ghyơk"], ["kinh nghiệm", "경험", "kyơng-hơm"], ["thời gian thi công", "공사 기간을", "công-sa ki-ga-nưl"]], "th-6": [["Điều kiện thanh toán", "결제 조건은요", "kyơl-chê chô-gơ-nư-nyô"], ["Bảo hành", "보증 기간은", "bô-chưng ki-ga-nưn"], ["bao lâu", "얼마나 돼요", "ơl-ma-na toe-yô"]], "th-7": [["Tạm ứng 50%", "선금 50%", "sơn-gưm 50%"], ["hoàn thành thanh toán 50%", "완료 후 잔금 50%", "oal-lyô hu chan-gưm 50%"], ["Bảo hành", "보증 기간은", "bô-chưng ki-ga-nưn"], ["[12] tháng", "[12]개월", "[12]-ke-uơl"]], "th-8": [["Có", "있어요", "i-sơ-yô"], ["phát sinh chi phí", "추가 비용이", "chu-ga bi-yông-i"]], "th-9": [["Hiện chưa có", "현재까지는 없습니다", "hyơn-che-ca-chi-nưn ơp-sưm-ni-đa"], ["Nếu có", "발생하면", "bal-seng-ha-myơn"], ["sẽ báo anh trước", "먼저 보고드리겠습니다", "mơn-chơ bô-gô-đư-ri-ghêt-sưm-ni-đa"], ["khi làm", "작업 전에", "cha-gơp chơ-nê"]], "th-10": [["Lấy thêm", "더 받아 보세요", "tơ ba-đa bô-sê-yô"], ["báo giá", "견적을", "kyơn-chơ-gưl"]], "th-11": [["Dạ", "알겠습니다", "al-ghêt-sưm-ni-đa"], ["lấy thêm", "더 받아서", "tơ ba-đa-sơ"], ["báo giá", "다른 업체 견적을", "ta-rưn ơp-chê kyơn-chơ-gưl"], ["báo cáo lại", "다시 보고드리겠습니다", "ta-si bô-gô-đư-ri-ghêt-sưm-ni-đa"]], "th-12": [["Khi nào", "언제", "ơn-chê"], ["xong", "끝나요", "cưn-na-yô"], ["ảnh hưởng", "영향이", "yơng-hyang-i"], ["sản xuất", "생산에", "seng-sa-nê"]], "th-13": [["Dự kiến", "예정입니다", "yê-chơng-im-ni-đa"], ["xong ngày [ ]", "[ ]일에 완료할", "[ ]-i-rê oal-lyô-hal"], ["làm", "작업해서", "cha-gơ-pe-sơ"], ["vào ngày không sản xuất", "생산이 없는 날에", "seng-sa-ni ơm-nưn na-rê"], ["không ảnh hưởng", "영향이 없도록", "yơng-hyang-i ơp-tô-rôk"]], "th-14": [["Tại sao", "왜", "oe"], ["chậm tiến độ", "공사가 늦어졌어요", "công-sa-ga nư-chơ-chơ-sơ-yô"]], "th-15": [["Vật tư về trễ", "자재 입고가 늦어져서", "cha-che ip-cô-ga nư-chơ-chơ-sơ"], ["chậm khoảng [ ] ngày", "약 [ ]일 지연되었습니다", "yak [ ]-il chi-yơn-đuê-ơt-sưm-ni-đa"], ["đã yêu cầu", "요청했습니다", "yô-chơng-het-sưm-ni-đa"], ["nhà thầu", "업체에", "ơp-chê-ê"], ["tăng người", "인원을 늘려서", "i-nuơ-nưl nưl-lyơ-sơ"], ["bù lại", "만회하도록", "man-huê-ha-đô-rôk"]], "th-16": [["Ai", "누가", "nu-ga"], ["giám sát", "감독은", "cam-đô-gưn"], ["thi công", "공사", "công-sa"], ["An toàn", "안전은", "an-chơ-nưn"], ["thế nào", "어떻게 관리해요", "ơ-tơ-khê coal-li-he-yô"]], "th-17": [["kiểm tra", "확인하고", "hoa-ghin-ha-gô"], ["hiện trường", "현장을", "hyơn-chang-ưl"], ["mỗi ngày", "매일", "me-il"], ["báo cáo", "보고드리겠습니다", "bô-gô-đư-ri-ghêt-sưm-ni-đa"], ["bằng ảnh", "사진으로", "sa-chi-nư-rô"], ["Trước khi làm", "작업 전", "cha-gơp chơn"], ["hướng dẫn an toàn", "안전 교육", "an-chơn kyô-yuk"], ["mặc đồ bảo hộ", "보호구 착용", "bô-hô-gu cha-ghyông"], ["xin phép khi hàn cắt", "화기 작업 허가를", "hoa-ghi cha-gơp hơ-ga-rưl"]], "th-18": [["Gia nhiệt T-400", "T-400을 가열하면", "T-400-ưl ca-yơl-ha-myơn"], ["hiệu quả", "효과가", "hyô-goa-ga"], ["là gì", "뭐예요", "muơ-yê-yô"]], "th-19": [["Dầu tách nhanh hơn", "기름 분리가 빨라져서", "ki-rưm bul-li-ga pal-la-chơ-sơ"], ["bể trống sớm hơn", "탱크를 더 빨리 비울 수 있고", "theng-khư-rưl tơ pal-li bi-ul su it-cô"], ["giảm", "줄일 수 있습니다", "chu-ril su it-sưm-ni-đa"], ["lượng dầu bị bỏ đi", "버려지는 기름도", "bơ-ryơ-chi-nưn ki-rưm-đô"], ["cùng cặn", "슬러지와 함께", "sưl-lơ-chi-oa ham-kê"]], "th-20": [["Lò hơi", "보일러", "bô-il-lơ"], ["đủ hơi", "스팀이 충분해요", "sư-thi-mi chung-bun-he-yô"]], "th-21": [["đang kiểm tra", "확인하고 있습니다", "hoa-ghin-ha-gô it-sưm-ni-đa"], ["theo", "기준으로", "ki-chu-nư-rô"], ["công suất lò", "보일러 용량", "bô-il-lơ yông-nyang"], ["3 tấn/giờ", "시간당 3톤", "si-gan-đang 3-thôn"], ["tổng hợp", "정리해서", "chơng-ni-he-sơ"], ["báo cáo lại", "다시 보고드리겠습니다", "ta-si bô-gô-đư-ri-ghêt-sưm-ni-đa"]], "th-22": [["Khi nào", "언제", "ơn-chê"], ["có", "나와요", "na-oa-yô"], ["kết quả", "결과는", "kyơl-goa-nưn"], ["thí nghiệm", "시험", "si-hơm"]], "th-23": [["Khoảng [ ] ngày làm việc nữa", "영업일 기준 [ ]일 정도 걸립니다", "yơng-ơ-bil ki-chun [ ]-il chơng-đô cơl-lim-ni-đa"], ["Có kết quả", "결과가 나오면", "kyơl-goa-ga na-ô-myơn"], ["gửi anh", "보내드리겠습니다", "bô-ne-đư-ri-ghêt-sưm-ni-đa"], ["ngay", "바로", "ba-rô"]], "th-24": [["Nếu không đạt", "부적합이면", "bu-chơ-kha-bi-myơn"], ["thì sao", "어떻게 해요", "ơ-tơ-khê he-yô"]], "th-25": [["tìm nguyên nhân", "원인을 분석하고", "uơ-ni-nưl bun-sơ-kha-gô"], ["xử lý lại", "재처리한 뒤", "che-chơ-ri-han tuy"], ["gửi mẫu kiểm tra lại", "다시 시험을 의뢰하겠습니다", "ta-si si-hơ-mưl ưi-ruê-ha-ghêt-sưm-ni-đa"]], "th-26": [["Tại sao", "왜", "oe"], ["phải gửi SGS", "SGS에 맡겨야 해요", "SGS-ê mat-kyơ-ya he-yô"], ["không tự kiểm", "우리가 직접 못 해요", "u-ri-ga chik-chơp môt he-yô"]], "th-27": [["Khách hàng", "고객에게 제출할", "cô-ghe-ghê-ghê chê-chul-hal"], ["cần", "필요하고", "pi-ryô-ha-gô"], ["phiếu kết quả của bên thứ ba", "공인 성적서가", "công-in sơng-chơk-sơ-ga"], ["phòng QC của mình", "우리 QC실에는", "u-ri QC-si-rê-nưn"], ["chưa đủ thiết bị", "아직 장비가 부족하기", "a-chik chang-bi-ga bu-chô-kha-ghi"]], "cn-0": [["Xin lỗi", "죄송하지만", "chuê-sông-ha-chi-man"], ["nói lại", "다시 한번 말씀해", "ta-si han-bơn mal-sưm-he"], ["được không ạ", "주시겠어요", "chu-si-ghê-sơ-yô"]], "cn-1": [["nói", "말씀해", "mal-sưm-he"], ["chậm hơn", "천천히", "chơn-chơn-hi"], ["một chút", "조금만", "chô-gưm-man"], ["được không ạ", "주시겠어요", "chu-si-ghê-sơ-yô"]], "cn-2": [["Ý anh là", "말씀이신가요", "mal-sư-mi-sin-ga-yô"], ["[ ]", "[ ]라는", "[ ]-ra-nưn"]], "cn-3": [["Số liệu này", "그 수치는", "cư su-chi-nưn"], ["chưa nắm", "모르겠습니다", "mô-rư-ghêt-sưm-ni-đa"], ["chính xác", "정확히", "chơng-hoa-khi"], ["kiểm tra", "확인해서", "hoa-ghin-he-sơ"], ["báo lại", "다시 보고드리겠습니다", "ta-si bô-gô-đư-ri-ghêt-sưm-ni-đa"]], "cn-4": [["xác nhận", "확인해서", "hoa-ghin-he-sơ"], ["với nhà thầu", "업체에", "ơp-chê-ê"], ["báo lại", "보고드리겠습니다", "bô-gô-đư-ri-ghêt-sưm-ni-đa"], ["trong hôm nay", "오늘 안으로", "ô-nưl a-nư-rô"]], "cn-5": [["Phần này", "이 부분은", "i bu-bu-nưn"], ["hỏi", "여쭤보고", "yơ-chuơ-bô-gô"], ["anh Thọ", "토 님", "thô nim"], ["anh Đô", "도 팀장님께", "tô thim-chang-nim-kê"], ["báo lại", "다시 보고드리겠습니다", "ta-si bô-gô-đư-ri-ghêt-sưm-ni-đa"]], "cn-6": [["Cho em", "주시면 감사하겠습니다", "chu-si-myơn cam-sa-ha-ghêt-sưm-ni-đa"], ["thêm", "조금 더", "chô-gưm tơ"], ["thời gian", "시간을", "si-ga-nưl"], ["đến ngày [ ]", "[ ]일까지", "[ ]-il-ca-chi"]], "cn-7": [["Em hiểu rồi", "알겠습니다", "al-ghêt-sưm-ni-đa"], ["làm theo", "대로 하겠습니다", "te-rô ha-ghêt-sưm-ni-đa"], ["ý anh", "말씀하신", "mal-sưm-ha-sin"]], "cn-8": [["Sau buổi họp", "회의 후에", "huê-i hu-ê"], ["gửi", "보내드리겠습니다", "bô-ne-đư-ri-ghêt-sưm-ni-đa"], ["tài liệu", "자료를", "cha-ryô-rưl"], ["qua tin nhắn", "메시지로", "mê-si-chi-rô"]], "cn-9": [["ghi lại", "메모하겠습니다", "mê-mô-ha-ghêt-sưm-ni-đa"], ["không quên", "잊지 않도록", "it-chi an-thô-rôk"]]};
+
+  var CARDS = [], BY_ID = {}, DECK_NAME = {};
+  DECKS.forEach(function (d) {
+    DECK_NAME[d.id] = d.name;
+    var rows = RAW[d.id];
+    rows.forEach(function (r, i) {
+      var c = { id: d.id + '-' + i, n: CARDS.length, deck: d.id, kind: r[0], vi: r[1], ko: r[2], pr: PRON[r[2]] || '', note: r[3] || '' };
+      if (c.kind === 'a') {
+        for (var j = i - 1; j >= 0; j--) { if (rows[j][0] === 'q') { c.ctxVi = rows[j][1]; c.ctxKo = rows[j][2]; break; } }
+      }
+      CARDS.push(c); BY_ID[c.id] = c;
+    });
+  });
+
+  /* ---------- Phrase alignment: tap a Vietnamese phrase and its Korean match lights up ---------- */
+  function pairsOf(c) { return (!c.ov && ALIGN[c.id]) || [[c.vi, c.ko, c.pr]]; }
+  var SEGS = {};
+  var isWordChar = (function () {
+    try { var re = new RegExp('[\\p{L}\\p{N}]', 'u'); return function (ch) { return re.test(ch); }; }
+    catch (e) { return function (ch) { return /[A-Za-z0-9À-ỹ]/.test(ch); }; }
+  })();
+  function locate(text, chunks, boundary) {
+    var taken = [], out = [];
+    chunks.forEach(function (ch, i) {
+      if (!ch) return;
+      var from = 0;
+      while (true) {
+        var k = text.indexOf(ch, from); if (k < 0) return;
+        var e = k + ch.length;
+        var ok = !taken.some(function (r) { return k < r[1] && e > r[0]; });
+        if (ok && boundary) { if (k > 0 && isWordChar(text[k - 1])) ok = false; if (e < text.length && isWordChar(text[e])) ok = false; }
+        if (ok) { taken.push([k, e]); out.push({ s: k, e: e, i: i }); return; }
+        from = k + 1;
+      }
+    });
+    return out.sort(function (a, b) { return a.s - b.s; });
+  }
+  function segsOf(c) {
+    if (!SEGS[c.id]) {
+      var ps = pairsOf(c);
+      SEGS[c.id] = { vi: locate(c.vi, ps.map(function (p) { return p[0]; }), true), ko: locate(c.ko, ps.map(function (p) { return p[1]; }), false) };
+    }
+    return SEGS[c.id];
+  }
+  function renderText(el, c, lang, tappable) {
+    var text = lang === 'vi' ? c.vi : c.ko, segs = segsOf(c)[lang], h = getP(c.id).h || [], pos = 0;
+    el.textContent = '';
+    segs.forEach(function (sg) {
+      if (sg.s > pos) el.appendChild(document.createTextNode(text.slice(pos, sg.s)));
+      var sp = document.createElement('span');
+      sp.className = 'ph' + (tappable ? ' tap' : '') + (h.indexOf(sg.i) >= 0 ? ' hl' + (sg.i % 4 + 1) : '');
+      sp.dataset.i = sg.i; sp.textContent = text.slice(sg.s, sg.e);
+      el.appendChild(sp); pos = sg.e;
+    });
+    if (pos < text.length) el.appendChild(document.createTextNode(text.slice(pos)));
+  }
+  function toggleHl(id, i) {
+    var h = (getP(id).h || []).slice(), k = h.indexOf(i);
+    if (k >= 0) h.splice(k, 1); else h.push(i);
+    setP(id, { h: h.length ? h : null });
+    if (k < 0) { var p = pairsOf(BY_ID[id])[i]; if (p) speak(p[1]); }
+  }
+  function hlItem(p, i) {
+    var d = document.createElement('div'); d.className = 'hl-item';
+    var sw = document.createElement('span'); sw.className = 'sw'; sw.style.background = 'var(--hl' + (i % 4 + 1) + ')'; d.appendChild(sw);
+    var v = document.createElement('span'); v.textContent = p[0]; d.appendChild(v);
+    var ar = document.createElement('span'); ar.className = 'p'; ar.textContent = '→'; d.appendChild(ar);
+    var k = document.createElement('span'); k.className = 'k'; k.lang = 'ko'; k.textContent = p[1]; d.appendChild(k);
+    if (state.pron && p[2]) { var pr = document.createElement('span'); pr.className = 'p'; pr.textContent = p[2]; d.appendChild(pr); }
+    var sp = document.createElement('button'); sp.type = 'button'; sp.className = 'speak'; sp.dataset.say = p[1];
+    sp.setAttribute('aria-label', 'Nghe tiếng Hàn'); sp.title = 'Nghe tiếng Hàn'; sp.innerHTML = $('cSpeak').innerHTML; d.appendChild(sp);
+    return d;
+  }
+
+  /* ---------- Helpers ---------- */
+  function $(id) { return document.getElementById(id); }
+  function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) { } }
+  function mulberry(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  function shuffle(arr, rnd) { var a = arr.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  var canSpeak = ('speechSynthesis' in window) && typeof window.SpeechSynthesisUtterance !== 'undefined';
+  if (!canSpeak) document.documentElement.classList.add('no-tts');
+  var VOICE_KEY = 'viko-ko-meeting-voice-v1', VOICE_PREF = { ko: '', vi: '' };
+  try { var vp = JSON.parse(lsGet(VOICE_KEY) || '{}'); if (vp && typeof vp === 'object') { VOICE_PREF.ko = vp.ko || ''; VOICE_PREF.vi = vp.vi || ''; } } catch (e) { }
+  function saveVoice() { lsSet(VOICE_KEY, JSON.stringify(VOICE_PREF)); }
+  // Rank the device's voices so the most natural one wins (Edge "Natural", Chrome "Google", Apple Premium/Enhanced)
+  function voiceScore(v, pre) {
+    var n = (v.name || '') + ' ' + (v.voiceURI || ''), s = 0;
+    if (/natural/i.test(n)) s += 100;
+    if (/google/i.test(n)) s += 70;
+    if (/premium/i.test(n)) s += 60;
+    if (/enhanced|nâng cao/i.test(n)) s += 50;
+    if (/online/i.test(n)) s += 40;
+    if (pre === 'ko' && /sunhi|injoon|hyunsu|yuna|seoyeon|jimin|bongjin|gookmin|sora|minsu/i.test(n)) s += 30;
+    if (pre === 'vi' && /hoaimy|namminh|linh|thi my|hoai/i.test(n)) s += 30;
+    if (/espeak|compact/i.test(n)) s -= 80;
+    if (!v.localService) s += 5;
+    return s;
+  }
+  function voicesFor(pre) {
+    if (!canSpeak) return [];
+    var all = window.speechSynthesis.getVoices() || [];
+    return all.filter(function (v) { return (v.lang || '').toLowerCase().replace('_', '-').indexOf(pre) === 0; })
+      .sort(function (a, b) { return voiceScore(b, pre) - voiceScore(a, pre); });
+  }
+  function pickVoice(pre) {
+    var list = voicesFor(pre); if (!list.length) return null;
+    var want = VOICE_PREF[pre];
+    if (want) { for (var i = 0; i < list.length; i++) { if (list[i].voiceURI === want) return list[i]; } }
+    return list[0];
+  }
+  function speak(text, lang, onend) {
+    if (!canSpeak) { if (onend) onend(); return; }
+    lang = lang || 'ko-KR';
+    var pre = lang.slice(0, 2).toLowerCase();
+    try {
+      var u = new SpeechSynthesisUtterance(text.replace(/\[\s*\]/g, ' '));
+      u.lang = lang; u.rate = (pre === 'vi' ? 1 : 0.9) * (RATE[state.rate] || 1);
+      if (onend) { u.onend = onend; u.onerror = onend; }
+      var v = pickVoice(pre); if (v) { u.voice = v; u.lang = v.lang; }
+      window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
+    } catch (e) { if (onend) onend(); }
+  }
+
+  /* ---------- Custom decks & cards (made by the learner, synced between devices) ---------- */
+  var CUSTOM_KEY = 'viko-custom-v1';
+  var custom = { d: {}, c: {} };
+  try { var cj = JSON.parse(lsGet(CUSTOM_KEY) || '{}'); if (cj && typeof cj === 'object') { custom.d = cj.d || {}; custom.c = cj.c || {}; } } catch (e) { }
+  var BUILTIN_DECKS = DECKS.length;
+  function sortByO(map) { return Object.keys(map).sort(function (a, b) { return ((map[a] || {}).o || 0) - ((map[b] || {}).o || 0); }); }
+  // Built-in cards can be edited or hidden live from the database: an entry in custom.c whose id is a built-in id overrides it
+  var BUILTIN = CARDS.map(function (c) { return Object.assign({}, c); });
+  function applyCustom() {
+    DECKS.splice(BUILTIN_DECKS).forEach(function (d) { delete DECK_NAME[d.id]; });
+    CARDS.length = 0;
+    Object.keys(BY_ID).forEach(function (k) { delete BY_ID[k]; });
+    Object.keys(SEGS).forEach(function (k) { delete SEGS[k]; });
+    sortByO(custom.d).forEach(function (id) {
+      var d = custom.d[id]; if (!d || d.del || !d.name) return;
+      DECKS.push({ id: id, name: String(d.name), custom: true }); DECK_NAME[id] = String(d.name);
+    });
+    BUILTIN.forEach(function (b) {
+      var r = custom.c[b.id], c = Object.assign({}, b);
+      if (r) {
+        if (r.del) return;
+        ['vi', 'ko', 'pr', 'note'].forEach(function (f) { if (typeof r[f] === 'string' && (r[f] || f === 'pr' || f === 'note')) c[f] = r[f]; });
+        if (r.deck && DECK_NAME[r.deck]) c.deck = r.deck;
+        c.ov = true;
+      }
+      c.n = CARDS.length; CARDS.push(c); BY_ID[c.id] = c;
+    });
+    sortByO(custom.c).forEach(function (id) {
+      var r = custom.c[id]; if (BY_ID[id] || BUILTIN_IDS[id]) return;
+      if (!r || r.del || !r.vi || !r.ko || !DECK_NAME[r.deck]) return;
+      var vi = String(r.vi), ko = String(r.ko);
+      var c = { id: id, n: CARDS.length, deck: r.deck, kind: (vi.length > 32 || ko.length > 22) ? 's' : 'w', vi: vi, ko: ko, pr: r.pr ? String(r.pr) : '', note: r.note ? String(r.note) : '', custom: true };
+      CARDS.push(c); BY_ID[id] = c;
+    });
+  }
+  var BUILTIN_IDS = {}; BUILTIN.forEach(function (b) { BUILTIN_IDS[b.id] = true; });
+  function saveCustom() { lsSet(CUSTOM_KEY, JSON.stringify(custom)); }
+  applyCustom();
+
+  /* ---------- UI state (per-viewer convenience) ---------- */
+  var UI_KEY = 'viko-ko-meeting-ui-v1';
+  var UI_KEYS = ['deck', 'status', 'order', 'dir', 'mode', 'seed', 'pron', 'autoVi', 'rate', 'loose', 'mcOnly', 'wkind'];
+  var MODES = ['cards', 'learn', 'write', 'test', 'match', 'quiz', 'list', 'words', 'sets'];
+  var state = { deck: 'all', status: 'all', order: 'default', dir: 'vk', mode: 'cards', seed: 7, pron: true, autoVi: true, rate: 'mid', loose: true, mcOnly: false, wkind: 'tr', idx: 0, flipped: false, search: '' };
+  try { var savedUi = JSON.parse(lsGet(UI_KEY) || '{}'); UI_KEYS.forEach(function (k) { if (savedUi[k] !== undefined) state[k] = savedUi[k]; }); } catch (e) { }
+  if (state.deck !== 'all' && !DECK_NAME[state.deck]) state.deck = 'all';
+  if (MODES.indexOf(state.mode) < 0) state.mode = 'cards';
+  if (!(state.rate in { slow: 1, mid: 1, fast: 1 })) state.rate = 'mid';
+  function saveUi() { var o = {}; UI_KEYS.forEach(function (k) { o[k] = state[k]; }); lsSet(UI_KEY, JSON.stringify(o)); }
+
+  /* ---------- Progress (X marks + level), synced to the viewer's own db subtree ---------- */
+  var LS_KEY = 'viko-ko-meeting-progress-v1';
+  function clean(o) {
+    var out = {};
+    if (!o || typeof o !== 'object') return out;
+    Object.keys(o).forEach(function (k) {
+      var e = cleanEntry(k, o[k]);
+      if (e && (e.x || e.lv || e.h || e.ls || e.t)) out[k] = e;
+    });
+    return out;
+  }
+  var progress = {};
+  try { progress = clean(JSON.parse(lsGet(LS_KEY) || '{}')); } catch (e) { progress = {}; }
+  function cacheLocal() { lsSet(LS_KEY, JSON.stringify(progress)); }
+  function getP(id) { return progress[id] || {}; }
+
+  var storageOk = (function () { try { var k = '__t'; localStorage.setItem(k, '1'); localStorage.removeItem(k); return true; } catch (e) { return false; } })();
+  function setP(id, patch) {
+    var cur = Object.assign({}, getP(id), patch);
+    if (!cur.x) delete cur.x;
+    if (!cur.lv) delete cur.lv;
+    if (!cur.ls) delete cur.ls;
+    if (!cur.h || !cur.h.length) delete cur.h;
+    cur.t = Date.now();
+    progress[id] = cur;
+    cacheLocal();
+    SYNC.queue('p/' + id, cur);
+    renderDecks(); renderStats();
+  }
+  function refreshAfterSync() {
+    renderDecks(); renderStats();
+    if (state.mode === 'cards') renderCard();
+    else if (state.mode === 'quiz' && quiz.id) renderQuiz();
+    else if (state.mode === 'list') renderList();
+    else if (state.mode === 'words') renderWords();
+    else if (state.mode === 'sets') renderSets();
+    else if (state.mode === 'learn') paintLearnBar();
+  }
+  // Keep several open tabs in step
+  window.addEventListener('storage', function (e) {
+    if (e.key === LS_KEY) { try { progress = clean(JSON.parse(e.newValue || '{}')); } catch (er) { progress = {}; } refreshAfterSync(); }
+    else if (e.key === CUSTOM_KEY) { try { var cj2 = JSON.parse(e.newValue || '{}'); custom.d = cj2.d || {}; custom.c = cj2.c || {}; } catch (er) { } applyCustom(); var cc = currentCard(); buildQueue(cc ? cc.id : null); renderAll(); }
+  });
+
+  /* ---------- Export / import progress (move between devices) ---------- */
+  function exportProgress() {
+    var data = JSON.stringify({ app: 'viko-ko-meeting', v: 1, exported: new Date().toISOString(), items: progress }, null, 2);
+    var blob = new Blob([data], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url; a.download = 'tien-do-hop-tieng-han-' + new Date().toISOString().slice(0, 10) + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  }
+  function importProgress(file) {
+    var r = new FileReader();
+    r.onload = function () {
+      var note = $('footNote');
+      try {
+        var d = JSON.parse(r.result);
+        var items = clean(d && d.items ? d.items : d), now = Date.now();
+        Object.keys(progress).forEach(function (k) { if (!items[k]) items[k] = {}; });
+        Object.keys(items).forEach(function (k) { items[k].t = now; SYNC.queue('p/' + k, items[k]); });
+        progress = items; cacheLocal(); buildQueue(); renderAll();
+        note.textContent = 'Đã nhập tiến độ: ' + Object.keys(items).length + ' thẻ.';
+      } catch (e) { note.textContent = 'Tệp không đúng định dạng tiến độ.'; }
+    };
+    r.readAsText(file);
+  }
+
+  /* ---------- Queue (snapshot of the filtered order) ---------- */
+  var queue = [], queueVer = 0;
+  function statusOk(c) {
+    var p = getP(c.id);
+    switch (state.status) {
+      case 'x': return !!p.x;
+      case 'h': case 'm': case 'e': return p.lv === state.status;
+      case 'new': return !p.lv;
+      case 'hl': return !!(p.h && p.h.length);
+      default: return true;
+    }
+  }
+  function rank(c) { var p = getP(c.id); var lv = { h: 0, m: 2, e: 3 }[p.lv]; return (p.x ? 0 : 10) + (lv === undefined ? 1 : lv); }
+  function buildQueue(keepId) {
+    var arr = CARDS.filter(function (c) { return (state.deck === 'all' || c.deck === state.deck) && statusOk(c); });
+    if (state.order === 'shuffle') arr = shuffle(arr, mulberry(state.seed));
+    else if (state.order === 'hard') arr = arr.slice().sort(function (a, b) { return rank(a) - rank(b) || a.n - b.n; });
+    queue = arr.map(function (c) { return c.id; });
+    queueVer++;
+    var k = keepId ? queue.indexOf(keepId) : -1;
+    state.idx = k >= 0 ? k : 0;
+    state.flipped = false;
+    quiz.pos = -1;
+  }
+
+  /* ---------- Decks + stats ---------- */
+  function renderDecks() {
+    var wrap = $('decks');
+    var items = [{ id: 'all', name: 'Tất cả' }].concat(DECKS);
+    wrap.textContent = '';
+    items.forEach(function (d) {
+      var cards = CARDS.filter(function (c) { return d.id === 'all' || c.deck === d.id; });
+      var xs = cards.filter(function (c) { return getP(c.id).x; }).length;
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'chip'; b.dataset.deck = d.id;
+      b.setAttribute('aria-pressed', String(state.deck === d.id));
+      var name = document.createElement('span'); name.textContent = d.name; b.appendChild(name);
+      var n = document.createElement('span'); n.className = 'n'; n.textContent = cards.length; b.appendChild(n);
+      if (xs) { var x = document.createElement('span'); x.className = 'xn'; x.textContent = 'X ' + xs; x.title = xs + ' thẻ cần học lại'; b.appendChild(x); }
+      wrap.appendChild(b);
+    });
+  }
+  function renderStats() {
+    var cards = CARDS.filter(function (c) { return state.deck === 'all' || c.deck === state.deck; });
+    var h = 0, m = 0, e = 0, x = 0, hl = 0;
+    cards.forEach(function (c) { var p = getP(c.id); if (p.lv === 'h') h++; else if (p.lv === 'm') m++; else if (p.lv === 'e') e++; if (p.x) x++; if (p.h && p.h.length) hl++; });
+    var total = cards.length || 1, nw = cards.length - h - m - e;
+    var spans = $('meter').children;
+    spans[0].style.width = (h / total * 100) + '%';
+    spans[1].style.width = (m / total * 100) + '%';
+    spans[2].style.width = (e / total * 100) + '%';
+    var lg = $('legend'); lg.textContent = '';
+    [['var(--hard)', 'Khó', h], ['var(--med)', 'Vừa', m], ['var(--easy)', 'Dễ', e], ['var(--new)', 'Chưa đánh giá', nw], ['var(--x)', 'Đánh dấu X', x], ['var(--hl1)', 'Có tô sáng', hl]].forEach(function (it) {
+      var s = document.createElement('span');
+      var dot = document.createElement('span'); dot.className = 'dot'; dot.style.background = it[0]; s.appendChild(dot);
+      s.appendChild(document.createTextNode(it[1] + ' '));
+      var b = document.createElement('b'); b.textContent = it[2]; s.appendChild(b);
+      lg.appendChild(s);
+    });
+  }
+
+  /* ---------- Flashcards ---------- */
+  function metaText(c) { var t = DECK_NAME[c.deck] + ' · ' + KIND[c.kind]; if (c.note && c.kind !== 'q' && c.kind !== 'a') t += ' · ' + c.note; return t; }
+  function fillPills(el, p) {
+    el.textContent = '';
+    if (p.x) { var a = document.createElement('span'); a.className = 'pill x'; a.textContent = 'X học lại'; el.appendChild(a); }
+    if (p.lv) { var b = document.createElement('span'); b.className = 'pill ' + p.lv; b.textContent = { h: 'Khó', m: 'Vừa', e: 'Dễ' }[p.lv]; el.appendChild(b); }
+  }
+  function syncRateButtons(xBtn, levelWrap, p) {
+    xBtn.setAttribute('aria-pressed', String(!!p.x));
+    Array.prototype.forEach.call(levelWrap.querySelectorAll('[data-lv]'), function (b) { b.setAttribute('aria-pressed', String(p.lv === b.dataset.lv)); });
+  }
+  function renderCard() {
+    var empty = !queue.length;
+    $('cardWrap').hidden = empty; $('cardEmpty').hidden = !empty;
+    if (empty) return;
+    if (state.idx >= queue.length) state.idx = queue.length - 1;
+    var c = BY_ID[queue[state.idx]], p = getP(c.id), vk = state.dir === 'vk';
+    $('cMeta').textContent = metaText(c);
+    fillPills($('cPills'), p);
+    var ctx = $('cCtx');
+    if (c.ctxVi) { ctx.hidden = false; ctx.className = 'ctx' + (vk ? '' : ' ko'); ctx.textContent = 'Sếp hỏi: ' + (vk ? c.ctxVi : c.ctxKo); }
+    else ctx.hidden = true;
+    var promptText = vk ? c.vi : c.ko, answerText = vk ? c.ko : c.vi;
+    var pr = $('cPrompt'), an = $('cAnswer');
+    renderText(pr, c, vk ? 'vi' : 'ko', true);
+    pr.className = 'prompt' + (vk ? '' : ' ko') + (promptText.length > 55 ? ' long' : '') + (state.flipped ? ' small' : '');
+    renderText(an, c, vk ? 'ko' : 'vi', true);
+    an.className = 'answer' + (vk ? ' ko' : '') + (answerText.length > 55 ? ' long' : '');
+    an.hidden = !state.flipped;
+    // Pronunciation sits right under whichever line is Korean, once that line is visible
+    var pe = $('cPron'), koEl = vk ? an : pr, koShown = vk ? state.flipped : true;
+    if (koEl.nextElementSibling !== pe) koEl.insertAdjacentElement('afterend', pe);
+    pe.textContent = c.pr;
+    pe.hidden = !(state.pron && koShown && c.pr);
+    $('cHint').textContent = 'Chạm vào chữ để tô sáng · chạm chỗ trống để ' + (state.flipped ? 'úp thẻ' : (vk ? 'xem tiếng Hàn' : 'xem tiếng Việt'));
+    // Highlighted phrases of this card, listed for closer study
+    var box = $('cHl'), hs = (p.h || []).slice().sort(function (a, b) { return a - b; });
+    box.textContent = '';
+    box.hidden = !(state.flipped && hs.length);
+    if (!box.hidden) {
+      var ttl = document.createElement('p'); ttl.className = 'hl-title'; ttl.textContent = 'Từ đã tô sáng'; box.appendChild(ttl);
+      hs.forEach(function (i) { var pp = pairsOf(c)[i]; if (pp) box.appendChild(hlItem(pp, i)); });
+    }
+    $('counter').textContent = (state.idx + 1) + ' / ' + queue.length;
+    $('prev').disabled = state.idx === 0;
+    $('next').disabled = state.idx >= queue.length - 1;
+    syncRateButtons($('cX'), document.querySelector('#view-cards .levels'), p);
+  }
+  function currentCard() { return queue.length ? BY_ID[queue[state.idx]] : null; }
+  function flip() { state.flipped = !state.flipped; renderCard(); }
+  function go(d) {
+    var n = state.idx + d; if (n < 0 || n >= queue.length) return;
+    state.idx = n; state.flipped = false; renderCard();
+    if (state.autoVi) { var c = currentCard(); if (c) speak(c.vi, 'vi-VN'); }
+  }
+  function rateCurrent(lv) {
+    var c = currentCard(); if (!c) return;
+    var p = getP(c.id);
+    setP(c.id, { lv: p.lv === lv ? null : lv });
+    renderCard();
+    if (p.lv !== lv && state.idx < queue.length - 1) { setTimeout(function () { go(1); }, 220); }
+  }
+  function toggleXCurrent() { var c = currentCard(); if (!c) return; setP(c.id, { x: !getP(c.id).x }); renderCard(); }
+
+  /* ---------- Quiz ---------- */
+  var quiz = { pos: -1, id: null, opts: [], answered: false, right: 0, total: 0 };
+  function newQuestion() {
+    var empty = !queue.length;
+    $('quizBox').hidden = empty; $('quizEmpty').hidden = !empty;
+    if (empty) return;
+    quiz.pos = (quiz.pos + 1) % queue.length;
+    var c = BY_ID[queue[quiz.pos]], field = state.dir === 'vk' ? 'ko' : 'vi';
+    var seen = {}; seen[c[field]] = true;
+    var rnd = Math.random;
+    var tiers = [
+      CARDS.filter(function (x) { return x.kind === c.kind && x.deck === c.deck; }),
+      CARDS.filter(function (x) { return x.kind === c.kind && x.deck !== c.deck; }),
+      CARDS
+    ];
+    var picks = [];
+    tiers.forEach(function (pool) {
+      shuffle(pool, rnd).forEach(function (x) { if (picks.length < 3 && x.id !== c.id && !seen[x[field]]) { seen[x[field]] = true; picks.push(x); } });
+    });
+    quiz.id = c.id; quiz.opts = shuffle([c].concat(picks), rnd); quiz.answered = false;
+    renderQuiz();
+  }
+  function renderQuiz() {
+    if (!queue.length || !quiz.id) { newQuestion(); return; }
+    var c = BY_ID[quiz.id], vk = state.dir === 'vk', field = vk ? 'ko' : 'vi';
+    $('qMeta').textContent = metaText(c);
+    $('qScore').textContent = quiz.total ? ('Đúng ' + quiz.right + ' / ' + quiz.total) : '';
+    var ctx = $('qCtx');
+    if (c.ctxVi) { ctx.hidden = false; ctx.className = 'ctx' + (vk ? '' : ' ko'); ctx.textContent = 'Sếp hỏi: ' + (vk ? c.ctxVi : c.ctxKo); }
+    else ctx.hidden = true;
+    var pr = $('qPrompt'); pr.textContent = vk ? c.vi : c.ko; pr.className = 'qprompt' + (vk ? '' : ' ko');
+    var box = $('qOpts'); box.textContent = '';
+    quiz.opts.forEach(function (o) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'opt' + (vk ? ' ko' : ''); b.dataset.id = o.id; b.textContent = o[field];
+      if (quiz.answered) {
+        b.disabled = true;
+        if (o.id === c.id) b.classList.add('right');
+        else if (o.id === quiz.picked) b.classList.add('wrong');
+      }
+      box.appendChild(b);
+    });
+    var qp = $('qPron'); qp.textContent = c.ko + '  ·  ' + c.pr; qp.hidden = !(quiz.answered && state.pron && c.pr);
+    $('qRate').hidden = !quiz.answered;
+    if (quiz.answered) syncRateButtons($('qX'), $('qLevels'), getP(c.id));
+    $('qNext').textContent = quiz.answered ? 'Câu tiếp' : 'Bỏ qua';
+  }
+  function answer(id) {
+    if (quiz.answered) return;
+    var c = BY_ID[quiz.id], ok = id === c.id, fb = $('qFb');
+    quiz.answered = true; quiz.picked = id; quiz.total++;
+    if (ok) { quiz.right++; fb.className = 'feedback ok'; fb.textContent = 'Đúng rồi.'; }
+    else {
+      fb.className = 'feedback bad';
+      var msg = 'Chưa đúng. Đáp án đúng đã được tô xanh.';
+      if ($('autoX').checked && !getP(c.id).x) { setP(c.id, { x: true }); msg += ' Đã đánh dấu X để học lại.'; }
+      fb.textContent = msg;
+    }
+    if (canSpeak && state.dir === 'vk') speak(c.ko);
+    renderQuiz();
+  }
+
+  /* ---------- List ---------- */
+  function rowEl(c) {
+    var p = getP(c.id);
+    var li = document.createElement('li'); li.className = 'row'; li.dataset.id = c.id;
+    var t = document.createElement('div');
+    var vi = document.createElement('p'); vi.className = 'vi'; renderText(vi, c, 'vi', true); t.appendChild(vi);
+    var ko = document.createElement('p'); ko.className = 'ko'; ko.lang = 'ko'; renderText(ko, c, 'ko', true); t.appendChild(ko);
+    if (state.pron && c.pr) { var pn = document.createElement('p'); pn.className = 'pron'; pn.textContent = c.pr; t.appendChild(pn); }
+    var tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = metaText(c); t.appendChild(tag);
+    li.appendChild(t);
+    var ctrl = document.createElement('div'); ctrl.className = 'ctrl';
+    var xb = document.createElement('button'); xb.type = 'button'; xb.className = 'xs'; xb.dataset.act = 'x'; xb.textContent = 'X';
+    xb.setAttribute('aria-pressed', String(!!p.x)); xb.setAttribute('aria-label', 'Đánh dấu học lại'); xb.title = 'Đánh dấu học lại';
+    ctrl.appendChild(xb);
+    var seg = document.createElement('div'); seg.className = 'seg'; seg.setAttribute('role', 'group'); seg.setAttribute('aria-label', 'Mức độ thuộc');
+    [['h', 'Khó'], ['m', 'Vừa'], ['e', 'Dễ']].forEach(function (l) {
+      var b = document.createElement('button'); b.type = 'button'; b.dataset.act = 'lv'; b.dataset.lv = l[0]; b.textContent = l[1];
+      b.setAttribute('aria-pressed', String(p.lv === l[0])); seg.appendChild(b);
+    });
+    ctrl.appendChild(seg);
+    var sp = document.createElement('button'); sp.type = 'button'; sp.className = 'speak'; sp.dataset.act = 'speak'; sp.setAttribute('aria-label', 'Nghe tiếng Hàn'); sp.title = 'Nghe tiếng Hàn';
+    sp.innerHTML = $('cSpeak').innerHTML;
+    ctrl.appendChild(sp);
+    li.appendChild(ctrl);
+    return li;
+  }
+  function renderList() {
+    var q = state.search.trim().toLowerCase();
+    var ids = queue.filter(function (id) { if (!q) return true; var c = BY_ID[id]; return c.vi.toLowerCase().indexOf(q) >= 0 || c.ko.indexOf(q) >= 0; });
+    var list = $('list'); list.textContent = '';
+    ids.forEach(function (id) { list.appendChild(rowEl(BY_ID[id])); });
+    $('listInfo').textContent = ids.length ? (ids.length + ' thẻ · chạm một cụm từ để tô sáng cặp Việt–Hàn') : 'Không có thẻ nào khớp. Thử bỏ bộ lọc hoặc đổi từ khóa.';
+  }
+  function renderWords() {
+    var box = $('words'), n = 0;
+    box.textContent = '';
+    CARDS.forEach(function (c) {
+      if (state.deck !== 'all' && c.deck !== state.deck) return;
+      var h = getP(c.id).h; if (!h || !h.length) return;
+      h.slice().sort(function (a, b) { return a - b; }).forEach(function (i) {
+        var p = pairsOf(c)[i]; if (!p) return; n++;
+        var li = document.createElement('li'); li.className = 'row'; li.dataset.id = c.id; li.dataset.i = i;
+        var t = document.createElement('div');
+        var vi = document.createElement('p'); vi.className = 'vi';
+        var st = document.createElement('span'); st.className = 'ph hl' + (i % 4 + 1); st.textContent = p[0]; vi.appendChild(st); t.appendChild(vi);
+        var ko = document.createElement('p'); ko.className = 'ko'; ko.lang = 'ko'; ko.textContent = p[1]; t.appendChild(ko);
+        if (state.pron && p[2]) { var pn = document.createElement('p'); pn.className = 'pron'; pn.textContent = p[2]; t.appendChild(pn); }
+        var src = document.createElement('span'); src.className = 'src'; src.textContent = DECK_NAME[c.deck] + ' · ' + c.vi; t.appendChild(src);
+        li.appendChild(t);
+        var ctrl = document.createElement('div'); ctrl.className = 'ctrl';
+        var sp = document.createElement('button'); sp.type = 'button'; sp.className = 'speak'; sp.dataset.say = p[1];
+        sp.setAttribute('aria-label', 'Nghe tiếng Hàn'); sp.title = 'Nghe tiếng Hàn'; sp.innerHTML = $('cSpeak').innerHTML; ctrl.appendChild(sp);
+        var rm = document.createElement('button'); rm.type = 'button'; rm.className = 'ghost'; rm.dataset.act = 'unhl'; rm.textContent = 'Bỏ tô'; ctrl.appendChild(rm);
+        li.appendChild(ctrl);
+        box.appendChild(li);
+      });
+    });
+    $('wordsInfo').textContent = n ? (n + ' cụm từ đã tô sáng') : 'Chưa có cụm từ nào. Ở thẻ ghi nhớ (sau khi lật thẻ) hoặc ở Danh sách, chạm vào một cụm từ tiếng Việt để tô sáng cả cụm tiếng Hàn tương ứng.';
+  }
+  function updateRow(id) {
+    var old = document.querySelector('#list .row[data-id="' + id + '"]');
+    if (old) old.parentNode.replaceChild(rowEl(BY_ID[id]), old);
+  }
+
+  /* ---------- Sync between devices: Firebase Realtime Database over plain REST + live stream ---------- */
+  var SYNC_CFG_KEY = 'viko-sync-v1', SYNC_PEND_KEY = 'viko-sync-pending-v1';
+  var linkedNow = false;
+  (function () {
+    var m = /^#lk=([^~]+)~([a-z0-9]{16,64})$/i.exec(location.hash || '');
+    if (!m) return;
+    var url = decodeURIComponent(m[1]);
+    if (validDbUrl(url)) { lsSet(SYNC_CFG_KEY, JSON.stringify({ url: cleanDbUrl(url), code: m[2].toLowerCase() })); linkedNow = true; }
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { }
+  })();
+  function cleanDbUrl(u) { return String(u || '').trim().replace(/\/+$/, ''); }
+  function validDbUrl(u) {
+    u = cleanDbUrl(u);
+    return /^https:\/\/[a-z0-9.-]+\.(firebaseio\.com|firebasedatabase\.app)$/i.test(u) || /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(u);
+  }
+  function newCode() {
+    var a = new Uint8Array(24), s = '', abc = 'abcdefghijkmnpqrstuvwxyz23456789';
+    (window.crypto || window.msCrypto).getRandomValues(a);
+    for (var i = 0; i < a.length; i++) s += abc[a[i] % abc.length];
+    return s;
+  }
+  var SYNC = (function () {
+    var cfg = null, es = null, pending = {}, flushing = false, flushTimer = null, connected = false, lastErr = '', onRemote = null;
+    try { cfg = JSON.parse(lsGet(SYNC_CFG_KEY) || 'null'); } catch (e) { cfg = null; }
+    if (cfg && !(cfg.url && cfg.code && validDbUrl(cfg.url))) cfg = null;
+    if (!cfg && SYNC_PRESET.url && SYNC_PRESET.code && validDbUrl(SYNC_PRESET.url)) cfg = { url: cleanDbUrl(SYNC_PRESET.url), code: SYNC_PRESET.code };
+    try { pending = JSON.parse(lsGet(SYNC_PEND_KEY) || '{}') || {}; } catch (e) { pending = {}; }
+    function base() { return cfg.url + '/sync/' + cfg.code; }
+    function savePending() { lsSet(SYNC_PEND_KEY, JSON.stringify(pending)); }
+    function queue(path, val) { if (!cfg) return; pending[path] = val; savePending(); schedule(); }
+    function schedule(ms) { clearTimeout(flushTimer); flushTimer = setTimeout(flush, ms == null ? 500 : ms); paint(); }
+    function flush() {
+      if (!cfg || flushing) return;
+      var keys = Object.keys(pending);
+      if (!keys.length) { paint(); return; }
+      if (navigator.onLine === false) { paint(); return; }
+      flushing = true;
+      var body = {}; keys.forEach(function (k) { body[k] = pending[k]; });
+      fetch(base() + '.json', { method: 'PATCH', body: JSON.stringify(body) }).then(function (r) {
+        if (!r.ok) throw new Error(r.status === 401 || r.status === 403 ? 'CSDL từ chối ghi (kiểm tra Rules)' : 'Lỗi máy chủ ' + r.status);
+        return r.text();
+      }).then(function () {
+        keys.forEach(function (k) { if (pending[k] === body[k]) delete pending[k]; });
+        savePending(); flushing = false; lastErr = '';
+        if (Object.keys(pending).length) schedule(150); else paint();
+      }).catch(function (e) {
+        flushing = false; lastErr = (e && e.message) || 'Không kết nối được'; paint(); schedule(8000);
+      });
+    }
+    function setDeep(o, parts, v) { var cur = o; for (var i = 0; i < parts.length - 1; i++) { if (!cur[parts[i]] || typeof cur[parts[i]] !== 'object') cur[parts[i]] = {}; cur = cur[parts[i]]; } cur[parts[parts.length - 1]] = v; }
+    function onEvent(e, isPatch) {
+      var m; try { m = JSON.parse(e.data); } catch (er) { return; }
+      if (!m) return;
+      connected = true; lastErr = '';
+      var parts = String(m.path || '/').split('/').filter(Boolean), doc = {}, full = false;
+      if (isPatch) Object.keys(m.data || {}).forEach(function (k) { setDeep(doc, parts.concat(k.split('/').filter(Boolean)), m.data[k]); });
+      else if (!parts.length) { doc = (m.data && typeof m.data === 'object') ? m.data : {}; full = true; }
+      else setDeep(doc, parts, m.data);
+      if (onRemote) onRemote(doc, full);
+      paint();
+    }
+    function disconnect() { if (es) { try { es.close(); } catch (e) { } es = null; } connected = false; }
+    function connect() {
+      disconnect();
+      if (!cfg) { paint(); return; }
+      if (typeof EventSource === 'undefined') { lastErr = 'Trình duyệt quá cũ'; paint(); return; }
+      es = new EventSource(base() + '.json');
+      es.addEventListener('put', function (e) { onEvent(e, false); });
+      es.addEventListener('patch', function (e) { onEvent(e, true); });
+      es.addEventListener('cancel', function () { lastErr = 'CSDL từ chối đọc (kiểm tra Rules)'; connected = false; paint(); });
+      es.onopen = function () { flush(); paint(); };
+      es.onerror = function () { connected = false; paint(); };
+    }
+    var TEXT = {
+      off: 'Chỉ lưu trên máy này · bấm để đồng bộ',
+      ok: 'Đã đồng bộ máy tính ↔ điện thoại',
+      busy: 'Đang đồng bộ…',
+      wait: 'Đang kết nối đồng bộ…',
+      offline: 'Ngoại tuyến · sẽ đồng bộ khi có mạng'
+    };
+    function paint() {
+      var el = document.getElementById('sync'); if (!el) return;
+      var s, t;
+      if (!cfg) { s = 'local'; t = TEXT.off; }
+      else if (navigator.onLine === false) { s = 'local'; t = TEXT.offline; }
+      else if (lastErr) { s = 'error'; t = 'Lỗi đồng bộ: ' + lastErr; }
+      else if (Object.keys(pending).length || flushing) { s = 'saving'; t = TEXT.busy; }
+      else if (connected) { s = 'cloud'; t = TEXT.ok; }
+      else { s = 'loading'; t = TEXT.wait; }
+      el.dataset.s = s; el.textContent = t;
+    }
+    window.addEventListener('online', function () { connect(); flush(); });
+    window.addEventListener('offline', paint);
+    document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && cfg && !connected) connect(); });
+    return {
+      cfg: function () { return cfg; },
+      queue: queue,
+      flush: flush,
+      paint: paint,
+      start: function (handler) { onRemote = handler; connect(); paint(); },
+      reconnect: function () { connect(); },
+      enable: function (url, code) { cfg = { url: cleanDbUrl(url), code: code }; lsSet(SYNC_CFG_KEY, JSON.stringify(cfg)); lastErr = ''; connect(); },
+      disable: function () { disconnect(); cfg = null; pending = {}; savePending(); try { localStorage.removeItem(SYNC_CFG_KEY); } catch (e) { } paint(); }
+    };
+  })();
+
+  // Merge whatever the other device sent: newest timestamp wins, item by item
+  function cleanEntry(id, v) {
+    if (!BY_ID[id] || !v || typeof v !== 'object') return null;
+    var e = {};
+    if (v.x === true) e.x = true;
+    if (v.lv === 'h' || v.lv === 'm' || v.lv === 'e') e.lv = v.lv;
+    if (v.ls === 1 || v.ls === 2) e.ls = v.ls;
+    var hv = v.h; if (hv && typeof hv === 'object' && !Array.isArray(hv)) hv = Object.keys(hv).map(function (k) { return hv[k]; });
+    if (Array.isArray(hv)) {
+      var n = pairsOf(BY_ID[id]).length, hh = [];
+      hv.forEach(function (x) { if (typeof x === 'number' && x % 1 === 0 && x >= 0 && x < n && hh.indexOf(x) < 0) hh.push(x); });
+      if (hh.length) e.h = hh;
+    }
+    if (typeof v.t === 'number') e.t = v.t;
+    return e;
+  }
+  function sanitizeCustom(sec, r) {
+    var o = { t: typeof r.t === 'number' ? r.t : 0, o: typeof r.o === 'number' ? r.o : 0 };
+    if (r.del) o.del = true;
+    if (sec === 'd') o.name = String(r.name || '').slice(0, 120);
+    else { o.deck = String(r.deck || ''); o.vi = String(r.vi || '').slice(0, 600); o.ko = String(r.ko || '').slice(0, 600); o.note = String(r.note || '').slice(0, 200); if (typeof r.pr === 'string') o.pr = String(r.pr).slice(0, 600); }
+    return o;
+  }
+  function mergeRemote(doc, full) {
+    var changedCustom = false, changedP = false;
+    ['d', 'c'].forEach(function (sec) {
+      var rem = (doc[sec] && typeof doc[sec] === 'object') ? doc[sec] : {};
+      Object.keys(rem).forEach(function (id) {
+        var r = rem[id], l = custom[sec][id];
+        if (!r || typeof r !== 'object') return;
+        if (!l || (r.t || 0) > (l.t || 0)) { custom[sec][id] = sanitizeCustom(sec, r); changedCustom = true; }
+        else if ((l.t || 0) > (r.t || 0)) SYNC.queue(sec + '/' + id, l);
+      });
+      if (full) Object.keys(custom[sec]).forEach(function (id) { if (!rem[id]) SYNC.queue(sec + '/' + id, custom[sec][id]); });
+    });
+    if (changedCustom) { saveCustom(); applyCustom(); }
+    var remP = (doc.p && typeof doc.p === 'object') ? doc.p : {};
+    Object.keys(remP).forEach(function (id) {
+      var r = remP[id], l = progress[id];
+      if (!r || typeof r !== 'object') return;
+      if (!l || (r.t || 0) > (l.t || 0)) { var e = cleanEntry(id, r); if (e) { progress[id] = e; changedP = true; } }
+      else if ((l.t || 0) > (r.t || 0)) SYNC.queue('p/' + id, l);
+    });
+    if (full) Object.keys(progress).forEach(function (id) { if (!remP[id]) SYNC.queue('p/' + id, progress[id]); });
+    if (changedP) cacheLocal();
+    if (changedCustom) { if (state.deck !== 'all' && !DECK_NAME[state.deck]) state.deck = 'all'; var c = currentCard(); buildQueue(c ? c.id : null); renderDecks(); renderStats(); softRender(); }
+    else if (changedP) refreshAfterSync();
+  }
+
+  /* ================= Shared helpers for the study modes ================= */
+  var RATE = { slow: 0.7, mid: 1, fast: 1.3 };
+  var HANGUL = /[가-힣ᄀ-ᇿ㄰-㆏]/;
+  function dirFields() { var vk = state.dir === 'vk'; return { p: vk ? 'vi' : 'ko', a: vk ? 'ko' : 'vi', pl: vk ? 'vi-VN' : 'ko-KR', al: vk ? 'ko-KR' : 'vi-VN' }; }
+  function mk(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function mkBtn(cls, text, attrs) { var b = mk('button', cls, text); b.type = 'button'; if (attrs) Object.keys(attrs).forEach(function (k) { b.setAttribute(k, attrs[k]); }); return b; }
+  function sayBtn(text, lang, label) {
+    var b = mkBtn('speak', null, { 'aria-label': label || 'Nghe', title: label || 'Nghe' });
+    b.innerHTML = $('cSpeak').innerHTML; b.dataset.say = text; b.dataset.lang = lang || 'ko-KR'; return b;
+  }
+  function langLabel(f) { return f === 'ko' ? 'tiếng Hàn' : 'tiếng Việt'; }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms / (RATE[state.rate] || 1)); }); }
+  function speakAsync(text, lang) {
+    return new Promise(function (resolve) {
+      var r = RATE[state.rate] || 1, est = (Math.max(1200, String(text).length * 110) / r) + 600, done = false, t;
+      function fin() { if (done) return; done = true; clearTimeout(t); resolve(); }
+      if (!canSpeak) { t = setTimeout(fin, est); return; }
+      t = setTimeout(fin, est + 5000);
+      speak(text, lang, fin);
+    });
+  }
+  function norm(s, loose) {
+    s = String(s || '').normalize('NFC').toLowerCase().replace(/\[[^\]]*\]/g, ' ').replace(/[.,!?;:()"'“”‘’…·~\-–—\/]/g, ' ');
+    if (loose) s = s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
+    return s.replace(/\s+/g, '');
+  }
+  function alts(t) {
+    var out = [t];
+    String(t).split(/\s*\/\s*/).forEach(function (x) { if (x && out.indexOf(x) < 0) out.push(x); });
+    if (t.length <= 40) String(t).split(/\s*[,;]\s*/).forEach(function (x) { if (x && out.indexOf(x) < 0) out.push(x); });
+    return out;
+  }
+  function lev(a, b) {
+    if (a === b) return 0;
+    var m = a.length, n = b.length, prev = [], cur, i, j;
+    if (!m) return n; if (!n) return m;
+    for (j = 0; j <= n; j++) prev[j] = j;
+    for (i = 1; i <= m; i++) { cur = [i]; for (j = 1; j <= n; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); prev = cur; }
+    return prev[n];
+  }
+  function grade(input, target) {
+    var inp = norm(input, state.loose), best = 0;
+    if (!inp) return { ok: false, close: false };
+    alts(target).forEach(function (t) { var tt = norm(t, state.loose); if (!tt) return; var s = 1 - lev(inp, tt) / Math.max(inp.length, tt.length); if (s > best) best = s; });
+    return { ok: best >= 0.88, close: best >= 0.88 && best < 0.999 };
+  }
+  function makeOptions(c, field) {
+    var seen = {}, picks = []; seen[c[field]] = true;
+    [CARDS.filter(function (x) { return x.kind === c.kind && x.deck === c.deck; }), CARDS.filter(function (x) { return x.kind === c.kind && x.deck !== c.deck; }), CARDS].forEach(function (pool) {
+      shuffle(pool, Math.random).forEach(function (x) { if (picks.length < 3 && x.id !== c.id && !seen[x[field]]) { seen[x[field]] = true; picks.push(x); } });
+    });
+    return shuffle([c].concat(picks), Math.random);
+  }
+  function markWrong(id) { if ($('autoX').checked && !getP(id).x) setP(id, { x: true }); }
+  function revealBox(c, f, extra) {
+    var box = mk('div', 'reveal');
+    var row = mk('div', 'reveal-row');
+    var t = mk('p', 'reveal-a' + (f.a === 'ko' ? ' ko' : ''), c[f.a]); if (f.a === 'ko') t.lang = 'ko';
+    row.appendChild(t); row.appendChild(sayBtn(c.ko, 'ko-KR', 'Nghe tiếng Hàn')); box.appendChild(row);
+    if (f.a !== 'ko') { var k = mk('p', 'reveal-k', c.ko); k.lang = 'ko'; box.appendChild(k); }
+    if (state.pron && c.pr) box.appendChild(mk('p', 'pron', c.pr));
+    if (extra) box.appendChild(extra);
+    return box;
+  }
+  function emptyBox(msg) {
+    var d = mk('div', 'empty'); d.appendChild(mk('p', null, msg || 'Không có thẻ nào khớp bộ lọc này.'));
+    var b = mkBtn('primary', 'Xem tất cả thẻ'); b.dataset.clearAll = '1'; d.appendChild(b); return d;
+  }
+  function promptBlock(c, f) {
+    var wrap = mk('div', 'prompt-row');
+    var p = mk('p', 'qprompt' + (f.p === 'ko' ? ' ko' : ''), c[f.p]); if (f.p === 'ko') p.lang = 'ko';
+    wrap.appendChild(p); wrap.appendChild(sayBtn(c[f.p], f.pl, 'Nghe câu hỏi'));
+    var out = mk('div'); out.appendChild(wrap);
+    if (f.p === 'ko' && state.pron && c.pr) out.appendChild(mk('p', 'pron', c.pr));
+    return out;
+  }
+  function ctxBlock(c, f) { if (!c.ctxVi) return null; var p = mk('p', 'ctx' + (f.p === 'ko' ? ' ko' : ''), 'Sếp hỏi: ' + (f.p === 'ko' ? c.ctxKo : c.ctxVi)); return p; }
+  function typeForm(id, placeholder) {
+    var form = mk('form', 'wform'); form.id = id;
+    var inp = mk('input', 'field'); inp.type = 'text'; inp.name = 'ans'; inp.autocomplete = 'off'; inp.setAttribute('autocapitalize', 'off'); inp.spellcheck = false; inp.placeholder = placeholder;
+    form.appendChild(inp);
+    var ok = mk('button', 'primary', 'Kiểm tra'); ok.type = 'submit'; form.appendChild(ok);
+    var no = mkBtn('ghost', 'Không biết'); no.dataset.act = 'dunno'; form.appendChild(no);
+    return form;
+  }
+  function focusSoon(sel) { setTimeout(function () { var e = document.querySelector(sel); if (e && !e.disabled) { try { e.focus({ preventScroll: true }); } catch (er) { e.focus(); } } }, 30); }
+
+  /* ================= Học: adaptive rounds (choose first, then type) ================= */
+  var ROUND = 7;
+  var learn = { ver: -1, ids: [], pos: 0, round: 0, view: 'q', type: 'mc', opts: [], answered: false, ok: false, picked: null, typed: '', close: false, right: 0, total: 0, again: {}, timer: null };
+  function lsOf(id) { return getP(id).ls || 0; }
+  function learnCounts() { var a = [0, 0, 0]; queue.forEach(function (id) { a[lsOf(id)]++; }); return a; }
+  function paintLearnBar() {
+    var a = learnCounts(), tot = queue.length || 1, sp = $('lBar').children;
+    sp[0].style.width = (a[2] / tot * 100) + '%'; sp[1].style.width = (a[1] / tot * 100) + '%';
+    var lg = $('lLegend'); lg.textContent = '';
+    [['var(--easy)', 'Đã thuộc', a[2]], ['var(--med)', 'Đang học', a[1]], ['var(--new)', 'Chưa học', a[0]]].forEach(function (it) {
+      var s = mk('span'), dot = mk('span', 'dot'); dot.style.background = it[0]; s.appendChild(dot);
+      s.appendChild(document.createTextNode(it[1] + ' ')); s.appendChild(mk('b', null, it[2])); lg.appendChild(s);
+    });
+  }
+  function learnNewRound() {
+    learn.ver = queueVer; clearTimeout(learn.timer);
+    var rest = queue.filter(function (id) { return lsOf(id) < 2; });
+    if (!rest.length) { learn.view = 'done'; paintLearn(); return; }
+    rest = rest.map(function (id, i) { return [id, i]; }).sort(function (a, b) { return (lsOf(b[0]) - lsOf(a[0])) || (a[1] - b[1]); }).map(function (x) { return x[0]; });
+    learn.ids = rest.slice(0, ROUND); learn.pos = 0; learn.round++; learn.right = 0; learn.total = 0; learn.again = {};
+    learnShow();
+  }
+  function learnShow() {
+    clearTimeout(learn.timer);
+    if (learn.pos >= learn.ids.length) { learn.view = 'sum'; paintLearn(); return; }
+    var c = BY_ID[learn.ids[learn.pos]];
+    if (!c) { learn.pos++; learnShow(); return; }
+    var f = dirFields();
+    learn.view = 'q'; learn.answered = false; learn.ok = false; learn.picked = null; learn.typed = ''; learn.close = false;
+    learn.type = (lsOf(c.id) >= 1 && !state.mcOnly) ? 'wr' : 'mc';
+    learn.opts = learn.type === 'mc' ? makeOptions(c, f.a).map(function (x) { return x.id; }) : [];
+    paintLearn();
+    if (state.autoVi && f.pl === 'vi-VN') speak(c.vi, 'vi-VN');
+    if (learn.type === 'wr') focusSoon('#lStage input');
+  }
+  function renderLearn() {
+    var empty = !queue.length;
+    $('learnBox').hidden = empty; $('learnEmpty').hidden = !empty;
+    if (empty) return;
+    paintLearnBar();
+    if (learn.ver !== queueVer) { learn.round = 0; learnNewRound(); } else paintLearn();
+  }
+  function paintLearn() {
+    var st = $('lStage'); st.textContent = '';
+    paintLearnBar();
+    $('lMcOnly').checked = !!state.mcOnly;
+    var a = learnCounts();
+    if (learn.view === 'done') {
+      st.appendChild(mk('p', 'sumbig', 'Đã thuộc cả ' + queue.length + ' thẻ'));
+      st.appendChild(mk('p', 'hint', 'Mọi thẻ trong bộ lọc hiện tại đều đã trả lời đúng ở cả bước chọn và bước gõ.'));
+      var row = mk('div', 'btnrow');
+      row.appendChild(mkBtn('primary', 'Làm bài kiểm tra', { 'data-go': 'test' }));
+      row.appendChild(mkBtn('ghost', 'Học lại từ đầu', { 'data-act': 'restart' }));
+      st.appendChild(row); return;
+    }
+    if (learn.view === 'sum') {
+      st.appendChild(mk('p', 'sumbig', 'Xong vòng ' + learn.round));
+      st.appendChild(mk('p', 'hint', 'Vòng này đúng ' + learn.right + ' / ' + learn.total + ' lượt. Đã thuộc ' + a[2] + ' / ' + queue.length + ' thẻ.'));
+      var list = mk('ul', 'sumlist');
+      learn.ids.filter(function (id, i) { return learn.ids.indexOf(id) === i; }).forEach(function (id) {
+        var c = BY_ID[id]; if (!c) return;
+        var li = mk('li'); li.appendChild(mk('span', 'pill ' + (lsOf(id) === 2 ? 'e' : 'm'), lsOf(id) === 2 ? 'Thuộc' : 'Đang học'));
+        li.appendChild(mk('span', null, ' ' + c.vi + ' → ')); var k = mk('span', 'ko', c.ko); k.lang = 'ko'; li.appendChild(k); list.appendChild(li);
+      });
+      st.appendChild(list);
+      var r2 = mk('div', 'btnrow'); r2.appendChild(mkBtn('primary', 'Tiếp tục vòng sau', { 'data-act': 'nextround' })); st.appendChild(r2);
+      return;
+    }
+    var c = BY_ID[learn.ids[learn.pos]], f = dirFields();
+    var top = mk('div', 'card-top'); top.appendChild(mk('span', 'meta', metaText(c)));
+    top.appendChild(mk('span', 'score', 'Vòng ' + learn.round + ' · ' + (learn.pos + 1) + '/' + learn.ids.length)); st.appendChild(top);
+    var cx = ctxBlock(c, f); if (cx) st.appendChild(cx);
+    st.appendChild(promptBlock(c, f));
+    st.appendChild(mk('p', 'hint', learn.type === 'mc' ? 'Chọn nghĩa đúng (phím 1–4)' : 'Gõ câu trả lời bằng ' + langLabel(f.a)));
+    if (learn.type === 'mc') {
+      var box = mk('div', 'options');
+      learn.opts.forEach(function (oid, i) {
+        var o = BY_ID[oid]; if (!o) return;
+        var b = mkBtn('opt' + (f.a === 'ko' ? ' ko' : ''), (i + 1) + '. ' + o[f.a]); b.dataset.pick = oid;
+        if (learn.answered) { b.disabled = true; if (oid === c.id) b.classList.add('right'); else if (oid === learn.picked) b.classList.add('wrong'); }
+        box.appendChild(b);
+      });
+      st.appendChild(box);
+    } else {
+      var form = typeForm('lForm', 'Gõ ' + langLabel(f.a) + '…');
+      if (learn.answered) { form.ans.value = learn.typed; Array.prototype.forEach.call(form.elements, function (x) { x.disabled = true; }); }
+      st.appendChild(form);
+    }
+    if (learn.answered) {
+      var fb = mk('p', 'feedback ' + (learn.ok ? 'ok' : 'bad'), learn.ok ? (learn.close ? 'Gần đúng, được tính là đúng.' : 'Đúng rồi!') : (learn.type === 'wr' && !learn.typed ? 'Đáp án là:' : 'Chưa đúng. Đáp án đúng:'));
+      st.appendChild(fb);
+      st.appendChild(revealBox(c, f));
+      var foot = mk('div', 'btnrow');
+      if (!learn.ok && learn.type === 'wr' && learn.typed) foot.appendChild(mkBtn('ghost', 'Tôi đã trả lời đúng', { 'data-act': 'override' }));
+      foot.appendChild(mkBtn('primary', 'Tiếp', { 'data-act': 'next', id: 'lNext' }));
+      st.appendChild(foot);
+      focusSoon('#lNext');
+    }
+  }
+  function learnResult(ok, info) {
+    var c = BY_ID[learn.ids[learn.pos]];
+    learn.answered = true; learn.ok = ok; learn.total++;
+    learn.picked = info.picked || null; learn.typed = info.typed || ''; learn.close = !!info.close;
+    if (ok) { learn.right++; setP(c.id, { ls: Math.min(2, lsOf(c.id) + 1) }); }
+    else { markWrong(c.id); if (!learn.again[c.id]) { learn.again[c.id] = true; learn.ids.push(c.id); } }
+    paintLearn();
+    speak(c.ko, 'ko-KR');
+    if (ok && learn.type === 'mc') learn.timer = setTimeout(function () { if (state.mode === 'learn' && learn.answered) { learn.pos++; learnShow(); } }, 1300);
+  }
+
+  /* ================= Viết: type the answer, or listen and write ================= */
+  var wr = { ver: -1, pos: 0, right: 0, total: 0, answered: false, ok: false, close: false, typed: '' };
+  function renderWrite() {
+    var empty = !queue.length;
+    $('writeBox').hidden = empty; $('writeEmpty').hidden = !empty;
+    if (empty) return;
+    if (wr.ver !== queueVer) { wr.ver = queueVer; wr.pos = 0; wr.right = 0; wr.total = 0; wr.answered = false; }
+    paintWrite();
+  }
+  function wrTarget(c) { return state.wkind === 'ls' ? 'ko' : dirFields().a; }
+  function paintWrite() {
+    var st = $('wStage'); st.textContent = '';
+    $('wKind').value = state.wkind;
+    var c = BY_ID[queue[wr.pos % queue.length]], f = dirFields(), listen = state.wkind === 'ls';
+    var tf = { p: f.p, a: wrTarget(c), pl: f.pl, al: f.al };
+    var top = mk('div', 'card-top'); top.appendChild(mk('span', 'meta', metaText(c)));
+    top.appendChild(mk('span', 'score', (wr.pos % queue.length + 1) + '/' + queue.length + (wr.total ? ' · đúng ' + wr.right + '/' + wr.total : ''))); st.appendChild(top);
+    if (listen) {
+      var lr = mk('div', 'listen-row');
+      var b1 = mkBtn('primary', '▶ Nghe'); b1.dataset.say = c.ko; b1.dataset.lang = 'ko-KR'; lr.appendChild(b1);
+      var b2 = mkBtn('ghost', 'Nghe chậm'); b2.dataset.saySlow = c.ko; lr.appendChild(b2);
+      st.appendChild(lr);
+      st.appendChild(mk('p', 'hint', 'Nghe rồi gõ lại đúng câu tiếng Hàn. Gợi ý nghĩa: ' + c.vi));
+    } else {
+      var cx = ctxBlock(c, f); if (cx) st.appendChild(cx);
+      st.appendChild(promptBlock(c, f));
+      st.appendChild(mk('p', 'hint', 'Gõ ' + langLabel(tf.a) + (tf.a === 'vi' && state.loose ? ' (không cần dấu)' : '')));
+    }
+    var form = typeForm('wForm', 'Gõ ' + langLabel(tf.a) + '…');
+    if (wr.answered) { form.ans.value = wr.typed; Array.prototype.forEach.call(form.elements, function (x) { x.disabled = true; }); }
+    st.appendChild(form);
+    if (wr.answered) {
+      st.appendChild(mk('p', 'feedback ' + (wr.ok ? 'ok' : 'bad'), wr.ok ? (wr.close ? 'Gần đúng, được tính là đúng.' : 'Đúng rồi!') : (wr.typed ? 'Chưa đúng. Đáp án đúng:' : 'Đáp án là:')));
+      st.appendChild(revealBox(c, { a: tf.a }, listen ? mk('p', 'hint', c.vi) : null));
+      var foot = mk('div', 'btnrow');
+      if (!wr.ok && wr.typed) foot.appendChild(mkBtn('ghost', 'Tôi đã trả lời đúng', { 'data-act': 'override' }));
+      foot.appendChild(mkBtn('primary', 'Câu tiếp', { 'data-act': 'next', id: 'wNext' }));
+      st.appendChild(foot); focusSoon('#wNext');
+    } else focusSoon('#wStage input');
+  }
+  function wrSubmit(text) {
+    var c = BY_ID[queue[wr.pos % queue.length]], g = grade(text, c[wrTarget(c)]);
+    wr.answered = true; wr.ok = g.ok; wr.close = g.close; wr.typed = text; wr.total++;
+    if (g.ok) wr.right++; else markWrong(c.id);
+    paintWrite(); speak(c.ko, 'ko-KR');
+  }
+  function wrNext() {
+    wr.pos = (wr.pos + 1) % queue.length; wr.answered = false; paintWrite();
+    var c = BY_ID[queue[wr.pos]];
+    if (state.wkind === 'ls') speak(c.ko, 'ko-KR'); else if (state.autoVi && dirFields().pl === 'vi-VN') speak(c.vi, 'vi-VN');
+  }
+
+  /* ================= Kiểm tra: mixed test with a score ================= */
+  var test = { ver: -1, paper: null, graded: false };
+  function renderTest() {
+    var empty = !queue.length;
+    $('testBox').hidden = empty; $('testEmpty').hidden = !empty;
+    if (empty) return;
+    var n = $('tN'); n.max = queue.length;
+    if (!n.value || +n.value > queue.length) n.value = Math.min(20, queue.length);
+    $('tInfo').textContent = 'Có ' + queue.length + ' thẻ trong bộ lọc hiện tại · chiều ' + (state.dir === 'vk' ? 'Việt → Hàn' : 'Hàn → Việt');
+    var show = test.paper && test.ver === queueVer;
+    $('tSetup').hidden = !!show; $('tPaper').hidden = !show;
+    if (show) paintTest();
+  }
+  function buildTest(ids) {
+    var n = Math.max(1, Math.min(ids.length, Math.floor(+$('tN').value) || 10));
+    var types = []; [['tTf', 'tf'], ['tMc', 'mc'], ['tWr', 'wr'], ['tMt', 'mt']].forEach(function (x) { if ($(x[0]).checked) types.push(x[1]); });
+    if (!types.length) types = ['mc'];
+    var pick = shuffle(ids, Math.random).slice(0, n), g = { tf: [], mc: [], wr: [], mt: [] }, f = dirFields(), qs = [];
+    pick.forEach(function (id, i) { g[types[i % types.length]].push(id); });
+    if (g.mt.length === 1) { g.mc = g.mc.concat(g.mt); g.mt = []; }
+    g.tf.forEach(function (id) {
+      var c = BY_ID[id], shown = c;
+      if (Math.random() < 0.5) { var o = makeOptions(c, f.a).filter(function (x) { return x.id !== c.id; })[0]; if (o) shown = o; }
+      qs.push({ t: 'tf', id: id, shown: shown.id });
+    });
+    g.mc.forEach(function (id) { qs.push({ t: 'mc', id: id, opts: makeOptions(BY_ID[id], f.a).map(function (x) { return x.id; }) }); });
+    g.wr.forEach(function (id) { qs.push({ t: 'wr', id: id }); });
+    for (var i = 0; i < g.mt.length; i += 5) {
+      var grp = g.mt.slice(i, i + 5);
+      if (grp.length === 1) qs.push({ t: 'mc', id: grp[0], opts: makeOptions(BY_ID[grp[0]], f.a).map(function (x) { return x.id; }) });
+      else qs.push({ t: 'mt', ids: grp, letters: shuffle(grp, Math.random) });
+    }
+    test.paper = { qs: qs, f: f, ans: {}, score: null }; test.graded = false; test.ver = queueVer;
+  }
+  var TLABEL = { tf: 'Đúng hay sai', mc: 'Trắc nghiệm', wr: 'Tự luận', mt: 'Ghép nối' };
+  function paintTest() {
+    var P = test.paper, f = P.f, box = $('tPaper'); box.textContent = '';
+    var head = mk('div', 'card-top');
+    head.appendChild(mk('span', 'meta', 'Bài kiểm tra · ' + countItems(P) + ' câu'));
+    head.appendChild(mkBtn('ghost', 'Tạo bài mới', { 'data-act': 'newtest' })); box.appendChild(head);
+    if (test.graded) {
+      var s = P.score, pct = Math.round(s.right / s.total * 100);
+      var sc = mk('div', 'tscore ' + (pct >= 80 ? 'good' : pct >= 50 ? 'mid' : 'low'));
+      sc.appendChild(mk('p', 'sumbig', pct + '%'));
+      sc.appendChild(mk('p', null, 'Đúng ' + s.right + ' / ' + s.total + ' câu' + (s.wrongIds.length && $('autoX').checked ? ' · các thẻ sai đã được đánh dấu X' : '')));
+      var br = mk('div', 'btnrow');
+      if (s.wrongIds.length) br.appendChild(mkBtn('primary', 'Làm lại ' + s.wrongIds.length + ' câu sai', { 'data-act': 'retrywrong' }));
+      br.appendChild(mkBtn('ghost', 'Tạo bài mới', { 'data-act': 'newtest' }));
+      sc.appendChild(br); box.appendChild(sc);
+    }
+    P.qs.forEach(function (q, qi) {
+      var blk = mk('div', 'tq'); blk.dataset.qi = qi;
+      var res = test.graded ? P.score.res[qi] : null;
+      if (res != null && q.t !== 'mt') blk.classList.add(res ? 'ok' : 'bad');
+      blk.appendChild(mk('p', 'tq-head', (qi + 1) + ' · ' + TLABEL[q.t]));
+      if (q.t === 'mt') {
+        blk.appendChild(mk('p', 'hint', 'Chọn chữ cái của nghĩa đúng cho mỗi dòng.'));
+        var ansList = mk('ol', 'mt-ans');
+        q.letters.forEach(function (id, li) { var o = BY_ID[id]; var x = mk('li', f.a === 'ko' ? 'ko' : null); x.textContent = String.fromCharCode(65 + li) + '. ' + o[f.a]; ansList.appendChild(x); });
+        q.ids.forEach(function (id) {
+          var c = BY_ID[id], row = mk('div', 'mt-row'), cur = (P.ans[qi] || {})[id];
+          if (test.graded) row.classList.add(P.score.mt[qi][id] ? 'ok' : 'bad');
+          var sel = mk('select', 'field mt-sel'); sel.dataset.mt = id; sel.disabled = test.graded;
+          sel.appendChild(new Option('—', ''));
+          q.letters.forEach(function (lid, li) { sel.appendChild(new Option(String.fromCharCode(65 + li), lid)); });
+          sel.value = cur || '';
+          row.appendChild(sel); var pt = mk('span', f.p === 'ko' ? 'ko' : null, c[f.p]); row.appendChild(pt);
+          if (test.graded && !P.score.mt[qi][id]) row.appendChild(mk('span', 'fix', ' → ' + String.fromCharCode(65 + q.letters.indexOf(id))));
+          blk.appendChild(row);
+        });
+        blk.appendChild(ansList);
+      } else {
+        var c = BY_ID[q.id];
+        blk.appendChild(promptBlock(c, f));
+        if (q.t === 'tf') {
+          var shown = BY_ID[q.shown];
+          var sp = mk('p', 'tf-shown' + (f.a === 'ko' ? ' ko' : ''), '= ' + shown[f.a]); blk.appendChild(sp);
+          var tb = mk('div', 'btnrow');
+          [[true, 'Đúng'], [false, 'Sai']].forEach(function (v) { var b = mkBtn('ghost tfb', v[1], { 'aria-pressed': String(P.ans[qi] === v[0]) }); b.dataset.tf = String(v[0]); b.disabled = test.graded; tb.appendChild(b); });
+          blk.appendChild(tb);
+        } else if (q.t === 'mc') {
+          var ob = mk('div', 'options');
+          q.opts.forEach(function (oid) {
+            var o = BY_ID[oid], b = mkBtn('opt' + (f.a === 'ko' ? ' ko' : ''), o[f.a], { 'aria-pressed': String(P.ans[qi] === oid) }); b.dataset.mc = oid; b.disabled = test.graded;
+            if (P.ans[qi] === oid) b.classList.add('chosen');
+            if (test.graded) { if (oid === q.id) b.classList.add('right'); else if (P.ans[qi] === oid) b.classList.add('wrong'); }
+            ob.appendChild(b);
+          });
+          blk.appendChild(ob);
+        } else {
+          var inp = mk('input', 'field'); inp.type = 'text'; inp.dataset.wr = '1'; inp.autocomplete = 'off'; inp.spellcheck = false; inp.setAttribute('autocapitalize', 'off');
+          inp.placeholder = 'Gõ ' + langLabel(f.a) + '…'; inp.value = P.ans[qi] || ''; inp.disabled = test.graded; blk.appendChild(inp);
+        }
+        if (test.graded && !res) blk.appendChild(revealBox(c, f));
+      }
+      box.appendChild(blk);
+    });
+    if (!test.graded) { var sb = mk('div', 'btnrow'); sb.appendChild(mkBtn('primary', 'Nộp bài', { 'data-act': 'submit' })); box.appendChild(sb); }
+  }
+  function countItems(P) { var n = 0; P.qs.forEach(function (q) { n += q.t === 'mt' ? q.ids.length : 1; }); return n; }
+  function gradeTest() {
+    var P = test.paper, f = P.f, res = {}, mt = {}, right = 0, total = 0, wrongIds = [];
+    P.qs.forEach(function (q, qi) {
+      if (q.t === 'mt') {
+        mt[qi] = {}; var allOk = true;
+        q.ids.forEach(function (id) { var ok = (P.ans[qi] || {})[id] === id; mt[qi][id] = ok; total++; if (ok) right++; else { allOk = false; wrongIds.push(id); } });
+        res[qi] = allOk; return;
+      }
+      var ok;
+      if (q.t === 'tf') ok = P.ans[qi] === (q.shown === q.id);
+      else if (q.t === 'mc') ok = P.ans[qi] === q.id;
+      else ok = grade(P.ans[qi] || '', BY_ID[q.id][f.a]).ok;
+      res[qi] = ok; total++; if (ok) right++; else wrongIds.push(q.id);
+    });
+    P.score = { res: res, mt: mt, right: right, total: total, wrongIds: wrongIds };
+    test.graded = true;
+    wrongIds.forEach(markWrong);
+    paintTest();
+    $('tPaper').scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
+
+  /* ================= Ghép thẻ: timed matching game ================= */
+  var MATCH_KEY = 'viko-match-best-v1';
+  var match = { ver: -1, tiles: [], sel: -1, left: 0, t0: 0, pen: 0, timer: null, running: false, done: false, final: 0 };
+  function matchBest() { try { return JSON.parse(lsGet(MATCH_KEY) || '{}')[state.deck] || 0; } catch (e) { return 0; } }
+  function renderMatch() {
+    var empty = queue.length < 2;
+    $('matchBox').hidden = empty; $('matchEmpty').hidden = !empty;
+    if (empty) return;
+    if (match.ver !== queueVer && !match.running) setupMatch();
+    paintMatch();
+  }
+  function setupMatch() {
+    match.ver = queueVer; clearInterval(match.timer);
+    var pool = queue.map(function (id) { return BY_ID[id]; }), short = pool.filter(function (c) { return c.ko.length <= 40 && c.vi.length <= 60; });
+    var src = short.length >= 6 ? short : pool, seenVi = {}, seenKo = {}, picks = [];
+    shuffle(src, Math.random).forEach(function (c) { if (picks.length < 6 && !seenVi[c.vi] && !seenKo[c.ko]) { seenVi[c.vi] = seenKo[c.ko] = true; picks.push(c); } });
+    match.tiles = shuffle(picks.map(function (c) { return { id: c.id, side: 'vi', text: c.vi, gone: false }; }).concat(picks.map(function (c) { return { id: c.id, side: 'ko', text: c.ko, gone: false }; })), Math.random);
+    match.left = picks.length; match.sel = -1; match.running = false; match.done = false; match.pen = 0; match.final = 0;
+  }
+  function matchTime() { return match.done ? match.final : match.running ? (performance.now() - match.t0) / 1000 + match.pen : 0; }
+  function paintMatchTime() { $('mTime').textContent = matchTime().toFixed(1) + ' giây'; }
+  function paintMatch() {
+    var grid = $('mGrid'); grid.textContent = '';
+    var best = matchBest();
+    $('mBest').textContent = best ? 'Kỷ lục: ' + best.toFixed(1) + ' giây' : '';
+    paintMatchTime();
+    $('mStart').hidden = match.running;
+    $('mStart').textContent = match.done ? 'Chơi lại' : 'Bắt đầu';
+    if (!match.running && !match.done) { $('mInfo').textContent = 'Ghép mỗi câu tiếng Việt với câu tiếng Hàn tương ứng càng nhanh càng tốt. Chọn sai bị cộng 1 giây.'; grid.hidden = true; return; }
+    grid.hidden = match.done;
+    if (match.done) {
+      var rec = best && match.final <= best + 1e-9;
+      $('mInfo').textContent = 'Xong trong ' + match.final.toFixed(1) + ' giây.' + (rec ? ' Kỷ lục mới!' : ''); return;
+    }
+    $('mInfo').textContent = 'Còn ' + match.left + ' cặp.';
+    match.tiles.forEach(function (t, i) {
+      var b = mkBtn('tile' + (t.side === 'ko' ? ' ko' : '') + (t.gone ? ' gone' : '') + (match.sel === i ? ' sel' : ''), t.text); b.dataset.ti = i;
+      if (t.side === 'ko') b.lang = 'ko';
+      grid.appendChild(b);
+    });
+  }
+  function startMatch() {
+    if (match.done || match.ver !== queueVer || !match.tiles.length) setupMatch();
+    match.running = true; match.t0 = performance.now(); clearInterval(match.timer);
+    match.timer = setInterval(paintMatchTime, 100); paintMatch();
+  }
+  function tapTile(i) {
+    var t = match.tiles[i]; if (!t || t.gone || !match.running) return;
+    if (match.sel < 0) { match.sel = i; paintMatch(); return; }
+    if (match.sel === i) { match.sel = -1; paintMatch(); return; }
+    var s = match.tiles[match.sel];
+    if (s.id === t.id && s.side !== t.side) {
+      s.gone = t.gone = true; match.sel = -1; match.left--;
+      speak(BY_ID[t.id].ko, 'ko-KR');
+      if (!match.left) {
+        match.running = false; match.done = true; clearInterval(match.timer);
+        match.final = (performance.now() - match.t0) / 1000 + match.pen;
+        var best = matchBest();
+        if (!best || match.final < best) { try { var all = JSON.parse(lsGet(MATCH_KEY) || '{}'); all[state.deck] = match.final; lsSet(MATCH_KEY, JSON.stringify(all)); } catch (e) { } }
+      }
+      paintMatch();
+    } else {
+      match.pen += 1; var a = match.sel; match.sel = -1;
+      paintMatch();
+      [a, i].forEach(function (k) { var el = document.querySelector('#mGrid [data-ti="' + k + '"]'); if (el) el.classList.add('bad'); });
+      setTimeout(function () { Array.prototype.forEach.call(document.querySelectorAll('#mGrid .bad'), function (x) { x.classList.remove('bad'); }); }, 500);
+    }
+  }
+
+  /* ================= Flashcards: hands-free auto play ================= */
+  var auto = { on: false, token: 0 };
+  function paintAutoBtn() { var b = $('autoPlay'); b.textContent = auto.on ? '■ Dừng tự phát' : '▶ Tự phát'; b.setAttribute('aria-pressed', String(auto.on)); }
+  function stopAuto() { if (!auto.on) return; auto.on = false; auto.token++; paintAutoBtn(); if (canSpeak) { try { window.speechSynthesis.cancel(); } catch (e) { } } }
+  function startAuto() {
+    if (!queue.length) return;
+    auto.on = true; var tk = ++auto.token; paintAutoBtn();
+    (function step() {
+      if (tk !== auto.token) return;
+      var c = currentCard(); if (!c) { stopAuto(); return; }
+      var f = dirFields(); state.flipped = false; renderCard();
+      speakAsync(c[f.p], f.pl).then(function () { return wait(800); }).then(function () {
+        if (tk !== auto.token) return;
+        state.flipped = true; renderCard(); return speakAsync(c[f.a], f.al);
+      }).then(function () { return wait(1300); }).then(function () {
+        if (tk !== auto.token) return;
+        if (state.idx >= queue.length - 1) { stopAuto(); return; }
+        state.idx++; step();
+      });
+    })();
+  }
+
+  /* ================= Học phần: create, edit, import your own cards ================= */
+  var sets = { deck: '', editing: '', renaming: '', confirmDel: '', msg: '' };
+  function uid(p) { var a = new Uint8Array(9); (window.crypto || window.msCrypto).getRandomValues(a); return p + Array.prototype.map.call(a, function (b) { return (b % 36).toString(36); }).join(''); }
+  function putCustom(sec, id, val) { val = Object.assign({}, val); val.t = Date.now(); custom[sec][id] = val; SYNC.queue(sec + '/' + id, val); }
+  function customChanged() {
+    saveCustom(); applyCustom();
+    if (state.deck !== 'all' && !DECK_NAME[state.deck]) state.deck = 'all';
+    var c = currentCard(); buildQueue(c ? c.id : null); renderDecks(); renderStats();
+    if (state.mode === 'sets') renderSets();
+  }
+  function addDeck(name) { var id = uid('ud'); putCustom('d', id, { name: name, o: Date.now() }); return id; }
+  function addCard(deck, vi, ko, note) { var id = uid('uc'); putCustom('c', id, { deck: deck, vi: vi, ko: ko, note: note || '', o: Date.now() + Math.random() }); return id; }
+  function splitLine(line) {
+    var seps = ['\t', ' = ', ' | ', ' - ', ' – ', ';', ' : '];
+    for (var i = 0; i < seps.length; i++) { var k = line.indexOf(seps[i]); if (k > 0) return [line.slice(0, k), line.slice(k + seps[i].length)].concat(seps[i] === '\t' ? [] : []); }
+    return null;
+  }
+  function parseImport(text) {
+    var out = [], bad = 0;
+    String(text || '').split(/\r?\n/).forEach(function (line) {
+      line = line.trim(); if (!line) return;
+      var parts = line.indexOf('\t') > 0 ? line.split('\t') : splitLine(line);
+      if (!parts || parts.length < 2) { bad++; return; }
+      var a = parts[0].trim(), b = parts[1].trim(), note = (parts[2] || '').trim();
+      if (!a || !b) { bad++; return; }
+      if (HANGUL.test(a) && !HANGUL.test(b)) { var t = a; a = b; b = t; }
+      out.push({ vi: a, ko: b, note: note });
+    });
+    return { rows: out, bad: bad };
+  }
+  function deckOptions(sel, includeNew) {
+    var s = mk('select', 'field'); s.name = 'deck';
+    DECKS.forEach(function (d) { s.appendChild(new Option(d.name + (d.custom ? '' : ' (có sẵn)'), d.id)); });
+    if (includeNew) s.appendChild(new Option('+ Học phần mới…', '__new'));
+    s.value = DECK_NAME[sel] ? sel : (DECKS[BUILTIN_DECKS] ? DECKS[BUILTIN_DECKS].id : DECKS[0].id);
+    return s;
+  }
+  function labeled(text, input) { var l = mk('label', 'flabel'); l.appendChild(mk('span', null, text)); l.appendChild(input); return l; }
+  function txt(name, ph, val) { var i = mk('input', 'field'); i.type = 'text'; i.name = name; i.placeholder = ph || ''; i.value = val || ''; i.autocomplete = 'off'; return i; }
+  function renderSets() {
+    var v = $('setsBox'); v.textContent = '';
+    if (sets.msg) { v.appendChild(mk('p', 'notice', sets.msg)); }
+    // New deck
+    var p1 = mk('form', 'quiz panel'); p1.dataset.form = 'deck';
+    p1.appendChild(mk('h2', null, 'Tạo học phần mới'));
+    var r1 = mk('div', 'wform'); r1.appendChild(txt('name', 'Tên học phần, ví dụ: Từ vựng an toàn lao động'));
+    var b1 = mk('button', 'primary', 'Tạo'); b1.type = 'submit'; r1.appendChild(b1); p1.appendChild(r1); v.appendChild(p1);
+    // Add one card
+    var p2 = mk('form', 'quiz panel'); p2.dataset.form = 'card';
+    p2.appendChild(mk('h2', null, 'Thêm thẻ'));
+    p2.appendChild(labeled('Học phần', deckOptions(sets.deck, false)));
+    p2.appendChild(labeled('Tiếng Việt', txt('vi', 'Ví dụ: Bản vẽ hoàn công')));
+    var ko = txt('ko', '예: 준공 도면'); ko.lang = 'ko'; p2.appendChild(labeled('Tiếng Hàn', ko));
+    p2.appendChild(labeled('Phiên âm (không bắt buộc)', txt('pr', 'chun-gông tô-myơn')));
+    p2.appendChild(labeled('Ghi chú (không bắt buộc)', txt('note', '')));
+    var b2 = mk('button', 'primary', 'Thêm thẻ'); b2.type = 'submit'; var r2 = mk('div', 'btnrow'); r2.appendChild(b2); p2.appendChild(r2); v.appendChild(p2);
+    // Bulk import
+    var p3 = mk('form', 'quiz panel'); p3.dataset.form = 'import';
+    p3.appendChild(mk('h2', null, 'Nhập nhanh nhiều thẻ'));
+    p3.appendChild(mk('p', 'hint', 'Mỗi dòng một thẻ: tiếng Việt và tiếng Hàn, ngăn cách bằng phím Tab (dán thẳng từ Excel / Google Sheets), dấu " = ", " - " hoặc ";". Cột thứ ba (nếu có) là ghi chú.'));
+    var dsel = deckOptions(sets.deck, true); p3.appendChild(labeled('Đưa vào học phần', dsel));
+    var nn = txt('newname', 'Tên học phần mới'); nn.hidden = dsel.value !== '__new'; p3.appendChild(nn);
+    var ta = mk('textarea', 'field'); ta.name = 'bulk'; ta.rows = 6; ta.placeholder = 'Báo giá = 견적\nNghiệm thu = 검수\nBẫy hơi\t스팀 트랩'; p3.appendChild(ta);
+    var pv = mk('p', 'hint'); pv.dataset.preview = '1'; p3.appendChild(pv);
+    var b3 = mk('button', 'primary', 'Nhập thẻ'); b3.type = 'submit'; var r3 = mk('div', 'btnrow'); r3.appendChild(b3); p3.appendChild(r3); v.appendChild(p3);
+    // Existing custom cards, grouped by deck
+    var p4 = mk('div', 'quiz panel'); p4.appendChild(mk('h2', null, 'Thẻ bạn đã tạo'));
+    var any = false;
+    DECKS.forEach(function (d) {
+      var cards = CARDS.filter(function (c) { return c.custom && c.deck === d.id; });
+      if (!d.custom && !cards.length) return;
+      any = true;
+      var g = mk('div', 'sgroup'), hd = mk('div', 'shead');
+      if (sets.renaming === d.id) {
+        var rf = mk('form', 'wform'); rf.dataset.form = 'rename'; rf.dataset.deck = d.id;
+        rf.appendChild(txt('name', '', d.name)); var sv = mk('button', 'primary', 'Lưu'); sv.type = 'submit'; rf.appendChild(sv);
+        rf.appendChild(mkBtn('ghost', 'Hủy', { 'data-act': 'cancel' })); hd.appendChild(rf);
+      } else {
+        hd.appendChild(mk('b', null, d.name)); hd.appendChild(mk('span', 'n', ' · ' + cards.length + ' thẻ' + (d.custom ? '' : ' thêm vào chủ đề có sẵn')));
+        if (d.custom) {
+          var ctl = mk('span', 'sctl');
+          ctl.appendChild(mkBtn('ghost', 'Học', { 'data-learn': d.id }));
+          ctl.appendChild(mkBtn('ghost', 'Đổi tên', { 'data-rename': d.id }));
+          ctl.appendChild(mkBtn(sets.confirmDel === d.id ? 'danger' : 'ghost', sets.confirmDel === d.id ? 'Bấm lần nữa để xoá' : 'Xoá', { 'data-deldeck': d.id }));
+          hd.appendChild(ctl);
+        }
+      }
+      g.appendChild(hd);
+      var ol = mk('ol', 'list');
+      cards.forEach(function (c) {
+        var li = mk('li', 'row');
+        if (sets.editing === c.id) {
+          var ef = mk('form', 'eform'); ef.dataset.form = 'edit'; ef.dataset.id = c.id;
+          ef.appendChild(labeled('Tiếng Việt', txt('vi', '', c.vi)));
+          var k2 = txt('ko', '', c.ko); k2.lang = 'ko'; ef.appendChild(labeled('Tiếng Hàn', k2));
+          ef.appendChild(labeled('Phiên âm', txt('pr', '', c.pr)));
+          ef.appendChild(labeled('Ghi chú', txt('note', '', c.note)));
+          var er = mk('div', 'btnrow'); var es2 = mk('button', 'primary', 'Lưu'); es2.type = 'submit'; er.appendChild(es2); er.appendChild(mkBtn('ghost', 'Hủy', { 'data-act': 'cancel' })); ef.appendChild(er);
+          li.appendChild(ef);
+        } else {
+          var t = mk('div'); t.appendChild(mk('p', 'vi', c.vi)); var kk = mk('p', 'ko', c.ko); kk.lang = 'ko'; t.appendChild(kk);
+          if (c.pr) t.appendChild(mk('p', 'pron', c.pr));
+          if (c.note) t.appendChild(mk('span', 'tag', c.note));
+          li.appendChild(t);
+          var cc = mk('div', 'ctrl');
+          cc.appendChild(sayBtn(c.ko, 'ko-KR', 'Nghe tiếng Hàn'));
+          cc.appendChild(mkBtn('ghost', 'Sửa', { 'data-edit': c.id }));
+          cc.appendChild(mkBtn(sets.confirmDel === c.id ? 'danger' : 'ghost', sets.confirmDel === c.id ? 'Xoá?' : 'Xoá', { 'data-delcard': c.id }));
+          li.appendChild(cc);
+        }
+        ol.appendChild(li);
+      });
+      if (!cards.length) ol.appendChild(mk('li', 'listinfo', 'Chưa có thẻ nào. Thêm ở mục "Thêm thẻ" phía trên.'));
+      g.appendChild(ol); p4.appendChild(g);
+    });
+    if (!any) p4.appendChild(mk('p', 'hint', 'Bạn chưa tạo thẻ nào. Thẻ tự tạo dùng được ở mọi chế độ học và được đồng bộ giữa các máy khi bật đồng bộ.'));
+    v.appendChild(p4);
+  }
+  function setsMsg(m) { sets.msg = m; renderSets(); setTimeout(function () { if (sets.msg === m) { sets.msg = ''; var n = document.querySelector('#setsBox .notice'); if (n) n.remove(); } }, 4000); }
+
+  /* ================= Voice: speed + natural voice guide ================= */
+  function platform() {
+    var ua = navigator.userAgent || '';
+    if (/iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return 'ios';
+    if (/Android/.test(ua)) return 'android';
+    if (/Windows/.test(ua)) return /Edg\//.test(ua) ? 'win-edge' : 'win';
+    if (/Macintosh/.test(ua)) return 'mac';
+    return 'other';
+  }
+  var GUIDE = {
+    ios: 'iPhone / iPad: vào Cài đặt › Trợ năng › Nội dung được đọc › Giọng nói. Chọn Tiếng Hàn › tải “Yuna (Cao cấp)” hoặc “Yuna (Nâng cao)”; chọn Tiếng Việt › tải “Linh (Nâng cao)”. Tải xong, đóng hẳn trình duyệt rồi mở lại trang.',
+    android: 'Android: cài hoặc cập nhật “Dịch vụ lời nói của Google” (Speech Services by Google) trên CH Play. Mở Cài đặt › Hệ thống › Ngôn ngữ › Đầu ra văn bản thành giọng nói › biểu tượng bánh răng › Cài đặt dữ liệu giọng nói › tải Tiếng Hàn và Tiếng Việt. Nên mở trang bằng Chrome.',
+    'win-edge': 'Máy tính Windows + Edge: đã có sẵn giọng “Natural” (SunHi cho tiếng Hàn, HoaiMy cho tiếng Việt), không cần tải thêm. Cần có mạng khi dùng giọng này.',
+    win: 'Máy tính Windows: mở trang bằng Microsoft Edge là có ngay giọng “Natural” tự nhiên nhất (SunHi, HoaiMy). Nếu dùng Chrome, vào Cài đặt Windows › Thời gian & ngôn ngữ › Giọng nói › Thêm giọng › chọn Tiếng Hàn và Tiếng Việt.',
+    mac: 'Mac: vào Cài đặt hệ thống › Trợ năng › Nội dung được đọc › Giọng hệ thống › Quản lý giọng, tải “Yuna (Cao cấp)” và “Linh (Nâng cao)”. Hoặc mở trang bằng Edge để có giọng Natural.',
+    other: 'Hãy mở trang bằng Microsoft Edge hoặc Chrome để có giọng tiếng Hàn và tiếng Việt tự nhiên.'
+  };
+  var NATURAL = /natural|neural|online|google|premium|enhanced|cao cấp|nâng cao|siri/i;
+  function paintVoiceStatus() {
+    var plat = platform(); $('voiceGuide').textContent = GUIDE[plat] || GUIDE.other;
+    if (!canSpeak) { $('voiceStatus').textContent = 'Trình duyệt này không hỗ trợ đọc thành tiếng.'; return; }
+    var parts = [];
+    [['ko', 'Tiếng Hàn'], ['vi', 'Tiếng Việt']].forEach(function (x) {
+      var v = pickVoice(x[0]);
+      if (!v) parts.push(x[1] + ': chưa có giọng trên máy này');
+      else parts.push(x[1] + ': ' + v.name + (NATURAL.test(v.name + ' ' + v.voiceURI) || plat === 'android' ? ' · tự nhiên ✓' : ' · giọng cơ bản, nên tải giọng tốt hơn'));
+    });
+    $('voiceStatus').textContent = parts.join('  ·  ');
+  }
+  function paintRate() { Array.prototype.forEach.call(document.querySelectorAll('[data-rate]'), function (b) { b.setAttribute('aria-pressed', String(b.dataset.rate === state.rate)); }); }
+
+  /* ================= Sync panel ================= */
+  var RULES = '{\n  "rules": {\n    "sync": {\n      "$code": {\n        ".read": "$code.length >= 20",\n        ".write": "$code.length >= 20"\n      }\n    }\n  }\n}';
+  function pairLink() { var c = SYNC.cfg(); return location.href.split('#')[0] + '#lk=' + encodeURIComponent(c.url) + '~' + c.code; }
+  function paintSyncPanel() {
+    var c = SYNC.cfg();
+    $('syncOffBox').hidden = !!c; $('syncOnBox').hidden = !c;
+    $('syncRules').textContent = RULES;
+    if (!c) return;
+    $('syncCodeShow').textContent = c.code;
+    $('syncUrlShow').textContent = c.url;
+    var fileMode = location.protocol === 'file:';
+    $('syncFileNote').hidden = !fileMode;
+    $('syncQrBox').hidden = true;
+  }
+  function showQr() {
+    var box = $('syncQrBox'), link = pairLink(); box.hidden = false;
+    var q = $('syncQr'); q.textContent = '';
+    if (typeof window.qrcode === 'function') {
+      try { var qr = window.qrcode(0, 'M'); qr.addData(link); qr.make(); q.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 2, scalable: true }); }
+      catch (e) { q.textContent = 'Không tạo được mã QR.'; }
+    } else q.textContent = 'Chưa tải được mã QR (cần mở trang từ link web). Hãy dùng nút Sao chép link.';
+    $('syncLinkText').value = link;
+  }
+  function copyText(t, btn) {
+    var done = function () { var o = btn.textContent; btn.textContent = 'Đã sao chép'; setTimeout(function () { btn.textContent = o; }, 1500); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(t).then(done, function () { fallback(); });
+    else fallback();
+    function fallback() { var ta = mk('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { } ta.remove(); }
+  }
+
+  /* Re-render the current view after data arrived from the other device, without interrupting a question in progress */
+  function softRender() {
+    if (state.mode === 'cards') renderCard();
+    else if (state.mode === 'quiz' && quiz.id) renderQuiz();
+    else if (state.mode === 'list') renderList();
+    else if (state.mode === 'words') renderWords();
+    else if (state.mode === 'sets') renderSets();
+    else if (state.mode === 'learn') paintLearnBar();
+  }
+
+  /* ---------- Modes ---------- */
+  function renderMode() {
+    if (state.mode !== 'cards') stopAuto();
+    if (state.mode !== 'match' && match.running) { match.running = false; clearInterval(match.timer); match.ver = -1; }
+    MODES.forEach(function (m) {
+      $('view-' + m).hidden = state.mode !== m;
+      $('tab-' + m).setAttribute('aria-selected', String(state.mode === m));
+    });
+    $('dir').textContent = state.dir === 'vk' ? 'Việt → Hàn' : 'Hàn → Việt';
+    $('status').value = state.status;
+    $('order').value = state.order;
+    $('reshuffle').hidden = state.order !== 'shuffle';
+    $('showPron').checked = !!state.pron;
+    $('autoRead').checked = !!state.autoVi;
+    if (state.mode === 'cards') renderCard();
+    else if (state.mode === 'quiz') { $('qFb').textContent = ''; newQuestion(); }
+    else if (state.mode === 'list') renderList();
+    else if (state.mode === 'words') renderWords();
+    else if (state.mode === 'learn') renderLearn();
+    else if (state.mode === 'write') renderWrite();
+    else if (state.mode === 'test') renderTest();
+    else if (state.mode === 'match') renderMatch();
+    else if (state.mode === 'sets') renderSets();
+    paintRate();
+    Array.prototype.forEach.call(document.querySelectorAll('.looseChk'), function (o) { o.checked = !!state.loose; });
+  }
+  function renderAll() { renderDecks(); renderStats(); renderMode(); }
+  function rebuild() { var c = currentCard(); buildQueue(c ? c.id : null); saveUi(); renderAll(); }
+
+  /* ---------- Events ---------- */
+  $('decks').addEventListener('click', function (e) {
+    var b = e.target.closest('.chip'); if (!b) return;
+    state.deck = b.dataset.deck; buildQueue(); saveUi(); renderAll();
+  });
+  document.querySelector('.tabs').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-mode]'); if (!b) return;
+    state.mode = b.dataset.mode; state.flipped = false; saveUi(); renderMode();
+  });
+  $('status').addEventListener('change', function () { state.status = this.value; buildQueue(); saveUi(); renderAll(); });
+  $('order').addEventListener('change', function () { state.order = this.value; buildQueue(); saveUi(); renderAll(); });
+  $('reshuffle').addEventListener('click', function () { state.seed = Math.floor(Math.random() * 1e9); buildQueue(); saveUi(); renderAll(); });
+  $('autoRead').addEventListener('change', function () {
+    state.autoVi = this.checked; saveUi();
+    if (!this.checked && canSpeak) { try { window.speechSynthesis.cancel(); } catch (e) { } }
+  });
+  $('showPron').addEventListener('change', function () {
+    state.pron = this.checked; saveUi();
+    if (state.mode === 'cards') renderCard(); else if (state.mode === 'quiz') renderQuiz(); else if (state.mode === 'list') renderList(); else renderWords();
+  });
+  $('dir').addEventListener('click', function () { state.dir = state.dir === 'vk' ? 'kv' : 'vk'; state.flipped = false; saveUi(); renderMode(); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-clear]'), function (b) {
+    b.addEventListener('click', function () { state.status = 'all'; state.deck = 'all'; buildQueue(); saveUi(); renderAll(); });
+  });
+
+  // Voice picker
+  var SAMPLE = { ko: '안녕하세요. 이번 주 업무 보고드리겠습니다.', vi: 'Xin chào, em xin báo cáo công việc tuần này.' };
+  function fillVoiceSelects() {
+    if (!canSpeak) return;
+    var missing = [];
+    [['ko', 'voiceKo', 'tiếng Hàn'], ['vi', 'voiceVi', 'tiếng Việt']].forEach(function (x) {
+      var sel = $(x[1]), list = voicesFor(x[0]);
+      sel.textContent = '';
+      var auto = document.createElement('option'); auto.value = '';
+      auto.textContent = list.length ? ('Tự chọn giọng tốt nhất (' + list[0].name + ')') : ('Máy này chưa có giọng ' + x[2]);
+      sel.appendChild(auto);
+      list.forEach(function (v) { var o = document.createElement('option'); o.value = v.voiceURI; o.textContent = v.name + (v.localService ? '' : ' · trực tuyến'); sel.appendChild(o); });
+      var has = VOICE_PREF[x[0]] && list.some(function (v) { return v.voiceURI === VOICE_PREF[x[0]]; });
+      sel.value = has ? VOICE_PREF[x[0]] : '';
+      sel.disabled = !list.length;
+      if (!list.length) missing.push(x[2]);
+    });
+    var m = $('voiceMissing');
+    m.hidden = !missing.length;
+    m.textContent = missing.length ? ('Máy này chưa có giọng ' + missing.join(' và ') + '. Hãy cài thêm giọng trong phần cài đặt giọng nói của máy rồi tải lại trang.') : '';
+  }
+  if (canSpeak) {
+    fillVoiceSelects();
+    try { window.speechSynthesis.addEventListener('voiceschanged', fillVoiceSelects); } catch (e) { window.speechSynthesis.onvoiceschanged = fillVoiceSelects; }
+  }
+  $('voiceKo').addEventListener('change', function () { VOICE_PREF.ko = this.value; saveVoice(); paintVoiceStatus(); speak(SAMPLE.ko, 'ko-KR'); });
+  $('voiceVi').addEventListener('change', function () { VOICE_PREF.vi = this.value; saveVoice(); paintVoiceStatus(); speak(SAMPLE.vi, 'vi-VN'); });
+  $('voicePanel').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-test]'); if (!b) return;
+    if (b.dataset.test === 'ko') speak(SAMPLE.ko, 'ko-KR'); else speak(SAMPLE.vi, 'vi-VN');
+  });
+
+  // Swipe left/right on the card (phones, tablets)
+  var sw = null, swiped = false;
+  $('card').addEventListener('touchstart', function (e) { if (e.touches.length === 1) sw = { x: e.touches[0].clientX, y: e.touches[0].clientY, t: Date.now() }; }, { passive: true });
+  $('card').addEventListener('touchend', function (e) {
+    if (!sw) return;
+    var t = e.changedTouches[0], dx = t.clientX - sw.x, dy = t.clientY - sw.y, dt = Date.now() - sw.t; sw = null;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5 && dt < 800) { swiped = true; setTimeout(function () { swiped = false; }, 400); go(dx < 0 ? 1 : -1); }
+  }, { passive: true });
+  $('card').addEventListener('click', function (e) {
+    if (swiped) { e.stopImmediatePropagation(); return; }
+  }, true);
+  $('card').addEventListener('click', function (e) {
+    var say = e.target.closest('[data-say]');
+    if (say) { e.stopPropagation(); speak(say.dataset.say); return; }
+    if (e.target.closest('.speak') || e.target.closest('.hl-list')) return;
+    var sg = e.target.closest('.ph');
+    if (sg) { var c = currentCard(); if (c) { toggleHl(c.id, +sg.dataset.i); renderCard(); } return; }
+    // Text without a pair does nothing; only empty space flips the card
+    if (e.target.closest('.prompt, .answer, .pron')) return;
+    flip();
+  });
+  $('card').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); flip(); } });
+  $('cSpeak').addEventListener('click', function (e) { e.stopPropagation(); var c = currentCard(); if (c) speak(c.ko); });
+  $('prev').addEventListener('click', function () { go(-1); });
+  $('next').addEventListener('click', function () { go(1); });
+  $('cX').addEventListener('click', toggleXCurrent);
+  document.querySelector('#view-cards .levels').addEventListener('click', function (e) { var b = e.target.closest('[data-lv]'); if (b) rateCurrent(b.dataset.lv); });
+
+  $('qOpts').addEventListener('click', function (e) { var b = e.target.closest('.opt'); if (b) answer(b.dataset.id); });
+  $('qNext').addEventListener('click', function () {
+    $('qFb').textContent = ''; newQuestion();
+    if (state.autoVi && quiz.id) speak(BY_ID[quiz.id].vi, 'vi-VN');
+  });
+  $('qX').addEventListener('click', function () { var id = quiz.id; if (!id) return; setP(id, { x: !getP(id).x }); renderQuiz(); });
+  $('qLevels').addEventListener('click', function (e) { var b = e.target.closest('[data-lv]'); if (!b || !quiz.id) return; var p = getP(quiz.id); setP(quiz.id, { lv: p.lv === b.dataset.lv ? null : b.dataset.lv }); renderQuiz(); });
+
+  $('search').addEventListener('input', function () { state.search = this.value; renderList(); });
+  $('words').addEventListener('click', function (e) {
+    var say = e.target.closest('[data-say]'); if (say) { speak(say.dataset.say); return; }
+    var b = e.target.closest('[data-act="unhl"]'); if (!b) return;
+    var li = b.closest('.row'); toggleHl(li.dataset.id, +li.dataset.i); renderWords();
+  });
+  $('list').addEventListener('click', function (e) {
+    var sg = e.target.closest('.ph');
+    if (sg) { var rid = sg.closest('.row').dataset.id; toggleHl(rid, +sg.dataset.i); updateRow(rid); return; }
+    var b = e.target.closest('[data-act]'); if (!b) return;
+    var id = b.closest('.row').dataset.id, act = b.dataset.act;
+    if (act === 'speak') { speak(BY_ID[id].ko); return; }
+    if (act === 'x') setP(id, { x: !getP(id).x });
+    if (act === 'lv') { var p = getP(id); setP(id, { lv: p.lv === b.dataset.lv ? null : b.dataset.lv }); }
+    updateRow(id);
+    var again = document.querySelector('#list .row[data-id="' + id + '"] [data-act="' + act + '"]' + (act === 'lv' ? '[data-lv="' + b.dataset.lv + '"]' : ''));
+    if (again) again.focus();
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (state.mode !== 'cards') return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA')) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === ' ' && t && t.tagName === 'BUTTON' && t.id !== 'card') return;
+    if (e.key === ' ') { e.preventDefault(); flip(); }
+    else if (e.key === 'ArrowRight') go(1);
+    else if (e.key === 'ArrowLeft') go(-1);
+    else if (e.key === '1') rateCurrent('h');
+    else if (e.key === '2') rateCurrent('m');
+    else if (e.key === '3') rateCurrent('e');
+    else if (e.key === 'x' || e.key === 'X') toggleXCurrent();
+  });
+
+  // Reset with an in-page confirmation
+  function showResetAsk() {
+    var box = $('resetBox'); box.textContent = '';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'ghost'; b.textContent = 'Xóa tiến độ';
+    b.addEventListener('click', showResetConfirm); box.appendChild(b);
+  }
+  function showResetConfirm() {
+    var box = $('resetBox'); box.textContent = '';
+    var s = document.createElement('span'); s.textContent = 'Xóa hết dấu X, mức Khó / Vừa / Dễ, từ tô và tiến độ Học?'; box.appendChild(s);
+    var yes = document.createElement('button'); yes.type = 'button'; yes.className = 'danger'; yes.textContent = 'Xóa';
+    yes.addEventListener('click', function () { var now = Date.now(); Object.keys(progress).forEach(function (k) { progress[k] = { t: now }; SYNC.queue('p/' + k, progress[k]); }); cacheLocal(); buildQueue(); renderAll(); showResetAsk(); });
+    var no = document.createElement('button'); no.type = 'button'; no.className = 'ghost'; no.textContent = 'Hủy';
+    no.addEventListener('click', showResetAsk);
+    box.appendChild(yes); box.appendChild(no); no.focus();
+  }
+  $('resetAsk').addEventListener('click', showResetConfirm);
+
+  /* ---------- Events for the new modes ---------- */
+  document.addEventListener('click', function (e) {
+    var say = e.target.closest('.nv [data-say]');
+    if (say) { speak(say.dataset.say, say.dataset.lang || 'ko-KR'); return; }
+    var slow = e.target.closest('[data-say-slow]');
+    if (slow) { var keep = state.rate; state.rate = 'slow'; speak(slow.dataset.saySlow, 'ko-KR'); state.rate = keep; return; }
+    var clr = e.target.closest('[data-clear-all]');
+    if (clr) { state.status = 'all'; state.deck = 'all'; buildQueue(); saveUi(); renderAll(); return; }
+    var go = e.target.closest('[data-go]');
+    if (go) { state.mode = go.dataset.go; saveUi(); renderMode(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  });
+  // Học
+  $('lStage').addEventListener('click', function (e) {
+    var p = e.target.closest('[data-pick]');
+    if (p && !learn.answered) { var c = BY_ID[learn.ids[learn.pos]]; learnResult(p.dataset.pick === c.id, { picked: p.dataset.pick }); return; }
+    var a = e.target.closest('[data-act]'); if (!a) return;
+    var act = a.dataset.act;
+    if (act === 'next') { learn.pos++; learnShow(); }
+    else if (act === 'dunno' && !learn.answered) learnResult(false, { typed: '' });
+    else if (act === 'override') {
+      var c2 = BY_ID[learn.ids[learn.pos]];
+      learn.ok = true; learn.right++; setP(c2.id, { ls: Math.min(2, lsOf(c2.id) + 1) });
+      if (learn.again[c2.id] && learn.ids[learn.ids.length - 1] === c2.id) { learn.ids.pop(); delete learn.again[c2.id]; }
+      paintLearn();
+    }
+    else if (act === 'nextround') learnNewRound();
+    else if (act === 'restart') { queue.forEach(function (id) { if (lsOf(id)) setP(id, { ls: null }); }); learn.round = 0; learnNewRound(); }
+  });
+  $('lStage').addEventListener('submit', function (e) {
+    e.preventDefault(); if (learn.answered) return;
+    var c = BY_ID[learn.ids[learn.pos]], val = e.target.ans.value, g = grade(val, c[dirFields().a]);
+    if (!val.trim()) return;
+    learnResult(g.ok, { typed: val, close: g.close });
+  });
+  $('lMcOnly').addEventListener('change', function () { state.mcOnly = this.checked; saveUi(); if (!learn.answered && learn.view === 'q') learnShow(); });
+  document.addEventListener('keydown', function (e) {
+    if (state.mode !== 'learn' || learn.view !== 'q' || learn.type !== 'mc' || learn.answered) return;
+    if (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
+    var k = +e.key; if (k >= 1 && k <= learn.opts.length) { var c = BY_ID[learn.ids[learn.pos]]; learnResult(learn.opts[k - 1] === c.id, { picked: learn.opts[k - 1] }); }
+  });
+  // Viết
+  $('wStage').addEventListener('submit', function (e) { e.preventDefault(); if (wr.answered) return; var v = e.target.ans.value; if (!v.trim()) return; wrSubmit(v); });
+  $('wStage').addEventListener('click', function (e) {
+    var a = e.target.closest('[data-act]'); if (!a) return;
+    if (a.dataset.act === 'dunno' && !wr.answered) { var c = BY_ID[queue[wr.pos % queue.length]]; wr.answered = true; wr.ok = false; wr.typed = ''; wr.total++; markWrong(c.id); paintWrite(); speak(c.ko, 'ko-KR'); }
+    else if (a.dataset.act === 'override') { wr.ok = true; wr.right++; paintWrite(); }
+    else if (a.dataset.act === 'next') wrNext();
+  });
+  $('wKind').addEventListener('change', function () { state.wkind = this.value; saveUi(); wr.answered = false; paintWrite(); if (state.wkind === 'ls') speak(BY_ID[queue[wr.pos % queue.length]].ko, 'ko-KR'); });
+  Array.prototype.forEach.call(document.querySelectorAll('.looseChk'), function (ch) {
+    ch.addEventListener('change', function () { state.loose = this.checked; saveUi(); Array.prototype.forEach.call(document.querySelectorAll('.looseChk'), function (o) { o.checked = state.loose; }); });
+  });
+  // Kiểm tra
+  $('tGo').addEventListener('click', function () { buildTest(queue); renderTest(); window.scrollTo({ top: $('view-test').offsetTop - 10, behavior: 'smooth' }); });
+  $('tPaper').addEventListener('click', function (e) {
+    var blk = e.target.closest('.tq'), P = test.paper;
+    var b = e.target.closest('[data-tf],[data-mc]');
+    if (b && blk && !test.graded) {
+      var qi = +blk.dataset.qi;
+      if (b.dataset.tf) P.ans[qi] = b.dataset.tf === 'true'; else P.ans[qi] = b.dataset.mc;
+      Array.prototype.forEach.call(blk.querySelectorAll('[data-tf],[data-mc]'), function (x) { var on = x === b; x.setAttribute('aria-pressed', String(on)); x.classList.toggle('chosen', on); });
+      return;
+    }
+    var a = e.target.closest('[data-act]'); if (!a) return;
+    if (a.dataset.act === 'submit') gradeTest();
+    else if (a.dataset.act === 'newtest') { test.paper = null; renderTest(); }
+    else if (a.dataset.act === 'retrywrong') { var ids = P.score.wrongIds.filter(function (id, i, arr) { return arr.indexOf(id) === i; }); $('tN').value = ids.length; buildTest(ids); renderTest(); }
+  });
+  $('tPaper').addEventListener('input', function (e) {
+    var blk = e.target.closest('.tq'); if (!blk || test.graded) return; var qi = +blk.dataset.qi;
+    if (e.target.dataset.wr) test.paper.ans[qi] = e.target.value;
+  });
+  $('tPaper').addEventListener('change', function (e) {
+    var blk = e.target.closest('.tq'); if (!blk || test.graded || !e.target.dataset.mt) return; var qi = +blk.dataset.qi;
+    test.paper.ans[qi] = test.paper.ans[qi] || {}; test.paper.ans[qi][e.target.dataset.mt] = e.target.value;
+  });
+  // Ghép thẻ
+  $('mStart').addEventListener('click', startMatch);
+  $('mGrid').addEventListener('click', function (e) { var t = e.target.closest('[data-ti]'); if (t) tapTile(+t.dataset.ti); });
+  // Tự phát
+  $('autoPlay').addEventListener('click', function (e) { e.stopPropagation(); if (auto.on) stopAuto(); else startAuto(); });
+  $('view-cards').addEventListener('click', function (e) { if (auto.on && !e.target.closest('#autoPlay')) stopAuto(); }, true);
+  document.addEventListener('keydown', function (e) { if (auto.on && state.mode === 'cards' && !e.metaKey && !e.ctrlKey) stopAuto(); }, true);
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') stopAuto(); });
+  // Tốc độ
+  Array.prototype.forEach.call(document.querySelectorAll('[data-rate]'), function (b) {
+    b.addEventListener('click', function () { state.rate = b.dataset.rate; saveUi(); paintRate(); var c = currentCard(); speak(state.mode === 'cards' && c ? c.ko : SAMPLE.ko, 'ko-KR'); });
+  });
+  // Học phần
+  $('setsBox').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var f = e.target, kind = f.dataset.form;
+    if (kind === 'deck') {
+      var name = f.name.value.trim(); if (!name) return;
+      var id = addDeck(name); sets.deck = id; customChanged(); setsMsg('Đã tạo học phần “' + name + '”. Thêm thẻ ngay bên dưới.');
+    } else if (kind === 'card') {
+      var vi = f.vi.value.trim(), ko = f.ko.value.trim(); if (!vi || !ko) { setsMsg('Cần nhập cả tiếng Việt và tiếng Hàn.'); return; }
+      sets.deck = f.deck.value;
+      var cid = addCard(sets.deck, vi, ko, f.note.value.trim());
+      if (f.pr.value.trim()) { custom.c[cid].pr = f.pr.value.trim(); putCustom('c', cid, custom.c[cid]); }
+      customChanged(); setsMsg('Đã thêm thẻ “' + vi + '”.');
+      var nf = document.querySelector('#setsBox [data-form="card"] [name="vi"]'); if (nf) nf.focus();
+    } else if (kind === 'import') {
+      var res = parseImport(f.bulk.value); if (!res.rows.length) { setsMsg('Không đọc được dòng nào. Kiểm tra lại dấu ngăn cách.'); return; }
+      var deck = f.deck.value;
+      if (deck === '__new') { var nm = f.newname.value.trim() || ('Học phần ' + new Date().toLocaleDateString('vi-VN')); deck = addDeck(nm); }
+      res.rows.forEach(function (r) { addCard(deck, r.vi, r.ko, r.note); });
+      sets.deck = deck; customChanged(); setsMsg('Đã nhập ' + res.rows.length + ' thẻ' + (res.bad ? ' (bỏ qua ' + res.bad + ' dòng không hợp lệ)' : '') + '.');
+    } else if (kind === 'rename') {
+      var d = custom.d[f.dataset.deck], nn = f.name.value.trim(); if (!d || !nn) return;
+      putCustom('d', f.dataset.deck, Object.assign({}, d, { name: nn })); sets.renaming = ''; customChanged();
+    } else if (kind === 'edit') {
+      var r = custom.c[f.dataset.id], v1 = f.vi.value.trim(), k1 = f.ko.value.trim(); if (!r || !v1 || !k1) return;
+      putCustom('c', f.dataset.id, Object.assign({}, r, { vi: v1, ko: k1, pr: f.pr.value.trim(), note: f.note.value.trim() })); sets.editing = ''; customChanged();
+    }
+  });
+  $('setsBox').addEventListener('input', function (e) {
+    if (e.target.name === 'bulk') { var r = parseImport(e.target.value), pv = document.querySelector('#setsBox [data-preview]'); if (pv) pv.textContent = e.target.value.trim() ? ('Đọc được ' + r.rows.length + ' thẻ' + (r.bad ? ', ' + r.bad + ' dòng không hợp lệ' : '') + '.') : ''; }
+  });
+  $('setsBox').addEventListener('change', function (e) {
+    if (e.target.name === 'deck' && e.target.closest('[data-form="import"]')) { var nn = e.target.closest('form').newname; nn.hidden = e.target.value !== '__new'; if (!nn.hidden) nn.focus(); }
+  });
+  $('setsBox').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b || b.type === 'submit') return;
+    var ds = b.dataset;
+    if (ds.edit) { sets.editing = ds.edit; sets.confirmDel = ''; renderSets(); }
+    else if (ds.rename) { sets.renaming = ds.rename; renderSets(); }
+    else if (ds.act === 'cancel') { sets.editing = ''; sets.renaming = ''; renderSets(); }
+    else if (ds.learn) { state.deck = ds.learn; state.status = 'all'; state.mode = 'cards'; buildQueue(); saveUi(); renderAll(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    else if (ds.delcard) {
+      if (sets.confirmDel !== ds.delcard) { sets.confirmDel = ds.delcard; renderSets(); return; }
+      putCustom('c', ds.delcard, Object.assign({}, custom.c[ds.delcard], { del: true })); sets.confirmDel = ''; customChanged();
+    } else if (ds.deldeck) {
+      if (sets.confirmDel !== ds.deldeck) { sets.confirmDel = ds.deldeck; renderSets(); return; }
+      var id = ds.deldeck;
+      putCustom('d', id, Object.assign({}, custom.d[id], { del: true }));
+      Object.keys(custom.c).forEach(function (cid) { if (custom.c[cid].deck === id && !custom.c[cid].del) putCustom('c', cid, Object.assign({}, custom.c[cid], { del: true })); });
+      sets.confirmDel = ''; customChanged(); setsMsg('Đã xoá học phần.');
+    }
+  });
+  // Đồng bộ
+  $('sync').addEventListener('click', function () { var p = $('syncPanel'); p.open = true; paintSyncPanel(); p.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  $('syncPanel').addEventListener('toggle', function () { if (this.open) paintSyncPanel(); });
+  $('syncOn').addEventListener('click', function () {
+    var url = $('syncUrl').value, code = $('syncCode').value.trim().toLowerCase(), msg = $('syncMsg');
+    if (!validDbUrl(url)) { msg.textContent = 'Địa chỉ chưa đúng. Địa chỉ có dạng https://ten-du-an-default-rtdb.asia-southeast1.firebasedatabase.app'; return; }
+    if (code && !/^[a-z0-9]{20,64}$/.test(code)) { msg.textContent = 'Mã đồng bộ gồm 20–64 chữ thường hoặc số. Để trống để tạo mã mới.'; return; }
+    msg.textContent = '';
+    SYNC.enable(url, code || newCode()); paintSyncPanel(); showQr();
+  });
+  $('syncShowQr').addEventListener('click', showQr);
+  $('syncCopy').addEventListener('click', function () { copyText(pairLink(), this); });
+  $('syncCopyRules').addEventListener('click', function () { copyText(RULES, this); });
+  $('syncNow').addEventListener('click', function () { SYNC.reconnect(); SYNC.flush(); });
+  $('syncOffBtn').addEventListener('click', function () {
+    if (this.dataset.armed !== '1') { this.dataset.armed = '1'; this.textContent = 'Bấm lần nữa để tắt'; return; }
+    this.dataset.armed = ''; this.textContent = 'Tắt đồng bộ trên máy này'; SYNC.disable(); paintSyncPanel();
+  });
+
+  /* ---------- Start ---------- */
+  buildQueue();
+  renderAll();
+  SYNC.start(mergeRemote);
+  paintVoiceStatus();
+  if (canSpeak) { try { window.speechSynthesis.addEventListener('voiceschanged', paintVoiceStatus); } catch (e) { } }
+  if (linkedNow) { $('footNote').textContent = 'Đã liên kết máy này với thiết bị kia. Tiến độ sẽ tự đồng bộ.'; }
+  if (!storageOk) $('footNote').textContent = 'Trình duyệt đang chặn lưu dữ liệu (chế độ ẩn danh?). Tiến độ sẽ mất khi đóng trang.';
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) { window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () { }); }); }
+  $('exportBtn').addEventListener('click', exportProgress);
+  $('importBtn').addEventListener('click', function () { $('importFile').click(); });
+  $('importFile').addEventListener('change', function () { if (this.files[0]) importProgress(this.files[0]); this.value = ''; });
+})();
+</script>
+
+</body></html>

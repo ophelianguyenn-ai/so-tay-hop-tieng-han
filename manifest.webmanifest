@@ -1,0 +1,15 @@
+{
+  "name": "Sổ tay họp tiếng Hàn",
+  "short_name": "Họp tiếng Hàn",
+  "description": "Thẻ ghi nhớ, trắc nghiệm và danh sách từ vựng Việt–Hàn cho buổi họp tuần.",
+  "lang": "vi",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F1F5F3",
+  "theme_color": "#2C7769",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
