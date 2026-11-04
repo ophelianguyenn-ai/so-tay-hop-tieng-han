@@ -332,6 +332,64 @@ code { font-size: 12.5px; background: var(--sunk); border-radius: 6px; padding: 
   .chip { flex: none; }
 }
 
+/* ---- Lịch học theo ngày ---- */
+:root { --p-done: #2D7A4C; --p-done-s: #DCF0E3; --p-today: #B45309; --p-today-s: #FBEBD3; --p-late: #B42318; --p-late-s: #FBE3E0; --p-next: #3B5BA9; --p-next-s: #E1E8F7; --p-fut: #7C8B88; --p-fut-s: #ECF0EF; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --p-done: #6FCF97; --p-done-s: #183223; --p-today: #F0B35A; --p-today-s: #3A2A12; --p-late: #F07167; --p-late-s: #3A1E1C; --p-next: #8FA9F0; --p-next-s: #1E2740; --p-fut: #8A9A97; --p-fut-s: #1F2928; } }
+body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-plan #order, body.mode-plan #reshuffle, body.mode-plan #dir, body.mode-plan .pron-toggle:not(.tts-only) { display: none !important; }
+#planBox { display: flex; flex-direction: column; gap: 10px; }
+.ptabs { align-self: flex-start; }
+.plegend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12.5px; color: var(--muted); }
+.plegend span { display: inline-flex; align-items: center; gap: 6px; }
+.psw { width: 12px; height: 12px; border-radius: 4px; border: 1.5px solid; display: inline-block; }
+.psw.done, .pchip.done { background: var(--p-done-s); border-color: var(--p-done); color: var(--p-done); }
+.psw.today, .pchip.today { background: var(--p-today-s); border-color: var(--p-today); color: var(--p-today); }
+.psw.late, .pchip.late { background: var(--p-late-s); border-color: var(--p-late); color: var(--p-late); }
+.psw.next, .pchip.next { background: var(--p-next-s); border-color: var(--p-next); color: var(--p-next); }
+.psw.future, .pchip.future { background: var(--p-fut-s); border-color: var(--line); color: var(--p-fut); }
+.pday { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin: 10px 2px 0; }
+.pday b { font-size: 19px; } .pday span { color: var(--muted); font-size: 13px; }
+.plesson { gap: 10px; }
+.phead { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; justify-content: space-between; }
+.psched { display: flex; flex-wrap: wrap; gap: 6px; }
+.pchip { border: 1.5px solid; border-radius: 10px; padding: 3px 8px; font-size: 12.5px; line-height: 1.3; min-width: 84px; }
+.pchip b { display: block; font-size: 10.5px; letter-spacing: .03em; text-transform: uppercase; }
+.pchip small { display: block; font-size: 11px; }
+.prow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.pstatus { font-size: 13px; font-weight: 600; }
+.pstatus.late { color: var(--p-late); } .pstatus.today { color: var(--p-today); } .pstatus.done { color: var(--p-done); } .pstatus.next { color: var(--p-next); }
+.pbanner { background: var(--p-late-s); border-color: var(--p-late); } .pbanner p { margin: 0; }
+.pcontent summary { cursor: pointer; color: var(--accent); font-size: 13.5px; font-weight: 600; }
+.psec { margin: 12px 0 4px; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+.ptopic { margin: 8px 0 4px; font-size: 14px; font-weight: 700; color: var(--accent); }
+.pitems { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.pitems li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 6px 8px; border-radius: 8px; background: var(--sunk); font-size: 14px; }
+.pitems li.known { opacity: .5; }
+.pitems .ko { font-family: var(--ko); font-weight: 700; word-break: keep-all; }
+@media (max-width: 560px) { .pitems li { grid-template-columns: minmax(0, 1fr) auto; } }
+.ptag { font-size: 11px; font-weight: 700; border-radius: 999px; padding: 1px 7px; white-space: nowrap; }
+.ptag.hard { background: var(--p-late-s); color: var(--p-late); } .ptag.known { background: var(--p-done-s); color: var(--p-done); } .ptag.cnt { background: var(--p-next-s); color: var(--p-next); }
+.picon { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; width: 30px; height: 30px; display: inline-grid; place-items: center; padding: 0; font-size: 14px; color: var(--muted); }
+.picon.del:hover { color: var(--p-late); border-color: var(--p-late); }
+.ptable { border-collapse: collapse; width: 100%; font-size: 14px; }
+.ptable th, .ptable td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); }
+.ptable .num { text-align: right; font-variant-numeric: tabular-nums; }
+.pcard { cursor: default; min-height: 280px; }
+.pfront { cursor: pointer; min-height: 150px; }
+.pnav { display: grid; grid-template-columns: 56px 1fr 56px; gap: 10px; align-items: center; }
+.parrow { border: 1px solid var(--line); background: var(--surface); border-radius: 12px; height: 44px; font-size: 20px; }
+.parrow:disabled { opacity: .35; cursor: default; }
+.pflip { border: 1px solid var(--line); background: var(--sunk); border-radius: 12px; height: 44px; font-size: 20px; }
+.prate { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.prate button { border: 1.5px solid var(--line); background: var(--surface); border-radius: 12px; padding: 9px 4px; font-weight: 600; }
+.prate button kbd { font: inherit; font-size: 11px; opacity: .6; margin-left: 4px; }
+.prate .known { color: var(--p-done); border-color: var(--p-done); }
+.prate .hard { color: var(--p-late); } .prate .mid { color: var(--p-today); } .prate .easy { color: var(--p-next); }
+.prate button:disabled { opacity: .35; cursor: default; }
+.prate button.picked { background: var(--accent-soft); }
+@media (max-width: 520px) { .prate { grid-template-columns: repeat(2, 1fr); } }
+.ptoast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); background: var(--ink); color: var(--bg); border-radius: 12px; padding: 8px 14px; display: flex; gap: 12px; align-items: center; font-size: 14px; z-index: 20; max-width: calc(100% - 32px); }
+.ptoast button { border: 0; background: transparent; color: inherit; font-weight: 700; text-decoration: underline; }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -357,6 +415,7 @@ code { font-size: 12.5px; background: var(--sunk); border-radius: 6px; padding: 
 
   <div class="toolbar">
     <div class="tabs" role="tablist" aria-label="Cách học">
+      <button type="button" role="tab" data-mode="plan" id="tab-plan">Lịch học</button>
       <button type="button" role="tab" data-mode="cards" id="tab-cards">Thẻ ghi nhớ</button>
       <button type="button" role="tab" data-mode="learn" id="tab-learn">Học</button>
       <button type="button" role="tab" data-mode="write" id="tab-write">Viết</button>
@@ -514,6 +573,11 @@ code { font-size: 12.5px; background: var(--sunk); border-radius: 6px; padding: 
     <input type="search" class="search" id="search" placeholder="Tìm theo tiếng Việt hoặc tiếng Hàn" aria-label="Tìm thẻ">
     <p class="listinfo" id="listInfo"></p>
     <ol class="list" id="list"></ol>
+  </section>
+
+  <!-- Day plan -->
+  <section id="view-plan" class="nv" hidden>
+    <div id="planBox"></div>
   </section>
 
   <!-- Learn -->
@@ -944,8 +1008,8 @@ code { font-size: 12.5px; background: var(--sunk); border-radius: 6px; padding: 
   /* ---------- UI state (per-viewer convenience) ---------- */
   var UI_KEY = 'viko-ko-meeting-ui-v1';
   var UI_KEYS = ['deck', 'status', 'order', 'dir', 'mode', 'seed', 'pron', 'autoVi', 'rate', 'loose', 'mcOnly', 'wkind'];
-  var MODES = ['cards', 'learn', 'write', 'test', 'match', 'quiz', 'list', 'words', 'sets'];
-  var state = { deck: 'all', status: 'all', order: 'default', dir: 'vk', mode: 'cards', seed: 7, pron: true, autoVi: true, rate: 'mid', loose: true, mcOnly: false, wkind: 'tr', idx: 0, flipped: false, search: '' };
+  var MODES = ['plan', 'cards', 'learn', 'write', 'test', 'match', 'quiz', 'list', 'words', 'sets'];
+  var state = { deck: 'all', status: 'all', order: 'default', dir: 'vk', mode: 'plan', seed: 7, pron: true, autoVi: true, rate: 'mid', loose: true, mcOnly: false, wkind: 'tr', idx: 0, flipped: false, search: '' };
   try { var savedUi = JSON.parse(lsGet(UI_KEY) || '{}'); UI_KEYS.forEach(function (k) { if (savedUi[k] !== undefined) state[k] = savedUi[k]; }); } catch (e) { }
   if (state.deck !== 'all' && !DECK_NAME[state.deck]) state.deck = 'all';
   if (MODES.indexOf(state.mode) < 0) state.mode = 'cards';
@@ -1404,6 +1468,7 @@ code { font-size: 12.5px; background: var(--sunk); border-radius: 6px; padding: 
   }
   function mergeRemote(doc, full) {
     var changedCustom = false, changedP = false;
+    PLAN.merge(doc.L || {}, full);
     ['d', 'c'].forEach(function (sec) {
       var rem = (doc[sec] && typeof doc[sec] === 'object') ? doc[sec] : {};
       Object.keys(rem).forEach(function (id) {
@@ -2078,11 +2143,290 @@ code { font-size: 12.5px; background: var(--sunk); border-radius: 6px; padding: 
     else if (state.mode === 'words') renderWords();
     else if (state.mode === 'sets') renderSets();
     else if (state.mode === 'learn') paintLearnBar();
+    else if (state.mode === 'plan' && !PLAN.active()) PLAN.render();
   }
+
+  /* ================= Lịch học theo ngày: bài theo ngày nhập + ôn lặp lại 5 mốc ================= */
+  var PLAN = (function () {
+    var KEY = 'viko-plan-v1', OFFSETS = [0, 3, 13, 50, 180], STEP = ['Học mới', 'Ôn 1', 'Ôn 2', 'Ôn 3', 'Ôn 4'];
+    var LESSONS = [], ITEMS = {}, loaded = false, loadErr = '';
+    var ps = { done: {}, known: {}, hard: {}, del: {} }, resume = {};
+    try { var raw = JSON.parse(lsGet(KEY) || '{}'); ['done', 'known', 'hard', 'del'].forEach(function (k) { if (raw[k] && typeof raw[k] === 'object') ps[k] = raw[k]; }); if (raw.resume) resume = raw.resume; } catch (e) { }
+    function save() { lsSet(KEY, JSON.stringify({ done: ps.done, known: ps.known, hard: ps.hard, del: ps.del, resume: resume })); }
+    function val(sec, k) { var e = ps[sec][k]; return e ? e.v : null; }
+    function put(sec, k, v) { var e = { v: v, t: Date.now() }; ps[sec][k] = e; save(); SYNC.queue('L/' + sec + '/' + k, e); }
+    var view = 'days', sess = null;
+
+    function today() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+    function parse(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+    function iso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+    function addDays(s, n) { var d = parse(s); d.setDate(d.getDate() + n); return iso(d); }
+    function vn(s, y) { var p = s.split('-'); return p[2] + '.' + p[1] + (y ? '.' + p[0] : ''); }
+    function alive(id) { return ITEMS[id] && !val('del', id); }
+    function el(t, c, x) { return mk(t, c, x); }
+    function btn(c, x, fn, title) { var b = mkBtn(c, x); if (title) { b.title = title; b.setAttribute('aria-label', title); } b.addEventListener('click', fn); return b; }
+
+    function load() {
+      if (loaded || loadErr === 'loading') return;
+      loadErr = 'loading';
+      fetch('lessons.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (j) {
+        LESSONS = j.lessons || [];
+        LESSONS.forEach(function (L) { L.ids = L.items.map(function (r) { ITEMS[r[0]] = { id: r[0], lesson: L.id, type: r[1], topic: r[2], vi: r[3], ko: r[4], n: r[5] || 1 }; return r[0]; }); });
+        loaded = true; loadErr = ''; if (state.mode === 'plan') render();
+      }).catch(function () { loadErr = 'Chưa tải được dữ liệu bài học. Kiểm tra mạng rồi mở lại trang.'; if (state.mode === 'plan') render(); });
+    }
+
+    function schedule(L) {
+      var done = val('done', L.id) || [], base = done[0] || L.plan, T = today();
+      return OFFSETS.map(function (off, i) {
+        var due = i === 0 ? L.plan : addDays(base, off), st;
+        if (i < done.length) st = 'done';
+        else if (i === done.length) st = due < T ? 'late' : due === T ? 'today' : 'next';
+        else st = 'future';
+        return { step: i, due: due, st: st, on: done[i] || null };
+      });
+    }
+    function current(L) { var s = schedule(L); for (var i = 0; i < s.length; i++) if (s[i].st !== 'done') return s[i]; return null; }
+    function grouped(ids) {
+      var out = { w: {}, s: {} };
+      ids.forEach(function (id) { if (!alive(id)) return; var it = ITEMS[id]; (out[it.type][it.topic] = out[it.type][it.topic] || []).push(it); });
+      Object.keys(out.w).forEach(function (t) { out.w[t].sort(function (a, b) { return b.n - a.n; }); });
+      return out;
+    }
+    function liveCount(ids) { var w = 0, s = 0; ids.forEach(function (id) { if (alive(id)) { if (ITEMS[id].type === 'w') w++; else s++; } }); return [w, s]; }
+    function ordered(ids) {
+      var g = grouped(ids), out = [];
+      ['w', 's'].forEach(function (t) { Object.keys(g[t]).sort(function (a, b) { return a.localeCompare(b, 'vi'); }).forEach(function (tp) { g[t][tp].forEach(function (it) { if (!val('known', it.id)) out.push(it.id); }); }); });
+      return out;
+    }
+
+    var toastTimer = null;
+    function toast(msg, undo) {
+      var old = document.querySelector('.ptoast'); if (old) old.remove(); clearTimeout(toastTimer);
+      var t = el('div', 'ptoast'); t.appendChild(el('span', null, msg));
+      if (undo) t.appendChild(btn('', 'Hoàn tác', function () { undo(); t.remove(); }));
+      document.body.appendChild(t); toastTimer = setTimeout(function () { t.remove(); }, 5000);
+    }
+    function del(id) {
+      put('del', id, 1); if (val('hard', id)) put('hard', id, null);
+      toast('Đã xoá “' + ITEMS[id].ko + '”', function () { put('del', id, 0); render(); });
+    }
+
+    function itemList(arr) {
+      var ul = el('ul', 'pitems');
+      arr.forEach(function (it) {
+        var li = el('li', val('known', it.id) ? 'known' : '');
+        li.appendChild(el('span', null, it.vi));
+        var k = el('span', 'ko', it.ko); k.lang = 'ko'; li.appendChild(k);
+        var right = el('span', 'prow');
+        if (it.type === 'w') right.appendChild(el('span', 'ptag cnt', '×' + it.n));
+        if (val('known', it.id)) right.appendChild(el('span', 'ptag known', 'Biết rồi')); else if (val('hard', it.id)) right.appendChild(el('span', 'ptag hard', 'Khó'));
+        if (canSpeak) right.appendChild(btn('picon', '🔊', function () { speak(it.ko, 'ko-KR'); }, 'Nghe'));
+        right.appendChild(btn('picon del', '🗑', function () { del(it.id); render(); }, 'Xoá khỏi danh sách'));
+        li.appendChild(right); ul.appendChild(li);
+      });
+      return ul;
+    }
+    function contentBlock(ids) {
+      var g = grouped(ids), box = el('div');
+      [['w', 'Phần 1 · Từ vựng'], ['s', 'Phần 2 · Câu']].forEach(function (sec) {
+        var topics = Object.keys(g[sec[0]]).sort(function (a, b) { return a.localeCompare(b, 'vi'); });
+        if (!topics.length) return;
+        box.appendChild(el('p', 'psec', sec[1]));
+        topics.forEach(function (t) { box.appendChild(el('p', 'ptopic', t + ' (' + g[sec[0]][t].length + ')')); box.appendChild(itemList(g[sec[0]][t])); });
+      });
+      return box;
+    }
+
+    function render() {
+      var v = $('planBox'); if (!v) return; v.textContent = '';
+      if (!loaded) { load(); v.appendChild(el('p', 'listinfo', loadErr && loadErr !== 'loading' ? loadErr : 'Đang tải bài học…')); return; }
+      if (sess) return renderSession(v);
+      var tabs = el('div', 'tabs ptabs');
+      [['days', 'Theo ngày'], ['months', 'Tổng hợp tháng']].forEach(function (x) { var b = btn('', x[1], function () { view = x[0]; render(); }); b.setAttribute('aria-selected', String(view === x[0])); tabs.appendChild(b); });
+      v.appendChild(tabs);
+      var lg = el('div', 'plegend');
+      [['done', 'Đã học (kèm ngày học)'], ['today', 'Hôm nay cần học'], ['late', 'Quá hạn, chưa học'], ['next', 'Lần học kế tiếp'], ['future', 'Chưa tới']].forEach(function (x) { var s = el('span'); s.appendChild(el('i', 'psw ' + x[0])); s.appendChild(document.createTextNode(x[1])); lg.appendChild(s); });
+      v.appendChild(lg);
+      if (view === 'days') renderDays(v); else renderMonths(v);
+    }
+    function lessonCard(L) {
+      var p = el('div', 'quiz plesson'), head = el('div', 'phead'), c = liveCount(L.ids);
+      head.appendChild(el('b', null, L.title)); head.appendChild(el('span', 'listinfo', c[0] + ' từ vựng · ' + c[1] + ' câu'));
+      p.appendChild(head);
+      var sc = el('div', 'psched');
+      schedule(L).forEach(function (s) {
+        var ch = el('div', 'pchip ' + s.st); ch.appendChild(el('b', null, STEP[s.step])); ch.appendChild(document.createTextNode(vn(s.due)));
+        var lbl = s.st === 'done' ? 'đã học ' + vn(s.on) : s.st === 'late' ? 'quá hạn' : s.st === 'today' ? 'hôm nay' : s.st === 'next' ? 'lần tới' : '';
+        if (lbl) ch.appendChild(el('small', null, lbl)); sc.appendChild(ch);
+      });
+      p.appendChild(sc);
+      var row = el('div', 'prow'), cur = current(L);
+      if (cur) {
+        var msg = cur.st === 'late' ? 'Quá hạn từ ' + vn(cur.due) + ' – nên học ngay' : cur.st === 'today' ? 'Hôm nay cần học: ' + STEP[cur.step] : 'Lần học tiếp theo: ' + STEP[cur.step] + ' ngày ' + vn(cur.due, true);
+        row.appendChild(el('span', 'pstatus ' + cur.st, msg));
+        var rs = (resume[L.id] || []).filter(alive);
+        var label = rs.length ? 'Tiếp tục (còn ' + rs.length + ' thẻ)' : cur.st === 'next' ? 'Học trước' : (cur.step ? 'Học ' + STEP[cur.step].toLowerCase() : 'Học ngay');
+        row.appendChild(btn(cur.st === 'next' && !rs.length ? 'ghost' : 'primary', label, function () {
+          var q = rs.length ? rs.filter(function (id) { return !val('known', id); }) : ordered(L.ids);
+          delete resume[L.id]; save();
+          start(cur.st === 'next' ? 'free' : 'lesson', q, L.title + ' · ' + STEP[cur.step], L);
+        }));
+      } else row.appendChild(el('span', 'pstatus done', 'Đã hoàn thành cả 5 lần'));
+      p.appendChild(row);
+      var det = el('details', 'pcontent'); det.appendChild(el('summary', null, 'Xem nội dung (chia theo chủ đề)'));
+      det.addEventListener('toggle', function () { if (det.open && det.children.length === 1) det.appendChild(contentBlock(L.ids)); });
+      p.appendChild(det);
+      return p;
+    }
+    function renderDays(v) {
+      var T = today();
+      var hard = Object.keys(ps.hard).filter(function (id) { var d = val('hard', id); return d && d <= T && !val('known', id) && alive(id); });
+      if (hard.length) {
+        var bn = el('div', 'quiz pbanner'); bn.appendChild(el('p', null, 'Có ' + hard.length + ' thẻ bạn đánh dấu Khó cần ôn thêm hôm nay.'));
+        bn.appendChild(btn('primary', 'Ôn thẻ khó', function () { start('hard', hard, 'Ôn thêm thẻ khó'); })); v.appendChild(bn);
+      }
+      var by = {}; LESSONS.forEach(function (L) { (by[L.date] = by[L.date] || []).push(L); });
+      Object.keys(by).sort().reverse().forEach(function (date) {
+        var ls = by[date], ids = []; ls.forEach(function (L) { ids = ids.concat(L.ids); });
+        var c = liveCount(ids), lab = el('div', 'pday');
+        lab.appendChild(el('b', null, vn(date, true)));
+        lab.appendChild(el('span', null, c[0] + ' từ vựng · ' + c[1] + ' câu' + (ls.length > 1 ? ' · ' + ls.length + ' bài nhỏ theo chủ đề' : '')));
+        v.appendChild(lab);
+        ls.forEach(function (L) { v.appendChild(lessonCard(L)); });
+      });
+    }
+    function renderMonths(v) {
+      var months = {}; LESSONS.forEach(function (L) { var k = L.date.slice(0, 7); (months[k] = months[k] || []).push(L); });
+      Object.keys(months).sort().reverse().forEach(function (k) {
+        var ids = [], dates = {}; months[k].forEach(function (L) { ids = ids.concat(L.ids); dates[L.date] = 1; });
+        var g = grouped(ids), p = el('div', 'quiz'), c = liveCount(ids);
+        p.appendChild(el('b', null, 'Tháng ' + k.slice(5) + '/' + k.slice(0, 4)));
+        p.appendChild(el('span', 'listinfo', Object.keys(dates).length + ' ngày có dữ liệu · ' + c[0] + ' từ vựng · ' + c[1] + ' câu'));
+        var topics = {};
+        ['w', 's'].forEach(function (t) { Object.keys(g[t]).forEach(function (tp) { topics[tp] = topics[tp] || { w: 0, s: 0 }; topics[tp][t] += g[t][tp].length; }); });
+        var tb = el('table', 'ptable'), tr = el('tr'); ['Chủ đề', 'Từ vựng', 'Câu'].forEach(function (h, i) { tr.appendChild(el('th', i ? 'num' : '', h)); }); tb.appendChild(tr);
+        Object.keys(topics).sort(function (a, b) { return a.localeCompare(b, 'vi'); }).forEach(function (tp) { var r = el('tr'); r.appendChild(el('td', null, tp)); r.appendChild(el('td', 'num', topics[tp].w || '–')); r.appendChild(el('td', 'num', topics[tp].s || '–')); tb.appendChild(r); });
+        p.appendChild(tb);
+        var row = el('div', 'prow'); row.appendChild(btn('primary', 'Ôn tổng hợp cả tháng', function () { start('free', ordered(ids), 'Tổng hợp tháng ' + k.slice(5) + '/' + k.slice(0, 4)); })); p.appendChild(row);
+        var det = el('details', 'pcontent'); det.appendChild(el('summary', null, 'Xem toàn bộ theo chủ đề'));
+        det.addEventListener('toggle', function () { if (det.open && det.children.length === 1) det.appendChild(contentBlock(ids)); });
+        p.appendChild(det); v.appendChild(p);
+      });
+      var dels = Object.keys(ps.del).filter(function (id) { return val('del', id) && ITEMS[id]; });
+      if (dels.length) {
+        var dp = el('div', 'quiz'); dp.appendChild(el('b', null, 'Đã xoá khỏi danh sách: ' + dels.length));
+        var r2 = el('div', 'prow'); r2.appendChild(btn('ghost', 'Khôi phục tất cả', function () { dels.forEach(function (id) { put('del', id, 0); }); render(); })); dp.appendChild(r2);
+        v.appendChild(dp);
+      }
+    }
+
+    /* ---- Học: ◀ ▶ chuyển thẻ · Enter lật · 1–4 chấm · Delete xoá ---- */
+    function start(kind, ids, title, L) {
+      ids = ids.filter(alive);
+      if (!ids.length) { toast('Không còn thẻ nào cần học.'); return; }
+      sess = { kind: kind, title: title, L: L || null, queue: ids.slice(), pos: 0, flipped: false, again: {}, picked: {}, stats: { known: 0, hard: 0, mid: 0, easy: 0 } };
+      render(); window.scrollTo({ top: $('view-plan').offsetTop - 8, behavior: 'smooth' });
+    }
+    function pause() { if (sess && sess.kind === 'lesson' && sess.L && sess.pos < sess.queue.length) { resume[sess.L.id] = sess.queue.slice(sess.pos); save(); } sess = null; render(); }
+    function renderSession(v) {
+      var s = sess;
+      while (s.pos < s.queue.length && !alive(s.queue[s.pos])) s.queue.splice(s.pos, 1);
+      if (s.pos >= s.queue.length) return renderDone(v);
+      var it = ITEMS[s.queue[s.pos]];
+      var head = el('div', 'phead'); head.appendChild(el('b', null, s.title)); head.appendChild(btn('ghost', 'Tạm dừng', pause)); v.appendChild(head);
+      var pr = el('div', 'meter'), sp = el('span', 'e'); sp.style.width = Math.min(100, s.pos / s.queue.length * 100) + '%'; pr.appendChild(sp); v.appendChild(pr);
+      var c = el('div', 'card pcard');
+      var m = el('div', 'card-top'); m.appendChild(el('span', 'meta', (it.type === 'w' ? 'Từ vựng' : 'Câu') + ' · ' + it.topic + (it.type === 'w' ? ' · gặp ' + it.n + ' lần' : '')));
+      var mr = el('span', 'prow'); mr.appendChild(el('span', 'counter', (s.pos + 1) + ' / ' + s.queue.length));
+      if (canSpeak) mr.appendChild(btn('picon', '🔊', function () { speak(it.ko, 'ko-KR'); }, 'Nghe'));
+      mr.appendChild(btn('picon del', '🗑', function () { del(it.id); render(); }, 'Xoá khỏi danh sách (Delete)'));
+      m.appendChild(mr); c.appendChild(m);
+      var f = el('div', 'stage pfront'); f.title = 'Bấm hoặc nhấn Enter để lật';
+      f.appendChild(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : ''), it.vi));
+      if (s.flipped) { var a = el('p', 'answer ko' + (it.ko.length > 40 ? ' long' : ''), it.ko); a.lang = 'ko'; f.appendChild(a); }
+      else f.appendChild(el('span', 'hint', 'Enter để lật thẻ'));
+      f.addEventListener('click', flip); c.appendChild(f);
+      var nav = el('div', 'pnav');
+      var pv = btn('parrow', '◀', function () { go(-1); }, 'Thẻ trước (←)'); pv.disabled = s.pos === 0; nav.appendChild(pv);
+      nav.appendChild(btn('pflip', '⟲', flip, 'Lật thẻ (Enter)'));
+      nav.appendChild(btn('parrow', '▶', function () { go(1); }, 'Thẻ sau (→)'));
+      c.appendChild(nav);
+      var r = el('div', 'prate'), picked = s.picked[s.pos];
+      [['known', 'Biết rồi', '1'], ['hard', 'Khó', '2'], ['mid', 'Bình thường', '3'], ['easy', 'Dễ', '4']].forEach(function (x) {
+        var b = btn(x[0] + (picked === x[0] ? ' picked' : ''), x[1], function () { rate(x[0]); }); b.appendChild(el('kbd', null, x[2]));
+        if (x[0] !== 'known') b.disabled = !s.flipped; r.appendChild(b);
+      });
+      c.appendChild(r);
+      var keys = el('p', 'keys desk-keys'); keys.innerHTML = '<kbd>←</kbd> <kbd>→</kbd> chuyển thẻ · <kbd>Enter</kbd> lật · <kbd>1</kbd> Biết rồi · <kbd>2</kbd> Khó · <kbd>3</kbd> Bình thường · <kbd>4</kbd> Dễ · <kbd>Delete</kbd> xoá từ';
+      c.appendChild(keys);
+      v.appendChild(c);
+    }
+    function flip() { if (!sess || sess.pos >= sess.queue.length) return; sess.flipped = !sess.flipped; if (sess.flipped) speak(ITEMS[sess.queue[sess.pos]].ko, 'ko-KR'); render(); }
+    function go(d) { var n = sess.pos + d; if (n < 0) return; sess.pos = n; sess.flipped = false; render(); }
+    function rate(k) {
+      var s = sess, id = s.queue[s.pos];
+      if (!id || (k !== 'known' && !s.flipped)) return;
+      s.stats[k]++; s.picked[s.pos] = k;
+      var T = today();
+      if (k === 'known') { put('known', id, 1); if (val('hard', id)) put('hard', id, null); }
+      else if (k === 'hard') { s.queue.splice(Math.min(s.pos + 4, s.queue.length), 0, id); put('hard', id, addDays(T, 1)); }
+      else if (k === 'mid') { if (!s.again[id]) { s.again[id] = 1; s.queue.push(id); } if (s.kind === 'hard') put('hard', id, addDays(T, 3)); }
+      else if (k === 'easy') { if (s.kind === 'hard' && val('hard', id)) put('hard', id, null); }
+      s.pos++; s.flipped = false; render();
+    }
+    function renderDone(v) {
+      var s = sess, p = el('div', 'quiz');
+      p.appendChild(el('b', null, 'Xong: ' + s.title));
+      p.appendChild(el('p', null, 'Biết rồi ' + s.stats.known + ' · Khó ' + s.stats.hard + ' · Bình thường ' + s.stats.mid + ' · Dễ ' + s.stats.easy));
+      if (s.kind === 'lesson' && s.L && !s.recorded) { var dn = (val('done', s.L.id) || []).slice(); dn.push(today()); put('done', s.L.id, dn); s.recorded = true; delete resume[s.L.id]; save(); }
+      if (s.kind === 'lesson' && s.L) { var nx = current(s.L); p.appendChild(el('p', 'pstatus done', nx ? 'Đã ghi nhận ngày học ' + vn(today(), true) + '. Lần tiếp theo: ' + STEP[nx.step] + ' ngày ' + vn(nx.due, true) + '.' : 'Đã hoàn thành cả 5 lần.')); }
+      var row = el('div', 'prow');
+      row.appendChild(btn('ghost', '◀ Xem lại thẻ cuối', function () { s.pos = Math.max(0, s.queue.length - 1); render(); }));
+      row.appendChild(btn('primary', 'Về danh sách', function () { sess = null; render(); }));
+      p.appendChild(row); v.appendChild(p);
+    }
+    document.addEventListener('keydown', function (e) {
+      if (state.mode !== 'plan' || !sess || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
+      if (sess.pos >= sess.queue.length) { if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); } return; }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+      else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
+      else if (e.key === '1') rate('known');
+      else if (e.key === '2') rate('hard');
+      else if (e.key === '3') rate('mid');
+      else if (e.key === '4') rate('easy');
+      else if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); del(sess.queue[sess.pos]); render(); }
+    });
+    // swipe on phones: left = next, right = previous
+    var tx = null;
+    document.addEventListener('touchstart', function (e) { if (state.mode === 'plan' && sess && e.target.closest('.pfront')) tx = { x: e.touches[0].clientX, y: e.touches[0].clientY }; else tx = null; }, { passive: true });
+    document.addEventListener('touchend', function (e) { if (!tx) return; var t = e.changedTouches[0], dx = t.clientX - tx.x, dy = t.clientY - tx.y; tx = null; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1); }, { passive: true });
+
+    // Merge plan state coming from the other device (newest timestamp wins per entry)
+    function merge(L, full) {
+      var changed = false;
+      ['done', 'known', 'hard', 'del'].forEach(function (sec) {
+        var rem = (L && L[sec] && typeof L[sec] === 'object') ? L[sec] : {};
+        Object.keys(rem).forEach(function (k) {
+          var r = rem[k], l = ps[sec][k];
+          if (!r || typeof r !== 'object') return;
+          if (!l || (r.t || 0) > (l.t || 0)) { var v = r.v; if (sec === 'done' && v && !Array.isArray(v)) v = Object.keys(v).map(function (x) { return v[x]; }); ps[sec][k] = { v: v === undefined ? null : v, t: r.t || 0 }; changed = true; }
+          else if ((l.t || 0) > (r.t || 0)) SYNC.queue('L/' + sec + '/' + k, l);
+        });
+        if (full) Object.keys(ps[sec]).forEach(function (k) { if (!rem[k]) SYNC.queue('L/' + sec + '/' + k, ps[sec][k]); });
+      });
+      if (changed) { save(); if (state.mode === 'plan' && !sess) render(); }
+    }
+    function leave() { if (!sess) return; if (sess.pos >= sess.queue.length) { sess = null; return; } if (sess.kind === 'lesson' && sess.L) { resume[sess.L.id] = sess.queue.slice(sess.pos); save(); } sess = null; }
+    return { render: render, merge: merge, active: function () { return !!sess; }, load: load, leave: leave };
+  })();
 
   /* ---------- Modes ---------- */
   function renderMode() {
     if (state.mode !== 'cards') stopAuto();
+    if (state.mode !== 'plan') PLAN.leave();
     if (state.mode !== 'match' && match.running) { match.running = false; clearInterval(match.timer); match.ver = -1; }
     MODES.forEach(function (m) {
       $('view-' + m).hidden = state.mode !== m;
@@ -2103,6 +2447,8 @@ code { font-size: 12.5px; background: var(--sunk); border-radius: 6px; padding: 
     else if (state.mode === 'test') renderTest();
     else if (state.mode === 'match') renderMatch();
     else if (state.mode === 'sets') renderSets();
+    else if (state.mode === 'plan') PLAN.render();
+    document.body.classList.toggle('mode-plan', state.mode === 'plan');
     paintRate();
     Array.prototype.forEach.call(document.querySelectorAll('.looseChk'), function (o) { o.checked = !!state.loose; });
   }
