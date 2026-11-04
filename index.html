@@ -393,6 +393,29 @@ body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-
 .ptoast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); background: var(--ink); color: var(--bg); border-radius: 12px; padding: 8px 14px; display: flex; gap: 12px; align-items: center; font-size: 14px; z-index: 20; max-width: calc(100% - 32px); }
 .ptoast button { border: 0; background: transparent; color: inherit; font-weight: 700; text-decoration: underline; }
 
+
+/* ---- Lịch học: trang bài riêng, màu theo ngày, tô sáng ---- */
+body.plan-page .app > *:not(#view-plan) { display: none !important; }
+.plesson { border-left: 5px solid var(--day, var(--accent)); }
+.pday b { color: var(--day, var(--ink)); }
+.ptitle { font-weight: 700; color: var(--ink); text-decoration: none; }
+.ptitle:hover { color: var(--day, var(--accent)); text-decoration: underline; }
+.ppage { display: flex; flex-direction: column; gap: 12px; }
+.pnavtop { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.pback { color: var(--day, var(--accent)); font-weight: 700; text-decoration: none; font-size: 15px; }
+.pdate { color: var(--day, var(--muted)); font-weight: 700; }
+.pband { border-top: 6px solid var(--day, var(--accent)); }
+.ph2 { margin: 0; font-size: clamp(19px, 4vw, 23px); color: var(--day, var(--ink)); }
+.ppage .meter .e, .ppage .primary { background: var(--day, var(--accent)); color: #fff; }
+.ppage .pcard { border-top: 4px solid var(--day, var(--line)); }
+.ptexts { min-width: 0; }
+.pvi, .pko { margin: 0; overflow-wrap: anywhere; }
+.pko { font-family: var(--ko); font-weight: 700; word-break: keep-all; margin-top: 2px; }
+.pitems li { grid-template-columns: minmax(0, 1fr) auto !important; }
+.ptag.r-hard { background: var(--p-late-s); color: var(--p-late); }
+.ptag.r-mid { background: var(--p-today-s); color: var(--p-today); }
+.ptag.r-known { background: var(--p-done-s); color: var(--p-done); }
+
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
@@ -2151,14 +2174,18 @@ body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-
 
   /* ================= Lịch học theo ngày: bài theo ngày nhập + ôn lặp lại 5 mốc ================= */
   var PLAN = (function () {
-    var KEY = 'viko-plan-v1', OFFSETS = [0, 3, 13, 50, 180], STEP = ['Học mới', 'Ôn 1', 'Ôn 2', 'Ôn 3', 'Ôn 4'];
-    var LESSONS = [], ITEMS = {}, loaded = false, loadErr = '';
-    var ps = { done: {}, known: {}, hard: {}, del: {} }, resume = {};
-    try { var raw = JSON.parse(lsGet(KEY) || '{}'); ['done', 'known', 'hard', 'del'].forEach(function (k) { if (raw[k] && typeof raw[k] === 'object') ps[k] = raw[k]; }); if (raw.resume) resume = raw.resume; } catch (e) { }
-    function save() { lsSet(KEY, JSON.stringify({ done: ps.done, known: ps.known, hard: ps.hard, del: ps.del, resume: resume })); }
+    var KEY = 'viko-plan-v1', SKEY = 'viko-plan-sess-v1', OFFSETS = [0, 3, 13, 50, 180], STEP = ['Học mới', 'Ôn 1', 'Ôn 2', 'Ôn 3', 'Ôn 4'];
+    var SECS = ['done', 'known', 'hard', 'del', 'rate', 'hl'];
+    var RATE_NAME = { known: 'Biết rồi', hard: 'Khó', mid: 'Bình thường' };
+    var DAY_COLORS = ['#2C7769', '#3B5BA9', '#B45309', '#7A4CB5', '#BE185D', '#0E7490', '#4D7C0F', '#C2410C', '#6D28D9', '#A16207', '#0F766E', '#0369A1', '#475569', '#1D4ED8', '#9D174D'];
+    var LESSONS = [], BY_LESSON = {}, ITEMS = {}, DATES = [], loaded = false, loadErr = '';
+    var ps = {}, resume = {};
+    SECS.forEach(function (k) { ps[k] = {}; });
+    try { var raw = JSON.parse(lsGet(KEY) || '{}'); SECS.forEach(function (k) { if (raw[k] && typeof raw[k] === 'object') ps[k] = raw[k]; }); if (raw.resume) resume = raw.resume; } catch (e) { }
+    function save() { var o = { resume: resume }; SECS.forEach(function (k) { o[k] = ps[k]; }); lsSet(KEY, JSON.stringify(o)); }
     function val(sec, k) { var e = ps[sec][k]; return e ? e.v : null; }
     function put(sec, k, v) { var e = { v: v, t: Date.now() }; ps[sec][k] = e; save(); SYNC.queue('L/' + sec + '/' + k, e); }
-    var view = 'days', sess = null;
+    var view = 'days', sess = null, page = null;
 
     function today() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
     function parse(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
@@ -2168,17 +2195,27 @@ body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-
     function alive(id) { return ITEMS[id] && !val('del', id); }
     function el(t, c, x) { return mk(t, c, x); }
     function btn(c, x, fn, title) { var b = mkBtn(c, x); if (title) { b.title = title; b.setAttribute('aria-label', title); } b.addEventListener('click', fn); return b; }
+    function dayColor(date) { var i = DATES.indexOf(date); return DAY_COLORS[(i < 0 ? 0 : i) % DAY_COLORS.length]; }
 
+    /* ---- data ---- */
     function load() {
       if (loaded || loadErr === 'loading') return;
       loadErr = 'loading';
       fetch('lessons.json', { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (j) {
         LESSONS = j.lessons || [];
-        LESSONS.forEach(function (L) { L.ids = L.items.map(function (r) { ITEMS[r[0]] = { id: r[0], lesson: L.id, type: r[1], topic: r[2], vi: r[3], ko: r[4], n: r[5] || 1 }; return r[0]; }); });
-        loaded = true; loadErr = ''; if (state.mode === 'plan') render();
+        LESSONS.forEach(function (L) {
+          BY_LESSON[L.id] = L;
+          if (DATES.indexOf(L.date) < 0) DATES.push(L.date);
+          L.ids = L.items.map(function (r) { ITEMS[r[0]] = { id: r[0], lesson: L.id, date: L.date, type: r[1], topic: r[2], vi: r[3], ko: r[4], n: r[5] || 1, pairs: (r[6] && r[6].length) ? r[6] : [[r[3], r[4]]] }; return r[0]; });
+        });
+        DATES.sort();
+        loaded = true; loadErr = '';
+        restoreSession();
+        route();
       }).catch(function () { loadErr = 'Chưa tải được dữ liệu bài học. Kiểm tra mạng rồi mở lại trang.'; if (state.mode === 'plan') render(); });
     }
 
+    /* ---- schedule ---- */
     function schedule(L) {
       var done = val('done', L.id) || [], base = done[0] || L.plan, T = today();
       return OFFSETS.map(function (off, i) {
@@ -2203,6 +2240,7 @@ body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-
       return out;
     }
 
+    /* ---- toast / delete ---- */
     var toastTimer = null;
     function toast(msg, undo) {
       var old = document.querySelector('.ptoast'); if (old) old.remove(); clearTimeout(toastTimer);
@@ -2215,71 +2253,84 @@ body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-
       toast('Đã xoá “' + ITEMS[id].ko + '”', function () { put('del', id, 0); render(); });
     }
 
-    function itemList(arr) {
-      var ul = el('ul', 'pitems');
-      arr.forEach(function (it) {
-        var li = el('li', val('known', it.id) ? 'known' : '');
-        li.appendChild(el('span', null, it.vi));
-        var k = el('span', 'ko', it.ko); k.lang = 'ko'; li.appendChild(k);
-        var right = el('span', 'prow');
-        if (it.type === 'w') right.appendChild(el('span', 'ptag cnt', '×' + it.n));
-        if (val('known', it.id)) right.appendChild(el('span', 'ptag known', 'Biết rồi')); else if (val('hard', it.id)) right.appendChild(el('span', 'ptag hard', 'Khó'));
-        if (canSpeak) right.appendChild(btn('picon', '🔊', function () { speak(it.ko, 'ko-KR'); }, 'Nghe'));
-        right.appendChild(btn('picon del', '🗑', function () { del(it.id); render(); }, 'Xoá khỏi danh sách'));
-        li.appendChild(right); ul.appendChild(li);
-      });
-      return ul;
+    /* ---- highlight: tap a Vietnamese phrase, it and its Korean match light up ---- */
+    var SEG = {};
+    function segs(it) {
+      if (!SEG[it.id]) SEG[it.id] = { vi: locate(it.vi, it.pairs.map(function (p) { return p[0]; }), true), ko: locate(it.ko, it.pairs.map(function (p) { return p[1]; }), false) };
+      return SEG[it.id];
     }
-    function contentBlock(ids) {
-      var g = grouped(ids), box = el('div');
-      [['w', 'Phần 1 · Từ vựng'], ['s', 'Phần 2 · Câu']].forEach(function (sec) {
-        var topics = Object.keys(g[sec[0]]).sort(function (a, b) { return a.localeCompare(b, 'vi'); });
-        if (!topics.length) return;
-        box.appendChild(el('p', 'psec', sec[1]));
-        topics.forEach(function (t) { box.appendChild(el('p', 'ptopic', t + ' (' + g[sec[0]][t].length + ')')); box.appendChild(itemList(g[sec[0]][t])); });
+    function hlText(elm, it, lang, tappable) {
+      var text = lang === 'vi' ? it.vi : it.ko, sg = segs(it)[lang], h = val('hl', it.id) || [], pos = 0;
+      if (h && !Array.isArray(h)) h = Object.keys(h).map(function (k) { return h[k]; });
+      elm.textContent = '';
+      sg.forEach(function (g) {
+        if (g.s > pos) elm.appendChild(document.createTextNode(text.slice(pos, g.s)));
+        var sp = el('span', 'ph' + (tappable ? ' tap' : '') + (h.indexOf(g.i) >= 0 ? ' hl' + (g.i % 4 + 1) : ''), text.slice(g.s, g.e));
+        sp.dataset.hi = g.i; sp.dataset.item = it.id; elm.appendChild(sp); pos = g.e;
       });
-      return box;
+      if (pos < text.length) elm.appendChild(document.createTextNode(text.slice(pos)));
+      return elm;
+    }
+    function toggleHl(id, i) {
+      var h = (val('hl', id) || []).slice(); if (!Array.isArray(h)) h = Object.keys(h).map(function (k) { return h[k]; });
+      var k = h.indexOf(i); if (k >= 0) h.splice(k, 1); else h.push(i);
+      put('hl', id, h);
+      if (k < 0) { var p = ITEMS[id].pairs[i]; if (p) speak(p[1], 'ko-KR'); }
     }
 
+    /* ---- routing: #/bai/<id> opens a lesson as its own page ---- */
+    function route() {
+      var m = /^#\/bai\/([\w-]+)$/.exec(location.hash || '');
+      page = m && BY_LESSON[m[1]] ? m[1] : null;
+      document.body.classList.toggle('plan-page', !!page);
+      if (page && state.mode !== 'plan') { state.mode = 'plan'; saveUi(); renderMode(); return; }
+      if (state.mode === 'plan') render();
+    }
+    window.addEventListener('hashchange', function () { if (sess && sess.L && sess.L.id !== (location.hash.split('/')[2] || '')) leave(); route(); window.scrollTo(0, 0); });
+    function openLesson(id) { location.hash = '#/bai/' + id; }
+
+    /* ---- views ---- */
     function render() {
       var v = $('planBox'); if (!v) return; v.textContent = '';
       if (!loaded) { load(); v.appendChild(el('p', 'listinfo', loadErr && loadErr !== 'loading' ? loadErr : 'Đang tải bài học…')); return; }
+      if (page) return renderPage(v, BY_LESSON[page]);
       if (sess) return renderSession(v);
       var tabs = el('div', 'tabs ptabs');
       [['days', 'Theo ngày'], ['months', 'Tổng hợp tháng']].forEach(function (x) { var b = btn('', x[1], function () { view = x[0]; render(); }); b.setAttribute('aria-selected', String(view === x[0])); tabs.appendChild(b); });
       v.appendChild(tabs);
-      var lg = el('div', 'plegend');
-      [['done', 'Đã học (kèm ngày học)'], ['today', 'Hôm nay cần học'], ['late', 'Quá hạn, chưa học'], ['next', 'Lần học kế tiếp'], ['future', 'Chưa tới']].forEach(function (x) { var s = el('span'); s.appendChild(el('i', 'psw ' + x[0])); s.appendChild(document.createTextNode(x[1])); lg.appendChild(s); });
-      v.appendChild(lg);
+      v.appendChild(legend());
       if (view === 'days') renderDays(v); else renderMonths(v);
     }
-    function lessonCard(L) {
-      var p = el('div', 'quiz plesson'), head = el('div', 'phead'), c = liveCount(L.ids);
-      head.appendChild(el('b', null, L.title)); head.appendChild(el('span', 'listinfo', c[0] + ' từ vựng · ' + c[1] + ' câu'));
-      p.appendChild(head);
+    function legend() {
+      var lg = el('div', 'plegend');
+      [['done', 'Đã học (kèm ngày học)'], ['today', 'Hôm nay cần học'], ['late', 'Quá hạn, chưa học'], ['next', 'Lần học kế tiếp'], ['future', 'Chưa tới']].forEach(function (x) { var s = el('span'); s.appendChild(el('i', 'psw ' + x[0])); s.appendChild(document.createTextNode(x[1])); lg.appendChild(s); });
+      return lg;
+    }
+    function chips(L) {
       var sc = el('div', 'psched');
       schedule(L).forEach(function (s) {
         var ch = el('div', 'pchip ' + s.st); ch.appendChild(el('b', null, STEP[s.step])); ch.appendChild(document.createTextNode(vn(s.due)));
         var lbl = s.st === 'done' ? 'đã học ' + vn(s.on) : s.st === 'late' ? 'quá hạn' : s.st === 'today' ? 'hôm nay' : s.st === 'next' ? 'lần tới' : '';
         if (lbl) ch.appendChild(el('small', null, lbl)); sc.appendChild(ch);
       });
-      p.appendChild(sc);
-      var row = el('div', 'prow'), cur = current(L);
-      if (cur) {
-        var msg = cur.st === 'late' ? 'Quá hạn từ ' + vn(cur.due) + ' – nên học ngay' : cur.st === 'today' ? 'Hôm nay cần học: ' + STEP[cur.step] : 'Lần học tiếp theo: ' + STEP[cur.step] + ' ngày ' + vn(cur.due, true);
-        row.appendChild(el('span', 'pstatus ' + cur.st, msg));
-        var rs = (resume[L.id] || []).filter(alive);
-        var label = rs.length ? 'Tiếp tục (còn ' + rs.length + ' thẻ)' : cur.st === 'next' ? 'Học trước' : (cur.step ? 'Học ' + STEP[cur.step].toLowerCase() : 'Học ngay');
-        row.appendChild(btn(cur.st === 'next' && !rs.length ? 'ghost' : 'primary', label, function () {
-          var q = rs.length ? rs.filter(function (id) { return !val('known', id); }) : ordered(L.ids);
-          delete resume[L.id]; save();
-          start(cur.st === 'next' ? 'free' : 'lesson', q, L.title + ' · ' + STEP[cur.step], L);
-        }));
-      } else row.appendChild(el('span', 'pstatus done', 'Đã hoàn thành cả 5 lần'));
+      return sc;
+    }
+    function statusLine(L) {
+      var cur = current(L);
+      if (!cur) return el('span', 'pstatus done', 'Đã hoàn thành cả 5 lần');
+      var msg = cur.st === 'late' ? 'Quá hạn từ ' + vn(cur.due) + ' – nên học ngay' : cur.st === 'today' ? 'Hôm nay cần học: ' + STEP[cur.step] : 'Lần học tiếp theo: ' + STEP[cur.step] + ' ngày ' + vn(cur.due, true);
+      return el('span', 'pstatus ' + cur.st, msg);
+    }
+    function lessonCard(L) {
+      var p = el('div', 'quiz plesson'); p.style.setProperty('--day', dayColor(L.date));
+      var head = el('div', 'phead'), c = liveCount(L.ids);
+      var a = el('a', 'ptitle', L.title); a.href = '#/bai/' + L.id; head.appendChild(a);
+      head.appendChild(el('span', 'listinfo', c[0] + ' từ vựng · ' + c[1] + ' câu'));
+      p.appendChild(head); p.appendChild(chips(L));
+      var row = el('div', 'prow'); row.appendChild(statusLine(L));
+      var rs = (resume[L.id] || []).filter(alive);
+      row.appendChild(btn('primary', rs.length ? 'Mở bài · tiếp tục (' + rs.length + ' thẻ)' : 'Mở bài →', function () { openLesson(L.id); }));
       p.appendChild(row);
-      var det = el('details', 'pcontent'); det.appendChild(el('summary', null, 'Xem nội dung (chia theo chủ đề)'));
-      det.addEventListener('toggle', function () { if (det.open && det.children.length === 1) det.appendChild(contentBlock(L.ids)); });
-      p.appendChild(det);
       return p;
     }
     function renderDays(v) {
@@ -2292,7 +2343,7 @@ body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-
       var by = {}; LESSONS.forEach(function (L) { (by[L.date] = by[L.date] || []).push(L); });
       Object.keys(by).sort().reverse().forEach(function (date) {
         var ls = by[date], ids = []; ls.forEach(function (L) { ids = ids.concat(L.ids); });
-        var c = liveCount(ids), lab = el('div', 'pday');
+        var c = liveCount(ids), lab = el('div', 'pday'); lab.style.setProperty('--day', dayColor(date));
         lab.appendChild(el('b', null, vn(date, true)));
         lab.appendChild(el('span', null, c[0] + ' từ vựng · ' + c[1] + ' câu' + (ls.length > 1 ? ' · ' + ls.length + ' bài nhỏ theo chủ đề' : '')));
         v.appendChild(lab);
@@ -2323,15 +2374,82 @@ body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-
         v.appendChild(dp);
       }
     }
+    function itemRow(it) {
+      var li = el('li', val('known', it.id) ? 'known' : ''); li.dataset.item = it.id;
+      var t = el('div', 'ptexts');
+      t.appendChild(hlText(el('p', 'pvi'), it, 'vi', true));
+      var k = hlText(el('p', 'pko'), it, 'ko', false); k.lang = 'ko'; t.appendChild(k);
+      li.appendChild(t);
+      var right = el('span', 'prow');
+      if (it.type === 'w') right.appendChild(el('span', 'ptag cnt', '×' + it.n));
+      var rt = val('rate', it.id); if (rt && RATE_NAME[rt]) right.appendChild(el('span', 'ptag r-' + rt, RATE_NAME[rt]));
+      if (canSpeak) right.appendChild(btn('picon', '🔊', function () { speak(it.ko, 'ko-KR'); }, 'Nghe tiếng Hàn'));
+      right.appendChild(btn('picon del', '🗑', function () { del(it.id); render(); }, 'Xoá khỏi danh sách'));
+      li.appendChild(right);
+      return li;
+    }
+    function contentBlock(ids) {
+      var g = grouped(ids), box = el('div');
+      [['w', 'Phần 1 · Từ vựng'], ['s', 'Phần 2 · Câu']].forEach(function (sec) {
+        var topics = Object.keys(g[sec[0]]).sort(function (a, b) { return a.localeCompare(b, 'vi'); });
+        if (!topics.length) return;
+        box.appendChild(el('p', 'psec', sec[1]));
+        topics.forEach(function (t) {
+          box.appendChild(el('p', 'ptopic', t + ' (' + g[sec[0]][t].length + ')'));
+          var ul = el('ul', 'pitems'); g[sec[0]][t].forEach(function (it) { ul.appendChild(itemRow(it)); }); box.appendChild(ul);
+        });
+      });
+      return box;
+    }
+    function renderPage(v, L) {
+      var wrap = el('div', 'ppage'); wrap.style.setProperty('--day', dayColor(L.date));
+      var top = el('div', 'pnavtop');
+      var back = el('a', 'pback', '← Lịch học'); back.href = '#'; top.appendChild(back);
+      top.appendChild(el('span', 'pdate', 'Ngày ' + vn(L.date, true)));
+      wrap.appendChild(top);
+      if (sess && sess.L && sess.L.id === L.id) { renderSession(wrap); v.appendChild(wrap); return; }
+      var hd = el('div', 'quiz pband');
+      hd.appendChild(el('h2', 'ph2', L.title));
+      var c = liveCount(L.ids); hd.appendChild(el('span', 'listinfo', c[0] + ' từ vựng · ' + c[1] + ' câu · chạm vào chữ tiếng Việt để tô sáng cụm Hàn tương ứng'));
+      hd.appendChild(chips(L));
+      var row = el('div', 'prow'), cur = current(L); row.appendChild(statusLine(L));
+      var rs = (resume[L.id] || []).filter(alive);
+      var label = rs.length ? 'Tiếp tục (còn ' + rs.length + ' thẻ)' : !cur ? 'Học lại' : cur.st === 'next' ? 'Học trước' : (cur.step ? 'Học ' + STEP[cur.step].toLowerCase() : 'Học ngay');
+      row.appendChild(btn('primary', label, function () {
+        var q = rs.length ? rs.filter(function (id) { return !val('known', id); }) : ordered(L.ids);
+        delete resume[L.id]; save();
+        start(!cur || cur.st === 'next' ? 'free' : 'lesson', q, L.title + (cur ? ' · ' + STEP[cur.step] : ''), L);
+      }));
+      hd.appendChild(row);
+      wrap.appendChild(hd);
+      var body = el('div', 'quiz'); body.appendChild(contentBlock(L.ids)); wrap.appendChild(body);
+      v.appendChild(wrap);
+    }
 
-    /* ---- Học: ◀ ▶ chuyển thẻ · Enter lật · 1–4 chấm · Delete xoá ---- */
+    /* ---- study session (kept across reloads) ---- */
+    function saveSess() {
+      if (!sess) { lsSet(SKEY, ''); return; }
+      lsSet(SKEY, JSON.stringify({ kind: sess.kind, title: sess.title, lesson: sess.L ? sess.L.id : null, queue: sess.queue, pos: sess.pos, picked: sess.picked, again: sess.again, stats: sess.stats, recorded: !!sess.recorded }));
+    }
+    function restoreSession() {
+      try {
+        var o = JSON.parse(lsGet(SKEY) || 'null'); if (!o || !o.queue) return;
+        sess = { kind: o.kind, title: o.title, L: o.lesson ? BY_LESSON[o.lesson] || null : null, queue: o.queue.filter(function (id) { return ITEMS[id]; }), pos: o.pos || 0, flipped: false, again: o.again || {}, picked: o.picked || {}, spoken: -1, stats: o.stats || { known: 0, hard: 0, mid: 0 }, recorded: !!o.recorded };
+        if (sess.L && !/^#\/bai\//.test(location.hash)) { history.replaceState(null, '', '#/bai/' + sess.L.id); }
+      } catch (e) { sess = null; }
+    }
     function start(kind, ids, title, L) {
       ids = ids.filter(alive);
       if (!ids.length) { toast('Không còn thẻ nào cần học.'); return; }
       sess = { kind: kind, title: title, L: L || null, queue: ids.slice(), pos: 0, flipped: false, again: {}, picked: {}, spoken: -1, stats: { known: 0, hard: 0, mid: 0 } };
-      render(); window.scrollTo({ top: $('view-plan').offsetTop - 8, behavior: 'smooth' });
+      saveSess(); render(); window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    function pause() { if (sess && sess.kind === 'lesson' && sess.L && sess.pos < sess.queue.length) { resume[sess.L.id] = sess.queue.slice(sess.pos); save(); } sess = null; render(); }
+    function leave() {
+      if (!sess) return;
+      if (sess.pos < sess.queue.length && sess.kind === 'lesson' && sess.L) { resume[sess.L.id] = sess.queue.slice(sess.pos); save(); }
+      sess = null; saveSess();
+    }
+    function pause() { leave(); render(); }
     function renderSession(v) {
       var s = sess;
       while (s.pos < s.queue.length && !alive(s.queue[s.pos])) s.queue.splice(s.pos, 1);
@@ -2341,15 +2459,17 @@ body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-
       var pr = el('div', 'meter'), sp = el('span', 'e'); sp.style.width = Math.min(100, s.pos / s.queue.length * 100) + '%'; pr.appendChild(sp); v.appendChild(pr);
       var c = el('div', 'card pcard');
       var m = el('div', 'card-top'); m.appendChild(el('span', 'meta', (it.type === 'w' ? 'Từ vựng' : 'Câu') + ' · ' + it.topic + (it.type === 'w' ? ' · gặp ' + it.n + ' lần' : '')));
-      var mr = el('span', 'prow'); mr.appendChild(el('span', 'counter', (s.pos + 1) + ' / ' + s.queue.length));
-      if (canSpeak) mr.appendChild(btn('picon', '🔊', function () { speak(it.ko, 'ko-KR'); }, 'Nghe'));
-      mr.appendChild(btn('picon del', '🗑', function () { del(it.id); render(); }, 'Xoá khỏi danh sách (Delete)'));
+      var mr = el('span', 'prow');
+      var last = val('rate', it.id); if (last && RATE_NAME[last]) mr.appendChild(el('span', 'ptag r-' + last, 'Lần trước: ' + RATE_NAME[last]));
+      mr.appendChild(el('span', 'counter', (s.pos + 1) + ' / ' + s.queue.length));
+      if (canSpeak) mr.appendChild(btn('picon', '🔊', function () { speak(it.ko, 'ko-KR'); }, 'Nghe tiếng Hàn'));
       m.appendChild(mr); c.appendChild(m);
-      var f = el('div', 'stage pfront'); f.title = 'Bấm hoặc nhấn Enter để lật';
-      f.appendChild(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : ''), it.vi));
-      if (s.flipped) { var a = el('p', 'answer ko' + (it.ko.length > 40 ? ' long' : ''), it.ko); a.lang = 'ko'; f.appendChild(a); }
+      var f = el('div', 'stage pfront'); f.title = 'Chạm chỗ trống hoặc nhấn Enter để lật · chạm chữ để tô sáng';
+      f.appendChild(hlText(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : '')), it, 'vi', true));
+      if (s.flipped) { var a = hlText(el('p', 'answer ko' + (it.ko.length > 40 ? ' long' : '')), it, 'ko', false); a.lang = 'ko'; f.appendChild(a); }
       else f.appendChild(el('span', 'hint', 'Enter để lật thẻ'));
-      f.addEventListener('click', flip); c.appendChild(f);
+      f.addEventListener('click', function (e) { if (e.target.closest('.ph.tap')) return; flip(); });
+      c.appendChild(f);
       var nav = el('div', 'pnav');
       var pv = btn('parrow', '◀', function () { go(-1); }, 'Thẻ trước (←)'); pv.disabled = s.pos === 0; nav.appendChild(pv);
       nav.appendChild(btn('pflip', '⟲', flip, 'Lật thẻ (Enter)'));
@@ -2359,7 +2479,7 @@ body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-
       [['known', 'Biết rồi', '1'], ['hard', 'Khó', '2'], ['mid', 'Bình thường', '3']].forEach(function (x) {
         var b = btn(x[0] + (picked === x[0] ? ' picked' : ''), x[1], function () { rate(x[0]); }); b.appendChild(el('kbd', null, x[2])); r.appendChild(b);
       });
-      var xb = btn('pdel', '🗑 Xoá', function () { del(it.id); render(); }); xb.appendChild(el('kbd', null, 'Del')); r.appendChild(xb);
+      var xb = btn('pdel', '🗑 Xoá', function () { del(it.id); saveSess(); render(); }); xb.appendChild(el('kbd', null, 'Del')); r.appendChild(xb);
       c.appendChild(r);
       var keys = el('p', 'keys desk-keys'); keys.innerHTML = '<kbd>←</kbd> <kbd>→</kbd> chuyển thẻ · <kbd>Enter</kbd> lật · <kbd>1</kbd> Biết rồi · <kbd>2</kbd> Khó · <kbd>3</kbd> Bình thường · <kbd>Delete</kbd> xoá từ';
       c.appendChild(keys);
@@ -2367,30 +2487,41 @@ body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-
       if (!s.flipped && s.spoken !== s.pos) { s.spoken = s.pos; if (state.autoVi) speak(it.vi, 'vi-VN'); }
     }
     function flip() { if (!sess || sess.pos >= sess.queue.length) return; sess.flipped = !sess.flipped; if (sess.flipped) speak(ITEMS[sess.queue[sess.pos]].ko, 'ko-KR'); render(); }
-    function go(d) { var n = sess.pos + d; if (n < 0) return; sess.pos = n; sess.flipped = false; render(); }
+    function go(d) { var n = sess.pos + d; if (n < 0) return; sess.pos = n; sess.flipped = false; saveSess(); render(); }
     function rate(k) {
       var s = sess, id = s.queue[s.pos];
       if (!id) return;
-      s.stats[k]++; s.picked[s.pos] = k;
+      s.stats[k] = (s.stats[k] || 0) + 1; s.picked[s.pos] = k;
+      put('rate', id, k);
       var T = today();
       if (k === 'known') { put('known', id, 1); if (val('hard', id)) put('hard', id, null); }
       else if (k === 'hard') { s.queue.splice(Math.min(s.pos + 4, s.queue.length), 0, id); put('hard', id, addDays(T, 1)); }
       else if (k === 'mid') { if (s.kind === 'hard' && val('hard', id)) put('hard', id, null); }
-      s.pos++; s.flipped = false; render();
+      s.pos++; s.flipped = false; saveSess(); render();
     }
     function renderDone(v) {
       var s = sess, p = el('div', 'quiz');
       p.appendChild(el('b', null, 'Xong: ' + s.title));
-      p.appendChild(el('p', null, 'Biết rồi ' + s.stats.known + ' · Khó ' + s.stats.hard + ' · Bình thường ' + s.stats.mid));
-      if (s.kind === 'lesson' && s.L && !s.recorded) { var dn = (val('done', s.L.id) || []).slice(); dn.push(today()); put('done', s.L.id, dn); s.recorded = true; delete resume[s.L.id]; save(); }
+      p.appendChild(el('p', null, 'Biết rồi ' + (s.stats.known || 0) + ' · Khó ' + (s.stats.hard || 0) + ' · Bình thường ' + (s.stats.mid || 0)));
+      if (s.kind === 'lesson' && s.L && !s.recorded) { var dn = (val('done', s.L.id) || []).slice(); dn.push(today()); put('done', s.L.id, dn); s.recorded = true; delete resume[s.L.id]; save(); saveSess(); }
       if (s.kind === 'lesson' && s.L) { var nx = current(s.L); p.appendChild(el('p', 'pstatus done', nx ? 'Đã ghi nhận ngày học ' + vn(today(), true) + '. Lần tiếp theo: ' + STEP[nx.step] + ' ngày ' + vn(nx.due, true) + '.' : 'Đã hoàn thành cả 5 lần.')); }
       var row = el('div', 'prow');
-      row.appendChild(btn('ghost', '◀ Xem lại thẻ cuối', function () { s.pos = Math.max(0, s.queue.length - 1); render(); }));
-      row.appendChild(btn('primary', 'Về danh sách', function () { sess = null; render(); }));
+      row.appendChild(btn('ghost', '◀ Xem lại thẻ cuối', function () { s.pos = Math.max(0, s.queue.length - 1); saveSess(); render(); }));
+      row.appendChild(btn('primary', 'Xong', function () { sess = null; saveSess(); render(); }));
       p.appendChild(row); v.appendChild(p);
     }
+
+    /* ---- input ---- */
+    document.addEventListener('click', function (e) {
+      var ph = e.target.closest('#planBox .ph.tap'); if (!ph) return;
+      e.stopPropagation(); toggleHl(ph.dataset.item, +ph.dataset.hi);
+      // repaint only the row / card that changed
+      var it = ITEMS[ph.dataset.item], li = ph.closest('li[data-item]');
+      if (li) li.parentNode.replaceChild(itemRow(it), li); else render();
+    }, true);
     document.addEventListener('keydown', function (e) {
       if (state.mode !== 'plan' || !sess || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (page && (!sess.L || sess.L.id !== page)) return;
       if (e.target && /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)) return;
       if (sess.pos >= sess.queue.length) { if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); } return; }
       if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
@@ -2399,30 +2530,28 @@ body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-
       else if (e.key === '1') rate('known');
       else if (e.key === '2') rate('hard');
       else if (e.key === '3') rate('mid');
-      else if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); del(sess.queue[sess.pos]); render(); }
+      else if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); del(sess.queue[sess.pos]); saveSess(); render(); }
     });
-    // swipe on phones: left = next, right = previous
     var tx = null;
     document.addEventListener('touchstart', function (e) { if (state.mode === 'plan' && sess && e.target.closest('.pfront')) tx = { x: e.touches[0].clientX, y: e.touches[0].clientY }; else tx = null; }, { passive: true });
     document.addEventListener('touchend', function (e) { if (!tx) return; var t = e.changedTouches[0], dx = t.clientX - tx.x, dy = t.clientY - tx.y; tx = null; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1); }, { passive: true });
 
-    // Merge plan state coming from the other device (newest timestamp wins per entry)
-    function merge(L, full) {
+    /* ---- merge state coming from the other device (newest timestamp wins per entry) ---- */
+    function merge(Ld, full) {
       var changed = false;
-      ['done', 'known', 'hard', 'del'].forEach(function (sec) {
-        var rem = (L && L[sec] && typeof L[sec] === 'object') ? L[sec] : {};
+      SECS.forEach(function (sec) {
+        var rem = (Ld && Ld[sec] && typeof Ld[sec] === 'object') ? Ld[sec] : {};
         Object.keys(rem).forEach(function (k) {
           var r = rem[k], l = ps[sec][k];
           if (!r || typeof r !== 'object') return;
-          if (!l || (r.t || 0) > (l.t || 0)) { var v = r.v; if (sec === 'done' && v && !Array.isArray(v)) v = Object.keys(v).map(function (x) { return v[x]; }); ps[sec][k] = { v: v === undefined ? null : v, t: r.t || 0 }; changed = true; }
+          if (!l || (r.t || 0) > (l.t || 0)) { var v = r.v; if ((sec === 'done' || sec === 'hl') && v && typeof v === 'object' && !Array.isArray(v)) v = Object.keys(v).map(function (x) { return v[x]; }); ps[sec][k] = { v: v === undefined ? null : v, t: r.t || 0 }; changed = true; }
           else if ((l.t || 0) > (r.t || 0)) SYNC.queue('L/' + sec + '/' + k, l);
         });
         if (full) Object.keys(ps[sec]).forEach(function (k) { if (!rem[k]) SYNC.queue('L/' + sec + '/' + k, ps[sec][k]); });
       });
       if (changed) { save(); if (state.mode === 'plan' && !sess) render(); }
     }
-    function leave() { if (!sess) return; if (sess.pos >= sess.queue.length) { sess = null; return; } if (sess.kind === 'lesson' && sess.L) { resume[sess.L.id] = sess.queue.slice(sess.pos); save(); } sess = null; }
-    return { render: render, merge: merge, active: function () { return !!sess; }, load: load, leave: leave };
+    return { render: render, merge: merge, active: function () { return !!sess; }, load: load, leave: function () { if (!page) leave(); }, route: route };
   })();
 
   /* ---------- Modes ---------- */
@@ -2764,6 +2893,7 @@ body.mode-plan .decks, body.mode-plan .stats, body.mode-plan #status, body.mode-
   buildQueue();
   renderAll();
   SYNC.start(mergeRemote);
+  PLAN.load();
   paintVoiceStatus();
   if (canSpeak) { try { window.speechSynthesis.addEventListener('voiceschanged', paintVoiceStatus); } catch (e) { } }
   if (linkedNow) { $('footNote').textContent = 'Đã liên kết máy này với thiết bị kia. Tiến độ sẽ tự đồng bộ.'; }
