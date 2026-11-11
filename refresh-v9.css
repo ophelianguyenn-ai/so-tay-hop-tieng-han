@@ -1,0 +1,37 @@
+/* Spacious paper desk, quiet motion, and an animated garden. */
+:root{--bg:#faf7f0;--sunk:#f2ede3;--line:#e0d9ca;--edge:#d5cdbd}
+:root[data-theme="dark"],:root[data-theme="dark"] body.themed{--bg:#030806;--surface:#080f0c;--sunk:#0b1410;--ink:#f5fff9;--muted:#c0d8cb;--line:#426151;--edge:#010403;--accent-soft:#101b15;--hero:#0c1912;--p-today-s:#11120c;--med-soft:#11120c;--hl1:#252312;--h-bg:#18130e;--x-soft:#18130e}
+:root[data-theme="dark"] .pday{background:#101b14;box-shadow:0 2px 0 #344d3f;color:#e6f4eb}
+:root[data-theme="dark"] .plesson{background:#080f0c}
+:root[data-theme="dark"] .pchip.today{background:#11120c;color:#eee3b5;animation:none}
+.brand-mark{width:54px;height:54px;box-shadow:none}
+.brand-mark img{width:100%;height:100%;object-fit:cover;object-position:50% 46%}
+.topbar{min-height:72px;--topbar:72px}
+.app{max-width:none;width:100%;padding:26px clamp(18px,3.5vw,68px) 72px}
+.days-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:start}
+.days-grid>.ptabs,.days-grid>.plegend{grid-column:1/-1}
+.days-grid>.tabs,.days-grid>:not(.day-group){grid-column:1/-1}
+.day-group{display:flex;flex-direction:column;gap:16px;min-width:0}.day-group .pday{margin-top:0}
+.day-group .plesson{height:100%}.day-group .ptitle{font-size:17px;line-height:1.55}
+.pcardwrap{width:100%;max-width:none;margin:auto}.pcard .pfront{min-height:340px;padding:32px 56px}.pcard{box-shadow:0 12px 35px #0000000c}
+body.focus .app{max-width:none;padding-inline:5vw}
+.cicons{flex-wrap:wrap;justify-content:flex-end}.hjbtn{font-size:22px!important;width:44px!important;height:44px!important}
+.hanja{line-height:1.6;text-align:center}.hanja small{display:block;margin:2px 0 0}.hanja-missing{font-size:14px;color:var(--muted);text-align:center}.hanja-missing a{display:block;color:var(--accent-t)}
+.react{width:130px;margin-left:-65px;margin-top:-110px;animation:none}.react .face{width:116px;height:116px}.react svg{width:130px;height:130px}.reaction-question{position:absolute;top:-8px;right:0;background:var(--surface);border:2px solid var(--line);border-radius:50%;width:42px;height:42px;text-align:center;font-size:28px;color:var(--ink)}
+.landscape{position:absolute;inset:0;overflow:hidden;pointer-events:none}.night-only{display:none}:root[data-theme=dark] .day-only{display:none}:root[data-theme=dark] .night-only{display:block}
+.cover{background:linear-gradient(#cceaf5,#eaf7f5 70%,#d9edcc)}:root[data-theme=dark] .cover{background:linear-gradient(#020705,#07150f 75%,#102317)}
+.cover-in{width:min(640px,90%);gap:14px}.cover h1{font-size:clamp(40px,5vw,68px)}.cover .hero{width:min(210px,42vw)}
+.sun,.moon{position:absolute;right:13%;top:12%;width:94px;height:94px;border-radius:50%;animation:sky-bob 12s ease-in-out infinite}.sun{background:#ffe7a1;box-shadow:0 0 70px #ffe5a166}.moon{background:#eeeccd;box-shadow:0 0 50px #d9e7bd22}.moon:after{content:'';position:absolute;inset:-9px -15px 15px 20px;border-radius:50%;background:#041009}
+.cloud{position:absolute;background:#ffffffbd;width:170px;height:40px;border-radius:60%;animation:cloud-pass 28s ease-in-out infinite alternate}.cloud:before,.cloud:after{content:'';position:absolute;background:inherit;border-radius:50%}.cloud:before{width:75px;height:65px;left:25px;bottom:0}.cloud:after{width:90px;height:75px;right:14px;bottom:0}.cloud-one{left:8%;top:19%}.cloud-two{left:65%;top:35%;animation-delay:-14s;transform:scale(.7)}.cloud-three{left:32%;top:8%;animation-delay:-8s;opacity:.6}
+.birds{position:absolute;top:24%;left:17%;width:200px;fill:none;stroke:#668c99;stroke-width:2.5;stroke-linecap:round;animation:bird-flight 19s ease-in-out infinite alternate}
+.hill{position:absolute;width:120%;left:-10%;height:32%;border-radius:50% 50% 0 0;bottom:-8%;background:#a9d6ac}.hill-back{left:-25%;bottom:-1%;background:#c4e3be;transform:rotate(-6deg)}.hill-front{left:8%;transform:rotate(5deg)}:root[data-theme=dark] .hill-back{background:#0b2116}:root[data-theme=dark] .hill-front{background:#10301e}
+.flower{position:absolute;width:26px;height:70px;transform-origin:bottom;animation:flower-sway 5s ease-in-out infinite alternate;animation-delay:var(--delay)}.flower:after{content:'';position:absolute;bottom:0;left:12px;width:3px;height:48px;background:#6aab77}.flower i{position:absolute;z-index:1;top:-8px;font-style:normal;font-size:38px;color:var(--petal)}
+.butterfly{position:absolute;width:30px;height:24px;animation:butterfly-path 12s ease-in-out infinite alternate}.butterfly i,.butterfly b{position:absolute;width:17px;height:24px;border-radius:75% 65% 55% 50%;background:#eab0cd;transform-origin:right;animation:wing-beat 1s ease-in-out infinite alternate}.butterfly b{left:16px;transform-origin:left;background:#c4b4e4;animation-delay:-.5s}
+.night-tree{position:absolute;bottom:2%;left:4%;height:48%;width:22%;transform-origin:bottom;animation:flower-sway 9s ease-in-out infinite alternate}.star{position:absolute;color:#f1edcb;font-size:10px;animation:star-glow 5s ease-in-out infinite alternate}.firefly{position:absolute;width:4px;height:4px;border-radius:50%;background:#e5ef9d;box-shadow:0 0 12px 4px #c9ea6944;animation:firefly-drift 10s ease-in-out infinite alternate}
+@keyframes sky-bob{50%{transform:translateY(10px)}}@keyframes cloud-pass{to{translate:100px 0}}@keyframes bird-flight{to{transform:translate(110px,-20px)}}@keyframes flower-sway{from{rotate:-3deg}to{rotate:3deg}}@keyframes butterfly-path{to{translate:50px -35px;rotate:12deg}}@keyframes wing-beat{to{scale:.4 1}}@keyframes star-glow{from{opacity:.3}to{opacity:.9}}@keyframes firefly-drift{0%{transform:translate(0,0);opacity:.25}50%{opacity:.85}100%{transform:translate(35px,-45px);opacity:.3}}
+@media(min-width:1100px){.thero{padding:30px 42px}.pcard .pfront{min-height:42vh}.pnav{max-width:760px;width:100%;margin:0 auto}.prate{max-width:760px;width:100%;margin:18px auto 0}}
+@media(max-width:1100px){.days-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.app{padding:18px 14px 70px}.days-grid{grid-template-columns:1fr;gap:18px}.pcard .pfront{padding:28px 16px;min-height:260px}.brand-mark{width:44px;height:44px}.cover-in{gap:14px}.sun,.moon{width:62px;height:62px;right:8%;top:9%}.cloud{scale:.65}.night-tree{width:38%;left:-8%}.cicons{gap:5px}.react{scale:.85}.card-top{gap:8px}}
+@media(prefers-reduced-motion:reduce){.landscape *,.cover *,.react,.pchip{animation:none!important;transition:none!important}.cover.leave{transform:none}}
+
+:root{--topbar:72px}.cover .hero{animation:rise .5s ease both,sky-bob 8s 1s ease-in-out infinite}.pchip.today{animation:none}

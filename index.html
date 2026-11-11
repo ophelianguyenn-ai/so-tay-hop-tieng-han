@@ -596,7 +596,9 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 }
 </style>
 
+<script src="hanja-v9.js"></script>
 <script src="qrcode.js" defer></script>
+<link rel="stylesheet" href="refresh-v9.css">
 </head>
 <body>
 <header class="topbar" id="topbar">
@@ -919,22 +921,13 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 
 <!-- Cover -->
 <div class="cover" id="cover">
-  <svg class="scene" viewBox="0 0 400 800" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
-    <circle cx="330" cy="92" r="38" fill="var(--sun)"/>
-    <g class="cl" fill="var(--cloud)"><ellipse cx="80" cy="96" rx="46" ry="17"/><ellipse cx="108" cy="82" rx="28" ry="18"/><ellipse cx="58" cy="86" rx="22" ry="13"/></g>
-    <g class="cl" fill="var(--cloud)" style="animation-delay:-4s"><ellipse cx="300" cy="200" rx="40" ry="14"/><ellipse cx="322" cy="189" rx="22" ry="14"/></g>
-    <g fill="none" stroke="var(--bird)" stroke-width="3" stroke-linecap="round"><path d="M150 150q9-9 16 0q8-9 16 0"/><path d="M214 118q7-7 12 0q6-7 12 0"/><path d="M40 210q6-6 10 0q5-6 10 0"/></g>
-    <path d="M-20 660C60 600 150 610 230 650S380 640 430 610V820H-20z" fill="var(--hill1)"/>
-    <path d="M-20 720C70 670 140 690 220 716S360 720 430 684V820H-20z" fill="var(--hill2)"/>
-    <g stroke="var(--stem)" stroke-width="3" stroke-linecap="round" fill="none"><path d="M30 742q-4-14 2-24M38 742q2-12 9-18M352 730q-3-13 3-22M362 730q3-10 9-15M190 760q-3-12 2-20M200 760q3-10 8-14"/></g>
-    <g class="fl"><path d="M70 760V722" stroke="var(--stem)" stroke-width="3.500" stroke-linecap="round"/><g fill="var(--f1)"><circle cx="70" cy="708" r="7"/><circle cx="60" cy="716" r="7"/><circle cx="80" cy="716" r="7"/><circle cx="64" cy="727" r="7"/><circle cx="76" cy="727" r="7"/></g><circle cx="70" cy="718" r="5.500" fill="var(--f2)"/></g>
-    <g class="fl" style="animation-delay:-1.2s"><path d="M118 776V746" stroke="var(--stem)" stroke-width="3.500" stroke-linecap="round"/><g fill="var(--f2)"><circle cx="118" cy="734" r="6"/><circle cx="110" cy="741" r="6"/><circle cx="126" cy="741" r="6"/><circle cx="113" cy="750" r="6"/><circle cx="123" cy="750" r="6"/></g><circle cx="118" cy="743" r="4.500" fill="var(--f1)"/></g>
-    <g class="fl" style="animation-delay:-2.1s"><path d="M300 770V734" stroke="var(--stem)" stroke-width="3.500" stroke-linecap="round"/><g fill="var(--f3)"><circle cx="300" cy="720" r="7"/><circle cx="290" cy="728" r="7"/><circle cx="310" cy="728" r="7"/><circle cx="294" cy="739" r="7"/><circle cx="306" cy="739" r="7"/></g><circle cx="300" cy="730" r="5.500" fill="var(--f2)"/></g>
-    <g class="fl" style="animation-delay:-.6s"><path d="M344 786V758" stroke="var(--stem)" stroke-width="3.500" stroke-linecap="round"/><g fill="var(--f1)"><circle cx="344" cy="746" r="6"/><circle cx="336" cy="753" r="6"/><circle cx="352" cy="753" r="6"/><circle cx="339" cy="762" r="6"/><circle cx="349" cy="762" r="6"/></g><circle cx="344" cy="755" r="4.500" fill="var(--f3)"/></g>
-    <g class="bf"><ellipse cx="52" cy="330" rx="11" ry="15" fill="var(--bf1)" transform="rotate(-28 52 330)"/><ellipse cx="72" cy="330" rx="11" ry="15" fill="var(--bf1)" transform="rotate(28 72 330)"/><ellipse cx="55" cy="349" rx="7" ry="9" fill="var(--bf2)" transform="rotate(-20 55 349)"/><ellipse cx="69" cy="349" rx="7" ry="9" fill="var(--bf2)" transform="rotate(20 69 349)"/><rect x="60" y="322" width="4" height="30" rx="2" fill="var(--bird)"/></g>
-    <g class="bf bf2"><ellipse cx="338" cy="420" rx="9" ry="12" fill="var(--bf2)" transform="rotate(-28 338 420)"/><ellipse cx="354" cy="420" rx="9" ry="12" fill="var(--bf2)" transform="rotate(28 354 420)"/><ellipse cx="340" cy="435" rx="6" ry="7" fill="var(--bf1)" transform="rotate(-20 340 435)"/><ellipse cx="352" cy="435" rx="6" ry="7" fill="var(--bf1)" transform="rotate(20 352 435)"/><rect x="344.500" y="413" width="3.500" height="25" rx="1.700" fill="var(--bird)"/></g>
-    <g class="bf" style="animation-delay:-3s"><ellipse cx="96" cy="612" rx="7" ry="10" fill="var(--f2)" transform="rotate(-28 96 612)"/><ellipse cx="108" cy="612" rx="7" ry="10" fill="var(--f2)" transform="rotate(28 108 612)"/><rect x="100.500" y="606" width="3" height="18" rx="1.500" fill="var(--bird)"/></g>
-  </svg>
+  <div class="landscape" aria-hidden="true">
+    <div class="sun day-only"></div><div class="moon night-only"></div>
+    <div class="cloud cloud-one day-only"></div><div class="cloud cloud-two day-only"></div><div class="cloud cloud-three day-only"></div>
+    <svg class="birds day-only" viewBox="0 0 220 60"><path d="M10 30q15-20 30 0q15-20 30 0 M100 15q12-16 24 0q12-16 24 0 M160 44q10-14 20 0q10-14 20 0"/></svg>
+    <div class="hill hill-back"></div><div class="hill hill-front"></div>
+    <svg class="night-tree night-only" viewBox="0 0 220 380"><path d="M110 370V140M110 245L55 190M110 210L165 130" fill="none" stroke="#33483c" stroke-width="15" stroke-linecap="round"/><g fill="#183e2c"><ellipse cx="106" cy="125" rx="80" ry="100"/><circle cx="54" cy="180" r="48"/><circle cx="162" cy="158" r="51"/></g></svg>
+<span class="flower day-only" style="left:3%;bottom:3%;--delay:-0.0s;--petal:#f8b8ce"><i>✿</i></span><span class="flower day-only" style="left:9%;bottom:7%;--delay:-0.7s;--petal:#ffe5a3"><i>✿</i></span><span class="flower day-only" style="left:15%;bottom:11%;--delay:-1.4s;--petal:#fff8f0"><i>✿</i></span><span class="flower day-only" style="left:21%;bottom:3%;--delay:-2.0999999999999996s;--petal:#f8b8ce"><i>✿</i></span><span class="flower day-only" style="left:27%;bottom:7%;--delay:-2.8s;--petal:#ffe5a3"><i>✿</i></span><span class="flower day-only" style="left:33%;bottom:11%;--delay:-3.5s;--petal:#fff8f0"><i>✿</i></span><span class="flower day-only" style="left:39%;bottom:3%;--delay:-4.199999999999999s;--petal:#f8b8ce"><i>✿</i></span><span class="flower day-only" style="left:45%;bottom:7%;--delay:-4.8999999999999995s;--petal:#ffe5a3"><i>✿</i></span><span class="flower day-only" style="left:51%;bottom:11%;--delay:-5.6s;--petal:#fff8f0"><i>✿</i></span><span class="flower day-only" style="left:57%;bottom:3%;--delay:-6.3s;--petal:#f8b8ce"><i>✿</i></span><span class="flower day-only" style="left:63%;bottom:7%;--delay:-7.0s;--petal:#ffe5a3"><i>✿</i></span><span class="flower day-only" style="left:69%;bottom:11%;--delay:-7.699999999999999s;--petal:#fff8f0"><i>✿</i></span><span class="flower day-only" style="left:75%;bottom:3%;--delay:-8.399999999999999s;--petal:#f8b8ce"><i>✿</i></span><span class="flower day-only" style="left:81%;bottom:7%;--delay:-9.1s;--petal:#ffe5a3"><i>✿</i></span><span class="flower day-only" style="left:87%;bottom:11%;--delay:-9.799999999999999s;--petal:#fff8f0"><i>✿</i></span><span class="flower day-only" style="left:93%;bottom:3%;--delay:-10.5s;--petal:#f8b8ce"><i>✿</i></span><span class="butterfly day-only" style="left:8%;top:30%;animation-delay:-0s"><i></i><b></b></span><span class="butterfly day-only" style="left:28%;top:46%;animation-delay:-2s"><i></i><b></b></span><span class="butterfly day-only" style="left:48%;top:62%;animation-delay:-4s"><i></i><b></b></span><span class="butterfly day-only" style="left:68%;top:30%;animation-delay:-6s"><i></i><b></b></span><span class="butterfly day-only" style="left:88%;top:46%;animation-delay:-8s"><i></i><b></b></span><span class="star night-only" style="left:7%;top:5%;animation-delay:-0.0s">✦</span><span class="star night-only" style="left:44%;top:22%;animation-delay:-0.4s">✦</span><span class="star night-only" style="left:81%;top:39%;animation-delay:-0.8s">✦</span><span class="star night-only" style="left:20%;top:56%;animation-delay:-1.2000000000000002s">✦</span><span class="star night-only" style="left:57%;top:11%;animation-delay:-1.6s">✦</span><span class="star night-only" style="left:94%;top:28%;animation-delay:-2.0s">✦</span><span class="star night-only" style="left:33%;top:45%;animation-delay:-2.4000000000000004s">✦</span><span class="star night-only" style="left:70%;top:0%;animation-delay:-2.8000000000000003s">✦</span><span class="star night-only" style="left:9%;top:17%;animation-delay:-3.2s">✦</span><span class="star night-only" style="left:46%;top:34%;animation-delay:-3.6s">✦</span><span class="star night-only" style="left:83%;top:51%;animation-delay:-4.0s">✦</span><span class="star night-only" style="left:22%;top:6%;animation-delay:-4.4s">✦</span><span class="star night-only" style="left:59%;top:23%;animation-delay:-4.800000000000001s">✦</span><span class="star night-only" style="left:96%;top:40%;animation-delay:-5.2s">✦</span><span class="star night-only" style="left:35%;top:57%;animation-delay:-5.6000000000000005s">✦</span><span class="star night-only" style="left:72%;top:12%;animation-delay:-6.0s">✦</span><span class="star night-only" style="left:11%;top:29%;animation-delay:-6.4s">✦</span><span class="star night-only" style="left:48%;top:46%;animation-delay:-6.800000000000001s">✦</span><span class="star night-only" style="left:85%;top:1%;animation-delay:-7.2s">✦</span><span class="star night-only" style="left:24%;top:18%;animation-delay:-7.6000000000000005s">✦</span><span class="star night-only" style="left:61%;top:35%;animation-delay:-8.0s">✦</span><span class="star night-only" style="left:0%;top:52%;animation-delay:-8.4s">✦</span><span class="star night-only" style="left:37%;top:7%;animation-delay:-8.8s">✦</span><span class="star night-only" style="left:74%;top:24%;animation-delay:-9.200000000000001s">✦</span><span class="star night-only" style="left:13%;top:41%;animation-delay:-9.600000000000001s">✦</span><span class="star night-only" style="left:50%;top:58%;animation-delay:-10.0s">✦</span><span class="star night-only" style="left:87%;top:13%;animation-delay:-10.4s">✦</span><span class="star night-only" style="left:26%;top:30%;animation-delay:-10.8s">✦</span><span class="star night-only" style="left:63%;top:47%;animation-delay:-11.200000000000001s">✦</span><span class="star night-only" style="left:2%;top:2%;animation-delay:-11.600000000000001s">✦</span><span class="star night-only" style="left:39%;top:19%;animation-delay:-12.0s">✦</span><span class="star night-only" style="left:76%;top:36%;animation-delay:-12.4s">✦</span><span class="star night-only" style="left:15%;top:53%;animation-delay:-12.8s">✦</span><span class="star night-only" style="left:52%;top:8%;animation-delay:-13.200000000000001s">✦</span><span class="star night-only" style="left:89%;top:25%;animation-delay:-13.600000000000001s">✦</span><span class="star night-only" style="left:28%;top:42%;animation-delay:-14.0s">✦</span><span class="star night-only" style="left:65%;top:59%;animation-delay:-14.4s">✦</span><span class="star night-only" style="left:4%;top:14%;animation-delay:-14.8s">✦</span><span class="firefly night-only" style="left:7%;top:57%;animation-delay:-0.0s"></span><span class="firefly night-only" style="left:30%;top:70%;animation-delay:-0.8s"></span><span class="firefly night-only" style="left:53%;top:83%;animation-delay:-1.6s"></span><span class="firefly night-only" style="left:76%;top:58%;animation-delay:-2.4000000000000004s"></span><span class="firefly night-only" style="left:3%;top:71%;animation-delay:-3.2s"></span><span class="firefly night-only" style="left:26%;top:84%;animation-delay:-4.0s"></span><span class="firefly night-only" style="left:49%;top:59%;animation-delay:-4.800000000000001s"></span><span class="firefly night-only" style="left:72%;top:72%;animation-delay:-5.6000000000000005s"></span><span class="firefly night-only" style="left:95%;top:85%;animation-delay:-6.4s"></span><span class="firefly night-only" style="left:22%;top:60%;animation-delay:-7.2s"></span><span class="firefly night-only" style="left:45%;top:73%;animation-delay:-8.0s"></span><span class="firefly night-only" style="left:68%;top:86%;animation-delay:-8.8s"></span><span class="firefly night-only" style="left:91%;top:61%;animation-delay:-9.600000000000001s"></span><span class="firefly night-only" style="left:18%;top:74%;animation-delay:-10.4s"></span><span class="firefly night-only" style="left:41%;top:87%;animation-delay:-11.200000000000001s"></span><span class="firefly night-only" style="left:64%;top:62%;animation-delay:-12.0s"></span></div>
   <div class="cover-in">
     <div class="hero" id="coverHero"></div>
     <h1>Nhi’s<em>Learning Corner</em></h1>
@@ -1246,7 +1239,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var u = new SpeechSynthesisUtterance(text.replace(/\[\s*\]/g, ' '));
       u.lang = lang; u.rate = (pre === 'vi' ? 1 : 0.9) * (RATE[state.rate] || 1);
       if (onend) { u.onend = onend; u.onerror = onend; }
-      var v = pickVoice(pre); if (v) { u.voice = v; u.lang = v.lang; }
+      var v = pickVoice(pre); if (!v) { toast('Thiết bị chưa có giọng ' + (pre === 'ko' ? 'tiếng Hàn' : 'tiếng Việt') + '. Mở Cài đặt → Giọng đọc để kiểm tra.'); if (onend) onend(); return; } u.voice = v; u.lang = v.lang;
       window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
     } catch (e) { if (onend) onend(); }
   }
@@ -1487,8 +1480,8 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     haptic(8);
     if (!c || !c.animate || reduceMotion()) { state.flipped = !state.flipped; renderCard(); return; }
     if (cardFlipping) return; cardFlipping = true;
-    var a = c.animate([{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(90deg)' }], { duration: 170, easing: 'ease-in' });
-    a.onfinish = a.oncancel = function () { cardFlipping = false; state.flipped = !state.flipped; renderCard(); c.animate([{ transform: 'rotateY(-90deg)' }, { transform: 'rotateY(0deg)' }], { duration: 230, easing: 'cubic-bezier(.2,.8,.2,1)' }); };
+    var a = c.animate([{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(4px)' }], { duration: 110, easing: 'ease-in' });
+    a.onfinish = a.oncancel = function () { cardFlipping = false; state.flipped = !state.flipped; renderCard(); c.animate([{ opacity: 0, transform: 'translateY(-4px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 160, easing: 'cubic-bezier(.2,.8,.2,1)' }); };
   }
   function go(d) {
     var n = state.idx + d; if (n < 0 || n >= queue.length) return;
@@ -2379,12 +2372,12 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     return 'other';
   }
   var GUIDE = {
-    ios: 'iPhone / iPad: vào Cài đặt › Trợ năng › Nội dung được đọc › Giọng nói. Chọn Tiếng Hàn › tải “Yuna (Cao cấp)” hoặc “Yuna (Nâng cao)”; chọn Tiếng Việt › tải “Linh (Nâng cao)”. Tải xong, đóng hẳn trình duyệt rồi mở lại trang.',
-    android: 'Android: cài hoặc cập nhật “Dịch vụ lời nói của Google” (Speech Services by Google) trên CH Play. Mở Cài đặt › Hệ thống › Ngôn ngữ › Đầu ra văn bản thành giọng nói › biểu tượng bánh răng › Cài đặt dữ liệu giọng nói › tải Tiếng Hàn và Tiếng Việt. Nên mở trang bằng Chrome.',
-    'win-edge': 'Máy tính Windows + Edge: đã có sẵn giọng “Natural” (SunHi cho tiếng Hàn, HoaiMy cho tiếng Việt), không cần tải thêm. Cần có mạng khi dùng giọng này.',
-    win: 'Máy tính Windows: mở trang bằng Microsoft Edge là có ngay giọng “Natural” tự nhiên nhất (SunHi, HoaiMy). Nếu dùng Chrome, vào Cài đặt Windows › Thời gian & ngôn ngữ › Giọng nói › Thêm giọng › chọn Tiếng Hàn và Tiếng Việt.',
-    mac: 'Mac: cách dễ nhất là mở trang bằng Microsoft Edge – có sẵn giọng Natural tự nhiên (SunHi tiếng Hàn, HoaiMy tiếng Việt), cần có mạng. Chrome trên Mac chỉ dùng được giọng Google tiếng Hàn và giọng cơ bản của máy. Giọng “Cao cấp” (Premium) của Apple không trang web nào dùng được; Safari dùng được bản “Nâng cao” (Enhanced) nếu bạn đã tải Yuna (Nâng cao) và Linh (Nâng cao).',
-    other: 'Hãy mở trang bằng Microsoft Edge hoặc Chrome để có giọng tiếng Hàn và tiếng Việt tự nhiên.'
+    ios: 'Mở phần giọng nói trong cài đặt Trợ năng của thiết bị để tải giọng Hàn và Việt nếu có. Sau đó mở lại trình duyệt và kiểm tra danh sách bên trên.',
+    android: 'Kiểm tra dịch vụ chuyển văn bản thành giọng nói trong cài đặt thiết bị. Tải dữ liệu Tiếng Hàn và Tiếng Việt nếu được hỗ trợ, rồi mở lại trang.',
+    'win-edge': 'Danh sách bên trên là các giọng trình duyệt thực sự cung cấp. Giọng Natural/Neural chỉ dùng được khi xuất hiện trong danh sách; có thể cần kết nối mạng.',
+    win: 'Kiểm tra gói giọng nói Tiếng Hàn và Tiếng Việt trong cài đặt Windows. Khả năng dùng giọng tự nhiên phụ thuộc trình duyệt và các giọng đã cài.',
+    mac: 'Kiểm tra giọng Tiếng Hàn và Tiếng Việt trong cài đặt Trợ năng của macOS. Chọn bản nâng cao nếu có, rồi mở lại trình duyệt. Không phải mọi giọng đã cài đều được cung cấp cho website.',
+    other: 'Trang ưu tiên giọng tự nhiên nếu trình duyệt cung cấp. Chưa có bộ âm thanh tải sẵn; danh sách và chất lượng giọng phụ thuộc thiết bị.'
   };
   var NATURAL = /natural|neural|online|google|premium|enhanced|cao cấp|nâng cao|siri/i;
   function paintVoiceStatus() {
@@ -2394,7 +2387,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     [['ko', 'Tiếng Hàn'], ['vi', 'Tiếng Việt']].forEach(function (x) {
       var v = pickVoice(x[0]);
       if (!v) parts.push(x[1] + ': chưa có giọng trên máy này');
-      else parts.push(x[1] + ': ' + v.name + (NATURAL.test(v.name + ' ' + v.voiceURI) || plat === 'android' ? ' · tự nhiên ✓' : ' · giọng cơ bản, nên tải giọng tốt hơn'));
+      else parts.push(x[1] + ': ' + v.name + (NATURAL.test(v.name + ' ' + v.voiceURI) ? ' · giọng ưu tiên' : ' · giọng cơ bản, nên tải giọng tốt hơn'));
     });
     $('voiceStatus').textContent = parts.join('  ·  ');
   }
@@ -2524,9 +2517,9 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   function react(kind, anchor) {
     if (!prefs.fx || kind !== 'hard') return;
     var old = document.querySelector('.react'); if (old) old.remove(); clearTimeout(reactTimer);
-    var d = mk('div', 'react hard'); d.setAttribute('aria-hidden', 'true'); d.innerHTML = '<span class="face">' + girl('think') + '</span>';
-    if (anchor) { var r = anchor.getBoundingClientRect(); d.style.top = Math.max(64, r.top - 22) + 'px'; d.style.left = (r.left + r.width / 2) + 'px'; }
-    document.body.appendChild(d); reactTimer = setTimeout(function () { d.remove(); }, reduceMotion() ? 700 : 1180);
+    var d = mk('div', 'react hard'); d.setAttribute('aria-hidden', 'true'); d.innerHTML = '<span class="face">' + girl('think') + '</span><b class="reaction-question">?</b>';
+    if (anchor) { var r = anchor.getBoundingClientRect(); d.style.top = Math.max(112, r.top + 15) + 'px'; d.style.left = (r.left + r.width / 2) + 'px'; }
+    document.body.appendChild(d); reactTimer = setTimeout(function () { d.remove(); }, reduceMotion() ? 1800 : 2100);
   }
   function confetti() {
     if (!prefs.fx || reduceMotion()) return;
@@ -2570,6 +2563,15 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     var TOPIC_COLORS = { 'Từ thông dụng': '#8B5CF6', 'Xây dựng & sửa chữa': '#F97316', 'Báo giá, hợp đồng & thanh toán': '#10B981', 'Thiết bị & đường ống': '#0EA5E9', 'Họp, báo cáo & giao tiếp': '#EC4899', 'PLC / HMI & đo lường': '#6366F1', 'Quy trình sản xuất': '#14B8A6', 'An toàn & môi trường': '#F59E0B', 'Chất lượng & thí nghiệm': '#D946EF', 'Tổ chức & nhân sự': '#06B6D4', 'Xuất hàng & kho': '#84CC16', 'Hơi & lò hơi': '#3B82F6' };
     // Sino-Korean words: Hán tự + âm Hán Việt (bản demo: một số từ; bản chính thức sẽ nạp đủ)
     var HANJA = { '등산': ['登山', 'đăng sơn'], '대금 지급': ['代金 支給', 'đại kim chi cấp'], '인도 장소': ['引渡 場所', 'dẫn độ trường sở'], '완료 기간': ['完了 期間', 'hoàn liễu kỳ gian'], '하자보증': ['瑕疵保證', 'hà tì bảo chứng'], '작업 범위': ['作業 範圍', 'tác nghiệp phạm vi'], '가열': ['加熱', 'gia nhiệt'], '배출': ['排出', 'bài xuất'], '운전': ['運轉', 'vận chuyển'], '용접': ['鎔接', 'dung tiếp'], '견적서': ['見積書', 'kiến tích thư'], '단가': ['單價', 'đơn giá'], '금액': ['金額', 'kim ngạch'], '수량': ['數量', 'số lượng'], '재질': ['材質', 'tài chất'], '점검': ['點檢', 'điểm kiểm'], '절단': ['切斷', 'thiết đoạn'], '내경': ['內徑', 'nội kính'], '밀도': ['密度', 'mật độ'], '허락': ['許諾', 'hứa nặc'], '출근': ['出勤', 'xuất cần'], '퇴근': ['退勤', 'thoái cần'], '주철': ['鑄鐵', 'chú thiết'], '운송': ['運送', 'vận tống'], '용기': ['容器', 'dung khí'], '입구': ['入口', 'nhập khẩu'], '출구': ['出口', 'xuất khẩu'], '작업 내용': ['作業 內容', 'tác nghiệp nội dung'], '인건비': ['人件費', 'nhân kiện phí'], '소모품': ['消耗品', 'tiêu hao phẩm'] };
+    Object.assign(HANJA, window.NHI_HANJA || {});
+    function lookupHanja(text) {
+      var key = text.trim().replace(/\s+/g, ' ');
+      if (HANJA[key]) return HANJA[key];
+      var parts = key.split(' '), found = parts.map(function (part) { return HANJA[part]; });
+      if (parts.length > 1 && found.every(Boolean)) return [found.map(function (x) { return x[0]; }).join(' '), found.map(function (x) { return x[1]; }).join(' ')];
+      return null;
+    }
+
     var SHORT = { 'Từ thông dụng': 'Thông dụng', 'Xây dựng & sửa chữa': 'Xây dựng', 'Báo giá, hợp đồng & thanh toán': 'Báo giá', 'Thiết bị & đường ống': 'Thiết bị', 'Họp, báo cáo & giao tiếp': 'Họp', 'PLC / HMI & đo lường': 'PLC', 'Quy trình sản xuất': 'Quy trình', 'An toàn & môi trường': 'An toàn', 'Chất lượng & thí nghiệm': 'QC', 'Tổ chức & nhân sự': 'Nhân sự', 'Xuất hàng & kho': 'Kho', 'Hơi & lò hơi': 'Lò hơi' };
     function shortT(t) { return SHORT[t] || t; }
     var WEEKDAY = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
@@ -2887,15 +2889,16 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       paintResults(res, main);
     }
     function renderDays(v) {
+      v.classList.add('days-grid');
       var by = {}; LESSONS.forEach(function (L) { (by[L.date] = by[L.date] || []).push(L); });
       Object.keys(by).sort().reverse().forEach(function (date) {
-        var ls = by[date], ids = []; ls.forEach(function (L) { ids = ids.concat(L.ids); });
+        var group = el('section', 'day-group'); v.appendChild(group); var ls = by[date], ids = []; ls.forEach(function (L) { ids = ids.concat(L.ids); });
         var c = liveCount(ids), lab = el('div', 'pday'); lab.style.setProperty('--day', dayColor(date));
         lab.appendChild(el('b', null, vn(date, true)));
         lab.appendChild(el('span', 'wd', WEEKDAY[parse(date).getDay()]));
         lab.appendChild(el('span', null, c[0] + ' từ vựng · ' + c[1] + ' câu' + (ls.length > 1 ? ' · ' + ls.length + ' bài nhỏ' : '')));
-        v.appendChild(lab);
-        ls.forEach(function (L) { v.appendChild(lessonCard(L)); });
+        group.appendChild(lab);
+        ls.forEach(function (L) { group.appendChild(lessonCard(L)); });
       });
     }
     function renderTopics(v) {
@@ -3071,14 +3074,15 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       ci.appendChild(ibtn('iconbtn sm', 'edit', function () { s.editing = !s.editing; legendOpen = false; render(); }, 'Sửa bản dịch'));
       var bk = ibtn('iconbtn sm', 'book', function () { legendOpen = !legendOpen; render(); }, 'Chú giải phím tắt và thao tác'); bk.setAttribute('aria-expanded', String(legendOpen)); ci.appendChild(bk);
       if (canSpeak) ci.appendChild(ibtn('iconbtn sm', 'vol', function () { speak(it.ko, 'ko-KR'); }, 'Nghe tiếng Hàn'));
-      var hj = it.type === 'w' ? HANJA[it.ko] : null;
-      if (hj && s.flipped) { var hb = btn('iconbtn sm hjbtn', '漢', function () { s.hanja = !s.hanja; render(); }, 'Chữ Hán và âm Hán Việt'); hb.setAttribute('aria-pressed', String(!!s.hanja)); ci.insertBefore(hb, ci.firstChild); }
+      var hj = it.type === 'w' ? lookupHanja(it.ko) : null;
+      if (it.type === 'w' && s.flipped) { var hb = btn('iconbtn sm hjbtn', '漢', function () { s.hanja = !s.hanja; render(); }, 'Chữ Hán và âm Hán Việt'); hb.setAttribute('aria-pressed', String(!!s.hanja)); ci.insertBefore(hb, ci.firstChild); }
       m.appendChild(ci); c.appendChild(m); c.appendChild(cm);
       if (legendOpen) c.appendChild(legendPop());
       var f = el('div', 'stage pfront');
       if (s.editing) f.appendChild(editForm(it));
       else if (s.flipped) {
         var a = hlText(el('p', 'answer ko' + (it.ko.length > 40 ? ' long' : '')), it, 'ko', false); a.lang = 'ko'; f.appendChild(a);
+        if (!hj && s.hanja) { var missing = el('p', 'hanja-missing', 'Từ này chưa có dữ liệu chữ Hán đã đối chiếu.'); var lookup = el('a', null, 'Tra từ điển Hàn–Việt'); lookup.href = 'https://krdict.korean.go.kr/vie/dicSearch/search?mainSearchWord=' + encodeURIComponent(it.ko); lookup.target = '_blank'; lookup.rel = 'noopener noreferrer'; missing.appendChild(lookup); f.appendChild(missing); }
         if (hj && s.hanja) { var hx = el('p', 'hanja', hj[0]); hx.lang = 'ko'; hx.appendChild(el('small', null, '(' + hj[1] + ')')); f.appendChild(hx); }
         f.appendChild(hlText(el('p', 'vi-under'), it, 'vi', true));
       } else f.appendChild(hlText(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : '')), it, 'vi', true));
@@ -3098,9 +3102,9 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       wrap.appendChild(c); v.appendChild(wrap);
       if (c.animate && !reduceMotion() && anim) {
         var ez = 'cubic-bezier(.2,.8,.2,1)';
-        if (anim === 'flip') c.animate([{ transform: 'rotateY(-90deg)' }, { transform: 'rotateY(0deg)' }], { duration: 230, easing: ez });
-        else if (anim === 'next') c.animate([{ transform: 'translateX(46px) rotate(2.5deg)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 260, easing: ez });
-        else if (anim === 'prev') c.animate([{ transform: 'translateX(-46px) rotate(-2.5deg)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 260, easing: ez });
+        if (anim === 'flip') c.animate([{ opacity: 0, transform: 'translateY(-4px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 160, easing: ez });
+        else if (anim === 'next') c.animate([{ transform: 'translateX(12px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 260, easing: ez });
+        else if (anim === 'prev') c.animate([{ transform: 'translateX(-12px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 260, easing: ez });
       }
       anim = '';
       if (!s.flipped && !s.editing && s.spoken !== s.pos) { s.spoken = s.pos; if (state.autoVi) speak(it.vi, 'vi-VN'); }
@@ -3110,7 +3114,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var pos0 = sess.pos, c = document.querySelector('#planBox .pcard');
       haptic(8); legendOpen = false;
       function turn() { flipping = false; if (!sess || sess.pos !== pos0) return; sess.flipped = !sess.flipped; if (sess.flipped) speak(ITEMS[sess.queue[sess.pos]].ko, 'ko-KR'); anim = 'flip'; render(); }
-      if (c && c.animate && !reduceMotion()) { flipping = true; var a = c.animate([{ transform: 'rotateY(0deg)' }, { transform: 'rotateY(90deg)' }], { duration: 170, easing: 'ease-in', fill: 'forwards' }); a.onfinish = turn; a.oncancel = function () { flipping = false; }; }
+      if (c && c.animate && !reduceMotion()) { flipping = true; var a = c.animate([{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(4px)' }], { duration: 110, easing: 'ease-in', fill: 'forwards' }); a.onfinish = turn; a.oncancel = function () { flipping = false; }; }
       else turn();
     }
     function go(d) { var n = sess.pos + d; if (n < 0) return; sess.pos = n; sess.flipped = false; sess.hanja = false; sess.editing = false; legendOpen = false; flipping = false; anim = d > 0 ? 'next' : 'prev'; haptic(6); saveSess(); render(); }
@@ -3581,7 +3585,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     function init() {
       applyTheme(); paintIcons(document);
       $('coverHero').innerHTML = girl('cover');
-      var face = girl('face').replace('viewBox="0 0 160 160"', 'viewBox="30 30 100 100"'); $('brandFace').innerHTML = face; $('aiFace').innerHTML = face;
+      var face = girl('face').replace('viewBox="0 0 160 160"', 'viewBox="30 30 100 100"'); $('brandFace').innerHTML = '<img src="nhi-avatar.png" alt="Nhi" width="54" height="54">'; $('aiFace').innerHTML = face;
       if (!$('cover').hidden) document.body.classList.add('modal-open');
       $('menuBtn').addEventListener('click', function () { menu($('menuList').hidden); });
       $('menuScrim').addEventListener('click', function () { menu(false); });
