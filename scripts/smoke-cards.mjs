@@ -52,7 +52,8 @@ try {
   }
   {
     // Regression: pause at card 15, reload, resume and go back to card 14.
-    const page=await browser.newPage();attach(page,'pause-resume');
+    const resumeContext=await browser.createBrowserContext();
+    const page=await resumeContext.newPage();attach(page,'pause-resume');
     await page.setViewport({width:1350,height:850});
     await openLesson(page,lesson.id);
     for(var i=0;i<14;i++) {
@@ -97,7 +98,7 @@ try {
     }));
     console.log('AI RESIZE & FONT',JSON.stringify({beforeWidth,afterWidth,font,saved}));
     if(saved.font!=='20'||saved.width<afterWidth-2)throw Error('AI display settings did not persist');
-    await page.close();
+    await page.close();await resumeContext.close();
   }
   {
     const id='daily-2026-11-12-testpayment',itemId='di-payment-test';
