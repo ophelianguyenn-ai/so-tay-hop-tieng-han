@@ -1281,6 +1281,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
         if (r.del) return;
         ['vi', 'ko', 'pr', 'note'].forEach(function (f) { if (typeof r[f] === 'string' && (r[f] || f === 'pr' || f === 'note')) c[f] = r[f]; });
         if (r.deck && DECK_NAME[r.deck]) c.deck = r.deck;
+        if (r.image) c.image = r.image;
         c.ov = true;
       }
       c.n = CARDS.length; CARDS.push(c); BY_ID[c.id] = c;
@@ -1289,7 +1290,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var r = custom.c[id]; if (BY_ID[id] || BUILTIN_IDS[id]) return;
       if (!r || r.del || !r.vi || !r.ko || !DECK_NAME[r.deck]) return;
       var vi = String(r.vi), ko = String(r.ko);
-      var c = { id: id, n: CARDS.length, deck: r.deck, kind: (vi.length > 32 || ko.length > 22) ? 's' : 'w', vi: vi, ko: ko, pr: r.pr ? String(r.pr) : '', note: r.note ? String(r.note) : '', custom: true };
+      var c = { id: id, n: CARDS.length, deck: r.deck, kind: (vi.length > 32 || ko.length > 22) ? 's' : 'w', vi: vi, ko: ko, pr: r.pr ? String(r.pr) : '', note: r.note ? String(r.note) : '', image: r.image || null, custom: true };
       CARDS.push(c); BY_ID[id] = c;
     });
   }
@@ -2355,6 +2356,11 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
           var k2 = txt('ko', '', c.ko); k2.lang = 'ko'; ef.appendChild(labeled('Tiếng Hàn', k2));
           ef.appendChild(labeled('Phiên âm', txt('pr', '', c.pr)));
           ef.appendChild(labeled('Ghi chú', txt('note', '', c.note)));
+          if (window.NHI_IMAGES) {
+            ef.appendChild(window.NHI_IMAGES.editor(c,c.image||null,function(value){
+              var row=custom.c[c.id];if(row){putCustom('c',c.id,Object.assign({},row,{image:value}));applyCustom();renderSets();}
+            }));
+          }
           var er = mk('div', 'btnrow'); var es2 = mk('button', 'primary', 'Lưu'); es2.type = 'submit'; er.appendChild(es2); er.appendChild(mkBtn('ghost', 'Hủy', { 'data-act': 'cancel' })); ef.appendChild(er);
           li.appendChild(ef);
         } else {
