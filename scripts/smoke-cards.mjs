@@ -158,8 +158,61 @@ try {
     if(classic.mode||!classic.show||!classic.answer||classic.width<100||classic.viewDisplay==='none')throw Error('Classic flashcard flip failed');
     await page.close();
   }
+  {
+    // Mock Google without exposing a real API key or incurring API usage.
+    const page=await browser.newPage();attach(page,'gemini-model');
+    await page.goto(ROOT,{waitUntil:'domcontentloaded'});
+    await page.evaluate(()=>{
+      localStorage.setItem('nlc-ai-v1',JSON.stringify({
+        p:'gemini',k:{gemini:'dummy-test-only'},m:{gemini:'models/models/gemini-3.5-flash-lite'}
+      }));
+      sessionStorage.setItem('nlc-cover-seen','1');
+    });
+    await page.evaluateOnNewDocument(()=>{
+      const oldFetch=window.fetch.bind(window);
+      window.__geminiTestUrls=[];
+      window.fetch=function(resource,opts){
+        var url=typeof resource==='string'?resource:resource.url;
+        if(url.indexOf('generativelanguage.googleapis.com')>=0){
+          window.__geminiTestUrls.push(url);
+          var payload=url.includes(':generateContent')
+            ? {candidates:[{content:{parts:[{text:'Đã nhận câu hỏi bằng tiếng Hàn.'}]}}]}
+            : {models:[{name:'models/gemini-3.5-flash-lite',supportedGenerationMethods:['generateContent']}]};
+          return Promise.resolve(new Response(JSON.stringify(payload),{status:200,headers:{'content-type':'application/json'}}));
+        }
+        return oldFetch(resource,opts);
+      };
+    });
+    await page.reload({waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>!!document.querySelector('#aiBtn'));
+    await page.evaluate(()=>{
+      document.querySelector('#aiBtn').click();
+      document.querySelector('#aiInput').value='Giải thích tiếng Hàn';
+      document.querySelector('#aiForm').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));
+    });
+    await page.waitForFunction(()=>document.querySelector('#aiLog')?.textContent.includes('Đã nhận câu hỏi bằng tiếng Hàn.'),{timeout:9000});
+    const first=await page.evaluate(()=>window.__geminiTestUrls.slice());
+    console.log('GEMINI NORMALIZED REQUEST',JSON.stringify(first));
+    if(!first.some(u=>u.endsWith('/models/gemini-3.5-flash-lite:generateContent')))
+      throw Error('Gemini model prefix was not normalized: '+JSON.stringify(first));
+    if(first.some(u=>u.includes('models/models/')))throw Error('Gemini models/models duplicated');
+
+    await page.evaluate(()=>{
+      document.querySelector('#aiCfgBtn').click();
+      document.querySelector('#aiCheck').click();
+    });
+    await page.waitForFunction(()=>document.querySelector('#aiCheckStatus')?.textContent.includes('Đã chọn'),{timeout:9000});
+    const checked=await page.evaluate(()=>({
+      status:document.querySelector('#aiCheckStatus').textContent,
+      model:document.querySelector('#aiModel').value,
+      requests:window.__geminiTestUrls.slice()
+    }));
+    console.log('GEMINI MODEL CHECK',JSON.stringify(checked));
+    if(checked.model!=='gemini-3.5-flash-lite')throw Error('Gemini model discovery failed');
+    await page.close();
+  }
   if(issues.length)throw Error('Runtime browser errors: '+JSON.stringify(issues.slice(0,20)));
-  console.log('ALL FLIP REGRESSION TESTS PASSED');
+  console.log('ALL FLIP AND GEMINI REGRESSION TESTS PASSED');
 }finally{
   console.log('BROWSER ERRORS',JSON.stringify(issues.slice(0,20)));
   await browser.close();
