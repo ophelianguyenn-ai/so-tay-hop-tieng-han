@@ -114,7 +114,20 @@ try {
     const page=await browser.newPage();attach(page,'classic');
     await page.goto(ROOT,{waitUntil:'domcontentloaded'});
     await page.evaluate(()=>{sessionStorage.setItem('nlc-cover-seen','1');document.querySelector('#tab-cards').click();});
-    await page.waitForSelector('#view-cards:not([hidden]) #card',{timeout:12000});
+    try{await page.waitForSelector('#view-cards:not([hidden]) #card',{timeout:5000});}
+    catch(ex){
+      const d=await page.evaluate(()=>({
+        hash:location.hash,bodyClass:document.body.className,
+        cardsHidden:document.querySelector('#view-cards')?.hidden,
+        cardsStyle:getComputedStyle(document.querySelector('#view-cards')).display,
+        planHidden:document.querySelector('#view-plan')?.hidden,
+        tabSelected:document.querySelector('#tab-cards')?.getAttribute('aria-selected'),
+        savedUI:localStorage.getItem('viko-ko-meeting-ui-v1')?.slice(0,300),
+        coverHidden:document.querySelector('#cover')?.hidden,
+        viewHTML:document.querySelector('#view-cards')?.outerHTML.slice(0,400)
+      }));
+      console.log('CLASSIC DEBUG',JSON.stringify(d));throw ex;
+    }
     await page.click('#card');
     await new Promise(r=>setTimeout(r,550));
     const classic=await page.evaluate(()=>({mode:document.querySelector('#view-cards').hidden,show:!document.querySelector('#cAnswer').hidden,
