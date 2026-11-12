@@ -596,7 +596,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 }
 </style>
 
-<script src="hanja-v9.js?v=11"></script><script src="card-images-v11.js"></script>
+<script src="hanja-v9.js?v=11b"></script><script src="card-images-v11.js"></script>
 <script src="qrcode.js" defer></script>
 <link rel="stylesheet" href="refresh-v9.css?v=11">
 </head>
@@ -2569,6 +2569,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var custom = id ? val('hj', id) : null;
       if (custom && custom.kind === 'none') return null;
       if (custom && custom.han) return [custom.han, custom.reading || ''];
+      if ((window.NHI_NON_HANJA||[]).indexOf(text.trim())>=0) return null;
       var key = text.trim().replace(/\s+/g, ' ');
       if (HANJA[key]) return HANJA[key];
       var parts = key.split(' '), found = parts.map(function (part) { return HANJA[part]; });
@@ -3037,7 +3038,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
         function field(label, name, value) { var l = el('label', 'flabel'); l.appendChild(el('span', null, label)); var i = el('input', 'field'); i.type = 'text'; i.name = name; i.value = value || ''; i.maxLength = 200; l.appendChild(i); section.appendChild(l); return i; }
         var kl = el('label', 'flabel'); kl.appendChild(el('span', null, 'Loại từ')); kindInput = el('select', 'field');
         [['auto','Chưa phân loại / dùng dữ liệu sẵn có'],['han','Từ Hán–Hàn'],['none','Không phải từ Hán–Hàn']].forEach(function(x){var o=el('option',null,x[1]);o.value=x[0];kindInput.appendChild(o);});
-        kindInput.value = savedHj ? savedHj.kind : (initialHj ? 'han' : 'auto'); kl.appendChild(kindInput); section.appendChild(kl);
+        kindInput.value = savedHj ? savedHj.kind : (initialHj ? 'han' : (window.NHI_NON_HANJA||[]).indexOf(it.ko.trim())>=0 ? 'none' : 'auto'); kl.appendChild(kindInput); section.appendChild(kl);
         hanInput = field('Chữ Hán', 'hanja', initialHj ? initialHj[0] : ''); readingInput = field('Âm Hán–Việt', 'hanviet', initialHj ? initialHj[1] : '');
         var links=el('div','dictionary-links');
         function dictionaryLink(label, href) {var a=el('a','ghost',label);a.href=href;a.target='_blank';a.rel='noopener noreferrer';links.appendChild(a);return a;}
@@ -3103,7 +3104,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var bk = ibtn('iconbtn sm', 'book', function () { legendOpen = !legendOpen; render(); }, 'Chú giải phím tắt và thao tác'); bk.setAttribute('aria-expanded', String(legendOpen)); ci.appendChild(bk);
       if (canSpeak) ci.appendChild(ibtn('iconbtn sm', 'vol', function () { speak(it.ko, 'ko-KR'); }, 'Nghe tiếng Hàn'));
       var hj = it.type === 'w' ? lookupHanja(it.ko, it.id) : null;
-      if (it.type === 'w' && !(val('hj', it.id) && val('hj', it.id).kind === 'none')) { var hb = btn('iconbtn sm hjbtn', '漢', function () { if(!s.flipped){s.flipped=true;s.hanja=true;}else{s.hanja=!s.hanja;} render(); }, 'Chữ Hán và âm Hán Việt'); hb.setAttribute('aria-pressed', String(!!s.hanja)); ci.insertBefore(hb, ci.firstChild); }
+      if (it.type === 'w' && !(val('hj', it.id) && val('hj', it.id).kind === 'none') && (val('hj',it.id) && val('hj',it.id).han || (window.NHI_NON_HANJA||[]).indexOf(it.ko.trim())<0)) { var hb = btn('iconbtn sm hjbtn', '漢', function () { if(!s.flipped){s.flipped=true;s.hanja=true;}else{s.hanja=!s.hanja;} render(); }, 'Chữ Hán và âm Hán Việt'); hb.setAttribute('aria-pressed', String(!!s.hanja)); ci.insertBefore(hb, ci.firstChild); }
       m.appendChild(ci); c.appendChild(m); c.appendChild(cm);
       if (legendOpen) c.appendChild(legendPop());
       var f = el('div', 'stage pfront');
