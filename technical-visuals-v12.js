@@ -58,6 +58,7 @@ f.insertBefore(img,tip);var a=document.createElement('a');a.href=inf.description
 });
 return f;
 }
+window.NHI_IMAGES.searchTerm=query;
 window.NHI_IMAGES.figure=function(it,value){
 var existing=original.figure(it,value);
 if(existing||value&&value.hidden)return existing;
