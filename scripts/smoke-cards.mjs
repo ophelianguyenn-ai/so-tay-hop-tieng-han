@@ -86,6 +86,15 @@ try {
     await page.focus('#aiResizeHandle');
     await page.keyboard.press('ArrowLeft');
     const afterWidth=await page.$eval('#aiPanel',el=>el.getBoundingClientRect().width);
+    const widthDebug=await page.evaluate(()=>({
+      active:document.activeElement?.id,
+      root:getComputedStyle(document.documentElement).getPropertyValue('--nhi-ai-width'),
+      saved:localStorage.getItem('nlc-ai-display-v2'),
+      panel:getComputedStyle(document.querySelector('#aiPanel')).width,
+      handle:getComputedStyle(document.querySelector('#aiResizeHandle')).display,
+      open:document.body.classList.contains('ai-open')
+    }));
+    console.log('AI KEYBOARD DEBUG',JSON.stringify({beforeWidth,afterWidth,widthDebug}));
     if(afterWidth<beforeWidth+20)throw Error('AI panel did not grow with resize keyboard control');
     // Verify pointer dragging too, not only keyboard accessibility.
     const grip=await page.$('#aiResizeHandle'),bounds=await grip.boundingBox();
