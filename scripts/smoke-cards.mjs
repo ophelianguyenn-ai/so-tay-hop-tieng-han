@@ -97,6 +97,12 @@ try {
     console.log('AI KEYBOARD DEBUG',JSON.stringify({beforeWidth,afterWidth,widthDebug}));
     if(afterWidth<beforeWidth+20)throw Error('AI panel did not grow with resize keyboard control');
     // Verify pointer dragging too, not only keyboard accessibility.
+    // The panel slides in over 280ms; pointer hit tests must wait until the
+    // transition has completed instead of clicking its former offscreen position.
+    await page.waitForFunction(()=>{
+      var panel=document.querySelector('#aiPanel');
+      return panel && panel.getBoundingClientRect().right<=innerWidth+1;
+    },{timeout:3000});
     const grip=await page.$('#aiResizeHandle'),bounds=await grip.boundingBox();
     if(!bounds||bounds.width<5)throw Error('AI resize handle is not visible');
     const gx=bounds.x+bounds.width/2,gy=bounds.y+bounds.height/2;
