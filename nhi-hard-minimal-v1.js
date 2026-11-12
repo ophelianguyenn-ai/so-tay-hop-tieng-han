@@ -8,7 +8,8 @@ var box=document.createElement('div');box.id='nhi-hard-mascot';box.setAttribute(
 var image=document.createElement('img');image.src='nhi-mascot.webp';image.alt='Bạn Nhi';image.draggable=false;
 var caption=document.createElement('p');caption.className='nhi-hard-caption';caption.textContent='Từ này hơi khó nhỉ... mình ôn lại nhé';
 box.appendChild(image);box.appendChild(caption);document.body.appendChild(box);active=box;
-var x=rect.left+rect.width/2,y=rect.top+rect.height/2,ox=0,oy=0,drag=null;
+// Ở bên trái của khung trắng, căn giữa theo chiều dọc.
+var x=rect.left+Math.max(90,Math.min(rect.width*0.22,rect.width/2)),y=rect.top+rect.height/2,ox=0,oy=0,drag=null;
 function paint(){if(active!==box)return;var w=box.offsetWidth,h=box.offsetHeight;
 box.style.left=Math.max(5,Math.min(innerWidth-w-5,x+ox-w/2))+'px';
 box.style.top=Math.max(5,Math.min(innerHeight-h-5,y+oy-h/2))+'px';}

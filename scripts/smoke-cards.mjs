@@ -108,6 +108,26 @@ try {
     }));
     console.log('hidden-view recovery',JSON.stringify(recovered));
     if(recovered.hidden||recovered.visible==='none'||recovered.card<50)throw Error('Hidden-view recovery failed: '+JSON.stringify(recovered));
+
+    // Undo a deletion (including the last card) restores the item and its position.
+    await customPage.click('#planBox .pdel');
+    await customPage.waitForSelector('#nhi-undo-delete:not([hidden])',{timeout:5000});
+    const deleted=await customPage.evaluate(()=>({
+      deleted:JSON.parse(localStorage.getItem('viko-plan-v1')||'{}').del?.['di-payment-test']?.v,
+      last:JSON.parse(localStorage.getItem('nhi-plan-deletions-v2')||'[]').at(-1)?.id
+    }));
+    console.log('delete state',JSON.stringify(deleted));
+    if(!deleted.deleted||deleted.last!=='di-payment-test')throw Error('Deletion was not stored for Undo');
+    await customPage.click('#nhi-undo-delete');
+    await customPage.waitForSelector('#planBox .pcard',{timeout:8000});
+    const restoredDelete=await customPage.evaluate(()=>({
+      deleted:JSON.parse(localStorage.getItem('viko-plan-v1')||'{}').del?.['di-payment-test']?.v,
+      card:!!document.querySelector('#planBox .pcard'),
+      itemText:document.querySelector('#planBox .pcard')?.textContent.includes('Thủ tục thanh toán')
+    }));
+    console.log('undo state',JSON.stringify(restoredDelete));
+    if(restoredDelete.deleted||!restoredDelete.card||!restoredDelete.itemText)throw Error('Undo failed to restore card');
+
     await customPage.close(); await context.close();
   }
   {

@@ -2852,17 +2852,71 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       return { loaded: loaded, due: due, late: late, cards: cards, hard: hardIds(), upcoming: upcoming, lessons: LESSONS.length, items: Object.keys(ITEMS).filter(alive).length };
     }
 
-    /* ---- toast / delete ---- */
-    var toastTimer = null;
+    /* ---- toast / delete / one-click Undo (persists across reloads) ---- */
+    var toastTimer = null, undoKey = 'nhi-plan-deletions-v2', undoHistory = [];
+    try {
+      var rawUndo = JSON.parse(lsGet(undoKey) || '[]');
+      if (Array.isArray(rawUndo)) undoHistory = rawUndo.filter(function (e) {
+        return e && typeof e.id === 'string' && typeof e.t === 'number';
+      }).slice(-15);
+    } catch (e) { undoHistory = []; }
+    function saveUndo() { lsSet(undoKey, JSON.stringify(undoHistory.slice(-15))); }
+    function undoUI() {
+      var control = document.getElementById('nhi-undo-delete');
+      if (!control) {
+        control = btn('nhi-undo-global', '↶ Hoàn tác xóa', undoDelete, 'Khôi phục thẻ vừa xóa (Ctrl+Z)');
+        control.id = 'nhi-undo-delete';
+        document.body.appendChild(control);
+      }
+      control.hidden = !undoHistory.length;
+      if (undoHistory.length) {
+        var item = ITEMS[undoHistory[undoHistory.length - 1].id];
+        control.title = 'Hoàn tác xóa: ' + (item ? item.ko : 'thẻ vừa xóa') + ' (Ctrl+Z)';
+      }
+    }
     function toast(msg, undo) {
       var old = document.querySelector('.ptoast'); if (old) old.remove(); clearTimeout(toastTimer);
       var t = el('div', 'ptoast'); t.appendChild(el('span', null, msg));
       if (undo) t.appendChild(btn('', 'Hoàn tác', function () { undo(); t.remove(); }));
       document.body.appendChild(t); toastTimer = setTimeout(function () { t.remove(); }, 5000);
     }
+    function undoDelete() {
+      var prev = undoHistory.pop();
+      if (!prev) { undoUI(); return; }
+      saveUndo();
+      put('del', prev.id, prev.del || 0);
+      if (prev.hard != null) put('hard', prev.id, prev.hard);
+      if (prev.inSession && sess && sess.kind === prev.kind && sess.title === prev.title) {
+        var at = Math.min(Math.max(0, prev.pos), sess.queue.length);
+        // The renderer removes the deleted card from the active queue.
+        // Insert it at the same position and show it again.
+        if (sess.queue[at] !== prev.id) sess.queue.splice(at, 0, prev.id);
+        sess.pos = at; sess.flipped = false; sess.hanja = false; sess.editing = false;
+        sess.imagePicker = false; sess.celebrated = false;
+        if (sess.recorded && !prev.recorded && prev.lessonId) {
+          put('done', prev.lessonId, prev.done || []);
+          sess.recorded = false;
+        }
+        saveSess();
+      }
+      if (window.NHI_HARD_MASCOT) window.NHI_HARD_MASCOT.clear();
+      undoUI();
+      render();
+      toast('Đã khôi phục thẻ vừa xóa.');
+    }
     function del(id) {
-      put('del', id, 1); if (val('hard', id)) put('hard', id, null);
-      toast('Đã xoá “' + ITEMS[id].ko + '”', function () { put('del', id, 0); render(); });
+      if (!ITEMS[id] || val('del', id)) return;
+      var inSession = !!(sess && sess.queue[sess.pos] === id);
+      undoHistory.push({ id: id, t: Date.now(), del: val('del', id), hard: val('hard', id),
+        inSession: inSession, kind: inSession ? sess.kind : '', title: inSession ? sess.title : '',
+        pos: inSession ? sess.pos : -1, lessonId: inSession && sess.L ? sess.L.id : null,
+        recorded: inSession ? !!sess.recorded : false,
+        done: inSession && sess.L ? val('done', sess.L.id) : null });
+      undoHistory = undoHistory.slice(-15); saveUndo();
+      put('del', id, 1);
+      if (val('hard', id)) put('hard', id, null);
+      undoUI();
+      toast('Đã xoá “' + ITEMS[id].ko + '”', undoDelete);
     }
 
     /* ---- highlight: tap a Vietnamese phrase, it and its Korean match light up ---- */
@@ -2924,7 +2978,8 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var inSess = !!sess && (!page || (sess.L && sess.L.id === page));
       if (!inSess) { setFocus(false); legendOpen = false; }
       document.body.classList.toggle('themed', !!(page && BY_LESSON[page])); if (page && BY_LESSON[page]) document.body.style.setProperty('--day', dayColor(BY_LESSON[page].date));
-      if (!loaded) { load(); v.appendChild(el('p', 'listinfo', loadErr && loadErr !== 'loading' ? loadErr : 'Đang tải bài học…')); return; }
+      if (!loaded) { load(); v.appendChild(el('p', 'listinfo', loadErr && loadErr !== 'loading' ? loadErr : 'Đang tải bài học…')); undoUI(); return; }
+      undoUI();
       var key = (page || 'home') + '|' + (inSess ? 'sess' : view);
       var fresh = key !== lastKey; lastKey = key;
       v.className = fresh ? 'fresh' : '';
@@ -3338,6 +3393,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       [['hard', 'Khó', '1'], ['mid', 'Bình thường', '2']].forEach(function (x) {
         var b = btn(x[0] + (picked === x[0] ? ' picked' : ''), x[1], function () { rate(x[0]); }); b.appendChild(el('kbd', null, x[2])); r.appendChild(b);
       });
+      if (undoHistory.length) r.appendChild(btn('pundo', '↶ Hoàn tác', undoDelete, 'Khôi phục thẻ vừa xóa (Ctrl+Z)'));
       r.appendChild(ibtn('pdel', 'trash', function () { del(it.id); anim = 'next'; saveSess(); render(); }, 'Xoá từ này khỏi danh sách (Delete)'));
       c.appendChild(r);
       if (s.imagePicker && window.NHI_IMAGES && window.NHI_IMAGES.picker) {
@@ -3408,6 +3464,11 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       if (li) li.parentNode.replaceChild(itemRow(it, li.dataset.src === '1'), li); else render();
     }, true);
     document.addEventListener('keydown', function (e) {
+      // Ctrl+Z / Cmd+Z undoes accidental deletion; never override Undo inside inputs.
+      if (state.mode === 'plan' && undoHistory.length && (e.ctrlKey || e.metaKey) && !e.shiftKey && e.key.toLowerCase() === 'z'
+          && !(e.target && (e.target.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)))) {
+        e.preventDefault(); undoDelete(); return;
+      }
       if (state.mode !== 'plan' || !sess || e.metaKey || e.ctrlKey || e.altKey) return;
       if (sess.imagePicker) { if (e.key === 'Escape') { e.preventDefault(); sess.imagePicker = false; render(); } return; }
       if (page && (!sess.L || sess.L.id !== page)) return;
