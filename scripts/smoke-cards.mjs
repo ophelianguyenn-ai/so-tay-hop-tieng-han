@@ -51,6 +51,55 @@ try {
     await page.close();
   }
   {
+    // Regression: pause at card 15, reload, resume and go back to card 14.
+    const page=await browser.newPage();attach(page,'pause-resume');
+    await page.setViewport({width:1350,height:850});
+    await openLesson(page,lesson.id);
+    for(var i=0;i<14;i++) {
+      await page.$eval('#planBox .pnav .parrow:last-child',button=>button.click());
+    }
+    const before=await page.$eval('#planBox .counter',el=>el.textContent.trim());
+    if(!before.startsWith('15 /'))throw Error('Not on card 15: '+before);
+    await page.$eval('#planBox .shead button:first-child',button=>button.click());
+    const snapshot=await page.evaluate(id=>(JSON.parse(localStorage.getItem('viko-plan-v1')||'{}').resumeFull||{})[id],lesson.id);
+    console.log('PAUSED SNAPSHOT',JSON.stringify({position:snapshot?.pos,queueLength:snapshot?.queue?.length}));
+    if(snapshot?.pos!==14||snapshot.queue.length<15)throw Error('Pause lost previous cards');
+    await page.reload({waitUntil:'domcontentloaded'});
+    await page.waitForFunction(()=>!!document.querySelector('#planBox .ppage'),{timeout:12000});
+    await page.evaluate(()=>{
+      const button=[...document.querySelectorAll('#planBox button')].find(b=>/Tiếp tục/.test(b.textContent||''));
+      if(!button)throw Error('Resume button missing');
+      button.click();
+    });
+    await page.waitForSelector('#planBox .pcard',{timeout:12000});
+    const reopened=await page.$eval('#planBox .counter',el=>el.textContent.trim());
+    if(!reopened.startsWith('15 /'))throw Error('Resume did not return to card 15: '+reopened);
+    await page.$eval('#planBox .pnav .parrow:first-child',button=>button.click());
+    const back=await page.$eval('#planBox .counter',el=>el.textContent.trim());
+    console.log('RESUME REVERSE NAVIGATION',JSON.stringify({before,reopened,back}));
+    if(!back.startsWith('14 /'))throw Error('Cannot go back from card 15 to card 14 after resuming');
+    // AI width can change through the resize handle; text size persists across reload.
+    await page.evaluate(()=>document.querySelector('#aiBtn').click());
+    await page.waitForFunction(()=>document.body.classList.contains('ai-open'));
+    const beforeWidth=await page.$eval('#aiPanel',el=>el.getBoundingClientRect().width);
+    await page.focus('#aiResizeHandle');
+    await page.keyboard.press('ArrowLeft');
+    const afterWidth=await page.$eval('#aiPanel',el=>el.getBoundingClientRect().width);
+    if(afterWidth<beforeWidth+20)throw Error('AI panel did not grow with resize keyboard control');
+    await page.select('#aiFontSize','20');
+    const font=await page.$eval('#aiPanel .aimsg',el=>getComputedStyle(el).fontSize);
+    if(font!=='20px')throw Error('AI chat font size was not applied: '+font);
+    await page.reload({waitUntil:'domcontentloaded'});
+    await page.waitForSelector('#aiFontSize',{timeout:12000});
+    const saved=await page.evaluate(()=>({
+      font:document.querySelector('#aiFontSize').value,
+      width:parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nhi-ai-width'))
+    }));
+    console.log('AI RESIZE & FONT',JSON.stringify({beforeWidth,afterWidth,font,saved}));
+    if(saved.font!=='20'||saved.width<afterWidth-2)throw Error('AI display settings did not persist');
+    await page.close();
+  }
+  {
     const id='daily-2026-11-12-testpayment',itemId='di-payment-test';
     const item=['di-payment-test','w','Báo giá, hợp đồng & thanh toán','Thủ tục thanh toán','결제 절차',1,[['Thủ tục thanh toán','결제 절차']],''];
     const fixture={id,date:'2026-11-12',plan:'2026-11-12',title:'Bài ngày 12.11 · Báo giá',items:[item],updatedAt:Date.now()};
