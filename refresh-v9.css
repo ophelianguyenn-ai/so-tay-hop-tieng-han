@@ -54,3 +54,5 @@ body.focus .app{max-width:none;padding-inline:5vw}
 @keyframes mascot-reaction{0%{opacity:0;transform:translateY(18px) scale(.85)}13%{opacity:1;transform:translateY(0) scale(1)}35%{transform:rotate(-3deg)}55%{transform:rotate(3deg)}75%{opacity:1;transform:rotate(0)}100%{opacity:0;transform:translateY(-10px)}}
 @media(max-width:700px){.image-results{grid-template-columns:repeat(2,minmax(0,1fr))}.react.hard{scale:.9;transform-origin:top center}.card-illustration img{height:190px}}
 @media(prefers-reduced-motion:reduce){.react.hard{animation:none}}
+
+.react.hard{left:16px!important;right:auto!important;top:auto!important;bottom:22px;margin:0!important;width:220px}.react.hard>img{width:210px;height:210px;border-radius:20px}.pcard .pfront{padding-left:250px}@media(max-width:700px){.react.hard{left:6px!important;width:110px;bottom:12px}.react.hard>img{width:108px;height:108px}.reaction-caption{font-size:11px;padding:5px;width:110px}.pcard .pfront{padding-left:125px}}

@@ -596,9 +596,9 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 }
 </style>
 
-<script src="hanja-v9.js?v=11b"></script><script src="card-images-v11.js"></script>
+<script src="hanja-v9.js?v=11b"></script><script src="card-images-v11.js"></script><script src="recorded-voices-v11.js"></script>
 <script src="qrcode.js" defer></script>
-<link rel="stylesheet" href="refresh-v9.css?v=11">
+<link rel="stylesheet" href="refresh-v9.css?v=12">
 </head>
 <body>
 <header class="topbar" id="topbar">
@@ -1455,6 +1455,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     renderText(an, c, vk ? 'ko' : 'vi', true);
     an.className = 'answer' + (vk ? ' ko' : '') + (answerText.length > 55 ? ' long' : '');
     an.hidden = !state.flipped;
+    var hx=$('legacyHanja');if(!hx){hx=document.createElement('p');hx.id='legacyHanja';hx.className='hanja';an.insertAdjacentElement('afterend',hx);}var hd=(window.NHI_HANJA||{})[c.ko.trim()];hx.hidden=!(state.flipped&&hd);hx.textContent=hd?hd[0]+' ('+hd[1]+')':'';
     // Pronunciation sits right under whichever line is Korean, once that line is visible
     var pe = $('cPron'), koEl = vk ? an : pr, koShown = vk ? state.flipped : true;
     if (koEl.nextElementSibling !== pe) koEl.insertAdjacentElement('afterend', pe);
@@ -2518,8 +2519,8 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   function react(kind, anchor) {
     if (!prefs.fx || kind !== 'hard') return;
     var old = document.querySelector('.react'); if (old) old.remove(); clearTimeout(reactTimer);
-    var d = mk('div', 'react hard'); d.setAttribute('aria-hidden', 'true'); d.innerHTML = '<img src="nhi-mascot.webp" alt=""><b class="reaction-question">?</b><span class="reaction-caption">Từ này hơi khó nhỉ…<br>Mình ôn lại nhé!</span>';
-    if (anchor) { var r = anchor.getBoundingClientRect(); d.style.top = Math.max(92, r.top - 180) + 'px'; d.style.left = Math.min(innerWidth - 155, Math.max(155,r.right - 140)) + 'px'; }
+    var d = mk('div', 'react hard'); d.setAttribute('aria-hidden', 'true'); d.innerHTML = '<img src="nhi-puzzled.webp" alt=""><span class="reaction-caption">Từ này hơi khó nhỉ…<br>Mình ôn lại nhé!</span>';
+
     document.body.appendChild(d); reactTimer = setTimeout(function () { d.remove(); }, reduceMotion() ? 2500 : 3200);
   }
   function confetti() {
