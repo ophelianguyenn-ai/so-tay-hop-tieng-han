@@ -65,7 +65,22 @@ try {
       sessionStorage.setItem('nlc-cover-seen','1');
     },id,fixture,itemId);
     await page.goto(ROOT+'#/bai/'+id,{waitUntil:'domcontentloaded'});
-    await page.waitForSelector('#planBox .pcard',{timeout:18000});
+    try { await page.waitForSelector('#planBox .pcard',{timeout:9000}); }
+    catch(ex) {
+      const diag=await page.evaluate(()=>({
+        hash:location.hash,url:location.href,
+        localSession:localStorage.getItem('viko-plan-sess-v1')?.slice(0,320),
+        daily:localStorage.getItem('viko-daily-lessons-v1')?.slice(0,450),
+        mode:localStorage.getItem('viko-ko-meeting-ui-v1')?.slice(0,220),
+        bodyClass:document.body.className,
+        planHidden:document.querySelector('#view-plan')?.hidden,
+        planHTML:document.querySelector('#planBox')?.innerHTML.slice(0,1200),
+        bodyExcerpt:document.body.textContent.slice(0,550),
+        status:document.readyState
+      }));
+      console.log('CUSTOM CARD DEBUG',JSON.stringify(diag));
+      throw ex;
+    }
     const before=await page.evaluate(()=>({mode:document.querySelector('#view-plan').hidden,body:document.body.className}));
     console.log('restored before',before);
     await page.click('#planBox .pflip');
