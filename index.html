@@ -2895,8 +2895,16 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var m = /^#\/bai\/([\w-]+)$/.exec(location.hash || '');
       page = m && BY_LESSON[m[1]] ? m[1] : null;
       document.body.classList.toggle('plan-page', !!page);
-      if (page && state.mode !== 'plan') { state.mode = 'plan'; saveUi(); renderMode(); return; }
-      if (state.mode === 'plan') render();
+      // A saved lesson deep link must always have the visible "plan" section.
+      // The older route could leave .plan-page on the body while #view-plan was hidden,
+      // producing a completely blank mint page with only the header visible.
+      if (page && (state.mode !== 'plan' || $('view-plan').hidden)) {
+        state.mode = 'plan'; saveUi(); renderMode(); return;
+      }
+      if (state.mode === 'plan') {
+        $('view-plan').hidden = false;
+        render();
+      }
     }
     window.addEventListener('hashchange', function () { if (sess && sess.L && sess.L.id !== (location.hash.split('/')[2] || '')) leave(); route(); window.scrollTo(0, 0); });
     function openLesson(id) { location.hash = '#/bai/' + id; }
@@ -2905,6 +2913,10 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     /* ---- views ---- */
     function render() {
       var v = $('planBox'); if (!v) return;
+      // Resynchronize route and selected view before removing the previous card.
+      if (state.mode !== 'plan') return;
+      $('view-plan').hidden = false;
+      if (page && !BY_LESSON[page]) { page = null; document.body.classList.remove('plan-page'); }
       // Keep the previous study card on screen until a fresh one has been rendered.
       // An optional feature must never leave the entire study area blank.
       var oldCard = document.createDocumentFragment();
@@ -3453,6 +3465,9 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     else if (state.mode === 'sets') renderSets();
     else if (state.mode === 'plan') PLAN.render();
     document.body.classList.toggle('mode-plan', state.mode === 'plan');
+    // Never retain a single-page CSS scope when another view is selected.
+    if (state.mode !== 'plan') document.body.classList.remove('plan-page');
+    if (state.mode === 'plan') $('view-plan').hidden = false;
     SHELL.paintMode();
     paintRate();
     Array.prototype.forEach.call(document.querySelectorAll('.looseChk'), function (o) { o.checked = !!state.loose; });
@@ -3965,6 +3980,15 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   renderAll();
   SYNC.start(mergeRemote);
   PLAN.load();
+  // Browser back/forward cache and old saved UI state can restore a hidden view.
+  // Recheck once pageshow fires; do not clear localStorage or study progress.
+  window.addEventListener('pageshow', function () {
+    if (document.body.classList.contains('plan-page') && $('view-plan').hidden) {
+      state.mode = 'plan'; saveUi(); renderMode();
+    } else if (state.mode === 'plan' && $('view-plan').hidden) {
+      $('view-plan').hidden = false; PLAN.render();
+    }
+  });
   paintVoiceStatus();
   if (canSpeak) { try { window.speechSynthesis.addEventListener('voiceschanged', paintVoiceStatus); } catch (e) { } }
   if (linkedNow) { $('footNote').textContent = 'Đã liên kết máy này với thiết bị kia. Tiến độ sẽ tự đồng bộ.'; SHELL.cover(false); }
