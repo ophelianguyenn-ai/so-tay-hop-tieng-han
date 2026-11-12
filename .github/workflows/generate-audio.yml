@@ -1,5 +1,11 @@
 name: Generate Korean and Vietnamese MP3 (Microsoft Edge TTS)
 on:
+  # One-time generation is initiated by this workflow file update.
+  # Audio commits won't retrigger because only this file matches the push filter.
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/generate-audio.yml"
   workflow_dispatch:
     inputs:
       language:
@@ -38,8 +44,12 @@ jobs:
       - name: Install voice generator and audio inspector
         run: python -m pip install --upgrade "edge-tts>=7,<8" "mutagen>=1.47,<2"
       - name: Generate missing audio files, with checkpoint manifest
+        env:
+          VOICE_LANG: ${{ inputs.language || 'both' }}
+          VOICE_OFFSET: ${{ inputs.offset || '0' }}
+          VOICE_LIMIT: ${{ inputs.limit || '0' }}
         run: |
-          python scripts/generate_tts.py --lang "${{ inputs.language }}" --offset "${{ inputs.offset }}" --limit "${{ inputs.limit }}"
+          python scripts/generate_tts.py --lang "$VOICE_LANG" --offset "$VOICE_OFFSET" --limit "$VOICE_LIMIT"
       - name: Publish generated MP3 and manifest
         run: |
           git config user.name "github-actions[bot]"
