@@ -128,7 +128,8 @@ try {
       }));
       console.log('CLASSIC DEBUG',JSON.stringify(d));throw ex;
     }
-    await page.click('#card');
+    // The card deliberately ignores text taps (used for highlights); click the blank card surface.
+    await page.$eval('#card',el=>el.click());
     await new Promise(r=>setTimeout(r,550));
     const classic=await page.evaluate(()=>({mode:document.querySelector('#view-cards').hidden,show:!document.querySelector('#cAnswer').hidden,
       answer:document.querySelector('#cAnswer').textContent.slice(0,140),width:document.querySelector('#card').getBoundingClientRect().width,
