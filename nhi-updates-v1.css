@@ -1,0 +1,18 @@
+/* Transparent mascot only; no background, frame or resize controls. */
+#nhi-movable,#nhi-mascot-restore,.nhi-mascot-controls,.nhi-hard-controls,.nhi-hard-grip{display:none!important}
+#nhi-hard-mascot{position:fixed;z-index:85;width:min(220px,55vw)!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important;border-radius:0!important;display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--ink)}
+#nhi-hard-mascot img{width:100%!important;height:auto!important;background:transparent!important;border:0!important;box-shadow:none!important;object-fit:contain!important;cursor:grab;touch-action:none;user-select:none}
+#nhi-hard-mascot .nhi-hard-caption{text-align:center;font-weight:800;font-size:clamp(12px,1.2vw,15px);line-height:1.45;margin:0!important;text-shadow:0 1px 1px var(--surface)}
+#planBox .pcard .pfront .card-illustration,#classicCardIllustration .card-illustration{width:min(340px,96%);max-width:100%;margin:8px auto!important;text-align:center;align-self:center;display:flex;flex-direction:column;align-items:center}
+#planBox .pcard .pfront .card-illustration img,#classicCardIllustration .card-illustration img{width:auto;max-width:100%;max-height:210px;object-fit:contain;border-radius:10px}
+#classicCardIllustration{display:flex;justify-content:center}
+#classicCardIllustration[hidden]{display:none!important}
+.nhi-google-editor{position:relative;border:1px solid var(--line);border-radius:12px;padding:10px;display:grid;gap:7px;min-width:0}
+.nhi-google-editor>.nhi-picture-picker{position:relative!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;min-height:330px;max-height:460px;padding:10px;box-shadow:none}
+.nhi-google-manual{display:flex;flex-direction:column;gap:7px;padding:8px 0}
+.nhi-google-manual label,.nhi-google-note{font-size:12px;color:var(--muted)}
+.nhi-google-manual input{min-width:0;max-width:100%}
+.nhi-google-advanced{border-top:1px solid var(--line);padding-top:8px}
+.nhi-google-advanced summary{cursor:pointer}
+#planBox .pcard .pfront>.vi-under{margin-top:8px}
+@media(max-width:540px){#nhi-hard-mascot{width:min(185px,57vw)!important}.nhi-google-editor .nhi-picture-results{grid-template-columns:repeat(2,minmax(0,1fr))}}

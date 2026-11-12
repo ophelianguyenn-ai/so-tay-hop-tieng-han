@@ -1,13 +1,13 @@
 // Offline support: network-first for the site and static assets so Netlify redeploys appear promptly.
 // Fall back to cache only when offline. Different cache key forces eviction of earlier stale CSS/JS.
-const CACHE = 'nhi-corner-v17-github-pages';
+const CACHE = 'nhi-corner-v18-google-gemini-clean';
 const CORE = [
   './','index.html','manifest.webmanifest','qrcode.js','lessons.json',
   'icon-192.png','icon-512.png','refresh-v9.css','study-enhancements-v13.css',
   'hanja-v9.js','hanja-extra-v12.js','nhi-avatar.png','nhi-mascot.webp',
   'nhi-puzzled.webp','garden-v10.js','card-images-v11.js','technical-images.json',
-  'technical-visuals-v12.js','image-picker-v13.js','hard-mascot-v13.js',
-  'transparent-mascot-v14.js','recorded-voices-v11.js','backup-portable-v1.js',
+  'nhi-google-images-v1.js','nhi-hard-minimal-v1.js','nhi-updates-v1.css',
+  'recorded-voices-v11.js','backup-portable-v1.js',
   'garden-day.webp','garden-night.webp'
 ];
 self.addEventListener('install', function(e) {

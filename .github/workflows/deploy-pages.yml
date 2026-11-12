@@ -37,8 +37,8 @@ jobs:
             qrcode.js garden-v10.js
             hanja-v9.js hanja-extra-v12.js
             card-images-v11.js technical-visuals-v12.js
-            image-picker-v13.js hard-mascot-v13.js
-            transparent-mascot-v14.js mascot-controls-v12.js
+            nhi-google-images-v1.js nhi-hard-minimal-v1.js
+            nhi-updates-v1.css
             recorded-voices-v11.js backup-portable-v1.js
             refresh-v9.css study-enhancements-v13.css
             icon-192.png icon-512.png nhi-avatar.png

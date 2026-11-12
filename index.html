@@ -596,9 +596,9 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 }
 </style>
 
-<script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="technical-visuals-v12.js?v=13"></script><script src="image-picker-v13.js"></script><script src="transparent-mascot-v14.js"></script><script src="hard-mascot-v13.js?v=14"></script><script src="recorded-voices-v11.js"></script>
+<script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="nhi-google-images-v1.js?v=1"></script><script src="nhi-hard-minimal-v1.js?v=1"></script><script src="recorded-voices-v11.js"></script>
 <script src="qrcode.js" defer></script>
-<link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14">
+<link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14"><link rel="stylesheet" href="nhi-updates-v1.css?v=1">
 <style>
 #nhi-movable{position:fixed;z-index:48;width:calc(var(--nhi-size,112px) + 30px);padding:4px 8px 7px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:0 5px 20px #0002;touch-action:none;display:flex;flex-direction:column;align-items:center;gap:2px}
 #nhi-movable[hidden],#nhi-mascot-restore[hidden]{display:none!important}
@@ -1469,7 +1469,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     renderText(an, c, vk ? 'ko' : 'vi', true);
     an.className = 'answer' + (vk ? ' ko' : '') + (answerText.length > 55 ? ' long' : '');
     an.hidden = !state.flipped;
-    var hx=$('legacyHanja');if(!hx){hx=document.createElement('p');hx.id='legacyHanja';hx.className='hanja';an.insertAdjacentElement('afterend',hx);}var hd=(window.NHI_HANJA||{})[c.ko.trim()];hx.hidden=!(state.flipped&&hd);hx.textContent=hd?hd[0]+' ('+hd[1]+')':'';
+    var hx=$('legacyHanja');if(!hx){hx=document.createElement('p');hx.id='legacyHanja';hx.className='hanja';an.insertAdjacentElement('afterend',hx);}var hd=(window.NHI_HANJA||{})[c.ko.trim()];var validHd=!!(hd&&hd[0]&&hd[1]);hx.hidden=!(state.flipped&&validHd);hx.textContent=validHd?hd[0]+' ('+hd[1]+')':'';
     var il=$('classicCardIllustration');if(!il){il=document.createElement('div');il.id='classicCardIllustration';an.insertAdjacentElement('afterend',il);}il.replaceChildren();if(state.flipped&&window.NHI_IMAGES){try{var ii=window.NHI_IMAGES.figure(c,c.image||null);if(ii)il.appendChild(ii);}catch(imageErr){console.warn('Nhi card illustration unavailable',imageErr);}}il.hidden=!state.flipped;
     // Pronunciation sits right under whichever line is Korean, once that line is visible
     var pe = $('cPron'), koEl = vk ? an : pr, koShown = vk ? state.flipped : true;
@@ -3303,22 +3303,29 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var bk = ibtn('iconbtn sm', 'book', function () { legendOpen = !legendOpen; render(); }, 'Chú giải phím tắt và thao tác'); bk.setAttribute('aria-expanded', String(legendOpen)); ci.appendChild(bk);
       if (canSpeak) ci.appendChild(ibtn('iconbtn sm', 'vol', function () { speak(it.ko, 'ko-KR'); }, 'Nghe tiếng Hàn'));
       var hj = null;
-      if (it.type === 'w') { try { hj = lookupHanja(it.ko, it.id); } catch(hanjaErr) { console.warn('Nhi Hanja unavailable for this card', hanjaErr); } }
-      if (it.type === 'w' && !(val('hj', it.id) && val('hj', it.id).kind === 'none') && (val('hj',it.id) && val('hj',it.id).han || (window.NHI_NON_HANJA||[]).indexOf(it.ko.trim())<0)) { var hb = btn('iconbtn sm hjbtn', '漢', function () { if(!s.flipped){s.flipped=true;s.hanja=true;}else{s.hanja=!s.hanja;} render(); }, 'Chữ Hán và âm Hán Việt'); hb.setAttribute('aria-pressed', String(!!s.hanja)); ci.insertBefore(hb, ci.firstChild); }
+      if (it.type === 'w') { try { hj = lookupHanja(it.ko, it.id); if(hj&&(!hj[0]||!hj[1]))hj=null; } catch(hanjaErr) { console.warn('Nhi Hanja unavailable for this card', hanjaErr); } }
+      if (it.type === 'w') {
+        var hb=btn('iconbtn sm hjbtn','漢',function(){
+          if(!hj){s.flipped=true;s.hanja=false;s.editing=true;}
+          else if(!s.flipped){s.flipped=true;s.hanja=true;}
+          else{s.hanja=!s.hanja;}
+          render();
+        },hj?'Chữ Hán và âm Hán–Việt':'Tự thêm chữ Hán và âm Hán–Việt');
+        hb.setAttribute('aria-pressed',String(!!(hj&&s.hanja)));
+        ci.insertBefore(hb,ci.firstChild);
+      }
       m.appendChild(ci); c.appendChild(m); c.appendChild(cm);
       if (legendOpen) c.appendChild(legendPop());
       var f = el('div', 'stage pfront');
       if (s.editing) f.appendChild(editForm(it));
       else if (s.flipped) {
         var a = hlText(el('p', 'answer ko' + (it.ko.length > 40 ? ' long' : '')), it, 'ko', false); a.lang = 'ko'; f.appendChild(a);
-        if (!hj && s.hanja) { var missing = el('p', 'hanja-missing', 'Từ này chưa có dữ liệu chữ Hán đã đối chiếu.'); var lookup = el('a', null, 'Tra Naver'); lookup.href = 'https://korean.dict.naver.com/koendict/#/search?range=korean&query=' + encodeURIComponent(it.ko); lookup.target = '_blank'; lookup.rel = 'noopener noreferrer'; missing.appendChild(lookup); missing.appendChild(btn('ghost','Thêm chữ Hán thủ công',function(){s.editing=true;render();})); f.appendChild(missing); }
+
         if (hj && s.hanja) { var hx = el('p', 'hanja', hj[0]); hx.lang = 'ko'; hx.appendChild(el('small', null, '(' + hj[1] + ')')); f.appendChild(hx); }
+        // Saved/preset illustration appears only on the back below the Korean answer.
+        if(window.NHI_IMAGES){try{var illustration=window.NHI_IMAGES.figure(it,val('img',it.id));if(illustration)f.appendChild(illustration);}catch(imageErr){console.warn('Nhi picture unavailable',imageErr);}}
         f.appendChild(hlText(el('p', 'vi-under'), it, 'vi', true));
       } else f.appendChild(hlText(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : '')), it, 'vi', true));
-      if (!s.editing && s.flipped && window.NHI_IMAGES) {
-        try { var illustration = window.NHI_IMAGES.figure(it, val('img',it.id)); if (illustration) f.appendChild(illustration); }
-        catch (imageErr) { console.warn('Nhi illustration could not render', imageErr); }
-      }
       f.addEventListener('click', function (e) { if (e.target.closest('figure')) return; if (s.editing || e.target.closest('.ph.tap')) return; flip(); });
       c.appendChild(f);
       if (it.note && s.flipped && !s.editing) c.appendChild(el('p', 'listinfo', it.note));
@@ -3867,12 +3874,13 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   var AI = (function () {
     var KEY = 'nlc-ai-v1', LOGKEY = 'nlc-ai-log', cfg = { p: 'gemini', k: {}, m: {} }, log = [], busy = false, withCtx = true;
     var PROV = {
-      gemini: { name: 'Google Gemini (có gói miễn phí)', model: 'gemini-2.5-flash', link: 'https://aistudio.google.com/apikey', note: 'Lấy mã miễn phí tại aistudio.google.com/apikey (đăng nhập Google, bấm “Create API key”).' },
+      gemini: { name: 'Google Gemini (có gói miễn phí)', model: 'gemini-3.5-flash-lite', link: 'https://aistudio.google.com/apikey', note: 'Lấy mã miễn phí tại aistudio.google.com/apikey (đăng nhập Google, bấm “Create API key”).' },
       claude: { name: 'Claude (Anthropic)', model: 'claude-haiku-4-5', link: 'https://console.anthropic.com/settings/keys', note: 'Lấy mã tại console.anthropic.com › API keys. Tính phí theo lượng dùng.' },
       deepseek: { name: 'DeepSeek', model: 'deepseek-chat', link: 'https://platform.deepseek.com/api_keys', note: 'Lấy mã tại platform.deepseek.com › API keys. Tính phí theo lượng dùng.' }
     };
     var SYSTEM = 'Bạn là trợ lý học tiếng Hàn cho một người Việt đi làm ở nhà máy, thường họp và báo cáo với sếp người Hàn. Trả lời bằng tiếng Việt, ngắn gọn, đi thẳng vào câu hỏi. Khi giải thích một từ hay câu tiếng Hàn: nêu nghĩa, tách từ vựng và ngữ pháp chính, mức độ kính ngữ, rồi cho 1–2 ví dụ ngắn kèm nghĩa. Nếu bản dịch trong thẻ chưa tự nhiên thì đề xuất cách nói tốt hơn. Không dùng bảng.';
     try { var j = JSON.parse(lsGet(KEY) || '{}'); if (j && typeof j === 'object') { if (PROV[j.p]) cfg.p = j.p; cfg.k = j.k || {}; cfg.m = j.m || {}; } } catch (e) { }
+    cfg.p='gemini'; // Default to Gemini; keys remain private on this device.
     try { var lj = JSON.parse(sessionStorage.getItem(LOGKEY) || '[]'); if (Array.isArray(lj)) log = lj.filter(function (m) { return m && (m.r === 'me' || m.r === 'ai') && typeof m.t === 'string'; }); } catch (e) { }
     function saveCfg() { lsSet(KEY, JSON.stringify(cfg)); }
     function saveLog() { try { sessionStorage.setItem(LOGKEY, JSON.stringify(log.slice(-30))); } catch (e) { } }
@@ -3899,7 +3907,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       log.forEach(function (m) {
         var d = mk('div', 'aimsg ' + (m.r === 'me' ? 'me' : m.n ? 'ai note' : m.e ? 'err' : 'ai'));
         if (m.r === 'me') d.textContent = m.t; else d.innerHTML = fmt(m.t);
-        if (m.link) { var a = mk('a', 'ghost', 'Mở câu hỏi này trên Claude.ai'); a.href = m.link; a.target = '_blank'; a.rel = 'noopener'; a.style.marginTop = '8px'; d.appendChild(document.createElement('br')); d.appendChild(a); }
+        if (m.link) { var a = mk('a', 'ghost', 'Tạo khóa Gemini tại Google AI Studio'); a.href = m.link; a.target = '_blank'; a.rel = 'noopener'; a.style.marginTop = '8px'; d.appendChild(document.createElement('br')); d.appendChild(a); }
         box.appendChild(d);
       });
       if (busy) box.appendChild(mk('div', 'aimsg ai wait'));
@@ -3948,7 +3956,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var ctx = withCtx ? ctxLine() : '';
       log.push({ r: 'me', t: text, c: ctx }); $('aiInput').value = ''; grow();
       if (!key()) {
-        log.push({ r: 'ai', e: 1, n: 1, t: 'Chưa kết nối AI trên máy này. Điền mã API ở khung phía trên (làm một lần), hoặc mở câu hỏi này trên Claude.ai.', link: 'https://claude.ai/new?q=' + encodeURIComponent((ctx ? ctx + '\n\n' : '') + text) });
+        log.push({ r: 'ai', e: 1, n: 1, t: 'Chưa có mã Gemini. Mở Cài đặt AI, tạo khóa tại Google AI Studio rồi dán khóa vào đây một lần. Có gói miễn phí theo giới hạn tài khoản.', link: 'https://aistudio.google.com/apikey' });
         saveLog(); paintLog(); paintSetup(true); return;
       }
       busy = true; paintLog();
@@ -4006,6 +4014,6 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 </script>
 
 <script src="garden-v10.js"></script>
-<script src="mascot-controls-v12.js?v=14"></script>
+
 <script src="backup-portable-v1.js"></script>
 </body></html>
