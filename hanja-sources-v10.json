@@ -166,5 +166,40 @@
     "reading": "tiến độ",
     "naver": "https://ko.dict.naver.com/#/entry/koko/a3dcf29864524da4bd7b009709e80f4f",
     "hanviet": "https://hvdic.thivien.net/whv/進度"
+  },
+  {
+    "ko": "표찰",
+    "hanja": "標札",
+    "reading": "tiêu trát",
+    "naver": "https://hanja.dict.naver.com/#/search?query=표찰",
+    "hanviet": "https://hvdic.thivien.net/whv/標札"
+  },
+  {
+    "ko": "방폭",
+    "hanja": "防爆",
+    "reading": "phòng bạo",
+    "naver": "https://hanja.dict.naver.com/#/search?query=방폭",
+    "hanviet": "https://hvdic.thivien.net/whv/防爆"
+  },
+  {
+    "ko": "방폭형",
+    "hanja": "防爆型",
+    "reading": "phòng bạo hình",
+    "naver": "https://hanja.dict.naver.com/#/search?query=방폭형",
+    "hanviet": "https://hvdic.thivien.net/whv/防爆型"
+  },
+  {
+    "ko": "본질",
+    "hanja": "本質",
+    "reading": "bản chất",
+    "naver": "https://hanja.dict.naver.com/#/search?query=본질",
+    "hanviet": "https://hvdic.thivien.net/whv/本質"
+  },
+  {
+    "ko": "연결부",
+    "hanja": "連結部",
+    "reading": "liên kết bộ",
+    "naver": "https://hanja.dict.naver.com/#/search?query=연결부",
+    "hanviet": "https://hvdic.thivien.net/whv/連結部"
   }
 ]

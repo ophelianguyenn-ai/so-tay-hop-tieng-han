@@ -1,0 +1,38 @@
+{
+  "펌프": {
+    "url": "pictures/pump.webp",
+    "caption": "Bơm ly tâm — minh họa cấu tạo",
+    "source": "https://commons.wikimedia.org/wiki/File:Centrifugal_Pump.jpg",
+    "credit": "Saud · CC BY-SA 4.0 · ảnh thu nhỏ"
+  },
+  "밸브": {
+    "url": "pictures/valve.webp",
+    "caption": "Van cửa — minh họa",
+    "source": "https://commons.wikimedia.org/wiki/File:Catalyst_-_gate_valve_1.jpg",
+    "credit": "Photograph by Mike Peel (www.mikepeel.net). · CC BY-SA 4.0 · ảnh thu nhỏ"
+  },
+  "열교환기": {
+    "url": "pictures/heat-exchanger.webp",
+    "caption": "Bó ống của bộ trao đổi nhiệt",
+    "source": "https://commons.wikimedia.org/wiki/File:Tube_bundle_of_a_shell_%26_tube_heat_exchanger_(before_assembly).jpg",
+    "credit": "Harald the Bard · CC BY-SA 4.0 · ảnh thu nhỏ"
+  },
+  "응축기": {
+    "url": "pictures/condenser.webp",
+    "caption": "Bình ngưng — ký hiệu trong sơ đồ công nghệ",
+    "source": "https://commons.wikimedia.org/wiki/File:Heat_exchanger_(general),_condenser_-_ISO_10628-2.svg",
+    "credit": "ChemSim · Public domain · ảnh thu nhỏ"
+  },
+  "압력계": {
+    "url": "pictures/pressure-gauge.webp",
+    "caption": "Đồng hồ đo áp suất",
+    "source": "https://commons.wikimedia.org/wiki/File:MAXIMATOR-High-Pressure-Manometer-01a.jpg",
+    "credit": "CEphoto, Uwe Aranas · CC BY-SA 3.0 · ảnh thu nhỏ"
+  },
+  "체크밸브": {
+    "url": "pictures/check-valve.webp",
+    "caption": "Van một chiều dạng lá lật",
+    "source": "https://commons.wikimedia.org/wiki/File:Swing_Check_valves.JPG",
+    "credit": "Heather Smith · CC BY 3.0 · ảnh thu nhỏ"
+  }
+}
