@@ -48,7 +48,7 @@ try {
     await page.click('#planBox .pflip');
     await new Promise(r=>setTimeout(r,550));
     await visibleCard(page,'built-in third flip');
-    await page.close();
+    await customPage.close(); await context.close();
   }
   {
     const page=await browser.newPage();attach(page,'custom-restored');
@@ -56,18 +56,25 @@ try {
     const id='daily-2026-11-12-testpayment',itemId='di-payment-test';
     const item=['di-payment-test','w','Báo giá, hợp đồng & thanh toán','Thủ tục thanh toán','결제 절차',1,[['Thủ tục thanh toán','결제 절차']],''];
     const fixture={id,date:'2026-11-12',plan:'2026-11-12',title:'Bài ngày 12.11 · Báo giá',items:[item],updatedAt:Date.now()};
-    await page.goto(ROOT,{waitUntil:'domcontentloaded'});
-    await page.evaluate((id,fixture,itemId)=>{
+    // Seed localStorage before any app code runs, as if the learner had already saved the custom lesson.
+    // Use a one-time marker to avoid resetting learning data on the subsequent reload test.
+    const context=await browser.createBrowserContext();
+    await page.close();
+    const customPage=await context.newPage();
+    attach(customPage,'custom-restored-isolated');
+    await customPage.setViewport({width:900,height:740});
+    await customPage.evaluateOnNewDocument((id,fixture,itemId)=>{
+      if(sessionStorage.getItem('nhi-smoke-seeded'))return;
       localStorage.setItem('viko-daily-lessons-v1',JSON.stringify({[id]:fixture}));
       localStorage.setItem('viko-plan-sess-v1',JSON.stringify({kind:'lesson',title:fixture.title,lesson:id,queue:[itemId],pos:0,picked:{},stats:{hard:0,mid:0}}));
       localStorage.setItem('viko-ko-meeting-ui-v1',JSON.stringify({mode:'cards',dir:'vk'}));
       sessionStorage.setItem('nlc-cover-seen','1');
+      sessionStorage.setItem('nhi-smoke-seeded','1');
     },id,fixture,itemId);
-    // Force a full reload after seeding localStorage; hash-only URL navigation would reuse the old app state.
-    await page.goto(ROOT+'?fixture=payment#/bai/'+id,{waitUntil:'domcontentloaded'});
-    try { await page.waitForSelector('#planBox .pcard',{timeout:9000}); }
+    await customPage.goto(ROOT+'#/bai/'+id,{waitUntil:'domcontentloaded'});
+    try { await customPage.waitForSelector('#planBox .pcard',{timeout:9000}); }
     catch(ex) {
-      const diag=await page.evaluate(()=>({
+      const diag=await customPage.evaluate(()=>({
         hash:location.hash,url:location.href,
         localSession:localStorage.getItem('viko-plan-sess-v1')?.slice(0,320),
         daily:localStorage.getItem('viko-daily-lessons-v1')?.slice(0,450),
@@ -81,23 +88,23 @@ try {
       console.log('CUSTOM CARD DEBUG',JSON.stringify(diag));
       throw ex;
     }
-    const before=await page.evaluate(()=>({mode:document.querySelector('#view-plan').hidden,body:document.body.className}));
+    const before=await customPage.evaluate(()=>({mode:document.querySelector('#view-plan').hidden,body:document.body.className}));
     console.log('restored before',before);
-    await page.click('#planBox .pflip');
+    await customPage.click('#planBox .pflip');
     await new Promise(r=>setTimeout(r,650));
-    await visibleCard(page,'restored custom Vietnamese-Korean');
-    await page.reload({waitUntil:'domcontentloaded'});
-    await page.waitForSelector('#planBox .pcard',{timeout:18000});
-    await page.click('#planBox .pflip');
+    await visibleCard(customPage,'restored custom Vietnamese-Korean');
+    await customPage.reload({waitUntil:'domcontentloaded'});
+    await customPage.waitForSelector('#planBox .pcard',{timeout:18000});
+    await customPage.click('#planBox .pflip');
     await new Promise(r=>setTimeout(r,650));
-    await visibleCard(page,'restored after reload');
+    await visibleCard(customPage,'restored after reload');
     // Regress prior blank mint-screen: lesson route exists, but its view is hidden.
-    await page.evaluate(()=>{
+    await customPage.evaluate(()=>{
       document.querySelector('#view-plan').hidden=true;
       window.dispatchEvent(new HashChangeEvent('hashchange'));
     });
     await new Promise(r=>setTimeout(r,700));
-    const recovered=await page.evaluate(()=>({
+    const recovered=await customPage.evaluate(()=>({
       hidden:document.querySelector('#view-plan').hidden,
       visible:getComputedStyle(document.querySelector('#view-plan')).display,
       card:document.querySelector('#planBox .pcard')?.getBoundingClientRect().height||0
