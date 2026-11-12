@@ -201,5 +201,222 @@
     "reading": "liên kết bộ",
     "naver": "https://hanja.dict.naver.com/#/search?query=연결부",
     "hanviet": "https://hvdic.thivien.net/whv/連結部"
+  },
+  {
+    "ko": "차량",
+    "hanja": "車輛",
+    "reading": "xa lượng",
+    "naver": "https://hanja.dict.naver.com/#/search?query=차량",
+    "hanviet": "https://hvdic.thivien.net/whv/車輛"
+  },
+  {
+    "ko": "도착",
+    "hanja": "到着",
+    "reading": "đáo trước",
+    "naver": "https://hanja.dict.naver.com/#/search?query=도착",
+    "hanviet": "https://hvdic.thivien.net/whv/到着"
+  },
+  {
+    "ko": "재고",
+    "hanja": "在庫",
+    "reading": "tại khố",
+    "naver": "https://hanja.dict.naver.com/#/search?query=재고",
+    "hanviet": "https://hvdic.thivien.net/whv/在庫"
+  },
+  {
+    "ko": "보관",
+    "hanja": "保管",
+    "reading": "bảo quản",
+    "naver": "https://hanja.dict.naver.com/#/search?query=보관",
+    "hanviet": "https://hvdic.thivien.net/whv/保管"
+  },
+  {
+    "ko": "반출",
+    "hanja": "搬出",
+    "reading": "ban xuất",
+    "naver": "https://hanja.dict.naver.com/#/search?query=반출",
+    "hanviet": "https://hvdic.thivien.net/whv/搬出"
+  },
+  {
+    "ko": "창고",
+    "hanja": "倉庫",
+    "reading": "thương khố",
+    "naver": "https://hanja.dict.naver.com/#/search?query=창고",
+    "hanviet": "https://hvdic.thivien.net/whv/倉庫"
+  },
+  {
+    "ko": "운반",
+    "hanja": "運搬",
+    "reading": "vận ban",
+    "naver": "https://hanja.dict.naver.com/#/search?query=운반",
+    "hanviet": "https://hvdic.thivien.net/whv/運搬"
+  },
+  {
+    "ko": "판매",
+    "hanja": "販賣",
+    "reading": "phiến mại",
+    "naver": "https://hanja.dict.naver.com/#/search?query=판매",
+    "hanviet": "https://hvdic.thivien.net/whv/販賣"
+  },
+  {
+    "ko": "저장고",
+    "hanja": "貯藏庫",
+    "reading": "trữ tàng khố",
+    "naver": "https://hanja.dict.naver.com/#/search?query=저장고",
+    "hanviet": "https://hvdic.thivien.net/whv/貯藏庫"
+  },
+  {
+    "ko": "누계",
+    "hanja": "累計",
+    "reading": "lũy kế",
+    "naver": "https://hanja.dict.naver.com/#/search?query=누계",
+    "hanviet": "https://hvdic.thivien.net/whv/累計"
+  },
+  {
+    "ko": "반입",
+    "hanja": "搬入",
+    "reading": "ban nhập",
+    "naver": "https://hanja.dict.naver.com/#/search?query=반입",
+    "hanviet": "https://hvdic.thivien.net/whv/搬入"
+  },
+  {
+    "ko": "잔량",
+    "hanja": "殘量",
+    "reading": "tàn lượng",
+    "naver": "https://hanja.dict.naver.com/#/search?query=잔량",
+    "hanviet": "https://hvdic.thivien.net/whv/殘量"
+  },
+  {
+    "ko": "물품",
+    "hanja": "物品",
+    "reading": "vật phẩm",
+    "naver": "https://hanja.dict.naver.com/#/search?query=물품",
+    "hanviet": "https://hvdic.thivien.net/whv/物品"
+  },
+  {
+    "ko": "계량",
+    "hanja": "計量",
+    "reading": "kế lượng",
+    "naver": "https://hanja.dict.naver.com/#/search?query=계량",
+    "hanviet": "https://hvdic.thivien.net/whv/計量"
+  },
+  {
+    "ko": "중량",
+    "hanja": "重量",
+    "reading": "trọng lượng",
+    "naver": "https://hanja.dict.naver.com/#/search?query=중량",
+    "hanviet": "https://hvdic.thivien.net/whv/重量"
+  },
+  {
+    "ko": "총량",
+    "hanja": "總量",
+    "reading": "tổng lượng",
+    "naver": "https://hanja.dict.naver.com/#/search?query=총량",
+    "hanviet": "https://hvdic.thivien.net/whv/總量"
+  },
+  {
+    "ko": "저장소",
+    "hanja": "貯藏所",
+    "reading": "trữ tàng sở",
+    "naver": "https://hanja.dict.naver.com/#/search?query=저장소",
+    "hanviet": "https://hvdic.thivien.net/whv/貯藏所"
+  },
+  {
+    "ko": "수출",
+    "hanja": "輸出",
+    "reading": "thâu xuất",
+    "naver": "https://hanja.dict.naver.com/#/search?query=수출",
+    "hanviet": "https://hvdic.thivien.net/whv/輸出"
+  },
+  {
+    "ko": "응축",
+    "hanja": "凝縮",
+    "reading": "ngưng súc",
+    "naver": "https://hanja.dict.naver.com/#/search?query=응축",
+    "hanviet": "https://hvdic.thivien.net/whv/凝縮"
+  },
+  {
+    "ko": "응축기",
+    "hanja": "凝縮器",
+    "reading": "ngưng súc khí",
+    "naver": "https://hanja.dict.naver.com/#/search?query=응축기",
+    "hanviet": "https://hvdic.thivien.net/whv/凝縮器"
+  },
+  {
+    "ko": "급수",
+    "hanja": "給水",
+    "reading": "cấp thủy",
+    "naver": "https://hanja.dict.naver.com/#/search?query=급수",
+    "hanviet": "https://hvdic.thivien.net/whv/給水"
+  },
+  {
+    "ko": "증기",
+    "hanja": "蒸氣",
+    "reading": "chưng khí",
+    "naver": "https://hanja.dict.naver.com/#/search?query=증기",
+    "hanviet": "https://hvdic.thivien.net/whv/蒸氣"
+  },
+  {
+    "ko": "외함",
+    "hanja": "外函",
+    "reading": "ngoại hàm",
+    "naver": "https://hanja.dict.naver.com/#/search?query=외함",
+    "hanviet": "https://hvdic.thivien.net/whv/外函"
+  },
+  {
+    "ko": "출고량",
+    "hanja": "出庫量",
+    "reading": "xuất khố lượng",
+    "naver": "https://hanja.dict.naver.com/#/search?query=출고량",
+    "hanviet": "https://hvdic.thivien.net/whv/出庫量"
+  },
+  {
+    "ko": "열량",
+    "hanja": "熱量",
+    "reading": "nhiệt lượng",
+    "naver": "https://hanja.dict.naver.com/#/search?query=열량",
+    "hanviet": "https://hvdic.thivien.net/whv/熱量"
+  },
+  {
+    "ko": "유량",
+    "hanja": "流量",
+    "reading": "lưu lượng",
+    "naver": "https://hanja.dict.naver.com/#/search?query=유량",
+    "hanviet": "https://hvdic.thivien.net/whv/流量"
+  },
+  {
+    "ko": "수위",
+    "hanja": "水位",
+    "reading": "thủy vị",
+    "naver": "https://hanja.dict.naver.com/#/search?query=수위",
+    "hanviet": "https://hvdic.thivien.net/whv/水位"
+  },
+  {
+    "ko": "방열",
+    "hanja": "放熱",
+    "reading": "phóng nhiệt",
+    "naver": "https://hanja.dict.naver.com/#/search?query=방열",
+    "hanviet": "https://hvdic.thivien.net/whv/放熱"
+  },
+  {
+    "ko": "단열재",
+    "hanja": "斷熱材",
+    "reading": "đoạn nhiệt tài",
+    "naver": "https://hanja.dict.naver.com/#/search?query=단열재",
+    "hanviet": "https://hvdic.thivien.net/whv/斷熱材"
+  },
+  {
+    "ko": "보온재",
+    "hanja": "保溫材",
+    "reading": "bảo ôn tài",
+    "naver": "https://hanja.dict.naver.com/#/search?query=보온재",
+    "hanviet": "https://hvdic.thivien.net/whv/保溫材"
+  },
+  {
+    "ko": "배수구",
+    "hanja": "排水口",
+    "reading": "bài thủy khẩu",
+    "naver": "https://hanja.dict.naver.com/#/search?query=배수구",
+    "hanviet": "https://hvdic.thivien.net/whv/排水口"
   }
 ]

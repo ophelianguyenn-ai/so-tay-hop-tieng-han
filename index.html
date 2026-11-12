@@ -596,7 +596,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 }
 </style>
 
-<script src="hanja-v9.js?v=11b"></script><script src="card-images-v11.js"></script><script src="recorded-voices-v11.js"></script>
+<script src="hanja-v9.js?v=12"></script><script src="card-images-v11.js"></script><script src="recorded-voices-v11.js"></script>
 <script src="qrcode.js" defer></script>
 <link rel="stylesheet" href="refresh-v9.css?v=12">
 </head>
@@ -2565,7 +2565,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     var TOPIC_COLORS = { 'Từ thông dụng': '#8B5CF6', 'Xây dựng & sửa chữa': '#F97316', 'Báo giá, hợp đồng & thanh toán': '#10B981', 'Thiết bị & đường ống': '#0EA5E9', 'Họp, báo cáo & giao tiếp': '#EC4899', 'PLC / HMI & đo lường': '#6366F1', 'Quy trình sản xuất': '#14B8A6', 'An toàn & môi trường': '#F59E0B', 'Chất lượng & thí nghiệm': '#D946EF', 'Tổ chức & nhân sự': '#06B6D4', 'Xuất hàng & kho': '#84CC16', 'Hơi & lò hơi': '#3B82F6' };
     // Sino-Korean words: Hán tự + âm Hán Việt (bản demo: một số từ; bản chính thức sẽ nạp đủ)
     var HANJA = { '등산': ['登山', 'đăng sơn'], '대금 지급': ['代金 支給', 'đại kim chi cấp'], '인도 장소': ['引渡 場所', 'dẫn độ trường sở'], '완료 기간': ['完了 期間', 'hoàn liễu kỳ gian'], '하자보증': ['瑕疵保證', 'hà tì bảo chứng'], '작업 범위': ['作業 範圍', 'tác nghiệp phạm vi'], '가열': ['加熱', 'gia nhiệt'], '배출': ['排出', 'bài xuất'], '운전': ['運轉', 'vận chuyển'], '용접': ['鎔接', 'dung tiếp'], '견적서': ['見積書', 'kiến tích thư'], '단가': ['單價', 'đơn giá'], '금액': ['金額', 'kim ngạch'], '수량': ['數量', 'số lượng'], '재질': ['材質', 'tài chất'], '점검': ['點檢', 'điểm kiểm'], '절단': ['切斷', 'thiết đoạn'], '내경': ['內徑', 'nội kính'], '밀도': ['密度', 'mật độ'], '허락': ['許諾', 'hứa nặc'], '출근': ['出勤', 'xuất cần'], '퇴근': ['退勤', 'thoái cần'], '주철': ['鑄鐵', 'chú thiết'], '운송': ['運送', 'vận tống'], '용기': ['容器', 'dung khí'], '입구': ['入口', 'nhập khẩu'], '출구': ['出口', 'xuất khẩu'], '작업 내용': ['作業 內容', 'tác nghiệp nội dung'], '인건비': ['人件費', 'nhân kiện phí'], '소모품': ['消耗品', 'tiêu hao phẩm'] };
-    Object.assign(HANJA, window.NHI_HANJA || {});
+    Object.assign(HANJA, window.NHI_HANJA || {}); window.NHI_HANJA = HANJA;
     function lookupHanja(text, id) {
       var custom = id ? val('hj', id) : null;
       if (custom && custom.kind === 'none') return null;
