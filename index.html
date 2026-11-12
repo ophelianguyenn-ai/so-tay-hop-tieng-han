@@ -596,9 +596,21 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 }
 </style>
 
-<script src="hanja-v9.js?v=12"></script><script src="card-images-v11.js"></script><script src="recorded-voices-v11.js"></script>
+<script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="technical-visuals-v12.js"></script><script src="recorded-voices-v11.js"></script>
 <script src="qrcode.js" defer></script>
 <link rel="stylesheet" href="refresh-v9.css?v=12">
+<style>
+#nhi-movable{position:fixed;z-index:48;width:calc(var(--nhi-size,112px) + 30px);padding:4px 8px 7px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:0 5px 20px #0002;touch-action:none;display:flex;flex-direction:column;align-items:center;gap:2px}
+#nhi-movable[hidden],#nhi-mascot-restore[hidden]{display:none!important}
+.nhi-drag-handle{font:700 11px var(--ui);padding:4px 8px;color:var(--muted);cursor:grab;touch-action:none;user-select:none;width:100%;text-align:center}
+.nhi-drag-handle:active{cursor:grabbing}
+#nhi-movable img{width:var(--nhi-size,112px);height:var(--nhi-size,112px);object-fit:contain;pointer-events:none;user-select:none}
+.nhi-mascot-controls{display:flex;gap:3px;justify-content:center}
+.nhi-mascot-controls button{border:1px solid var(--line);background:var(--sunk);color:var(--ink);border-radius:8px;min-width:27px;height:27px;cursor:pointer;font-size:16px}
+#nhi-mascot-restore{position:fixed;right:12px;bottom:18px;z-index:48;border-radius:18px;padding:9px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);box-shadow:var(--sh-1);cursor:pointer}
+.auto-illustration figcaption{font-size:12px}
+@media(max-width:480px){#nhi-movable{padding:2px 4px 4px}.nhi-mascot-controls button{min-width:26px}}
+</style>
 </head>
 <body>
 <header class="topbar" id="topbar">
@@ -1457,6 +1469,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     an.className = 'answer' + (vk ? ' ko' : '') + (answerText.length > 55 ? ' long' : '');
     an.hidden = !state.flipped;
     var hx=$('legacyHanja');if(!hx){hx=document.createElement('p');hx.id='legacyHanja';hx.className='hanja';an.insertAdjacentElement('afterend',hx);}var hd=(window.NHI_HANJA||{})[c.ko.trim()];hx.hidden=!(state.flipped&&hd);hx.textContent=hd?hd[0]+' ('+hd[1]+')':'';
+    var il=$('classicCardIllustration');if(!il){il=document.createElement('div');il.id='classicCardIllustration';an.insertAdjacentElement('afterend',il);}il.replaceChildren();if(state.flipped&&window.NHI_IMAGES){var ii=window.NHI_IMAGES.figure(c,c.image||null);if(ii)il.appendChild(ii);}il.hidden=!state.flipped;
     // Pronunciation sits right under whichever line is Korean, once that line is visible
     var pe = $('cPron'), koEl = vk ? an : pr, koShown = vk ? state.flipped : true;
     if (koEl.nextElementSibling !== pe) koEl.insertAdjacentElement('afterend', pe);
@@ -3220,7 +3233,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
         if (hj && s.hanja) { var hx = el('p', 'hanja', hj[0]); hx.lang = 'ko'; hx.appendChild(el('small', null, '(' + hj[1] + ')')); f.appendChild(hx); }
         f.appendChild(hlText(el('p', 'vi-under'), it, 'vi', true));
       } else f.appendChild(hlText(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : '')), it, 'vi', true));
-      if (!s.editing) { var illustration = window.NHI_IMAGES.figure(it, val('img',it.id)); if (illustration) f.appendChild(illustration); }
+      if (!s.editing && s.flipped) { var illustration = window.NHI_IMAGES.figure(it, val('img',it.id)); if (illustration) f.appendChild(illustration); }
       f.addEventListener('click', function (e) { if (e.target.closest('figure')) return; if (s.editing || e.target.closest('.ph.tap')) return; flip(); });
       c.appendChild(f);
       if (it.note && s.flipped && !s.editing) c.appendChild(el('p', 'listinfo', it.note));
@@ -3889,4 +3902,5 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 </script>
 
 <script src="garden-v10.js"></script>
+<script src="mascot-controls-v12.js"></script>
 </body></html>
