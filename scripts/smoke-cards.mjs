@@ -87,6 +87,17 @@ try {
     await page.keyboard.press('ArrowLeft');
     const afterWidth=await page.$eval('#aiPanel',el=>el.getBoundingClientRect().width);
     if(afterWidth<beforeWidth+20)throw Error('AI panel did not grow with resize keyboard control');
+    // Verify pointer dragging too, not only keyboard accessibility.
+    const grip=await page.$('#aiResizeHandle'),bounds=await grip.boundingBox();
+    if(!bounds||bounds.width<5)throw Error('AI resize handle is not visible');
+    const gx=bounds.x+bounds.width/2,gy=bounds.y+bounds.height/2;
+    await page.mouse.move(gx,gy);
+    await page.mouse.down();
+    await page.mouse.move(gx-68,gy,{steps:5});
+    await page.mouse.up();
+    const dragWidth=await page.$eval('#aiPanel',el=>el.getBoundingClientRect().width);
+    console.log('AI POINTER RESIZE',JSON.stringify({afterWidth,dragWidth}));
+    if(dragWidth<afterWidth+40)throw Error('Dragging the AI panel border did not increase width');
     await page.select('#aiFontSize','20');
     const font=await page.$eval('#aiPanel .aimsg',el=>getComputedStyle(el).fontSize);
     if(font!=='20px')throw Error('AI chat font size was not applied: '+font);
@@ -97,7 +108,18 @@ try {
       width:parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--nhi-ai-width'))
     }));
     console.log('AI RESIZE & FONT',JSON.stringify({beforeWidth,afterWidth,font,saved}));
-    if(saved.font!=='20'||saved.width<afterWidth-2)throw Error('AI display settings did not persist');
+    if(saved.font!=='20'||saved.width<dragWidth-2)throw Error('AI display settings did not persist');
+    await page.evaluate(()=>window.NHI_HARD_MASCOT.show(document.querySelector('#planBox .pcard')));
+    const companion=await page.evaluate(()=>{
+      var n=document.querySelector('#nhi-hard-mascot'),card=document.querySelector('#planBox .pfront');
+      if(!n||!card)return null;
+      return {left:n.getBoundingClientRect().left,cardLeft:card.getBoundingClientRect().left,
+        buttonCount:n.querySelectorAll('button').length,text:n.textContent.trim(),
+        background:getComputedStyle(n).backgroundColor,position:getComputedStyle(n).position};
+    });
+    console.log('FIXED LEFT COMPANION',JSON.stringify(companion));
+    if(!companion||companion.left>companion.cardLeft+40||companion.buttonCount||companion.position!=='fixed')
+      throw Error('Nhi mascot is not fixed at left without controls');
     await page.close();await resumeContext.close();
   }
   {
