@@ -82,6 +82,13 @@ try {
     // AI width can change through the resize handle; text size persists across reload.
     await page.evaluate(()=>document.querySelector('#aiBtn').click());
     await page.waitForFunction(()=>document.body.classList.contains('ai-open'));
+    // The chat autofocus runs after 60ms. Let it finish before focusing the
+    // resize handle, otherwise the timer steals keyboard focus from the handle.
+    await page.waitForFunction(()=>{
+      var p=document.getElementById('aiPanel');
+      return p && p.getBoundingClientRect().right<=innerWidth+1;
+    },{timeout:3000});
+    await new Promise(r=>setTimeout(r,150));
     const beforeWidth=await page.$eval('#aiPanel',el=>el.getBoundingClientRect().width);
     await page.focus('#aiResizeHandle');
     await page.keyboard.press('ArrowLeft');
