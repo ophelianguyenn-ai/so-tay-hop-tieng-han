@@ -3200,7 +3200,12 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
         // a session on one of the daily lessons can only come back once those lessons have arrived
         if (!extrasTried && ((o.lesson && !BY_LESSON[o.lesson]) || o.queue.some(function (id) { return !ITEMS[id]; }))) return;
         sess = { kind: o.kind, title: o.title, L: o.lesson ? BY_LESSON[o.lesson] || null : null, queue: o.queue.filter(function (id) { return ITEMS[id]; }), pos: o.pos || 0, flipped: false, again: o.again || {}, picked: o.picked || {}, spoken: -1, stats: o.stats || { known: 0, hard: 0, mid: 0 }, recorded: !!o.recorded, celebrated: !!o.celebrated };
-        if (sess.L && !/^#\/bai\//.test(location.hash)) { history.replaceState(null, '', '#/bai/' + sess.L.id); }
+        // Do not hijack another learning mode while old lesson data is loading.
+        // On a slow connection, the user may already have selected "Thẻ ghi nhớ".
+        // Recover the deep-link only while the active mode is actually "Lịch học".
+        if (sess.L && state.mode === 'plan' && !/^#\/bai\//.test(location.hash)) {
+          history.replaceState(null, '', location.pathname + location.search + '#/bai/' + sess.L.id);
+        }
       } catch (e) { sess = null; }
     }
     function start(kind, ids, title, L) {
