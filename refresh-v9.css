@@ -55,4 +55,9 @@ body.focus .app{max-width:none;padding-inline:5vw}
 @media(max-width:700px){.image-results{grid-template-columns:repeat(2,minmax(0,1fr))}.react.hard{scale:.9;transform-origin:top center}.card-illustration img{height:190px}}
 @media(prefers-reduced-motion:reduce){.react.hard{animation:none}}
 
-.react.hard{left:16px!important;right:auto!important;top:auto!important;bottom:22px;margin:0!important;width:220px}.react.hard>img{width:210px;height:210px;border-radius:20px}.pcard .pfront{padding-left:250px}@media(max-width:700px){.react.hard{left:6px!important;width:110px;bottom:12px}.react.hard>img{width:108px;height:108px}.reaction-caption{font-size:11px;padding:5px;width:110px}.pcard .pfront{padding-left:125px}}
+/* Reverse card text and images share the same centered content column. */
+#planBox .pcard .pfront{padding-left:clamp(16px,3vw,56px);padding-right:clamp(16px,3vw,56px);text-align:center;align-items:center;justify-content:center;box-sizing:border-box;width:100%}
+#planBox .pcard .pfront > .answer, #planBox .pcard .pfront > .prompt, #planBox .pcard .pfront > .vi-under, #planBox .pcard .pfront > .hanja, #planBox .pcard .pfront > .hanja-missing{max-width:min(100%,72ch);width:auto;margin-inline:auto;text-align:center}
+#planBox .pcard .pfront > figure{margin-left:auto;margin-right:auto;align-self:center}
+@media(max-width:700px){#planBox .pcard .pfront{padding-left:16px;padding-right:16px}}
+
