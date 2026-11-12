@@ -40,6 +40,7 @@ jobs:
             nhi-google-images-v1.js nhi-hard-minimal-v1.js
             nhi-updates-v1.css nhi-ai-resize-v2.js nhi-ai-resize-v2.css
             nhi-study-motion-v3.css nhi-fireworks-v3.js
+            nhi-interface-v4.css nhi-interface-v4.js
             recorded-voices-v11.js backup-portable-v1.js
             refresh-v9.css study-enhancements-v13.css
             icon-192.png icon-512.png nhi-avatar.png

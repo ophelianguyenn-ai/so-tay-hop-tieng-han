@@ -598,7 +598,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 
 <script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="nhi-google-images-v1.js?v=1"></script><script src="nhi-hard-minimal-v1.js?v=1"></script><script src="recorded-voices-v11.js"></script>
 <script src="qrcode.js" defer></script>
-<link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14"><link rel="stylesheet" href="nhi-updates-v1.css?v=1"><link rel="stylesheet" href="nhi-ai-resize-v2.css?v=1"><link rel="stylesheet" href="nhi-study-motion-v3.css?v=3">
+<link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14"><link rel="stylesheet" href="nhi-updates-v1.css?v=1"><link rel="stylesheet" href="nhi-ai-resize-v2.css?v=1"><link rel="stylesheet" href="nhi-study-motion-v3.css?v=3"><link rel="stylesheet" href="nhi-interface-v4.css?v=4">
 <style>
 #nhi-movable{position:fixed;z-index:48;width:calc(var(--nhi-size,112px) + 30px);padding:4px 8px 7px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:0 5px 20px #0002;touch-action:none;display:flex;flex-direction:column;align-items:center;gap:2px}
 #nhi-movable[hidden],#nhi-mascot-restore[hidden]{display:none!important}
@@ -614,7 +614,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 </head>
 <body>
 <header class="topbar" id="topbar">
-  <button type="button" class="brand" id="brandBtn" aria-label="Về trang Hôm nay">
+  <button type="button" class="brand" id="brandBtn" aria-label="Về trang bìa">
     <span class="brand-mark" id="brandFace" aria-hidden="true"></span>
     <span class="brand-name"><b>Nhi’s</b><span>Learning Corner</span></span>
   </button>
@@ -1510,7 +1510,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   function go(d) {
     var n = state.idx + d; if (n < 0 || n >= queue.length) return;
     state.idx = n; state.flipped = false; renderCard();
-    var cc = $('card'); if (cc && cc.animate && !reduceMotion()) cc.animate([{ transform: 'translateX(' + (d > 0 ? 40 : -40) + 'px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 240, easing: 'cubic-bezier(.2,.8,.2,1)' });
+    var cc = $('card'); if (cc && cc.animate && !reduceMotion()) { var sign = d > 0 ? 1 : -1; cc.animate([{ opacity: .1, transform: 'perspective(1100px) translateX(' + (sign * 54) + 'px) rotateY(' + (sign * -7) + 'deg) scale(.948)' }, { offset: .72, opacity: 1, transform: 'perspective(1100px) translateX(' + (sign * -4) + 'px) rotateY(' + (sign * .8) + 'deg) scale(1.007)' }, { opacity: 1, transform: 'perspective(1100px) translateX(0) rotateY(0deg) scale(1)' }], { duration: 620, easing: 'cubic-bezier(.16,.78,.23,1)' }); }
     if (state.autoVi) { var c = currentCard(); if (c) speak(c.vi, 'vi-VN'); }
   }
   function rateCurrent(lv) {
@@ -2520,6 +2520,9 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     s += '<path d="M30 96c-3 10 4 16 1 26M40 104c-3 9 3 15 0 24M130 96c3 10-4 16-1 26M120 104c3 9-3 15 0 24" fill="none" stroke="' + hairL + '" stroke-width="2.4" stroke-linecap="round"/>';
     // sweater
     s += '<path d="M40 160c0-22 15-33 40-33s40 11 40 33z" fill="' + pink + '"' + ol + '/><path d="M66 129q14 9 28 0" fill="none" stroke="' + pinkD + '" stroke-width="4" stroke-linecap="round"/>';
+    // Visible neck between face and sweater; source remains vector/editable.
+    s += '<path data-nhi-neck="true" d="M72 107v19c0 7 4 11 8 11s8-4 8-11v-19z" fill="' + skin + '"' + ol + '/>';
+    s += '<path d="M68 132q12 9 24 0" fill="none" stroke="' + pinkD + '" stroke-width="2.5" stroke-linecap="round"/>';
     // face
     s += '<circle cx="46" cy="86" r="6.500" fill="' + skin + '"' + ol + '/>';
     s += '<ellipse cx="80" cy="80" rx="35" ry="32" fill="' + skin + '"' + ol + '/>';
@@ -3080,7 +3083,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
         q, titleMain(L) + (cur ? ' · ' + STEP[cur.step] : ''), L, restored);
     }
     function todayCard() {
-      var s = summary(), box = el('section', 'thero'), txt = el('div'), d = new Date();
+      var s = summary(), box = el('section', 'thero nhi-calendar-hero'), txt = el('div'), d = new Date();
       txt.appendChild(el('p', 'eyebrow', WEEKDAY[d.getDay()] + ' · ' + vn(today(), true)));
       var n = s.due.length + s.late.length;
       txt.appendChild(el('h2', null, n ? 'Hôm nay cần học' : 'Hôm nay xong hết rồi!'));
@@ -3090,7 +3093,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       stat(s.late.length, 'bài quá hạn', s.late.length ? 'late' : '');
       stat(s.cards, 'thẻ');
       box.appendChild(txt);
-      var m = el('div'); m.innerHTML = girl(n ? 'smile' : 'grin'); box.appendChild(m.firstChild);
+      var m = el('div', 'nhi-calendar-girl'); m.innerHTML = girl(n ? 'smile' : 'grin'); box.appendChild(m);
       box.appendChild(st);
       var act = el('div', 'tact');
       var first = s.late[0] || s.due[0];
@@ -3417,7 +3420,6 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       } else f.appendChild(hlText(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : '')), it, 'vi', true));
       f.addEventListener('click', function (e) { if (e.target.closest('figure')) return; if (s.editing || e.target.closest('.ph.tap')) return; flip(); });
       c.appendChild(f);
-      if (it.note && s.flipped && !s.editing) c.appendChild(el('p', 'listinfo', it.note));
       var nav = el('div', 'pnav');
       var pv = ibtn('parrow', 'left', function () { go(-1); }, 'Thẻ trước (←)'); pv.disabled = s.pos === 0; nav.appendChild(pv);
       nav.appendChild(ibtn('pflip', 'flip', flip, 'Lật thẻ (Enter)'));
@@ -3437,17 +3439,21 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
         }, function () { s.imagePicker = false; render(); }));
       }
       wrap.appendChild(c); v.appendChild(wrap);
+      if (window.NHI_HARD_MASCOT && window.NHI_HARD_MASCOT.sync) window.NHI_HARD_MASCOT.sync(c);
       if (c.animate && !reduceMotion() && prefs.fx && anim) {
-        var easing = 'cubic-bezier(.22, 1, .36, 1)';
+        var ease = 'cubic-bezier(.16,.78,.23,1)';
         if (anim === 'flip') {
-          c.animate([{ opacity: .15, transform: 'translateY(10px) scale(.987)' },
-                     { opacity: 1, transform: 'translateY(0) scale(1)' }],
-                    { duration: 320, easing: easing });
+          c.animate([
+            { opacity: .2, transform: 'perspective(1100px) translateY(12px) scale(.982)' },
+            { opacity: 1, transform: 'perspective(1100px) translateY(0) scale(1)' }
+          ], { duration: 350, easing: ease });
         } else if (anim === 'next' || anim === 'prev') {
-          var shift = anim === 'next' ? 24 : -24;
-          c.animate([{ opacity: .12, transform: 'translateX(' + shift + 'px) scale(.989)' },
-                     { opacity: 1, transform: 'translateX(0) scale(1)' }],
-                    { duration: 390, easing: easing });
+          var sign = anim === 'next' ? 1 : -1;
+          c.animate([
+            { opacity: .08, transform: 'perspective(1100px) translateX(' + (sign * 54) + 'px) rotateY(' + (sign * -7) + 'deg) scale(.947)', filter: 'blur(2px)' },
+            { offset: .72, opacity: 1, transform: 'perspective(1100px) translateX(' + (sign * -5) + 'px) rotateY(' + (sign * .8) + 'deg) scale(1.008)', filter: 'blur(0)' },
+            { opacity: 1, transform: 'perspective(1100px) translateX(0) rotateY(0deg) scale(1)', filter: 'blur(0)' }
+          ], { duration: 620, easing: ease });
         }
       }
       anim = '';
@@ -3994,7 +4000,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       });
       $('menuDaily').addEventListener('click', function () { menu(false); PLAN.openDailyCreator(); });
       $('menuCover').addEventListener('click', function () { menu(false); cover(true); });
-      $('brandBtn').addEventListener('click', function () { menu(false); PLAN.home(); if (state.mode !== 'plan') { state.mode = 'plan'; saveUi(); renderMode(); } window.scrollTo({ top: 0, behavior: 'smooth' }); });
+      $('brandBtn').addEventListener('click', function () { menu(false); cover(true); });
       $('coverGo').addEventListener('click', function () { haptic(14); cover(false); });
       $('setBtn').addEventListener('click', function () { menu(false); sheet(true); });
       $('setSheet').addEventListener('click', function (e) {
@@ -4225,4 +4231,5 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 <script src="backup-portable-v1.js"></script>
 <script src="nhi-ai-resize-v2.js?v=1"></script>
 <script src="nhi-fireworks-v3.js?v=3"></script>
+<script src="nhi-interface-v4.js?v=4"></script>
 </body></html>

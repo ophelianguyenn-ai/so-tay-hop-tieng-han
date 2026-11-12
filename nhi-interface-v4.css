@@ -1,0 +1,134 @@
+/* Nhi UI v4 — eight interface improvements.
+   New file loaded AFTER existing CSS: no changes to learner content or storage. */
+#planBox .pcardwrap { perspective: 1300px; }
+#planBox .pcard { backface-visibility:hidden; transform-origin:50% 50%; }
+#planBox .parrow,#planBox .pflip,#planBox .prate button,#planBox .iconbtn {
+  transition:transform .22s cubic-bezier(.18,.8,.26,1),box-shadow .22s ease,
+    color .22s ease,border-color .22s ease,background-color .22s ease;
+}
+#planBox .parrow:hover:not(:disabled),#planBox .pflip:hover,#planBox .prate button:hover:not(:disabled){transform:translateY(-2px)}
+#planBox .parrow:active:not(:disabled),#planBox .pflip:active,#planBox .prate button:active:not(:disabled){transform:translateY(2px) scale(.975)}
+
+/* A short-lived ring follows the actual button bounding rectangle even when a card is rebuilt. */
+.nhi-button-ring-v4 {
+  position:fixed;z-index:220;pointer-events:none;box-sizing:border-box;
+  background:color-mix(in srgb,var(--ring-color) 13%,transparent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--ring-color) 46%,transparent),
+    0 0 20px 2px color-mix(in srgb,var(--ring-color) 16%,transparent);
+  border:2px solid color-mix(in srgb,var(--ring-color) 48%,transparent);
+}
+
+/* Top-left universal close control for active overlays, using their native actions. */
+.nhi-global-close-v4 {
+  position:fixed;z-index:210;top:max(12px,env(safe-area-inset-top,0px));
+  left:max(12px,env(safe-area-inset-left,0px));
+  display:grid;place-items:center;width:46px;height:46px;min-width:46px;
+  border:2px solid var(--line);border-radius:50%;background:var(--surface);
+  color:var(--ink);box-shadow:0 5px 16px rgba(0,0,0,.16);
+  font:500 28px/1 var(--ui);cursor:pointer;
+}
+.nhi-global-close-v4[hidden]{display:none!important}
+.nhi-global-close-v4:focus-visible{outline:3px solid var(--accent-t);outline-offset:3px}
+.nhi-global-close-v4:hover{color:var(--accent-t);transform:scale(1.04)}
+body.ai-open #aiClose{display:none}
+
+/* Cover theme toggle — functional buttons, unlike the decorative sun and moon. */
+.nhi-cover-theme-v4{
+  position:absolute;z-index:4;top:max(14px,env(safe-area-inset-top,0px));
+  right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;gap:6px;padding:5px;border-radius:999px;
+  border:1px solid color-mix(in srgb,var(--accent-d) 55%,transparent);
+  background:color-mix(in srgb,var(--surface) 82%,transparent);
+  box-shadow:0 4px 16px rgba(0,0,0,.1);backdrop-filter:blur(10px);
+}
+.nhi-cover-theme-v4 button{
+  width:36px;height:36px;border:0;border-radius:50%;background:transparent;
+  color:var(--ink);display:grid;place-items:center;font-size:20px;cursor:pointer;
+  transition:background-color .2s ease,transform .2s ease;
+}
+.nhi-cover-theme-v4 button:hover{transform:translateY(-1px)}
+.nhi-cover-theme-v4 button[aria-pressed="true"]{
+  color:var(--accent-t);background:var(--accent-soft);
+  box-shadow:inset 0 0 0 1px var(--accent-d);
+}
+.nhi-cover-theme-v4 button:focus-visible{outline:3px solid var(--accent-t)}
+
+/* On mobile, reserve genuine space for Nhi rather than allowing any text overlap.
+   New JS keeps her in the current face while it is re-rendered. */
+@media(max-width:720px){
+  #planBox .pcard.nhi-mascot-active .pfront{
+    position:relative!important;box-sizing:border-box;
+    padding-left:clamp(90px,27vw,114px)!important;
+    padding-right:clamp(10px,3vw,18px)!important;
+    min-height:225px;
+  }
+  #planBox .pcard.nhi-mascot-active .pfront > .prompt,
+  #planBox .pcard.nhi-mascot-active .pfront > .answer,
+  #planBox .pcard.nhi-mascot-active .pfront > .hanja,
+  #planBox .pcard.nhi-mascot-active .pfront > .vi-under,
+  #planBox .pcard.nhi-mascot-active .pfront > .card-illustration{
+    width:100%;max-width:100%;min-width:0;margin-left:auto;margin-right:auto;
+    overflow-wrap:anywhere;text-align:center;
+  }
+  #planBox .pcard.nhi-mascot-active .pfront #nhi-hard-mascot.nhi-hard-inline{
+    position:absolute!important;z-index:2!important;
+    left:6px!important;top:50%!important;right:auto!important;bottom:auto!important;
+    transform:translateY(-50%)!important;width:clamp(76px,23vw,99px)!important;
+    max-width:clamp(76px,23vw,99px)!important;min-height:0!important;
+    margin:0!important;padding:0!important;
+    display:flex!important;flex-direction:column!important;gap:3px!important;
+    align-items:center!important;justify-content:center!important;
+    border:0!important;border-radius:0!important;background:transparent!important;
+    box-shadow:none!important;pointer-events:none!important;
+  }
+  #planBox .pcard.nhi-mascot-active .pfront #nhi-hard-mascot.nhi-hard-inline img{
+    display:block;width:min(66px,19vw)!important;max-width:min(66px,19vw)!important;
+    height:auto!important;flex:none!important;object-fit:contain;
+    filter:drop-shadow(0 3px 5px rgba(50,50,50,.09));
+    pointer-events:none!important;
+  }
+  #planBox .pcard.nhi-mascot-active .pfront #nhi-hard-mascot.nhi-hard-inline .nhi-hard-caption{
+    max-width:100%!important;margin:0!important;padding:0 2px!important;
+    font-size:clamp(10px,2.7vw,11px)!important;line-height:1.25!important;
+    font-weight:800;text-align:center!important;white-space:normal!important;
+    overflow-wrap:break-word;background:transparent!important;box-shadow:none!important;
+    text-shadow:0 1px 0 var(--surface)!important;
+  }
+}
+
+/* Calendar hero: portrait is anchored right, the svg now has an actual neck path. */
+.thero.nhi-calendar-hero {
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(112px,170px);
+  align-items:center;gap:8px 12px;overflow:hidden;
+}
+.thero.nhi-calendar-hero > div:first-child{grid-column:1;grid-row:1;z-index:2}
+.thero.nhi-calendar-hero .nhi-calendar-girl{
+  position:relative;grid-column:2;grid-row:1;align-self:end;justify-self:end;
+  display:grid;place-items:end center;width:100%;max-width:170px;isolation:isolate;
+}
+.thero.nhi-calendar-hero .nhi-calendar-girl::before{
+  content:"";position:absolute;z-index:-1;inset:12% 5% 5%;
+  border-radius:50% 50% 44% 44%;
+  background:color-mix(in srgb,var(--accent-soft) 58%,transparent);
+}
+.thero.nhi-calendar-hero .nhi-calendar-girl > svg.mascot{
+  width:min(100%,160px);height:auto;min-width:0;max-height:158px;overflow:visible;
+  animation:bob 4.5s ease-in-out infinite;
+  filter:drop-shadow(0 4px 5px rgba(25,40,30,.12));
+}
+.thero.nhi-calendar-hero .tstats,.thero.nhi-calendar-hero .tact{
+  grid-column:1/-1;grid-row:auto;
+}
+@media(max-width:430px){
+  .thero.nhi-calendar-hero{
+    grid-template-columns:minmax(0,1fr) 92px;gap:7px;padding:18px 14px;
+  }
+  .thero.nhi-calendar-hero .nhi-calendar-girl > svg.mascot{width:92px;max-height:118px}
+  .thero.nhi-calendar-hero h2{font-size:clamp(19px,5.4vw,25px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .nhi-button-ring-v4{display:none!important}
+  .nhi-cover-theme-v4 button,.thero.nhi-calendar-hero .nhi-calendar-girl > svg.mascot{
+    animation:none!important;transition:none!important;
+  }
+}

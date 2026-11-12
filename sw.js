@@ -1,13 +1,13 @@
 // Offline support: network-first for the site and static assets so Netlify redeploys appear promptly.
 // Fall back to cache only when offline. Different cache key forces eviction of earlier stale CSS/JS.
-const CACHE = 'nhi-corner-v23-responsive-celebration';
+const CACHE = 'nhi-corner-v24-ui-polish';
 const CORE = [
   './','index.html','manifest.webmanifest','qrcode.js','lessons.json',
   'icon-192.png','icon-512.png','refresh-v9.css','study-enhancements-v13.css',
   'hanja-v9.js','hanja-extra-v12.js','nhi-avatar.png','nhi-mascot.webp',
   'nhi-puzzled.webp','garden-v10.js','card-images-v11.js','technical-images.json',
   'nhi-google-images-v1.js','nhi-hard-minimal-v1.js','nhi-updates-v1.css','nhi-ai-resize-v2.js','nhi-ai-resize-v2.css',
-  'nhi-study-motion-v3.css','nhi-fireworks-v3.js',
+  'nhi-study-motion-v3.css','nhi-fireworks-v3.js','nhi-interface-v4.css','nhi-interface-v4.js',
   'recorded-voices-v11.js','backup-portable-v1.js',
   'garden-day.webp','garden-night.webp'
 ];

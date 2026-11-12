@@ -13,6 +13,9 @@ on:
       - 'nhi-hard-minimal-v1.js'
       - 'nhi-study-motion-v3.css'
       - 'nhi-fireworks-v3.js'
+      - 'nhi-interface-v4.css'
+      - 'nhi-interface-v4.js'
+      - 'scripts/smoke-ux-v4.mjs'
       - '.github/workflows/smoke-cards.yml'
   workflow_dispatch:
 
@@ -43,3 +46,5 @@ jobs:
         run: node scripts/smoke-cards.mjs
       - name: Check mobile layout, rating animations and fireworks
         run: node scripts/smoke-ux-v3.mjs
+      - name: Check mobile mascot, cover theme, top-left close and transition
+        run: node scripts/smoke-ux-v4.mjs
