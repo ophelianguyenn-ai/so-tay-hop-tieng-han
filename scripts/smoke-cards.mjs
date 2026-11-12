@@ -48,18 +48,15 @@ try {
     await page.click('#planBox .pflip');
     await new Promise(r=>setTimeout(r,550));
     await visibleCard(page,'built-in third flip');
-    await customPage.close(); await context.close();
+    await page.close();
   }
   {
-    const page=await browser.newPage();attach(page,'custom-restored');
-    await page.setViewport({width:900,height:740});
     const id='daily-2026-11-12-testpayment',itemId='di-payment-test';
     const item=['di-payment-test','w','Báo giá, hợp đồng & thanh toán','Thủ tục thanh toán','결제 절차',1,[['Thủ tục thanh toán','결제 절차']],''];
     const fixture={id,date:'2026-11-12',plan:'2026-11-12',title:'Bài ngày 12.11 · Báo giá',items:[item],updatedAt:Date.now()};
     // Seed localStorage before any app code runs, as if the learner had already saved the custom lesson.
     // Use a one-time marker to avoid resetting learning data on the subsequent reload test.
     const context=await browser.createBrowserContext();
-    await page.close();
     const customPage=await context.newPage();
     attach(customPage,'custom-restored-isolated');
     await customPage.setViewport({width:900,height:740});
