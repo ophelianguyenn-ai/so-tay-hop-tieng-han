@@ -2593,8 +2593,29 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       if ((window.NHI_NON_HANJA||[]).indexOf(text.trim())>=0) return null;
       var key = text.trim().replace(/\s+/g, ' ');
       if (HANJA[key]) return HANJA[key];
-      var parts = key.split(' '), found = parts.map(function (part) { return HANJA[part]; });
-      if (parts.length > 1 && found.every(Boolean)) return [found.map(function (x) { return x[0]; }).join(' '), found.map(function (x) { return x[1]; }).join(' ')];
+      // Compose only fully known Hanja morphemes: never invent characters or map loanwords.
+      function fromKnown(part) {
+        if (HANJA[part]) return HANJA[part];
+        if ((window.NHI_NON_HANJA || []).indexOf(part) >= 0) return null;
+        if (!/^[가-힣]{4,}$/.test(part)) return null;
+        var memo = {};
+        function split(from) {
+          if (from === part.length) return [];
+          if (Object.prototype.hasOwnProperty.call(memo, from)) return memo[from];
+          var best = null;
+          for (var end = part.length; end >= from + 2; end--) {
+            var fragment = part.slice(from, end), record = HANJA[fragment];
+            if (!record || !record[0] || !record[1]) continue;
+            var rest = split(end);
+            if (rest !== null && (!best || rest.length + 1 < best.length)) best = [record].concat(rest);
+          }
+          return memo[from] = best;
+        }
+        var all = split(0);
+        return all && all.length > 1 ? [all.map(function (x) { return x[0]; }).join(''), all.map(function (x) { return x[1]; }).join(' ')] : null;
+      }
+      var parts = key.split(' '), found = parts.map(fromKnown);
+      if (found.every(Boolean)) return [found.map(function (x) { return x[0]; }).join(' '), found.map(function (x) { return x[1]; }).join(' ')];
       return null;
     }
 
