@@ -26,8 +26,7 @@ async function visibleCard(page,name){
     throw Error(name+': card disappeared or answer hidden; '+JSON.stringify(d));
 }
 async function openLesson(page,id){
-  // Force a full document navigation so newly seeded storage is loaded (hash-only navigation does not reload).
-    await page.goto(ROOT+'?fixture=payment#/bai/'+id,{waitUntil:'domcontentloaded'});
+  await page.goto(ROOT+'#/bai/'+id,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>!!document.querySelector('#planBox .ppage'),{timeout:18000});
   await page.evaluate(()=>{
     const b=[...document.querySelectorAll('#planBox button')].find(b=>/Học ngay|Học trước|Tiếp tục|Học lại|Ôn/.test(b.textContent||''));
@@ -64,7 +63,8 @@ try {
       localStorage.setItem('viko-ko-meeting-ui-v1',JSON.stringify({mode:'cards',dir:'vk'}));
       sessionStorage.setItem('nlc-cover-seen','1');
     },id,fixture,itemId);
-    await page.goto(ROOT+'#/bai/'+id,{waitUntil:'domcontentloaded'});
+    // Force a full reload after seeding localStorage; hash-only URL navigation would reuse the old app state.
+    await page.goto(ROOT+'?fixture=payment#/bai/'+id,{waitUntil:'domcontentloaded'});
     try { await page.waitForSelector('#planBox .pcard',{timeout:9000}); }
     catch(ex) {
       const diag=await page.evaluate(()=>({
