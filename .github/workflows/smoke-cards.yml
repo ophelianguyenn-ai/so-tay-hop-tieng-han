@@ -9,6 +9,10 @@ on:
       - 'technical-visuals-v12.js'
       - 'hanja-extra-v12.js'
       - 'scripts/smoke-cards.mjs'
+      - 'scripts/smoke-ux-v3.mjs'
+      - 'nhi-hard-minimal-v1.js'
+      - 'nhi-study-motion-v3.css'
+      - 'nhi-fireworks-v3.js'
       - '.github/workflows/smoke-cards.yml'
   workflow_dispatch:
 
@@ -37,3 +41,5 @@ jobs:
           exit 1
       - name: Confirm Vietnamese to Korean flip is visible
         run: node scripts/smoke-cards.mjs
+      - name: Check mobile layout, rating animations and fireworks
+        run: node scripts/smoke-ux-v3.mjs
