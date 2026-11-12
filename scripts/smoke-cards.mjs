@@ -111,7 +111,7 @@ try {
     }));
     console.log('hidden-view recovery',JSON.stringify(recovered));
     if(recovered.hidden||recovered.visible==='none'||recovered.card<50)throw Error('Hidden-view recovery failed: '+JSON.stringify(recovered));
-    await page.close();
+    await customPage.close(); await context.close();
   }
   {
     const page=await browser.newPage();attach(page,'classic');
