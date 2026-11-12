@@ -598,7 +598,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 
 <script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="nhi-google-images-v1.js?v=1"></script><script src="nhi-hard-minimal-v1.js?v=1"></script><script src="recorded-voices-v11.js"></script>
 <script src="qrcode.js" defer></script>
-<link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14"><link rel="stylesheet" href="nhi-updates-v1.css?v=1"><link rel="stylesheet" href="nhi-ai-resize-v2.css?v=1">
+<link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14"><link rel="stylesheet" href="nhi-updates-v1.css?v=1"><link rel="stylesheet" href="nhi-ai-resize-v2.css?v=1"><link rel="stylesheet" href="nhi-study-motion-v3.css?v=3">
 <style>
 #nhi-movable{position:fixed;z-index:48;width:calc(var(--nhi-size,112px) + 30px);padding:4px 8px 7px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:0 5px 20px #0002;touch-action:none;display:flex;flex-direction:column;align-items:center;gap:2px}
 #nhi-movable[hidden],#nhi-mascot-restore[hidden]{display:none!important}
@@ -2636,6 +2636,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     function put(sec, k, v) { var e = { v: v, t: Date.now() }; ps[sec][k] = e; save(); SYNC.queue('L/' + sec + '/' + k, e); }
     var view = 'days', sess = null, page = null;
     var lastKey = '', anim = '', flipping = false, legendOpen = false, query = '', topicSel = '';
+    var ratingPending = false, ratingToken = 0;
 
     function today() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
     function parse(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
@@ -3436,43 +3437,86 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
         }, function () { s.imagePicker = false; render(); }));
       }
       wrap.appendChild(c); v.appendChild(wrap);
-      if (c.animate && !reduceMotion() && anim) {
-        var ez = 'cubic-bezier(.2,.8,.2,1)';
-        if (anim === 'flip') c.animate([{ opacity: 0, transform: 'translateY(-4px)' }, { opacity: 1, transform: 'translateY(0)' }], { duration: 160, easing: ez });
-        else if (anim === 'next') c.animate([{ transform: 'translateX(12px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 260, easing: ez });
-        else if (anim === 'prev') c.animate([{ transform: 'translateX(-12px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 260, easing: ez });
+      if (c.animate && !reduceMotion() && prefs.fx && anim) {
+        var easing = 'cubic-bezier(.22, 1, .36, 1)';
+        if (anim === 'flip') {
+          c.animate([{ opacity: .15, transform: 'translateY(10px) scale(.987)' },
+                     { opacity: 1, transform: 'translateY(0) scale(1)' }],
+                    { duration: 320, easing: easing });
+        } else if (anim === 'next' || anim === 'prev') {
+          var shift = anim === 'next' ? 24 : -24;
+          c.animate([{ opacity: .12, transform: 'translateX(' + shift + 'px) scale(.989)' },
+                     { opacity: 1, transform: 'translateX(0) scale(1)' }],
+                    { duration: 390, easing: easing });
+        }
       }
       anim = '';
       if (!s.flipped && !s.editing && s.spoken !== s.pos) { s.spoken = s.pos; if (state.autoVi) speak(it.vi, 'vi-VN'); }
     }
     function flip() {
-      if (!sess || sess.pos >= sess.queue.length || sess.editing || flipping) return;
+      if (!sess || sess.pos >= sess.queue.length || sess.editing || flipping || ratingPending) return;
       var pos0 = sess.pos, c = document.querySelector('#planBox .pcard');
       haptic(8); legendOpen = false;
       function turn() { flipping = false; if (!sess || sess.pos !== pos0) return; sess.flipped = !sess.flipped; sess.hanja = sess.flipped; if (sess.flipped) speak(ITEMS[sess.queue[sess.pos]].ko, 'ko-KR'); anim = 'flip'; render(); }
-      if (c && c.animate && !reduceMotion()) { flipping = true; var a = c.animate([{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(4px)' }], { duration: 110, easing: 'ease-in', fill: 'forwards' }); a.onfinish = turn; a.oncancel = function () { flipping = false; }; }
+      if (c && c.animate && !reduceMotion() && prefs.fx) {
+        flipping = true;
+        var a = c.animate([
+          { opacity: 1, transform: 'translateY(0) scale(1)' },
+          { opacity: .12, transform: 'translateY(-8px) scale(.986)' }
+        ], { duration: 185, easing: 'cubic-bezier(.42, 0, .7, .28)', fill: 'forwards' });
+        a.onfinish = turn;
+        a.oncancel = function () { flipping = false; };
+      }
       else turn();
     }
-    function go(d) { var n = sess.pos + d; if (n < 0) return; if(window.NHI_HARD_MASCOT)window.NHI_HARD_MASCOT.clear(); sess.pos = n; sess.flipped = false; sess.hanja = false; sess.editing = false; sess.imagePicker = false; legendOpen = false; flipping = false; anim = d > 0 ? 'next' : 'prev'; haptic(6); saveSess(); render(); }
+    function go(d) {
+      if (!sess || ratingPending) return;
+      var n = sess.pos + d; if (n < 0) return;
+      ++ratingToken;
+      if(window.NHI_HARD_MASCOT)window.NHI_HARD_MASCOT.clear();
+      sess.pos = n; sess.flipped = false; sess.hanja = false; sess.editing = false; sess.imagePicker = false;
+      legendOpen = false; flipping = false; anim = d > 0 ? 'next' : 'prev';
+      haptic(6); saveSess(); render();
+    }
     function rate(k) {
-      var s = sess, id = s.queue[s.pos];
+      if (!sess || ratingPending || sess.pos >= sess.queue.length) return;
+      var s = sess, pos = s.pos, id = s.queue[pos], card = document.querySelector('#planBox .pcard');
       if (!id) return;
-      var card = document.querySelector('#planBox .pcard');
-      s.stats[k] = (s.stats[k] || 0) + 1; s.picked[s.pos] = k;
-      put('rate', id, k);
-      var T = today();
-      if (k === 'known') { put('known', id, 1); if (val('hard', id)) put('hard', id, null); }
-      else if (k === 'hard') { s.queue.splice(Math.min(s.pos + 4, s.queue.length), 0, id); put('hard', id, addDays(T, 1)); }
-      else if (k === 'mid') { if (s.kind === 'hard' && val('hard', id)) put('hard', id, null); }
-      haptic(k === 'hard' ? [14, 40, 14] : 14);
-      s.pos++; if (k === 'hard' && s.pos < s.queue.length) react(k, card); else if(window.NHI_HARD_MASCOT)window.NHI_HARD_MASCOT.clear();
-      s.flipped = false; s.hanja = false; s.editing = false; s.imagePicker = false; legendOpen = false; flipping = false; anim = 'next'; saveSess(); render();
+      var token = ++ratingToken;
+      var animated = !!(card && card.isConnected && prefs.fx && !reduceMotion());
+      ratingPending = animated;
+      if (animated) {
+        card.classList.add('nhi-rating-busy', 'nhi-rate-' + k);
+        var button = card.querySelector('.prate .' + k);
+        if(button)button.setAttribute('aria-pressed', 'true');
+      }
+      function finish(){
+        if (token !== ratingToken || sess !== s || s.pos !== pos) { ratingPending = false; return; }
+        ratingPending = false;
+        s.stats[k] = (s.stats[k] || 0) + 1; s.picked[pos] = k;
+        put('rate', id, k);
+        var T = today();
+        if (k === 'known') { put('known', id, 1); if (val('hard', id)) put('hard', id, null); }
+        else if (k === 'hard') { s.queue.splice(Math.min(pos + 4, s.queue.length), 0, id); put('hard', id, addDays(T, 1)); }
+        else if (k === 'mid') { if (s.kind === 'hard' && val('hard', id)) put('hard', id, null); }
+        haptic(k === 'hard' ? [14, 40, 14] : 14);
+        s.pos++; s.flipped = false; s.hanja = false; s.editing = false; s.imagePicker = false;
+        legendOpen = false; flipping = false; anim = 'next';
+        saveSess(); render();
+        // Add Nhi to the NEW card; on mobile this is a dedicated row BELOW the text.
+        if (k === 'hard' && s.pos < s.queue.length) {
+          react(k, document.querySelector('#planBox .pcard'));
+        } else if(window.NHI_HARD_MASCOT) window.NHI_HARD_MASCOT.clear();
+      }
+      if (animated) setTimeout(finish, 430);
+      else finish();
     }
     function renderDone(v) {
       var s = sess, p = el('div', 'quiz sdone');
       setFocus(false);
       var m = el('div'); m.innerHTML = girl('grin'); p.appendChild(m.firstChild);
-      p.appendChild(el('h2', null, 'Xong rồi!'));
+      p.appendChild(el('h2', null, '🎉 Chúc mừng, bạn đã hoàn thành!'));
+      p.appendChild(el('p', 'nhi-victory-message', 'Tuyệt vời! Mỗi thẻ đã học là một bước tiến mới. ✨'));
       p.appendChild(el('p', 'listinfo', s.title));
       var tiles = el('div', 'tiles');
       [['h', 'hard', 'Khó'], ['m', 'mid', 'Bình thường']].forEach(function (x) { var t = el('div', 'tile2 ' + x[0]); t.appendChild(el('b', null, s.stats[x[1]] || 0)); t.appendChild(document.createTextNode(x[2])); tiles.appendChild(t); });
@@ -3483,7 +3527,14 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       row.appendChild(lbtn('ghost', 'left', 'Xem lại thẻ cuối', function () { s.pos = Math.max(0, s.queue.length - 1); anim = 'prev'; saveSess(); render(); }));
       row.appendChild(btn('primary', 'Xong', function () { sess = null; saveSess(); render(); }));
       p.appendChild(row); v.appendChild(p);
-      if (!s.celebrated) { s.celebrated = true; saveSess(); confetti(); haptic([20, 60, 20, 60, 40]); }
+      if (!s.celebrated) {
+        s.celebrated = true; saveSess();
+        if (prefs.fx && !reduceMotion()) {
+          if (window.NHI_FIREWORKS && window.NHI_FIREWORKS.launch) window.NHI_FIREWORKS.launch();
+          else confetti();
+        }
+        haptic([20, 60, 20, 60, 40]);
+      }
     }
     function askAi() { var it = curItem(); if (it && window.NLC_AI) window.NLC_AI.open(true); }
 
@@ -4173,4 +4224,5 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 
 <script src="backup-portable-v1.js"></script>
 <script src="nhi-ai-resize-v2.js?v=1"></script>
+<script src="nhi-fireworks-v3.js?v=3"></script>
 </body></html>

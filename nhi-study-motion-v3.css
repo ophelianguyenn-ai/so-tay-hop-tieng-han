@@ -1,0 +1,87 @@
+/* v3: calm, professional card transitions and responsive celebrations */
+#planBox .pcard { backface-visibility: hidden; }
+#planBox .pcard.nhi-rating-busy .prate button { pointer-events:none; }
+#planBox .pcard.nhi-rating-busy .pfront { pointer-events:none; }
+#planBox .pcard.nhi-rating-busy { isolation:isolate; }
+#planBox .pcard.nhi-rate-hard { --nhi-react-ink:#b45309; --nhi-react-bg:#fff0d6; }
+#planBox .pcard.nhi-rate-mid { --nhi-react-ink:#1265a8; --nhi-react-bg:#e2f3ff; }
+#planBox .pcard.nhi-rating-busy .pfront .prompt,
+#planBox .pcard.nhi-rating-busy .pfront .answer,
+#planBox .pcard.nhi-rating-busy .pfront .vi-under,
+#planBox .pcard.nhi-rating-busy .pfront .hanja {
+  color:var(--nhi-react-ink)!important;
+  animation:nhi-word-affirm .43s cubic-bezier(.18,.65,.28,1) both;
+}
+#planBox .pcard.nhi-rating-busy .pfront {
+  background-image:radial-gradient(ellipse at 50% 55%,var(--nhi-react-bg),transparent 62%);
+  animation:nhi-card-affirm .43s cubic-bezier(.18,.65,.28,1) both;
+}
+#planBox .pcard.nhi-rate-hard .prate .hard,
+#planBox .pcard.nhi-rate-mid .prate .mid {
+  transform:translateY(2px) scale(1.035);
+  color:#fff!important;
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--nhi-react-ink) 22%,transparent),0 8px 24px color-mix(in srgb,var(--nhi-react-ink) 24%,transparent)!important;
+  background:var(--nhi-react-ink)!important;
+  border-color:var(--nhi-react-ink)!important;
+  animation:nhi-button-confirm .43s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes nhi-word-affirm {
+  0% {transform:translateY(0);filter:brightness(1)}
+  38% {transform:translateY(-3px) scale(1.015);filter:brightness(1.08)}
+  100% {transform:translateY(0);filter:brightness(1)}
+}
+@keyframes nhi-button-confirm {
+  0% {transform:scale(1)}
+  36% {transform:translateY(-2px) scale(1.055)}
+  100% {transform:translateY(2px) scale(1.035)}
+}
+@keyframes nhi-card-affirm {
+  0% {filter:brightness(1)}
+  50% {filter:brightness(1.018)}
+  100% {filter:brightness(1)}
+}
+#planBox .sdone {position:relative;overflow:hidden;background-image:radial-gradient(ellipse at 50% -8%,rgba(255,210,110,.13),transparent 60%)}
+#planBox .sdone .nhi-victory-message {color:var(--accent-t);font-weight:800;font-size:clamp(15px,3vw,19px);line-height:1.5;margin:5px auto 15px;text-wrap:balance}
+#planBox .sdone h2{font-size:clamp(22px,4vw,30px)}
+#confetti:not([hidden]){pointer-events:none!important}
+@media(max-width:720px){
+  /* On phones: put Nhi AFTER the text and action buttons as a normal card row. Never cover learning text. */
+  #planBox .pcard #nhi-hard-mascot.nhi-hard-inline {
+    position:relative!important;
+    inset:auto!important;
+    left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;
+    width:min(100%,260px)!important;max-width:100%!important;
+    margin:12px auto 5px 12px!important;
+    padding:5px 0!important;
+    display:flex!important;flex-direction:row!important;align-items:center!important;
+    justify-content:flex-start!important;gap:9px!important;
+    background:transparent!important;border:0!important;box-shadow:none!important;
+    transform:none!important;pointer-events:none!important;
+    z-index:2!important;min-height:60px;
+  }
+  #planBox .pcard #nhi-hard-mascot.nhi-hard-inline img{
+    width:64px!important;max-width:64px!important;height:auto!important;
+    flex:0 0 64px!important;
+    pointer-events:none!important;cursor:default!important;
+    filter:drop-shadow(0 3px 6px rgba(53,74,67,.12));
+  }
+  #planBox .pcard #nhi-hard-mascot.nhi-hard-inline .nhi-hard-caption{
+    font-size:12px!important;line-height:1.35!important;
+    max-width:165px!important;min-width:0;
+    text-align:left!important;white-space:normal;
+    overflow-wrap:break-word;text-shadow:none!important;
+  }
+}
+@media(max-width:370px) {
+  #planBox .pcard #nhi-hard-mascot.nhi-hard-inline {margin-left:7px!important;width:min(100%,226px)!important;gap:7px!important}
+  #planBox .pcard #nhi-hard-mascot.nhi-hard-inline img {width:52px!important;max-width:52px!important;flex-basis:52px!important}
+  #planBox .pcard #nhi-hard-mascot.nhi-hard-inline .nhi-hard-caption {font-size:11px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  #planBox .pcard.nhi-rating-busy .pfront,
+  #planBox .pcard.nhi-rating-busy .pfront .prompt,
+  #planBox .pcard.nhi-rating-busy .pfront .answer,
+  #planBox .pcard.nhi-rating-busy .pfront .vi-under,
+  #planBox .pcard.nhi-rating-busy .pfront .hanja,
+  #planBox .pcard.nhi-rating-busy .prate button {animation:none!important;transition:none!important}
+}
