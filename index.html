@@ -1470,7 +1470,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     an.className = 'answer' + (vk ? ' ko' : '') + (answerText.length > 55 ? ' long' : '');
     an.hidden = !state.flipped;
     var hx=$('legacyHanja');if(!hx){hx=document.createElement('p');hx.id='legacyHanja';hx.className='hanja';an.insertAdjacentElement('afterend',hx);}var hd=(window.NHI_HANJA||{})[c.ko.trim()];hx.hidden=!(state.flipped&&hd);hx.textContent=hd?hd[0]+' ('+hd[1]+')':'';
-    var il=$('classicCardIllustration');if(!il){il=document.createElement('div');il.id='classicCardIllustration';an.insertAdjacentElement('afterend',il);}il.replaceChildren();if(state.flipped&&window.NHI_IMAGES){var ii=window.NHI_IMAGES.figure(c,c.image||null);if(ii)il.appendChild(ii);}il.hidden=!state.flipped;
+    var il=$('classicCardIllustration');if(!il){il=document.createElement('div');il.id='classicCardIllustration';an.insertAdjacentElement('afterend',il);}il.replaceChildren();if(state.flipped&&window.NHI_IMAGES){try{var ii=window.NHI_IMAGES.figure(c,c.image||null);if(ii)il.appendChild(ii);}catch(imageErr){console.warn('Nhi card illustration unavailable',imageErr);}}il.hidden=!state.flipped;
     // Pronunciation sits right under whichever line is Korean, once that line is visible
     var pe = $('cPron'), koEl = vk ? an : pr, koShown = vk ? state.flipped : true;
     if (koEl.nextElementSibling !== pe) koEl.insertAdjacentElement('afterend', pe);
@@ -2904,7 +2904,11 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 
     /* ---- views ---- */
     function render() {
-      var v = $('planBox'); if (!v) return; v.textContent = '';
+      var v = $('planBox'); if (!v) return;
+      // Keep the previous study card on screen until a fresh one has been rendered.
+      // An optional feature must never leave the entire study area blank.
+      var oldCard = document.createDocumentFragment();
+      while (v.firstChild) oldCard.appendChild(v.firstChild);
       var inSess = !!sess && (!page || (sess.L && sess.L.id === page));
       if (!inSess) { setFocus(false); legendOpen = false; }
       document.body.classList.toggle('themed', !!(page && BY_LESSON[page])); if (page && BY_LESSON[page]) document.body.style.setProperty('--day', dayColor(BY_LESSON[page].date));
@@ -2912,9 +2916,38 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var key = (page || 'home') + '|' + (inSess ? 'sess' : view);
       var fresh = key !== lastKey; lastKey = key;
       v.className = fresh ? 'fresh' : '';
-      if (page) return renderPage(v, BY_LESSON[page], fresh);
-      if (sess) return renderSession(v, fresh);
-      renderHome(v, fresh);
+      try {
+        if (page) renderPage(v, BY_LESSON[page], fresh);
+        else if (sess) renderSession(v, fresh);
+        else renderHome(v, fresh);
+      } catch (renderErr) {
+        console.error('Nhi: study-card render error (showing a safe fallback)', renderErr);
+        // Always display at least a functional card when a secondary feature fails.
+        v.textContent = '';
+        var it = sess && sess.queue && ITEMS[sess.queue[sess.pos]];
+        if (it) {
+          var backup = el('section', 'card pcard nhi-fallback-card');
+          backup.style.cssText = 'padding:24px;min-height:260px;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px';
+          backup.appendChild(el('p','kind', it.type === 'w' ? 'Từ vựng' : 'Câu'));
+          var content = el('p', sess.flipped ? 'answer ko' : 'prompt', sess.flipped ? it.ko : it.vi);
+          content.lang = sess.flipped ? 'ko' : 'vi';
+          content.style.cssText = 'margin:auto;text-align:center;overflow-wrap:anywhere';
+          backup.appendChild(content);
+          if(sess.flipped)backup.appendChild(el('p','vi-under',it.vi));
+          var nav = el('div','btnrow');
+          nav.style.justifyContent = 'center';
+          nav.appendChild(btn('ghost','← Trước',function(){go(-1);}));
+          nav.appendChild(btn('primary','Lật thẻ',function(){sess.flipped=!sess.flipped;render();}));
+          nav.appendChild(btn('ghost','Tiếp →',function(){go(1);}));
+          backup.appendChild(nav);
+          var rates = el('div','btnrow');rates.style.justifyContent='center';
+          rates.appendChild(btn('ghost','Khó',function(){rate('hard');}));
+          rates.appendChild(btn('ghost','Bình thường',function(){rate('mid');}));
+          backup.appendChild(rates);
+          v.appendChild(backup);
+        } else if (oldCard.childNodes.length) v.appendChild(oldCard);
+        else v.appendChild(el('p','notice','Đã xảy ra lỗi hiển thị. Hãy tải lại trang để tiếp tục học; tiến độ không bị xoá.'));
+      }
     }
     function legend() {
       var lg = el('div', 'plegend');
@@ -3252,7 +3285,8 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       ci.appendChild(ibtn('iconbtn sm', 'edit', function () { s.editing = !s.editing; legendOpen = false; render(); }, 'Sửa thẻ, chữ Hán và hình ảnh'));
       var bk = ibtn('iconbtn sm', 'book', function () { legendOpen = !legendOpen; render(); }, 'Chú giải phím tắt và thao tác'); bk.setAttribute('aria-expanded', String(legendOpen)); ci.appendChild(bk);
       if (canSpeak) ci.appendChild(ibtn('iconbtn sm', 'vol', function () { speak(it.ko, 'ko-KR'); }, 'Nghe tiếng Hàn'));
-      var hj = it.type === 'w' ? lookupHanja(it.ko, it.id) : null;
+      var hj = null;
+      if (it.type === 'w') { try { hj = lookupHanja(it.ko, it.id); } catch(hanjaErr) { console.warn('Nhi Hanja unavailable for this card', hanjaErr); } }
       if (it.type === 'w' && !(val('hj', it.id) && val('hj', it.id).kind === 'none') && (val('hj',it.id) && val('hj',it.id).han || (window.NHI_NON_HANJA||[]).indexOf(it.ko.trim())<0)) { var hb = btn('iconbtn sm hjbtn', '漢', function () { if(!s.flipped){s.flipped=true;s.hanja=true;}else{s.hanja=!s.hanja;} render(); }, 'Chữ Hán và âm Hán Việt'); hb.setAttribute('aria-pressed', String(!!s.hanja)); ci.insertBefore(hb, ci.firstChild); }
       m.appendChild(ci); c.appendChild(m); c.appendChild(cm);
       if (legendOpen) c.appendChild(legendPop());
@@ -3264,7 +3298,10 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
         if (hj && s.hanja) { var hx = el('p', 'hanja', hj[0]); hx.lang = 'ko'; hx.appendChild(el('small', null, '(' + hj[1] + ')')); f.appendChild(hx); }
         f.appendChild(hlText(el('p', 'vi-under'), it, 'vi', true));
       } else f.appendChild(hlText(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : '')), it, 'vi', true));
-      if (!s.editing && s.flipped) { var illustration = window.NHI_IMAGES.figure(it, val('img',it.id)); if (illustration) f.appendChild(illustration); }
+      if (!s.editing && s.flipped && window.NHI_IMAGES) {
+        try { var illustration = window.NHI_IMAGES.figure(it, val('img',it.id)); if (illustration) f.appendChild(illustration); }
+        catch (imageErr) { console.warn('Nhi illustration could not render', imageErr); }
+      }
       f.addEventListener('click', function (e) { if (e.target.closest('figure')) return; if (s.editing || e.target.closest('.ph.tap')) return; flip(); });
       c.appendChild(f);
       if (it.note && s.flipped && !s.editing) c.appendChild(el('p', 'listinfo', it.note));
