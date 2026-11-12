@@ -2665,6 +2665,42 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       SYNC.queue('X/' + L.id, L);
       return L;
     }
+    function titleDate(title, year) {
+      var m = /(?:^|\s)(\d{1,2})[.\/](\d{1,2})(?:[.\/](\d{4}))?(?=\s|$|[·–—-])/.exec(title);
+      if (!m) return null;
+      var date = (m[3] || year) + '-' + String(+m[2]).padStart(2, '0') + '-' + String(+m[1]).padStart(2, '0');
+      return validDate(date) ? date : null;
+    }
+    function updateDaily(id, date, title) {
+      var original = BY_LESSON[id];
+      if (!original) throw new Error('Không tìm thấy học phần. Tải lại trang rồi thử lại.');
+      if (!validDate(date)) throw new Error('Chọn một ngày hợp lệ.');
+      title = String(title || '').trim();
+      if (!title) throw new Error('Nhập tên học phần.');
+      var L = { id: original.id, date: date, plan: date === original.date ? original.plan : date, title: title, items: original.items, sourceDeck: original.sourceDeck || '', updatedAt: Date.now() };
+      var X = {}; X[id] = L; applyExtras(X); SYNC.queue('X/' + id, L); SYNC.flush();
+      return BY_LESSON[id];
+    }
+    function openDailyEditor(L) {
+      var previous = document.getElementById('dailyEditor'); if (previous) previous.remove();
+      var dlg = el('dialog'); dlg.id = 'dailyEditor'; dlg.setAttribute('aria-labelledby', 'dailyEditTitle');
+      dlg.style.cssText = 'width:min(600px,calc(100% - 24px));max-height:90dvh;overflow:auto;border:2px solid var(--line);border-radius:26px;padding:24px;background:var(--surface);color:var(--ink);box-shadow:var(--sh-2)';
+      var form = el('form', 'panel'); form.style.cssText = 'display:grid;gap:16px';
+      var head = el('div', 'sheethead'), h = el('h2', null, 'Sửa tên học phần'); h.id = 'dailyEditTitle'; head.appendChild(h); head.appendChild(btn('ghost', 'Đóng', function () { dlg.close(); })); form.appendChild(head);
+      var date = txt('date', '', L.date); date.type = 'date'; date.required = true; form.appendChild(labeled('Ngày học phần', date));
+      var title = txt('title', 'Tên học phần', L.title); title.required = true; title.maxLength = 200; form.appendChild(labeled('Tên học phần', title));
+      form.appendChild(el('p', 'listinfo', 'Đổi ngày để bài tự xếp lại theo thứ tự trong lịch. Bạn cũng có thể sửa ngày trong tên, ví dụ “Bài ngày 12.11.2026”. Nội dung và tiến độ đã học được giữ nguyên.'));
+      var error = el('p', 'notice'); error.setAttribute('role', 'alert'); form.appendChild(error);
+      date.addEventListener('change', function () { if (validDate(date.value)) title.value = title.value.replace(/\b\d{1,2}[.\/]\d{1,2}(?:[.\/]\d{4})?\b/, function (v) { return vn(date.value, /\d{4}$/.test(v)); }); });
+      title.addEventListener('input', function () { var d = titleDate(title.value, date.value.slice(0, 4)); if (d) date.value = d; });
+      var submit = el('button', 'primary', 'Lưu thay đổi'); submit.type = 'submit'; form.appendChild(submit);
+      form.addEventListener('submit', function (e) {
+        e.preventDefault(); error.textContent = '';
+        try { var updated = updateDaily(L.id, date.value, title.value); dlg.close(); render(); toast('Đã lưu học phần ngày ' + vn(updated.date, true) + ' và xếp lại lịch học.'); }
+        catch (ex) { error.textContent = ex.message; }
+      });
+      dlg.appendChild(form); document.body.appendChild(dlg); dlg.addEventListener('close', function () { dlg.remove(); }); dlg.showModal(); title.focus();
+    }
     function openDailyCreator() {
       var previous = document.getElementById('dailyCreator'); if (previous) previous.remove();
       var dlg = el('dialog'); dlg.id = 'dailyCreator'; dlg.setAttribute('aria-labelledby', 'dailyTitle');
@@ -2681,7 +2717,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var bulk = el('textarea', 'field'); bulk.name = 'bulk'; bulk.rows = 8; bulk.placeholder = 'Tiếng Việt\tTiếng Hàn\tGhi chú (không bắt buộc)'; form.appendChild(labeled('Nội dung: mỗi dòng một mục Việt – Hàn', bulk));
       form.appendChild(el('p', 'listinfo', 'Dán hai cột từ Excel hoặc ngăn bằng Tab, dấu = hay dấu ;. Cột thứ ba là ghi chú. Câu có dấu kết thúc được đưa vào phần Câu, các mục còn lại vào phần Từ vựng.'));
       var move = el('input'); move.type = 'checkbox'; move.name = 'move'; move.checked = true;
-      var moveLabel = labeled('Chuyển khỏi học phần thẻ ghi nhớ sau khi tạo bài (có thể khôi phục)', move); moveLabel.hidden = true; form.appendChild(moveLabel);
+      var moveLabel = labeled('Chuyển khỏi học phần thẻ ghi nhớ sau khi tạo bài', move); moveLabel.hidden = true; form.appendChild(moveLabel);
       var preview = el('p', 'notice'); preview.setAttribute('aria-live', 'polite'); form.appendChild(preview);
       var error = el('p', 'notice'); error.setAttribute('role', 'alert'); form.appendChild(error);
       var submit = el('button', 'primary', 'Tạo bài theo ngày'); submit.type = 'submit'; form.appendChild(submit);
@@ -2714,7 +2750,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       if (!loaded) { pendingExtras = Object.assign(pendingExtras || {}, X); return; }
       var changed = false;
       Object.keys(X).forEach(function (k) { var L = X[k]; if (!L || typeof L !== 'object' || k.charAt(0) === '_') return; var copy = { id: L.id || k, date: L.date, plan: L.plan || L.date, title: L.title || ('Bài ngày ' + vn(L.date)), items: normItems(L), extra: true, updatedAt: L.updatedAt || 0, sourceDeck: L.sourceDeck || '' }; if (validDate(copy.date) && (!dailyCache[k] || !dailyCache[k].updatedAt || copy.updatedAt >= dailyCache[k].updatedAt)) { dailyCache[k] = copy; if (addLesson(copy)) changed = true; } });
-      if (changed) { cacheDaily(); DATES.sort(); onData(); if (!sess) { restoreSession(); route(); } }
+      if (changed) { cacheDaily(); DATES = LESSONS.map(function (L) { return L.date; }).filter(function (d, i, a) { return a.indexOf(d) === i; }).sort(); if (sess && sess.L && BY_LESSON[sess.L.id]) sess.L = BY_LESSON[sess.L.id]; onData(); if (!sess) { restoreSession(); route(); } }
     }
     function loadExtras() {
       var c = SYNC.cfg(); if (!c) { extrasTried = true; return; }
@@ -3061,6 +3097,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var label = rs.length ? 'Tiếp tục (còn ' + rs.length + ' thẻ)' : !cur ? 'Học lại' : cur.st === 'next' ? 'Học trước' : (cur.step ? 'Học ' + STEP[cur.step].toLowerCase() : 'Học ngay');
       var row2 = el('div', 'prow');
       row2.appendChild(lbtn('primary big', 'bolt', label, function () { startLesson(L); }));
+      row2.appendChild(lbtn('ghost', 'edit', 'Sửa tên học phần', function () { openDailyEditor(L); }));
       var hd2 = hardIds(L.ids);
       if (hd2.length) row2.appendChild(lbtn('ghost', 'flip', 'Ôn lại thẻ khó (' + hd2.length + ')', function () { start('hard', hd2, L.title + ' · thẻ khó', L); }));
       hd.appendChild(row2);
