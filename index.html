@@ -921,7 +921,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 
 <!-- Cover -->
 <div class="cover" id="cover">
-  <div class="landscape" aria-hidden="true">
+  <div class="landscape" aria-hidden="true"><div class="garden-art day-only"></div><div class="garden-art night-only"></div><div class="water-light"></div>
     <div class="sun day-only"></div><div class="moon night-only"></div>
     <div class="cloud cloud-one day-only"></div><div class="cloud cloud-two day-only"></div><div class="cloud cloud-three day-only"></div>
     <svg class="birds day-only" viewBox="0 0 220 60"><path d="M10 30q15-20 30 0q15-20 30 0 M100 15q12-16 24 0q12-16 24 0 M160 44q10-14 20 0q10-14 20 0"/></svg>
@@ -2555,7 +2555,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   /* ================= Lịch học theo ngày: bài theo ngày nhập + ôn lặp lại 5 mốc ================= */
   var PLAN = (function () {
     var KEY = 'viko-plan-v1', SKEY = 'viko-plan-sess-v1', OFFSETS = [0, 3, 13, 50, 180], STEP = ['Học mới', 'Ôn 1', 'Ôn 2', 'Ôn 3', 'Ôn 4'];
-    var SECS = ['done', 'known', 'hard', 'del', 'rate', 'hl', 'ed'];
+    var SECS = ['done', 'known', 'hard', 'del', 'rate', 'hl', 'ed', 'hj'];
     var RATE_NAME = { known: 'Biết rồi', hard: 'Khó', mid: 'Bình thường' };
     var ST_ICON = { done: '✓', today: '●', late: '!', next: '○', future: '○' };
     // every colour here is dark enough for white text; no reds or oranges, so a day never looks "overdue"
@@ -2564,7 +2564,10 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     // Sino-Korean words: Hán tự + âm Hán Việt (bản demo: một số từ; bản chính thức sẽ nạp đủ)
     var HANJA = { '등산': ['登山', 'đăng sơn'], '대금 지급': ['代金 支給', 'đại kim chi cấp'], '인도 장소': ['引渡 場所', 'dẫn độ trường sở'], '완료 기간': ['完了 期間', 'hoàn liễu kỳ gian'], '하자보증': ['瑕疵保證', 'hà tì bảo chứng'], '작업 범위': ['作業 範圍', 'tác nghiệp phạm vi'], '가열': ['加熱', 'gia nhiệt'], '배출': ['排出', 'bài xuất'], '운전': ['運轉', 'vận chuyển'], '용접': ['鎔接', 'dung tiếp'], '견적서': ['見積書', 'kiến tích thư'], '단가': ['單價', 'đơn giá'], '금액': ['金額', 'kim ngạch'], '수량': ['數量', 'số lượng'], '재질': ['材質', 'tài chất'], '점검': ['點檢', 'điểm kiểm'], '절단': ['切斷', 'thiết đoạn'], '내경': ['內徑', 'nội kính'], '밀도': ['密度', 'mật độ'], '허락': ['許諾', 'hứa nặc'], '출근': ['出勤', 'xuất cần'], '퇴근': ['退勤', 'thoái cần'], '주철': ['鑄鐵', 'chú thiết'], '운송': ['運送', 'vận tống'], '용기': ['容器', 'dung khí'], '입구': ['入口', 'nhập khẩu'], '출구': ['出口', 'xuất khẩu'], '작업 내용': ['作業 內容', 'tác nghiệp nội dung'], '인건비': ['人件費', 'nhân kiện phí'], '소모품': ['消耗品', 'tiêu hao phẩm'] };
     Object.assign(HANJA, window.NHI_HANJA || {});
-    function lookupHanja(text) {
+    function lookupHanja(text, id) {
+      var custom = id ? val('hj', id) : null;
+      if (custom && custom.kind === 'none') return null;
+      if (custom && custom.han) return [custom.han, custom.reading || ''];
       var key = text.trim().replace(/\s+/g, ' ');
       if (HANJA[key]) return HANJA[key];
       var parts = key.split(' '), found = parts.map(function (part) { return HANJA[part]; });
@@ -3026,15 +3029,37 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     function curItem() { return sess && sess.pos < sess.queue.length ? ITEMS[sess.queue[sess.pos]] : null; }
     function editForm(it) {
       var f = el('form', 'editbox');
+      var savedHj = val('hj', it.id), initialHj = lookupHanja(it.ko, it.id);
+      var hanInput, readingInput, kindInput;
+      if (it.type === 'w') {
+        var section = el('fieldset', 'hanja-editor'); section.appendChild(el('legend', null, 'Chữ Hán & âm Hán–Việt'));
+        function field(label, name, value) { var l = el('label', 'flabel'); l.appendChild(el('span', null, label)); var i = el('input', 'field'); i.type = 'text'; i.name = name; i.value = value || ''; i.maxLength = 200; l.appendChild(i); section.appendChild(l); return i; }
+        var kl = el('label', 'flabel'); kl.appendChild(el('span', null, 'Loại từ')); kindInput = el('select', 'field');
+        [['auto','Chưa phân loại / dùng dữ liệu sẵn có'],['han','Từ Hán–Hàn'],['none','Không phải từ Hán–Hàn']].forEach(function(x){var o=el('option',null,x[1]);o.value=x[0];kindInput.appendChild(o);});
+        kindInput.value = savedHj ? savedHj.kind : (initialHj ? 'han' : 'auto'); kl.appendChild(kindInput); section.appendChild(kl);
+        hanInput = field('Chữ Hán', 'hanja', initialHj ? initialHj[0] : ''); readingInput = field('Âm Hán–Việt', 'hanviet', initialHj ? initialHj[1] : '');
+        var links=el('div','dictionary-links');
+        function dictionaryLink(label, href) {var a=el('a','ghost',label);a.href=href;a.target='_blank';a.rel='noopener noreferrer';links.appendChild(a);return a;}
+        dictionaryLink('1. Tra Naver', 'https://korean.dict.naver.com/koendict/#/search?range=korean&query='+encodeURIComponent(it.ko));
+        var vietLink=dictionaryLink('2. Tra Thi Viện', 'https://hvdic.thivien.net/whv/'+encodeURIComponent(hanInput.value || ''));
+        hanInput.addEventListener('input',function(){vietLink.href='https://hvdic.thivien.net/whv/'+encodeURIComponent(hanInput.value);if(hanInput.value.trim())kindInput.value='han';});
+        function updateKind(){hanInput.disabled=readingInput.disabled=kindInput.value==='none';}kindInput.addEventListener('change',updateKind);updateKind();
+        section.appendChild(links);section.appendChild(el('p','hint','Lưu để đồng bộ với tiến độ học. Chọn “Không phải từ Hán–Hàn” để ẩn nút 漢.')); f.appendChild(section);
+      }
       var l1 = el('label', 'flabel'); l1.appendChild(el('span', null, 'Tiếng Hàn')); var ko = el('textarea', 'field'); ko.rows = 2; ko.lang = 'ko'; ko.value = it.ko; ko.name = 'ko'; l1.appendChild(ko); f.appendChild(l1);
       var l2 = el('label', 'flabel'); l2.appendChild(el('span', null, 'Nghĩa tiếng Việt')); var vi = el('textarea', 'field'); vi.rows = 2; vi.value = it.vi; vi.name = 'vi'; l2.appendChild(vi); f.appendChild(l2);
       var row = el('div', 'btnrow'), ok = el('button', 'primary', 'Lưu'); ok.type = 'submit'; row.appendChild(ok);
       row.appendChild(btn('ghost', 'Huỷ', function () { sess.editing = false; render(); }));
-      if (it.edited) row.appendChild(btn('ghost', 'Về bản gốc', function () { put('ed', it.id, null); applyEd(it.id); sess.editing = false; render(); toast('Đã trả về bản dịch gốc.'); }));
+      if (it.edited || savedHj) row.appendChild(btn('ghost', 'Về bản gốc', function () { put('ed', it.id, null); put('hj', it.id, null); applyEd(it.id); sess.editing = false; render(); toast('Đã trả về bản dịch gốc.'); }));
       f.appendChild(row);
       f.addEventListener('submit', function (e) {
         e.preventDefault();
         var k = ko.value.trim(), w = vi.value.trim(); if (!k || !w) return;
+        if (hanInput) {
+          var han = hanInput.value.trim(), reading = readingInput.value.trim(), kind = kindInput.value;
+          if (kind === 'han' && (!han || !reading)) { toast('Nhập cả chữ Hán và âm Hán–Việt trước khi lưu.'); return; }
+          put('hj', it.id, kind === 'none' ? {kind:'none'} : kind === 'auto' ? null : {kind:'han',han:han,reading:reading});
+        }
         put('ed', it.id, (k === it.ko0 && w === it.vi0) ? null : { vi: w, ko: k }); applyEd(it.id);
         sess.editing = false; render(); toast('Đã lưu bản sửa.');
       });
@@ -3074,15 +3099,15 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       ci.appendChild(ibtn('iconbtn sm', 'edit', function () { s.editing = !s.editing; legendOpen = false; render(); }, 'Sửa bản dịch'));
       var bk = ibtn('iconbtn sm', 'book', function () { legendOpen = !legendOpen; render(); }, 'Chú giải phím tắt và thao tác'); bk.setAttribute('aria-expanded', String(legendOpen)); ci.appendChild(bk);
       if (canSpeak) ci.appendChild(ibtn('iconbtn sm', 'vol', function () { speak(it.ko, 'ko-KR'); }, 'Nghe tiếng Hàn'));
-      var hj = it.type === 'w' ? lookupHanja(it.ko) : null;
-      if (it.type === 'w' && s.flipped) { var hb = btn('iconbtn sm hjbtn', '漢', function () { s.hanja = !s.hanja; render(); }, 'Chữ Hán và âm Hán Việt'); hb.setAttribute('aria-pressed', String(!!s.hanja)); ci.insertBefore(hb, ci.firstChild); }
+      var hj = it.type === 'w' ? lookupHanja(it.ko, it.id) : null;
+      if (it.type === 'w' && s.flipped && !(val('hj', it.id) && val('hj', it.id).kind === 'none')) { var hb = btn('iconbtn sm hjbtn', '漢', function () { s.hanja = !s.hanja; render(); }, 'Chữ Hán và âm Hán Việt'); hb.setAttribute('aria-pressed', String(!!s.hanja)); ci.insertBefore(hb, ci.firstChild); }
       m.appendChild(ci); c.appendChild(m); c.appendChild(cm);
       if (legendOpen) c.appendChild(legendPop());
       var f = el('div', 'stage pfront');
       if (s.editing) f.appendChild(editForm(it));
       else if (s.flipped) {
         var a = hlText(el('p', 'answer ko' + (it.ko.length > 40 ? ' long' : '')), it, 'ko', false); a.lang = 'ko'; f.appendChild(a);
-        if (!hj && s.hanja) { var missing = el('p', 'hanja-missing', 'Từ này chưa có dữ liệu chữ Hán đã đối chiếu.'); var lookup = el('a', null, 'Tra từ điển Hàn–Việt'); lookup.href = 'https://krdict.korean.go.kr/vie/dicSearch/search?mainSearchWord=' + encodeURIComponent(it.ko); lookup.target = '_blank'; lookup.rel = 'noopener noreferrer'; missing.appendChild(lookup); f.appendChild(missing); }
+        if (!hj && s.hanja) { var missing = el('p', 'hanja-missing', 'Từ này chưa có dữ liệu chữ Hán đã đối chiếu.'); var lookup = el('a', null, 'Tra Naver'); lookup.href = 'https://korean.dict.naver.com/koendict/#/search?range=korean&query=' + encodeURIComponent(it.ko); lookup.target = '_blank'; lookup.rel = 'noopener noreferrer'; missing.appendChild(lookup); missing.appendChild(btn('ghost','Thêm chữ Hán thủ công',function(){s.editing=true;render();})); f.appendChild(missing); }
         if (hj && s.hanja) { var hx = el('p', 'hanja', hj[0]); hx.lang = 'ko'; hx.appendChild(el('small', null, '(' + hj[1] + ')')); f.appendChild(hx); }
         f.appendChild(hlText(el('p', 'vi-under'), it, 'vi', true));
       } else f.appendChild(hlText(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : '')), it, 'vi', true));
@@ -3584,8 +3609,8 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     }
     function init() {
       applyTheme(); paintIcons(document);
-      $('coverHero').innerHTML = girl('cover');
-      var face = girl('face').replace('viewBox="0 0 160 160"', 'viewBox="30 30 100 100"'); $('brandFace').innerHTML = '<img src="nhi-avatar.png" alt="Nhi" width="54" height="54">'; $('aiFace').innerHTML = face;
+      $('coverHero').innerHTML = '<img class="nhi-original" src="nhi-mascot.webp" alt="Nhi ôm hoa">';
+      var face = girl('face').replace('viewBox="0 0 160 160"', 'viewBox="30 30 100 100"'); $('brandFace').innerHTML = '<img src="nhi-mascot.webp" alt="Nhi" width="64" height="64">'; $('aiFace').innerHTML = face;
       if (!$('cover').hidden) document.body.classList.add('modal-open');
       $('menuBtn').addEventListener('click', function () { menu($('menuList').hidden); });
       $('menuScrim').addEventListener('click', function () { menu(false); });
@@ -3751,4 +3776,5 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 })();
 </script>
 
+<script src="garden-v10.js"></script>
 </body></html>
