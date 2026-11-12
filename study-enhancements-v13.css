@@ -1,0 +1,101 @@
+/* V13: centered flip card, picture picker and interactive hard-card mascot. */
+#planBox .pcard .pfront {
+  padding-inline:clamp(16px,3.2vw,56px) !important;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+#planBox .pcard .pfront > .prompt,
+#planBox .pcard .pfront > .answer,
+#planBox .pcard .pfront > .vi-under,
+#planBox .pcard .pfront > .hanja {
+  margin-inline:auto;
+  text-align:center;
+  align-self:center;
+}
+#planBox .pcard .pfront > figure { margin-inline:auto; align-self:center; }
+
+.nhi-picture-picker {
+  position:absolute;
+  z-index:25;
+  left:clamp(10px,2vw,24px);
+  right:clamp(10px,2vw,24px);
+  top:78px;
+  bottom:12px;
+  min-height:220px;
+  box-sizing:border-box;
+  border:2px solid var(--line);
+  border-radius:20px;
+  background:var(--surface);
+  color:var(--ink);
+  box-shadow:0 12px 38px #0002;
+  padding:clamp(12px,2vw,22px);
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  cursor:default;
+}
+.nhi-picture-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nhi-picture-head strong{font-size:18px}
+.nhi-picture-help,.nhi-picture-status{font-size:13px;color:var(--muted);margin:0}
+.nhi-picture-search{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nhi-picture-search input{flex:1;min-width:160px}
+.nhi-picture-search button{min-height:44px}
+.nhi-picture-results{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:stretch}
+.nhi-picture-result{display:flex;flex-direction:column;gap:5px;padding:6px;background:var(--sunk);border:2px solid var(--line);border-radius:12px;color:var(--ink);min-width:0;cursor:pointer;text-align:center;transition:border-color .15s, transform .15s}
+.nhi-picture-result:hover,.nhi-picture-result:focus-visible{border-color:var(--accent-t);transform:translateY(-2px)}
+.nhi-picture-result img{width:100%;aspect-ratio:4/3;height:auto;object-fit:contain;background:var(--surface);border-radius:7px}
+.nhi-picture-result span{font-size:11px;line-height:1.3;overflow-wrap:anywhere;max-height:3.9em;overflow:hidden}
+@media(max-width:800px){
+ .nhi-picture-results{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .nhi-picture-picker{top:68px}
+}
+@media(max-width:560px){
+ .nhi-picture-results{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .nhi-picture-picker{left:7px;right:7px;top:74px;bottom:6px;padding:10px}
+ .nhi-picture-head strong{font-size:15px}
+ .nhi-picture-result span{font-size:10px}
+}
+#nhi-hard-mascot{
+ position:fixed;z-index:85;
+ width:calc(var(--nhi-hard-size,185px) + 24px);
+ padding:7px 10px 10px;
+ border-radius:18px;
+ background:var(--surface);
+ border:1px solid var(--line);
+ box-shadow:0 8px 32px #0003;
+ display:flex;
+ align-items:center;
+ flex-direction:column;
+ gap:3px;
+ color:var(--ink);
+ box-sizing:border-box;
+}
+.nhi-hard-grip{
+ font-size:11px;font-weight:700;
+ color:var(--muted);text-align:center;
+ width:100%;padding:3px;
+ cursor:grab;
+ touch-action:none;
+ user-select:none;
+}
+#nhi-hard-mascot img{
+ display:block;
+ width:var(--nhi-hard-size,185px);
+ height:var(--nhi-hard-size,185px);
+ object-fit:contain;
+ max-width:100%;
+ border-radius:12px;
+ cursor:grab;
+ touch-action:none;
+ user-select:none;
+}
+.nhi-hard-grip:active,#nhi-hard-mascot img:active{cursor:grabbing}
+.nhi-hard-caption{margin:0;text-align:center;font-size:12px;font-weight:700;line-height:1.4}
+.nhi-hard-controls{display:flex;gap:5px;align-items:center;justify-content:center}
+.nhi-hard-controls button{min-width:31px;height:30px;border:1px solid var(--line);border-radius:9px;background:var(--sunk);color:var(--ink);cursor:pointer;font-size:17px}
+.nhi-hard-controls button:hover{border-color:var(--accent-t)}
+/* The normal floating mascot is hidden during daily study. Clicking "Khó" shows the interactive one inside the card. */
+body.mode-plan #nhi-movable,body.mode-plan #nhi-mascot-restore{display:none!important}
