@@ -1,0 +1,33 @@
+/* Resizable Gemini panel; settings stored on this browser. */
+:root{--nhi-ai-width:520px;--nhi-ai-font-size:16px}
+#aiPanel.aipanel{width:min(var(--nhi-ai-width),100vw)!important;max-width:100vw;overflow:visible}
+#aiResizeHandle{position:absolute;left:-10px;top:50%;transform:translateY(-50%);z-index:4;
+  width:19px;height:112px;border:2px solid var(--accent-d);border-radius:12px;
+  background:var(--surface);color:var(--accent-t);display:grid;place-items:center;
+  box-shadow:var(--sh-1);cursor:ew-resize;touch-action:none;user-select:none}
+#aiResizeHandle span{font-size:19px;writing-mode:vertical-rl;letter-spacing:4px;pointer-events:none}
+#aiResizeHandle:hover,#aiResizeHandle.resizing{background:var(--accent-soft);border-color:var(--accent-t)}
+body.nhi-ai-resizing,body.nhi-ai-resizing *{cursor:ew-resize!important;user-select:none!important}
+#aiPanel .aihead{gap:8px;min-width:0;flex-wrap:nowrap;padding-inline:12px}
+#aiPanel .aihead h2{min-width:0;font-size:16px;white-space:nowrap}
+#aiPanel .ai-font-control{display:inline-flex;flex-direction:column;align-items:center;gap:1px;font-size:10px;color:var(--muted);font-weight:700;white-space:nowrap}
+#aiPanel .ai-font-control select{color:var(--ink);background:var(--surface);border:1px solid var(--line);
+  border-radius:8px;padding:2px;font:inherit;font-size:13px;min-width:49px;min-height:29px}
+#aiPanel .aimsg{font-size:var(--nhi-ai-font-size)!important;line-height:1.58}
+#aiPanel .aiform textarea{font-size:var(--nhi-ai-font-size)!important;line-height:1.5}
+#aiPanel .aictx{font-size:calc(var(--nhi-ai-font-size) - 2px)}
+#aiPanel .aiquick button{font-size:calc(var(--nhi-ai-font-size) - 2px)}
+#nhi-hard-mascot{pointer-events:none!important}
+#nhi-hard-mascot img{cursor:default!important;pointer-events:none!important;touch-action:auto!important}
+@media(min-width:1160px){
+ body.ai-open .topbar{padding-right:calc(var(--nhi-ai-width) + 16px)!important}
+ body.ai-open .menu{right:calc(var(--nhi-ai-width) + 12px)!important}
+ body.ai-open .app{margin-right:max(var(--nhi-ai-width),calc((100vw - 820px)/2))!important}
+}
+@media(max-width:699px){
+ #aiPanel.aipanel{width:100vw!important}
+ #aiResizeHandle{display:none}
+ #aiPanel .aihead{gap:5px}
+ #aiPanel .aihead h2{font-size:15px}
+ #aiPanel .aihead .iconbtn.sm{min-width:34px;width:34px}
+}
