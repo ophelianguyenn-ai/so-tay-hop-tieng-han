@@ -1,6 +1,6 @@
 // Offline support. Page: network first (so updates show up), fall back to cache.
 // Other same-origin files and Google Fonts: cache first. Sync traffic (Firebase) is never touched.
-const CACHE = 'nhi-corner-v12';
+const CACHE = 'nhi-corner-v13-daily';
 const CORE = ['./', 'index.html', 'manifest.webmanifest', 'qrcode.js', 'lessons.json', 'icon-192.png', 'icon-512.png', 'refresh-v9.css', 'hanja-v9.js', 'nhi-avatar.png', 'nhi-mascot.webp', 'garden-v10.js', 'card-images-v11.js', 'technical-images.json', 'garden-day.webp', 'garden-night.webp'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
