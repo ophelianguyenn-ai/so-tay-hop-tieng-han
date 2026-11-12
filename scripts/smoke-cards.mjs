@@ -100,12 +100,25 @@ try {
     const grip=await page.$('#aiResizeHandle'),bounds=await grip.boundingBox();
     if(!bounds||bounds.width<5)throw Error('AI resize handle is not visible');
     const gx=bounds.x+bounds.width/2,gy=bounds.y+bounds.height/2;
+    await page.evaluate(()=>{
+      window.__resizeTrace=[];
+      var grip=document.getElementById('aiResizeHandle');
+      ['pointerdown','pointermove','pointerup'].forEach(function(event){
+        grip.addEventListener(event,function(e){window.__resizeTrace.push(event+'@'+e.clientX);},true);
+      });
+    });
     await page.mouse.move(gx,gy);
     await page.mouse.down();
     await page.mouse.move(gx-68,gy,{steps:5});
     await page.mouse.up();
     const dragWidth=await page.$eval('#aiPanel',el=>el.getBoundingClientRect().width);
-    console.log('AI POINTER RESIZE',JSON.stringify({afterWidth,dragWidth}));
+    const pointerDebug=await page.evaluate(([x,y])=>({
+      target:document.elementFromPoint(x,y)?.id||document.elementFromPoint(x,y)?.className,
+      pointerEvents:getComputedStyle(document.getElementById('aiResizeHandle')).pointerEvents,
+      trace:window.__resizeTrace||[],
+      root:getComputedStyle(document.documentElement).getPropertyValue('--nhi-ai-width')
+    }),[gx,gy]);
+    console.log('AI POINTER RESIZE',JSON.stringify({afterWidth,dragWidth,bounds,pointerDebug}));
     if(dragWidth<afterWidth+40)throw Error('Dragging the AI panel border did not increase width');
     await page.select('#aiFontSize','20');
     const font=await page.$eval('#aiPanel .aimsg',el=>getComputedStyle(el).fontSize);
