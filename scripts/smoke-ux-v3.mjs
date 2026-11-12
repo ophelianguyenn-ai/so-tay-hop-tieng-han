@@ -46,18 +46,19 @@ try {
   const mascot=await mobile.evaluate(()=>{
     const root=document.querySelector('#nhi-hard-mascot'),card=document.querySelector('#planBox .pcard');
     if(!root||!card)return null;
-    const a=root.getBoundingClientRect(),b=card.querySelector('.pfront').getBoundingClientRect();
-    const intersection=Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*
+    const a=root.getBoundingClientRect(),p=card.querySelector('.pfront .prompt'),b=p.getBoundingClientRect();
+    // Either layout is supported: Nhi below the text (v3) or in a reserved left gutter (v4).
+    const overlap=Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))*
       Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top));
-    return {parent:root.parentElement===card,position:getComputedStyle(root).position,
+    return {parent:card.contains(root),position:getComputedStyle(root).position,
       width:a.width,imgWidth:root.querySelector('img').getBoundingClientRect().width,
-      top:a.top,frontBottom:b.bottom,intersection,buttons:root.querySelectorAll('button').length,
-      text:root.textContent.trim()};
+      top:a.top,textLeft:b.left,mascotRight:a.right,overlap,
+      buttons:root.querySelectorAll('button').length,text:root.textContent.trim()};
   });
   console.log('MOBILE NHI SAFE LAYOUT',JSON.stringify(mascot));
-  if(!mascot||!mascot.parent||mascot.position==='fixed'||mascot.intersection>1||
+  if(!mascot||!mascot.parent||mascot.position==='fixed'||mascot.overlap>1||
       mascot.imgWidth>80||mascot.buttons)
-    throw Error('Nhi overlays Korean/Vietnamese learning text on mobile');
+    throw Error('Nhi overlaps the actual learning text on mobile');
   const mid=await mobile.evaluate(()=>{
     const card=document.querySelector('#planBox .pcard'),text=card.querySelector('.pfront .prompt');
     const before=getComputedStyle(text).color;
