@@ -26,7 +26,8 @@ async function visibleCard(page,name){
     throw Error(name+': card disappeared or answer hidden; '+JSON.stringify(d));
 }
 async function openLesson(page,id){
-  await page.goto(ROOT+'#/bai/'+id,{waitUntil:'domcontentloaded'});
+  // Force a full document navigation so newly seeded storage is loaded (hash-only navigation does not reload).
+    await page.goto(ROOT+'?fixture=payment#/bai/'+id,{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>!!document.querySelector('#planBox .ppage'),{timeout:18000});
   await page.evaluate(()=>{
     const b=[...document.querySelectorAll('#planBox button')].find(b=>/Học ngay|Học trước|Tiếp tục|Học lại|Ôn/.test(b.textContent||''));
