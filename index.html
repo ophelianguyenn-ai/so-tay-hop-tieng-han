@@ -598,7 +598,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 
 <script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="nhi-google-images-v1.js?v=1"></script><script src="nhi-hard-minimal-v1.js?v=1"></script><script src="recorded-voices-v11.js"></script>
 <script src="qrcode.js" defer></script>
-<link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14"><link rel="stylesheet" href="nhi-updates-v1.css?v=1">
+<link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14"><link rel="stylesheet" href="nhi-updates-v1.css?v=1"><link rel="stylesheet" href="nhi-ai-resize-v2.css?v=1">
 <style>
 #nhi-movable{position:fixed;z-index:48;width:calc(var(--nhi-size,112px) + 30px);padding:4px 8px 7px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:0 5px 20px #0002;touch-action:none;display:flex;flex-direction:column;align-items:center;gap:2px}
 #nhi-movable[hidden],#nhi-mascot-restore[hidden]{display:none!important}
@@ -908,8 +908,13 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 
 <!-- AI side window -->
 <aside class="aipanel" id="aiPanel" aria-label="Hỏi AI" aria-hidden="true">
+  <div class="ai-resize-handle" id="aiResizeHandle" role="separator" aria-label="Kéo thay đổi độ rộng khung chat; dùng phím trái và phải để điều chỉnh" aria-orientation="vertical" tabindex="0" title="Giữ và kéo sang trái hoặc phải để thay đổi độ rộng"><span aria-hidden="true">⋮⋮</span></div>
   <div class="aihead">
     <h2><span class="mi" id="aiFace"></span>Hỏi AI</h2>
+    <label class="ai-font-control" for="aiFontSize"><span>Cỡ chữ</span><select id="aiFontSize" aria-label="Cỡ chữ khung chat AI">
+      <option value="13">13</option><option value="14">14</option><option value="15">15</option>
+      <option value="16">16</option><option value="18">18</option><option value="20">20</option><option value="22">22</option>
+    </select></label>
     <button type="button" class="iconbtn sm" id="aiCfgBtn" aria-label="Thiết lập AI" title="Thiết lập AI" data-ic="gear"></button>
     <button type="button" class="iconbtn sm" id="aiNewBtn" aria-label="Xoá hội thoại" title="Xoá hội thoại" data-ic="trash"></button>
     <button type="button" class="iconbtn sm" id="aiClose" aria-label="Ẩn cửa sổ AI" title="Ẩn cửa sổ AI" data-ic="x"></button>
@@ -2623,10 +2628,10 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     function shortT(t) { return SHORT[t] || t; }
     var WEEKDAY = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
     var LESSONS = [], BY_LESSON = {}, ITEMS = {}, DATES = [], loaded = false, loadErr = '';
-    var ps = {}, resume = {};
+    var ps = {}, resume = {}, resumeFull = {};
     SECS.forEach(function (k) { ps[k] = {}; });
-    try { var raw = JSON.parse(lsGet(KEY) || '{}'); SECS.forEach(function (k) { if (raw[k] && typeof raw[k] === 'object') ps[k] = raw[k]; }); if (raw.resume) resume = raw.resume; } catch (e) { }
-    function save() { var o = { resume: resume }; SECS.forEach(function (k) { o[k] = ps[k]; }); lsSet(KEY, JSON.stringify(o)); }
+    try { var raw = JSON.parse(lsGet(KEY) || '{}'); SECS.forEach(function (k) { if (raw[k] && typeof raw[k] === 'object') ps[k] = raw[k]; }); if (raw.resume) resume = raw.resume; if (raw.resumeFull && typeof raw.resumeFull === 'object') resumeFull = raw.resumeFull; } catch (e) { }
+    function save() { var o = { resume: resume, resumeFull: resumeFull }; SECS.forEach(function (k) { o[k] = ps[k]; }); lsSet(KEY, JSON.stringify(o)); }
     function val(sec, k) { var e = ps[sec][k]; return e ? e.v : null; }
     function put(sec, k, v) { var e = { v: v, t: Date.now() }; ps[sec][k] = e; save(); SYNC.queue('L/' + sec + '/' + k, e); }
     var view = 'days', sess = null, page = null;
@@ -3058,10 +3063,20 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     }
     function startLesson(L) {
       var cur = current(L), rs = (resume[L.id] || []).filter(alive);
-      var q = rs.length ? rs.filter(function (id) { return !val('known', id); }) : ordered(L.ids);
-      delete resume[L.id]; save();
+      var saved = resumeFull[L.id], q, restored = null;
+      if (saved && Array.isArray(saved.queue) && saved.queue.some(alive)) {
+        // Preserve previously visited cards, their order and the paused index.
+        restored = saved; q = saved.queue.slice();
+      } else if (rs.length) {
+        // Migrate older saved sessions that only held the unstudied tail.
+        var original = ordered(L.ids), before = original.indexOf(rs[0]);
+        q = before > 0 ? original.slice(0, before).concat(rs) : rs.slice();
+        if (before > 0) restored = { queue: q.slice(), pos: before };
+      } else q = ordered(L.ids);
+      delete resume[L.id]; delete resumeFull[L.id]; save();
       if (location.hash !== '#/bai/' + L.id) { history.pushState(null, '', '#/bai/' + L.id); page = L.id; document.body.classList.add('plan-page'); }
-      start(!cur || cur.st === 'next' ? 'free' : 'lesson', q, titleMain(L) + (cur ? ' · ' + STEP[cur.step] : ''), L);
+      start(restored && restored.kind ? restored.kind : (!cur || cur.st === 'next' ? 'free' : 'lesson'),
+        q, titleMain(L) + (cur ? ' · ' + STEP[cur.step] : ''), L, restored);
     }
     function todayCard() {
       var s = summary(), box = el('section', 'thero'), txt = el('div'), d = new Date();
@@ -3265,16 +3280,32 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
         }
       } catch (e) { sess = null; }
     }
-    function start(kind, ids, title, L) {
-      ids = ids.filter(alive);
+    function start(kind, ids, title, L, restored) {
+      var beforeFilter = ids.slice(); ids = ids.filter(alive);
       if (!ids.length) { toast('Không còn thẻ nào cần học.'); return; }
-      sess = { kind: kind, title: title, L: L || null, queue: ids.slice(), pos: 0, flipped: false, again: {}, picked: {}, spoken: -1, stats: { known: 0, hard: 0, mid: 0 } };
+      var pos = 0;
+      if (restored && Number.isFinite(+restored.pos)) {
+        var previous = Math.max(0, Math.min(beforeFilter.length - 1, Math.floor(+restored.pos)));
+        pos = Math.min(ids.length - 1, beforeFilter.slice(0, previous).filter(alive).length);
+      }
+      sess = { kind: kind, title: title, L: L || null, queue: ids.slice(), pos: pos,
+        flipped: false, again: restored && restored.again || {}, picked: restored && restored.picked || {},
+        spoken: -1, stats: restored && restored.stats || { known: 0, hard: 0, mid: 0 },
+        recorded: !!(restored && restored.recorded) };
       anim = 'next'; saveSess(); render(); window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     function leave() {
       if (!sess) return;
       if(window.NHI_HARD_MASCOT)window.NHI_HARD_MASCOT.clear();
-      if (sess.pos < sess.queue.length && sess.kind === 'lesson' && sess.L) { resume[sess.L.id] = sess.queue.slice(sess.pos); save(); }
+      if (sess.pos < sess.queue.length && sess.L) {
+        resume[sess.L.id] = sess.queue.slice(sess.pos);
+        resumeFull[sess.L.id] = {
+          kind: sess.kind, queue: sess.queue.slice(), pos: sess.pos, title: sess.title,
+          picked: Object.assign({}, sess.picked), again: Object.assign({}, sess.again),
+          stats: Object.assign({}, sess.stats), recorded: !!sess.recorded
+        };
+        save();
+      }
       sess = null; saveSess(); setFocus(false);
     }
     function pause() { leave(); render(); }
@@ -3446,7 +3477,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var tiles = el('div', 'tiles');
       [['h', 'hard', 'Khó'], ['m', 'mid', 'Bình thường']].forEach(function (x) { var t = el('div', 'tile2 ' + x[0]); t.appendChild(el('b', null, s.stats[x[1]] || 0)); t.appendChild(document.createTextNode(x[2])); tiles.appendChild(t); });
       p.appendChild(tiles);
-      if (s.kind === 'lesson' && s.L && !s.recorded) { var dn = (val('done', s.L.id) || []).slice(); dn.push(today()); put('done', s.L.id, dn); s.recorded = true; delete resume[s.L.id]; save(); saveSess(); }
+      if (s.kind === 'lesson' && s.L && !s.recorded) { var dn = (val('done', s.L.id) || []).slice(); dn.push(today()); put('done', s.L.id, dn); s.recorded = true; delete resume[s.L.id]; delete resumeFull[s.L.id]; save(); saveSess(); }
       if (s.kind === 'lesson' && s.L) { var nx = current(s.L); p.appendChild(el('p', 'pstatus done', nx ? '✓ ' + STEP[nx.step] + ' · ' + vn(nx.due, true) : '✓ Đã hoàn thành cả 5 lần.')); }
       var row = el('div', 'prow');
       row.appendChild(lbtn('ghost', 'left', 'Xem lại thẻ cuối', function () { s.pos = Math.max(0, s.queue.length - 1); anim = 'prev'; saveSess(); render(); }));
@@ -4141,4 +4172,5 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 <script src="garden-v10.js"></script>
 
 <script src="backup-portable-v1.js"></script>
+<script src="nhi-ai-resize-v2.js?v=1"></script>
 </body></html>
