@@ -1,0 +1,39 @@
+name: Verify Korean Flashcard Flip
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'card-images-v11.js'
+      - 'technical-visuals-v12.js'
+      - 'hanja-extra-v12.js'
+      - 'scripts/smoke-cards.mjs'
+      - '.github/workflows/smoke-cards.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install headless Chrome automation
+        run: npm install --no-save --no-package-lock puppeteer-core@24
+      - name: Start local static site
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/nhi-site-server.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl -sf http://127.0.0.1:8765/index.html >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/nhi-site-server.log
+          exit 1
+      - name: Confirm Vietnamese to Korean flip is visible
+        run: node scripts/smoke-cards.mjs
