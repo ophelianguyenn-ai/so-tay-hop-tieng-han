@@ -1,22 +1,46 @@
-// Offline support. Page: network first (so updates show up), fall back to cache.
-// Other same-origin files and Google Fonts: cache first. Sync traffic (Firebase) is never touched.
-const CACHE = 'nhi-corner-v14-daily-editor';
-const CORE = ['./', 'index.html', 'manifest.webmanifest', 'qrcode.js', 'lessons.json', 'icon-192.png', 'icon-512.png', 'refresh-v9.css', 'hanja-v9.js', 'nhi-avatar.png', 'nhi-mascot.webp', 'garden-v10.js', 'card-images-v11.js', 'technical-images.json', 'garden-day.webp', 'garden-night.webp'];
-self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting())); });
-self.addEventListener('activate', e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
-self.addEventListener('fetch', e => {
-  const req = e.request;
-  if (req.method !== 'GET') return;
-  const url = new URL(req.url);
-  const fonts = /(^|\.)fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
-  if (url.origin !== self.location.origin && !fonts) return;
-  if (req.mode === 'navigate' || url.pathname.endsWith('.html') || url.pathname.endsWith('.json') || url.pathname.endsWith('/')) {
-    e.respondWith(fetch(req).then(r => { const cp = r.clone(); caches.open(CACHE).then(c => c.put(req, cp)); return r; })
-      .catch(() => caches.match(req).then(h => h || caches.match('index.html'))));
+// Offline support: network-first for the site and static assets so Netlify redeploys appear promptly.
+// Fall back to cache only when offline. Different cache key forces eviction of earlier stale CSS/JS.
+const CACHE = 'nhi-corner-v16-network-refresh';
+const CORE = [
+  './','index.html','manifest.webmanifest','qrcode.js','lessons.json',
+  'icon-192.png','icon-512.png','refresh-v9.css','study-enhancements-v13.css',
+  'hanja-v9.js','hanja-extra-v12.js','nhi-avatar.png','nhi-mascot.webp',
+  'nhi-puzzled.webp','garden-v10.js','card-images-v11.js','technical-images.json',
+  'technical-visuals-v12.js','image-picker-v13.js','hard-mascot-v13.js',
+  'transparent-mascot-v14.js','recorded-voices-v11.js',
+  'garden-day.webp','garden-night.webp'
+];
+self.addEventListener('install', function(e) {
+  e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(CORE);}).then(function(){return self.skipWaiting();}));
+});
+self.addEventListener('activate', function(e){
+  e.waitUntil(caches.keys().then(function(keys){
+    return Promise.all(keys.filter(function(k){return k!==CACHE;}).map(function(k){return caches.delete(k);}));
+  }).then(function(){return self.clients.claim();}));
+});
+self.addEventListener('fetch', function(e){
+  var req=e.request;
+  if(req.method!=='GET')return;
+  var url=new URL(req.url);
+  var fonts=/(^|\.)fonts\.(googleapis|gstatic)\.com$/.test(url.hostname);
+  if(url.origin!==self.location.origin && !fonts)return;
+  if(fonts){
+    e.respondWith(caches.match(req).then(function(hit){return hit||fetch(req).then(function(res){
+      if(res && (res.ok||res.type==='opaque')) caches.open(CACHE).then(function(c){c.put(req,res.clone());});
+      return res;
+    });}));
     return;
   }
-  e.respondWith(caches.match(req).then(hit => hit || fetch(req).then(r => {
-    if (r && (r.ok || r.type === 'opaque')) { const cp = r.clone(); caches.open(CACHE).then(c => c.put(req, cp)); }
-    return r;
-  })));
+  // Do not serve outdated JS/CSS as long as network works.
+  e.respondWith(fetch(req).then(function(res){
+    if(res && res.ok){
+      var copy=res.clone();
+      caches.open(CACHE).then(function(c){return c.put(req,copy);}).catch(function(){});
+    }
+    return res;
+  }).catch(function(){
+    return caches.match(req).then(function(hit){
+      return hit || (req.mode==='navigate' ? caches.match('index.html') : Response.error());
+    });
+  }));
 });
