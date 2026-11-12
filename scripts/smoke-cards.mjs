@@ -1,47 +1,112 @@
-/* Smoke test for the app's core flip path; runs inside GitHub Actions. */
+/* Browser regression: visible Korean flip in built-in, custom, restored and classic modes. */
 import fs from 'node:fs';
 import puppeteer from 'puppeteer-core';
 
-const lessons = JSON.parse(fs.readFileSync('lessons.json','utf8')).lessons;
-const first = lessons.find(l => l?.items?.length);
-if (!first) throw new Error('No study lessons in lessons.json');
-const browser = await puppeteer.launch({
-  headless: true, executablePath: process.env.CHROME_BIN || '/usr/bin/google-chrome',
-  args: ['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']
-});
-const errors = [];
-try {
-  const page = await browser.newPage();
-  page.on('pageerror', e => errors.push('PAGE ERROR: '+String(e)));
-  page.on('console', m => { if(m.type()==='error') errors.push('CONSOLE ERROR: '+m.text()); });
-  await page.setViewport({width:1320,height:860});
-  await page.goto('http://127.0.0.1:8765/#/bai/'+first.id,{waitUntil:'domcontentloaded'});
-  try { await page.waitForSelector('#coverGo',{timeout:4000}); await page.click('#coverGo'); } catch(e){}
-  await page.waitForSelector('#planBox .ppage',{timeout:15000});
-  const startButtons = await page.$$eval('#planBox button', buttons=>buttons.filter(b=>/Học ngay|Học trước|Tiếp tục|Học lại|Ôn/.test(b.textContent||'')).map(b=>({txt:b.textContent,cls:b.className})));
-  console.log('START BUTTONS',JSON.stringify(startButtons.slice(0,8)));
-  const go = await page.evaluate(() => {
-    const b=[...document.querySelectorAll('#planBox button')].find(b=>/Học ngay|Học trước|Tiếp tục|Học lại|Ôn/.test(b.textContent||''));
-    if(!b)return false;b.click();return true;
+const lesson = JSON.parse(fs.readFileSync('lessons.json','utf8')).lessons.find(l => l.items?.length);
+if(!lesson) throw new Error('No built-in lessons');
+const ROOT='http://127.0.0.1:8765/';
+const browser=await puppeteer.launch({headless:true,executablePath:process.env.CHROME_BIN || '/usr/bin/google-chrome',args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']});
+const issues=[];
+function attach(page,name){
+  page.on('pageerror',e=>issues.push(name+': PAGEERROR '+String(e)));
+  page.on('console',msg=>{ if(msg.type()==='error') issues.push(name+': CONSOLE '+msg.text()); });
+}
+async function visibleCard(page,name){
+  const d=await page.evaluate(()=>{
+    const v=document.querySelector('#view-plan'),card=document.querySelector('#planBox .pcard');
+    const rect=card?.getBoundingClientRect();
+    const style=card?getComputedStyle(card):null;
+    return {path:location.hash,bodyClass:document.body.className,viewHidden:v?.hidden,viewDisplay:v?getComputedStyle(v).display:null,
+      cardCount:document.querySelectorAll('#planBox .pcard').length,cardWidth:rect?.width||0,cardHeight:rect?.height||0,
+      cardDisplay:style?.display,answer:card?.querySelector('.answer.ko')?.textContent||'',
+      fallback:!!document.querySelector('.nhi-fallback-card'),snippet:document.querySelector('#planBox')?.textContent.slice(0,160)};
   });
-  if(!go) throw new Error('Cannot find start-lesson button');
-  await page.waitForSelector('#planBox .pcard',{timeout:12000});
-  const before=await page.$eval('#planBox .pcard',el=>el.textContent.slice(0,250));
-  console.log('BEFORE',before);
-  await page.click('#planBox .pflip');
-  await new Promise(r=>setTimeout(r,1000));
-  const after=await page.evaluate(() => ({
-    count:document.querySelectorAll('#planBox .pcard').length,
-    answer:document.querySelector('#planBox .pcard .answer.ko')?.textContent||'',
-    fallback:!!document.querySelector('.nhi-fallback-card'),
-    bodyChars:document.querySelector('#planBox')?.textContent.length||0,
-    snippet:document.querySelector('#planBox')?.textContent.slice(0,450)||''
-  }));
-  console.log('AFTER',JSON.stringify(after));
-  if(!after.count || !after.answer || !after.bodyChars)throw Error('Flip failed to display Korean answer');
-  if(after.fallback)throw Error('Flip works only with fallback; see preceding console errors');
-  console.log('SMOKE TEST SUCCESS');
+  console.log(name,JSON.stringify(d));
+  if(d.viewHidden||d.viewDisplay==='none'||!d.cardCount||d.cardWidth<100||d.cardHeight<50||!d.answer||d.fallback)
+    throw Error(name+': card disappeared or answer hidden; '+JSON.stringify(d));
+}
+async function openLesson(page,id){
+  await page.goto(ROOT+'#/bai/'+id,{waitUntil:'domcontentloaded'});
+  await page.waitForFunction(()=>!!document.querySelector('#planBox .ppage'),{timeout:18000});
+  await page.evaluate(()=>{
+    const b=[...document.querySelectorAll('#planBox button')].find(b=>/Học ngay|Học trước|Tiếp tục|Học lại|Ôn/.test(b.textContent||''));
+    if(!b) throw Error('No start lesson button');
+    b.click();
+  });
+  await page.waitForSelector('#planBox .pcard',{timeout:16000});
+}
+try {
+  {
+    const page=await browser.newPage();attach(page,'built-in');
+    await page.setViewport({width:1350,height:820});
+    await openLesson(page,lesson.id);
+    await page.click('#planBox .pflip');
+    await new Promise(r=>setTimeout(r,650));
+    await visibleCard(page,'built-in first flip');
+    await page.click('#planBox .pflip');
+    await new Promise(r=>setTimeout(r,480));
+    await page.click('#planBox .pflip');
+    await new Promise(r=>setTimeout(r,550));
+    await visibleCard(page,'built-in third flip');
+    await page.close();
+  }
+  {
+    const page=await browser.newPage();attach(page,'custom-restored');
+    await page.setViewport({width:900,height:740});
+    const id='daily-2026-11-12-testpayment',itemId='di-payment-test';
+    const item=['di-payment-test','w','Báo giá, hợp đồng & thanh toán','Thủ tục thanh toán','결제 절차',1,[['Thủ tục thanh toán','결제 절차']],''];
+    const fixture={id,date:'2026-11-12',plan:'2026-11-12',title:'Bài ngày 12.11 · Báo giá',items:[item],updatedAt:Date.now()};
+    await page.goto(ROOT,{waitUntil:'domcontentloaded'});
+    await page.evaluate((id,fixture,itemId)=>{
+      localStorage.setItem('viko-daily-lessons-v1',JSON.stringify({[id]:fixture}));
+      localStorage.setItem('viko-plan-sess-v1',JSON.stringify({kind:'lesson',title:fixture.title,lesson:id,queue:[itemId],pos:0,picked:{},stats:{hard:0,mid:0}}));
+      localStorage.setItem('viko-ko-meeting-ui-v1',JSON.stringify({mode:'cards',dir:'vk'}));
+      sessionStorage.setItem('nlc-cover-seen','1');
+    },id,fixture,itemId);
+    await page.goto(ROOT+'#/bai/'+id,{waitUntil:'domcontentloaded'});
+    await page.waitForSelector('#planBox .pcard',{timeout:18000});
+    const before=await page.evaluate(()=>({mode:document.querySelector('#view-plan').hidden,body:document.body.className}));
+    console.log('restored before',before);
+    await page.click('#planBox .pflip');
+    await new Promise(r=>setTimeout(r,650));
+    await visibleCard(page,'restored custom Vietnamese-Korean');
+    await page.reload({waitUntil:'domcontentloaded'});
+    await page.waitForSelector('#planBox .pcard',{timeout:18000});
+    await page.click('#planBox .pflip');
+    await new Promise(r=>setTimeout(r,650));
+    await visibleCard(page,'restored after reload');
+    // Regress prior blank mint-screen: lesson route exists, but its view is hidden.
+    await page.evaluate(()=>{
+      document.querySelector('#view-plan').hidden=true;
+      window.dispatchEvent(new HashChangeEvent('hashchange'));
+    });
+    await new Promise(r=>setTimeout(r,700));
+    const recovered=await page.evaluate(()=>({
+      hidden:document.querySelector('#view-plan').hidden,
+      visible:getComputedStyle(document.querySelector('#view-plan')).display,
+      card:document.querySelector('#planBox .pcard')?.getBoundingClientRect().height||0
+    }));
+    console.log('hidden-view recovery',JSON.stringify(recovered));
+    if(recovered.hidden||recovered.visible==='none'||recovered.card<50)throw Error('Hidden-view recovery failed: '+JSON.stringify(recovered));
+    await page.close();
+  }
+  {
+    const page=await browser.newPage();attach(page,'classic');
+    await page.goto(ROOT,{waitUntil:'domcontentloaded'});
+    await page.evaluate(()=>{sessionStorage.setItem('nlc-cover-seen','1');document.querySelector('#tab-cards').click();});
+    await page.waitForSelector('#view-cards:not([hidden]) #card',{timeout:12000});
+    await page.click('#card');
+    await new Promise(r=>setTimeout(r,550));
+    const classic=await page.evaluate(()=>({mode:document.querySelector('#view-cards').hidden,show:!document.querySelector('#cAnswer').hidden,
+      answer:document.querySelector('#cAnswer').textContent.slice(0,140),width:document.querySelector('#card').getBoundingClientRect().width,
+      viewDisplay:getComputedStyle(document.querySelector('#view-cards')).display}));
+    console.log('classic flip',JSON.stringify(classic));
+    if(classic.mode||!classic.show||!classic.answer||classic.width<100||classic.viewDisplay==='none')throw Error('Classic flashcard flip failed');
+    await page.close();
+  }
+  if(issues.length)throw Error('Runtime browser errors: '+JSON.stringify(issues.slice(0,20)));
+  console.log('ALL FLIP REGRESSION TESTS PASSED');
 }finally{
-  console.log('BROWSER ERRORS',JSON.stringify(errors.slice(0,30)));
+  console.log('BROWSER ERRORS',JSON.stringify(issues.slice(0,20)));
   await browser.close();
 }
