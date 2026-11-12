@@ -919,9 +919,11 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     <p class="voice-note">Trang này chạy thẳng trên trình duyệt nên cần một mã API của riêng bạn để gọi AI. Mã chỉ lưu trong trình duyệt này, không đồng bộ, không gửi đi đâu ngoài nhà cung cấp AI bạn chọn.</p>
     <label class="flabel"><span>Nhà cung cấp</span><select class="field small" id="aiProv"></select></label>
     <label class="flabel"><span>Mã API</span><input class="field" id="aiKey" type="password" autocomplete="off" placeholder="Dán mã API vào đây"></label>
-    <label class="flabel"><span>Mô hình</span><input class="field" id="aiModel" type="text" autocomplete="off"></label>
+    <label class="flabel"><span>Mô hình</span><input class="field" id="aiModel" type="text" autocomplete="off" list="aiModels" placeholder="gemini-3.5-flash-lite"></label>
     <p class="voice-note" id="aiProvNote"></p>
-    <div class="btnrow"><button type="submit" class="primary">Lưu</button><button type="button" class="ghost" id="aiForget">Xoá mã trên máy này</button></div>
+    <datalist id="aiModels"><option value="gemini-3.5-flash-lite"></option><option value="gemini-3.1-flash-lite"></option><option value="gemini-2.5-flash-lite"></option></datalist>
+    <p class="voice-note" id="aiCheckStatus" role="status" aria-live="polite"></p>
+    <div class="btnrow"><button type="submit" class="primary">Lưu</button><button type="button" class="ghost" id="aiCheck">Kiểm tra Gemini và chọn mô hình</button><button type="button" class="ghost" id="aiForget">Xoá mã trên máy này</button></div>
   </form>
   <div class="aictx" id="aiCtx" hidden></div>
   <div class="ailog" id="aiLog" aria-live="polite"></div>
@@ -3946,7 +3948,47 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     function saveCfg() { lsSet(KEY, JSON.stringify(cfg)); }
     function saveLog() { try { sessionStorage.setItem(LOGKEY, JSON.stringify(log.slice(-30))); } catch (e) { } }
     function key() { return (cfg.k[cfg.p] || '').trim(); }
-    function model() { return (cfg.m[cfg.p] || PROV[cfg.p].model).trim(); }
+    function normalizeGeminiModel(raw) {
+      var name=String(raw || '').trim();
+      name=name.replace(/^https?:\/\/[^/]+\/v1(?:beta)?\//i,'');
+      name=name.replace(/^(?:models\/)+/i,'').replace(/:generateContent.*$/i,'').replace(/[?#].*$/,'').trim();
+      if (/^Gemini\s+[\d.]+/i.test(name)) name=name.replace(/\s+/g,'-');
+      name=name.toLowerCase();
+      return /^gemini-[a-z0-9][a-z0-9.-]*$/.test(name) ? name : '';
+    }
+    function model() {
+      var v=String(cfg.m[cfg.p] || PROV[cfg.p].model).trim();
+      return cfg.p === 'gemini' ? (normalizeGeminiModel(v) || PROV.gemini.model) : v;
+    }
+    function getGeminiModels(apiKey) {
+      return fetch('https://generativelanguage.googleapis.com/v1beta/models?pageSize=100',{
+        headers:{'x-goog-api-key':apiKey}
+      }).then(parse).then(function(data){
+        return (data.models||[]).filter(function(x){
+          return (x.supportedGenerationMethods||[]).indexOf('generateContent')>=0;
+        }).map(function(x){return normalizeGeminiModel(x.name);}).filter(Boolean);
+      });
+    }
+    function chooseGeminiModel(available,expected) {
+      var current=normalizeGeminiModel(expected);
+      if(current && available.indexOf(current)>=0)return current;
+      var preferences=['gemini-3.5-flash-lite','gemini-3.1-flash-lite','gemini-2.5-flash-lite','gemini-3.5-flash','gemini-2.5-flash'];
+      for(var i=0;i<preferences.length;i++)if(available.indexOf(preferences[i])>=0)return preferences[i];
+      return available.filter(function(x){return !/image|tts|audio|live|embedding/i.test(x);})[0]||'';
+    }
+    function checkGemini(){
+      var status=$('aiCheckStatus'),btn=$('aiCheck'),apiKey=$('aiKey').value.trim();
+      if($('aiProv').value!=='gemini'){status.textContent='Chọn Google Gemini trước.';return;}
+      if(!apiKey){status.textContent='Hãy nhập API key vào ô Mã API.';return;}
+      btn.disabled=true;status.textContent='Đang kiểm tra các mô hình được cấp quyền...';
+      getGeminiModels(apiKey).then(function(available){
+        var selected=chooseGeminiModel(available,$('aiModel').value);
+        if(!selected)throw new Error('Google không trả về mô hình Gemini dùng được với key này.');
+        cfg.p='gemini';cfg.k.gemini=apiKey;cfg.m.gemini=selected;saveCfg();
+        $('aiModel').value=selected;status.textContent='Đã chọn '+selected+'. Bạn có thể hỏi lại AI.';
+      }).catch(function(err){status.textContent='Không kiểm tra được: '+String(err.message||err).slice(0,200);})
+      .then(function(){btn.disabled=false;});
+    }
     function isOpen() { return document.body.classList.contains('ai-open'); }
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
     function fmt(s) { return esc(s).replace(/\*\*([^*\n]+)\*\*/g, '<b>$1</b>').replace(/^#{1,4}\s*(.+)$/gm, '<b>$1</b>').replace(/^\s*[*-]\s+/gm, '• '); }
@@ -3991,8 +4033,29 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     function call(msgs) {
       var p = cfg.p, k = key(), m = model();
       if (p === 'gemini') {
-        return fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(m) + ':generateContent', { method: 'POST', headers: { 'content-type': 'application/json', 'x-goog-api-key': k }, body: JSON.stringify({ systemInstruction: { parts: [{ text: SYSTEM }] }, contents: msgs.map(function (x) { return { role: x.r === 'me' ? 'user' : 'model', parts: [{ text: x.t }] }; }) }) })
-          .then(parse).then(function (j) { var c = j.candidates && j.candidates[0]; var t = c && c.content && c.content.parts ? c.content.parts.map(function (q) { return q.text || ''; }).join('') : ''; if (!t) throw new Error('AI không trả lời (có thể câu hỏi bị chặn).'); return t; });
+        var contents=msgs.map(function(x){return {role:x.r==='me'?'user':'model',parts:[{text:x.t}]};});
+        function generate(name) {
+          return fetch('https://generativelanguage.googleapis.com/v1beta/models/'+name+':generateContent',{
+            method:'POST',headers:{'content-type':'application/json','x-goog-api-key':k},
+            body:JSON.stringify({systemInstruction:{parts:[{text:SYSTEM}]},contents:contents})
+          }).then(parse).then(function(j){
+            var c=j.candidates&&j.candidates[0];
+            var text=c&&c.content&&c.content.parts?c.content.parts.map(function(x){return x.text||'';}).join(''):'';
+            if(!text)throw new Error('AI không trả lời (có thể câu hỏi bị chặn).');
+            return text;
+          });
+        }
+        return generate(m).catch(function(err){
+          var message=String(err&&err.message||err);
+          if(!/unexpected model name format|không tìm thấy mô hình|model.*(?:not found|not supported)/i.test(message))throw err;
+          return getGeminiModels(k).then(function(available){
+            var other=chooseGeminiModel(available,m);
+            if(!other||other===m)throw err;
+            cfg.m.gemini=other;saveCfg();
+            $('aiCheckStatus').textContent='Đã tự chọn mô hình khác: '+other;
+            return generate(other);
+          });
+        });
       }
       if (p === 'claude') {
         return fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'content-type': 'application/json', 'x-api-key': k, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' }, body: JSON.stringify({ model: m, max_tokens: 1024, system: SYSTEM, messages: msgs.map(function (x) { return { role: x.r === 'me' ? 'user' : 'assistant', content: x.t }; }) }) })
@@ -4036,7 +4099,8 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       $('aiCfgBtn').addEventListener('click', function () { paintSetup($('aiSetup').hidden); });
       $('aiNewBtn').addEventListener('click', function () { log = []; saveLog(); paintLog(); });
       $('aiProv').addEventListener('change', function () { cfg.p = this.value; saveCfg(); paintSetup(); });
-      $('aiSetup').addEventListener('submit', function (e) { e.preventDefault(); cfg.p = $('aiProv').value; cfg.k[cfg.p] = $('aiKey').value.trim(); var m = $('aiModel').value.trim(); if (m && m !== PROV[cfg.p].model) cfg.m[cfg.p] = m; else delete cfg.m[cfg.p]; saveCfg(); paintSetup(!key()); });
+      $('aiSetup').addEventListener('submit', function (e) { e.preventDefault(); cfg.p = $('aiProv').value; cfg.k[cfg.p] = $('aiKey').value.trim(); var m = $('aiModel').value.trim(); if(cfg.p==='gemini'){var normalized=normalizeGeminiModel(m);if(m&&!normalized){$('aiCheckStatus').textContent='Tên mô hình không hợp lệ. Hãy bấm Kiểm tra Gemini và chọn mô hình.';return;}m=normalized||PROV.gemini.model;} if (m && m !== PROV[cfg.p].model) cfg.m[cfg.p] = m; else delete cfg.m[cfg.p]; saveCfg(); paintSetup(!key()); });
+      $('aiCheck').addEventListener('click',checkGemini);
       $('aiForget').addEventListener('click', function () { delete cfg.k[cfg.p]; saveCfg(); paintSetup(true); });
       $('aiForm').addEventListener('submit', function (e) { e.preventDefault(); send($('aiInput').value); });
       $('aiInput').addEventListener('input', grow);
