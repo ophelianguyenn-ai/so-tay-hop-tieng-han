@@ -179,3 +179,25 @@
  .nhi-english-v5 .nhi-en-mini-actions>button{font-size:10px;padding:3px 6px}
  .nhi-english-v5 .nhi-en-tools>.nhi-en-review{font-size:10px}
 }
+
+
+/* English word choices sit beside the original meaning; never replace its text. */
+.nhi-english-v5 .nhi-en-reading-row{
+ display:flex;align-items:baseline;column-gap:9px;row-gap:3px;flex-wrap:wrap;
+}
+.nhi-english-v5 .nhi-en-reading-row>.nhi-en-translation{
+ flex:1 1 220px;margin:0;min-width:0;
+}
+.nhi-english-v5 .nhi-en-reading-row>.nhi-en-mini-actions{
+ margin-left:auto;flex:0 0 auto;max-width:100%;
+}
+.nhi-english-v5 .nhi-en-download{
+ cursor:pointer;border:1px solid var(--accent-d);
+ background:transparent;color:var(--accent-t);
+ border-radius:9px;padding:5px 7px;font:700 10px var(--ui);
+ min-height:29px;
+}
+@media(max-width:470px){
+ .nhi-english-v5 .nhi-en-reading-row>.nhi-en-translation{flex-basis:160px}
+ .nhi-english-v5 .nhi-en-head-actions button{font-size:11px!important}
+}
