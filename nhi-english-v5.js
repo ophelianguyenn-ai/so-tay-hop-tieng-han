@@ -95,36 +95,6 @@ async function checkMeaning(box,id,vi,ko){
  }catch(e){status.textContent='Chưa đối chiếu được. Thử lại sau.';}
  finally{btn.disabled=false;}
 }
-function lexical(box,relation){
- let panel=box.querySelector('.nhi-en-lexicon');
- if(!panel){panel=document.createElement('div');panel.className='nhi-en-lexicon';box.appendChild(panel);}
- const selected=clean(String(window.getSelection()||''));
- const current=box.querySelector('.nhi-en-translation').textContent;
- const word=/^[a-zA-Z]+(?:[-'][a-zA-Z]+)*$/.test(selected)?selected:(/^[a-zA-Z]+$/.test(current)?current:'');
- panel.replaceChildren();
- const form=document.createElement('form'),input=document.createElement('input'),submit=document.createElement('button'),close=document.createElement('button'),output=document.createElement('p');
- input.value=word;input.placeholder='Nhập một từ tiếng Anh';input.setAttribute('aria-label','Từ tiếng Anh cần tra');input.required=true;
- submit.type='submit';submit.textContent='Tra';close.type='button';close.textContent='×';close.setAttribute('aria-label','Đóng tra từ');close.onclick=()=>panel.remove();
- form.append(input,submit,close);output.setAttribute('aria-live','polite');panel.append(form,output);
- const credit=document.createElement('a');credit.href='https://dictionaryapi.dev/';credit.target='_blank';credit.rel='noopener';credit.textContent='Free Dictionary';credit.style.fontSize='11px';panel.appendChild(credit);
- form.onsubmit=async e=>{
-  e.preventDefault();const term=clean(input.value);
-  if(!/^[a-zA-Z]+(?:[-'][a-zA-Z]+)*$/.test(term)){output.textContent='Nhập một từ tiếng Anh để tra.';return;}
-  submit.disabled=true;output.textContent='Đang tra…';
-  try{
-   const response=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(term));
-   if(response.status===404){output.textContent='Chưa có kết quả cho từ này.';return;}
-   if(!response.ok)throw Error('Unavailable');const entries=await response.json();
-   if(!Array.isArray(entries))throw Error('Invalid');
-   const key=relation==='syn'?'synonyms':'antonyms';
-   const words=entries.flatMap(x=>(x.meanings||[]).flatMap(m=>[...(m[key]||[]),...(m.definitions||[]).flatMap(d=>d[key]||[])]));
-   const rows=[...new Set(words)].slice(0,8).map(word=>({word}));
-   output.textContent=(relation==='syn'?'Đồng nghĩa: ':'Trái nghĩa: ')+(rows.length?rows.map(x=>clean(x.word)).filter(Boolean).join(' · '):'Chưa có kết quả.');
-  }catch(e){output.textContent='Chưa tra được. Vui lòng thử lại.';}
-  finally{submit.disabled=false;}
- };
- if(word)form.requestSubmit();else input.focus();
-}
 
 let corpus=null,corpusPromise=null;
 const inFlight=new Map();
@@ -270,8 +240,6 @@ function display(box,entry,id,vi,ko){
 
  box.querySelector('.nhi-en-status').textContent='';
  comparisonRows(box,id,vi,ko);
- box.querySelector('.nhi-en-syn').onclick=()=>lexical(box,'syn');
- box.querySelector('.nhi-en-ant').onclick=()=>lexical(box,'ant');
  var review=box.querySelector('.nhi-en-review');if(review){review.hidden=!en;review.onclick=()=>checkMeaning(box,id,vi,ko);}
  var editBtn=box.querySelector('.nhi-en-edit');if(editBtn)editBtn.onclick=()=>editEnglish(box,id,vi,ko);
 }
@@ -306,7 +274,7 @@ function mount(parent,id,vi,ko){
  if(!parent)return;
  const before=parent.querySelector('.nhi-english-v5');if(before)before.remove();
  const box=document.createElement('section');box.className='nhi-english-v5';box.setAttribute('aria-label','Tiếng Anh');
- box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><p class="nhi-en-status" aria-live="polite"></p><div class="nhi-en-tools"><button type="button" class="nhi-en-syn">Đồng nghĩa</button><button type="button" class="nhi-en-ant">Trái nghĩa</button><button type="button" class="nhi-en-review" title="Khi bấm, nội dung tiếng Việt và tiếng Hàn sẽ được gửi đến Google Translate để đối chiếu tự động. Đây không phải kiểm duyệt chuyên gia.">✓ Đối chiếu</button></div>';
+ box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><p class="nhi-en-status" aria-live="polite"></p><div class="nhi-en-tools"><button type="button" class="nhi-en-review" title="Khi bấm, nội dung tiếng Việt và tiếng Hàn sẽ được gửi đến Google Translate để đối chiếu tự động. Đây không phải kiểm duyệt chuyên gia.">✓ Đối chiếu</button></div>';
  parent.appendChild(box);
  display(box,verifiedEntry(id,vi,ko),id,vi,ko);
  if(!data||!Object.keys(data).length){

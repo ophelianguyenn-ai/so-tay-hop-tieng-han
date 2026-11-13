@@ -1,4 +1,4 @@
-/* Compact comparison, original preservation, lexical tools and no-device Neural regression. */
+/* Compact comparison, original preservation, serif typography and no-device Neural regression. */
 import fs from 'node:fs';
 import puppeteer from 'puppeteer-core';
 const lessons=JSON.parse(fs.readFileSync('lessons.json','utf8')).lessons;
@@ -37,11 +37,11 @@ try{
   visible:!!document.querySelector('.nhi-en-translation'),
   buttons:[...document.querySelectorAll('.nhi-english-v5 button')].map(x=>x.textContent),
   noRetranslate:!document.querySelector('.nhi-en-translate'),
-  lexical:!!document.querySelector('.nhi-en-syn')&&!!document.querySelector('.nhi-en-ant'),
+  noLexical:!document.querySelector('.nhi-en-syn')&&!document.querySelector('.nhi-en-ant'),
   audio:!!document.querySelector('.nhi-en-speak'),
   naturalVoice:!!window.NHI_AUDIO?.urlFor?.(document.querySelector('.nhi-en-translation')?.textContent,'en')
  }));
- if(!initial.visible||!initial.en||!initial.noRetranslate||!initial.lexical||!initial.audio||!initial.naturalVoice)
+ if(!initial.visible||!initial.en||!initial.noRetranslate||!initial.noLexical||!initial.audio||!initial.naturalVoice)
   throw Error('English rollback controls fail: '+JSON.stringify(initial));
  await page.evaluate(()=>{
   const native=window.fetch;
@@ -69,13 +69,12 @@ try{
  if(await page.$eval('.nhi-en-translation',x=>x.textContent)!=='Final approval has been given')throw Error('Vietnamese alternative not selected');
  await page.$eval('.nhi-en-original',b=>b.click());
  if(await page.$eval('.nhi-en-translation',x=>x.textContent)!==initial.en)throw Error('Original not restored');
- // Mock lexical provider only; never rely on changing external dictionary results.
- await page.evaluate(()=>{const native=window.fetch;window.fetch=function(url){if(String(url).includes('api.dictionaryapi.dev'))return Promise.resolve({ok:true,json:async()=>[{meanings:[{synonyms:['authorization'],antonyms:['disapproval'],definitions:[]}]}]});return native.apply(this,arguments);};});
- for(const [button,expected] of [['.nhi-en-syn','authorization'],['.nhi-en-ant','disapproval']]){
-  await page.$eval(button,b=>b.click());await page.$eval('.nhi-en-lexicon input',x=>x.value='approval');
-  await page.$eval('.nhi-en-lexicon form',f=>f.requestSubmit());
-  await page.waitForFunction(word=>document.querySelector('.nhi-en-lexicon p')?.textContent.includes(word),{timeout:5000},expected);
- }
+ const appearance=await page.evaluate(()=>{
+  const rows=[...document.querySelectorAll('.nhi-en-choice')];
+  return {serif:getComputedStyle(document.body).fontFamily.includes('Times New Roman'),
+   plain:rows.length===2&&rows.every(row=>{const css=getComputedStyle(row);return css.backgroundColor==='rgba(0, 0, 0, 0)'&&css.borderTopWidth==='0px'&&css.boxShadow==='none';})};
+ });
+ if(!appearance.serif||!appearance.plain)throw Error('Serif or plain comparison styling missing: '+JSON.stringify(appearance));
  const noDevice=await page.evaluate(async text=>{
   const old=speechSynthesis.getVoices;speechSynthesis.getVoices=()=>[];speechSynthesis.dispatchEvent(new Event('voiceschanged'));
   const selectors=['voiceKo','voiceVi','voiceEn'].every(id=>!document.getElementById(id).disabled&&document.getElementById(id).options[0].textContent.includes('Neural'));

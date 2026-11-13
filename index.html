@@ -16,7 +16,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Noto+Serif+KR:wght@500;700;900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;700;900&display=swap">
 <script>(function () { try { var p = JSON.parse(localStorage.getItem('nlc-prefs-v1') || '{}').theme || 'auto'; var d = p === 'dark' || (p === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches); document.documentElement.setAttribute('data-theme', d ? 'dark' : 'light'); } catch (e) { } })();</script>
 <style>
 /* Nhi's Learning Corner — candy block design system.
@@ -34,8 +34,8 @@
   --r-sm: 10px; --r: 16px; --r-lg: 22px; --r-pill: 999px;
   --sh-1: 0 4px 0 var(--edge); --sh-2: 0 18px 40px rgb(20 50 63 / .16);
   --shadow: var(--sh-1);
-  --ui: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  --ko: "Noto Serif KR", "Apple SD Gothic Neo", "Malgun Gothic", serif;
+  --ui: "Times New Roman", "Liberation Serif", Times, serif;
+  --ko: "Times New Roman", "Noto Serif KR", Batang, serif;
   --ease: cubic-bezier(.2, .8, .2, 1); --bounce: cubic-bezier(.34, 1.56, .64, 1);
   --topbar: 60px;
 }
@@ -596,7 +596,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 }
 </style>
 
-<script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="nhi-google-images-v1.js?v=1"></script><script src="nhi-hard-minimal-v1.js?v=1"></script><script src="nhi-phrases-v5.js?v=5"></script><script src="nhi-english-data-v6.js?v=20261113-reviewed-173"></script><script src="nhi-english-v5.js?v=20261113-compact-choice-v2"></script><script src="recorded-voices-v11.js?v=20261113-en1887"></script>
+<script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="nhi-google-images-v1.js?v=1"></script><script src="nhi-hard-minimal-v1.js?v=1"></script><script src="nhi-phrases-v5.js?v=5"></script><script src="nhi-english-data-v6.js?v=20261113-reviewed-173"></script><script src="nhi-english-v5.js?v=20261113-times-clean-v3"></script><script src="recorded-voices-v11.js?v=20261113-en1887"></script>
 <script src="qrcode.js" defer></script>
 <link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14"><link rel="stylesheet" href="nhi-updates-v1.css?v=1"><link rel="stylesheet" href="nhi-ai-resize-v2.css?v=1"><link rel="stylesheet" href="nhi-study-motion-v3.css?v=3"><link rel="stylesheet" href="nhi-interface-v4.css?v=4"><link rel="stylesheet" href="nhi-interface-v5.css?v=20261113-rollback-stable-v1"><link rel="stylesheet" href="nhi-seasons-v1.css?v=20261113-cartoon-soft-1">
 <link rel="stylesheet" href="nhi-living-garden-v1.css?v=20261113-cartoon-butterflies-v1">
@@ -613,7 +613,33 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 @media(max-width:480px){#nhi-movable{padding:2px 4px 4px}.nhi-mascot-controls button{min-width:26px}}
 </style>
 <style>
-.nhi-en-choices{display:grid;gap:3px;margin:5px 0}.nhi-en-choice{display:flex;align-items:center;gap:6px;padding:4px 7px!important;min-height:32px!important;text-align:left;font-size:13px!important;line-height:1.4;white-space:normal;overflow-wrap:anywhere}.nhi-en-choice span{flex:1}.nhi-en-choice small{opacity:0;font-size:11px}.nhi-en-choice:hover small,.nhi-en-choice:focus-visible small,.nhi-en-choice[aria-pressed="true"] small{opacity:1}.nhi-en-choice[aria-pressed="true"]{border-color:var(--accent,#7c3aed)}.nhi-en-tools{display:flex;gap:5px;flex-wrap:wrap;align-items:center}.nhi-en-tools button{font-size:12px!important;min-height:30px!important;padding:3px 7px!important}.nhi-en-lexicon{font-size:13px;margin-top:5px}.nhi-en-lexicon form{display:flex;gap:5px}.nhi-en-lexicon input{min-width:0;width:100%;flex:1;padding:5px}.nhi-en-status:empty{display:none}.nhi-en-original{font-size:12px!important}.nhi-en-translation{overflow-wrap:anywhere}
+
+/* Calm serif typography; comparison alternatives stay as plain text. */
+body{font-size:16px;line-height:1.55}
+button,input,select,textarea{font-family:var(--ui)}
+.nhi-en-choices{display:grid;gap:2px;margin:6px 0}
+.nhi-english-v5 .nhi-en-choice,
+.nhi-english-v5 .nhi-en-choice:hover,
+.nhi-english-v5 .nhi-en-choice:active,
+.nhi-english-v5 .nhi-en-choice[aria-pressed="true"]{
+ display:flex;align-items:baseline;gap:8px;width:100%;padding:3px 0!important;
+ min-height:32px!important;background:transparent!important;border:0!important;
+ border-radius:0!important;box-shadow:none!important;transform:none!important;
+ color:var(--muted);text-align:left;font-family:var(--ui);font-size:16px!important;
+ font-weight:400;line-height:1.5;letter-spacing:normal;white-space:normal;overflow-wrap:anywhere
+}
+.nhi-en-choice span{flex:1}
+.nhi-en-choice small{opacity:0;font-size:12px;white-space:nowrap}
+.nhi-en-choice:hover span,.nhi-en-choice:focus-visible span{text-decoration:underline;text-underline-offset:3px}
+.nhi-en-choice:hover small,.nhi-en-choice:focus-visible small,.nhi-en-choice[aria-pressed="true"] small{opacity:1}
+.nhi-english-v5 .nhi-en-choice[aria-pressed="true"]{color:var(--accent-t);font-weight:700}
+.nhi-en-choice:focus-visible{outline:2px solid var(--accent-t);outline-offset:3px}
+.nhi-en-tools{display:flex;gap:5px;align-items:center}
+.nhi-en-tools button{font-size:13px!important;min-height:30px!important;padding:3px 7px!important}
+.nhi-en-status:empty{display:none}
+.nhi-en-original{justify-self:start;font-size:13px!important}
+.nhi-english-v5 .nhi-en-translation{font-family:var(--ui);font-size:clamp(19px,4.2vw,22px);font-weight:400;line-height:1.5;letter-spacing:normal;overflow-wrap:anywhere}
+.nhi-en-head strong{letter-spacing:normal}
 @media(hover:none){.nhi-en-choice small{opacity:1}}
 </style>
 </head>
