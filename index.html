@@ -596,9 +596,9 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 }
 </style>
 
-<script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="nhi-google-images-v1.js?v=1"></script><script src="nhi-hard-minimal-v1.js?v=1"></script><script src="recorded-voices-v11.js"></script>
+<script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="nhi-google-images-v1.js?v=1"></script><script src="nhi-hard-minimal-v1.js?v=1"></script><script src="nhi-phrases-v5.js?v=5"></script><script src="nhi-english-v5.js?v=5"></script><script src="recorded-voices-v11.js"></script>
 <script src="qrcode.js" defer></script>
-<link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14"><link rel="stylesheet" href="nhi-updates-v1.css?v=1"><link rel="stylesheet" href="nhi-ai-resize-v2.css?v=1"><link rel="stylesheet" href="nhi-study-motion-v3.css?v=3"><link rel="stylesheet" href="nhi-interface-v4.css?v=4">
+<link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14"><link rel="stylesheet" href="nhi-updates-v1.css?v=1"><link rel="stylesheet" href="nhi-ai-resize-v2.css?v=1"><link rel="stylesheet" href="nhi-study-motion-v3.css?v=3"><link rel="stylesheet" href="nhi-interface-v4.css?v=4"><link rel="stylesheet" href="nhi-interface-v5.css?v=5">
 <style>
 #nhi-movable{position:fixed;z-index:48;width:calc(var(--nhi-size,112px) + 30px);padding:4px 8px 7px;border:1px solid var(--line);border-radius:18px;background:var(--surface);box-shadow:0 5px 20px #0002;touch-action:none;display:flex;flex-direction:column;align-items:center;gap:2px}
 #nhi-movable[hidden],#nhi-mascot-restore[hidden]{display:none!important}
@@ -614,10 +614,10 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 </head>
 <body>
 <header class="topbar" id="topbar">
-  <button type="button" class="brand" id="brandBtn" aria-label="Về trang bìa">
-    <span class="brand-mark" id="brandFace" aria-hidden="true"></span>
-    <span class="brand-name"><b>Nhi’s</b><span>Learning Corner</span></span>
-  </button>
+  <div class="brand nhi-brand-v5">
+    <button type="button" class="brand-mark nhi-brand-icon-v5" id="brandFaceBtn" aria-label="Về trang bìa"><span id="brandFace" aria-hidden="true"></span></button>
+    <button type="button" class="brand-name nhi-brand-title-v5" id="brandBtn" aria-label="Về Lịch học"><b>Nhi’s</b><span>Learning Corner</span></button>
+  </div>
   <div class="topbtns">
     <button type="button" class="iconbtn ai" id="aiBtn" aria-label="Hỏi AI" title="Hỏi AI" aria-pressed="false" data-ic="spark"></button>
     <button type="button" class="iconbtn" id="setBtn" aria-label="Cài đặt" title="Cài đặt (giọng đọc, tốc độ, giao diện)" data-ic="gear"></button>
@@ -910,6 +910,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 <aside class="aipanel" id="aiPanel" aria-label="Hỏi AI" aria-hidden="true">
   <div class="ai-resize-handle" id="aiResizeHandle" role="separator" aria-label="Kéo thay đổi độ rộng khung chat; dùng phím trái và phải để điều chỉnh" aria-orientation="vertical" tabindex="0" title="Giữ và kéo sang trái hoặc phải để thay đổi độ rộng"><span aria-hidden="true">⋮⋮</span></div>
   <div class="aihead">
+    <button type="button" class="iconbtn sm nhi-ai-close-v5" id="aiClose" aria-label="Đóng chat AI" title="Đóng chat AI" data-ic="x"></button>
     <h2><span class="mi" id="aiFace"></span>Hỏi AI</h2>
     <label class="ai-font-control" for="aiFontSize"><span>Cỡ chữ</span><select id="aiFontSize" aria-label="Cỡ chữ khung chat AI">
       <option value="13">13</option><option value="14">14</option><option value="15">15</option>
@@ -917,7 +918,6 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     </select></label>
     <button type="button" class="iconbtn sm" id="aiCfgBtn" aria-label="Thiết lập AI" title="Thiết lập AI" data-ic="gear"></button>
     <button type="button" class="iconbtn sm" id="aiNewBtn" aria-label="Xoá hội thoại" title="Xoá hội thoại" data-ic="trash"></button>
-    <button type="button" class="iconbtn sm" id="aiClose" aria-label="Ẩn cửa sổ AI" title="Ẩn cửa sổ AI" data-ic="x"></button>
   </div>
   <form class="aisetup" id="aiSetup" hidden>
     <p><b>Kết nối AI (làm một lần trên mỗi máy)</b></p>
@@ -1155,7 +1155,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   });
 
   /* ---------- Phrase alignment: tap a Vietnamese phrase and its Korean match lights up ---------- */
-  function pairsOf(c) { return (!c.ov && ALIGN[c.id]) || [[c.vi, c.ko, c.pr]]; }
+  function pairsOf(c) { return (!c.ov && ALIGN[c.id]) || (window.NHI_PHRASES_V5 ? window.NHI_PHRASES_V5.align(c,BY_ID) : [[c.vi,c.ko,c.pr]]); }
   var SEGS = {};
   var isWordChar = (function () {
     try { var re = new RegExp('[\\p{L}\\p{N}]', 'u'); return function (ch) { return re.test(ch); }; }
@@ -1167,7 +1167,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       if (!ch) return;
       var from = 0;
       while (true) {
-        var k = text.indexOf(ch, from); if (k < 0) return;
+        var k = String(text).toLocaleLowerCase('vi').indexOf(String(ch).toLocaleLowerCase('vi'),from); if (k < 0) return;
         var e = k + ch.length;
         var ok = !taken.some(function (r) { return k < r[1] && e > r[0]; });
         if (ok && boundary) { if (k > 0 && isWordChar(text[k - 1])) ok = false; if (e < text.length && isWordChar(text[e])) ok = false; }
@@ -1185,22 +1185,24 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     return SEGS[c.id];
   }
   function renderText(el, c, lang, tappable) {
-    var text = lang === 'vi' ? c.vi : c.ko, segs = segsOf(c)[lang], h = getP(c.id).h || [], pos = 0;
+    var text = lang === 'vi' ? c.vi : c.ko, segs = segsOf(c)[lang], h = getP(c.id).h || [], h2=getP(c.id).h2||[], pos=0;
     el.textContent = '';
     segs.forEach(function (sg) {
       if (sg.s > pos) el.appendChild(document.createTextNode(text.slice(pos, sg.s)));
       var sp = document.createElement('span');
-      sp.className = 'ph' + (tappable ? ' tap' : '') + (h.indexOf(sg.i) >= 0 ? ' hl' + (sg.i % 4 + 1) : '');
+      sp.className = 'ph' + (tappable ? ' tap' : '') + (h2.indexOf(sg.i)>=0 ? ' nhi-hl-second' : h.indexOf(sg.i)>=0 ? ' hl' + (sg.i%4+1):'');
       sp.dataset.i = sg.i; sp.textContent = text.slice(sg.s, sg.e);
       el.appendChild(sp); pos = sg.e;
     });
     if (pos < text.length) el.appendChild(document.createTextNode(text.slice(pos)));
   }
-  function toggleHl(id, i) {
-    var h = (getP(id).h || []).slice(), k = h.indexOf(i);
-    if (k >= 0) h.splice(k, 1); else h.push(i);
-    setP(id, { h: h.length ? h : null });
-    if (k < 0) { var p = pairsOf(BY_ID[id])[i]; if (p) speak(p[1]); }
+  function toggleHl(id,i){
+    var entry=getP(id),h=(entry.h||[]).slice(),h2=(entry.h2||[]).slice();
+    var a=h.indexOf(i),b=h2.indexOf(i);
+    if(a>=0){h.splice(a,1);h2.push(i);}
+    else if(b>=0)h2.splice(b,1);
+    else{h.push(i);var p=pairsOf(BY_ID[id])[i];if(p&&p[1])speak(p[1]);}
+    setP(id,{h:h.length?h:null,h2:h2.length?h2:null});
   }
   function hlItem(p, i) {
     var d = document.createElement('div'); d.className = 'hl-item';
@@ -1476,6 +1478,10 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     renderText(an, c, vk ? 'ko' : 'vi', true);
     an.className = 'answer' + (vk ? ' ko' : '') + (answerText.length > 55 ? ' long' : '');
     an.hidden = !state.flipped;
+    var classicEnglish=$('nhi-classic-english');
+    if(!classicEnglish){classicEnglish=document.createElement('div');classicEnglish.id='nhi-classic-english';an.insertAdjacentElement('afterend',classicEnglish);}
+    classicEnglish.hidden=!state.flipped;
+    if(state.flipped&&window.NHI_ENGLISH)window.NHI_ENGLISH.mount(classicEnglish,c.id,c.vi,c.ko);
     var hx=$('legacyHanja');if(!hx){hx=document.createElement('p');hx.id='legacyHanja';hx.className='hanja';an.insertAdjacentElement('afterend',hx);}var hd=(window.NHI_HANJA||{})[c.ko.trim()];var validHd=!!(hd&&hd[0]&&hd[1]);hx.hidden=!(state.flipped&&validHd);hx.textContent=validHd?hd[0]+' ('+hd[1]+')':'';
     var il=$('classicCardIllustration');if(!il){il=document.createElement('div');il.id='classicCardIllustration';an.insertAdjacentElement('afterend',il);}il.replaceChildren();if(state.flipped&&window.NHI_IMAGES){try{var ii=window.NHI_IMAGES.figure(c,c.image||null);if(ii)il.appendChild(ii);}catch(imageErr){console.warn('Nhi card illustration unavailable',imageErr);}}il.hidden=!state.flipped;
     // Pronunciation sits right under whichever line is Korean, once that line is visible
@@ -1487,6 +1493,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     // Highlighted phrases of this card, listed for closer study
     var box = $('cHl'), hs = (p.h || []).slice().sort(function (a, b) { return a - b; });
     box.textContent = '';
+    var secondary=(p.h2||[]);hs=hs.concat(secondary.filter(function(i){return hs.indexOf(i)<0;})).sort(function(a,b){return a-b;});
     box.hidden = !(state.flipped && hs.length);
     if (!box.hidden) {
       var ttl = document.createElement('p'); ttl.className = 'hl-title'; ttl.textContent = 'Từ đã tô sáng'; box.appendChild(ttl);
@@ -2585,7 +2592,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   /* ================= Lịch học theo ngày: bài theo ngày nhập + ôn lặp lại 5 mốc ================= */
   var PLAN = (function () {
     var KEY = 'viko-plan-v1', SKEY = 'viko-plan-sess-v1', OFFSETS = [0, 3, 13, 50, 180], STEP = ['Học mới', 'Ôn 1', 'Ôn 2', 'Ôn 3', 'Ôn 4'];
-    var SECS = ['done', 'known', 'hard', 'del', 'rate', 'hl', 'ed', 'hj', 'img'];
+    var SECS = ['done', 'known', 'hard', 'del', 'rate', 'hl', 'hl2', 'ed', 'hj', 'img'];
     var RATE_NAME = { known: 'Biết rồi', hard: 'Khó', mid: 'Bình thường' };
     var ST_ICON = { done: '✓', today: '●', late: '!', next: '○', future: '○' };
     // every colour here is dark enough for white text; no reds or oranges, so a day never looks "overdue"
@@ -2933,26 +2940,40 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     /* ---- highlight: tap a Vietnamese phrase, it and its Korean match light up ---- */
     var SEG = {};
     function segs(it) {
-      if (!SEG[it.id]) SEG[it.id] = { vi: locate(it.vi, it.pairs.map(function (p) { return p[0]; }), true), ko: locate(it.ko, it.pairs.map(function (p) { return p[1]; }), false) };
+      if (!SEG[it.id]) {
+        if ((it.wholePair || it.pairs.length <= 1) && window.NHI_PHRASES_V5) {
+          it.pairs = window.NHI_PHRASES_V5.align(it, ITEMS);
+        }
+        SEG[it.id] = {
+          vi: locate(it.vi,it.pairs.map(function(p){return p[0];}),true),
+          ko: locate(it.ko,it.pairs.map(function(p){return p[1];}),false)
+        };
+      }
       return SEG[it.id];
     }
     function hlText(elm, it, lang, tappable) {
-      var text = lang === 'vi' ? it.vi : it.ko, sg = segs(it)[lang], h = val('hl', it.id) || [], pos = 0;
+      var text = lang === 'vi' ? it.vi : it.ko, sg = segs(it)[lang], h = val('hl', it.id) || [], h2=val('hl2',it.id)||[], pos = 0;
       if (h && !Array.isArray(h)) h = Object.keys(h).map(function (k) { return h[k]; });
+      if (h2 && !Array.isArray(h2)) h2=Object.keys(h2).map(function(k){return h2[k];});
       elm.textContent = '';
       sg.forEach(function (g) {
         if (g.s > pos) elm.appendChild(document.createTextNode(text.slice(pos, g.s)));
-        var sp = el('span', 'ph' + (tappable ? ' tap' : '') + (h.indexOf(g.i) >= 0 ? ' hl' + (g.i % 4 + 1) : ''), text.slice(g.s, g.e));
+        var sp = el('span', 'ph' + (tappable ? ' tap' : '') + (h2.indexOf(g.i)>=0 ? ' nhi-hl-second' : h.indexOf(g.i)>=0 ? ' hl' + (g.i % 4+1) : ''), text.slice(g.s,g.e));
         sp.dataset.hi = g.i; sp.dataset.item = it.id; elm.appendChild(sp); pos = g.e;
       });
       if (pos < text.length) elm.appendChild(document.createTextNode(text.slice(pos)));
       return elm;
     }
     function toggleHl(id, i) {
-      var h = (val('hl', id) || []).slice(); if (!Array.isArray(h)) h = Object.keys(h).map(function (k) { return h[k]; });
-      var k = h.indexOf(i); if (k >= 0) h.splice(k, 1); else h.push(i);
-      put('hl', id, h);
-      if (k < 0) { var p = ITEMS[id].pairs[i]; if (p) speak(p[1], 'ko-KR'); }
+      var h = val('hl',id)||[],h2=val('hl2',id)||[];
+      if(!Array.isArray(h))h=Object.keys(h).map(function(k){return h[k];});
+      if(!Array.isArray(h2))h2=Object.keys(h2).map(function(k){return h2[k];});
+      h=h.slice();h2=h2.slice();
+      var first=h.indexOf(i),second=h2.indexOf(i);
+      if(first>=0){h.splice(first,1);h2.push(i);}
+      else if(second>=0){h2.splice(second,1);}
+      else{h.push(i);var pair=ITEMS[id]?.pairs[i];if(pair&&pair[1])speak(pair[1],'ko-KR');}
+      put('hl',id,h);put('hl2',id,h2);
     }
 
     /* ---- routing: #/bai/<id> opens a lesson as its own page ---- */
@@ -3316,7 +3337,8 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     function setFocus(on) { document.body.classList.toggle('focus', !!on); }
     function curItem() { return sess && sess.pos < sess.queue.length ? ITEMS[sess.queue[sess.pos]] : null; }
     function editForm(it) {
-      var f = el('form', 'editbox');
+      var f = el('form', 'editbox nhi-editor-window-v5');
+      f.appendChild(ibtn('iconbtn sm nhi-editor-close-v5','x',function(){sess.editing=false;render();},'Đóng chỉnh sửa thẻ'));
       var savedHj = val('hj', it.id), initialHj = lookupHanja(it.ko, it.id);
       var hanInput, readingInput, kindInput;
       if (it.type === 'w') {
@@ -3411,14 +3433,15 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       var f = el('div', 'stage pfront');
       if (s.editing) f.appendChild(editForm(it));
       else if (s.flipped) {
-        var a = hlText(el('p', 'answer ko' + (it.ko.length > 40 ? ' long' : '')), it, 'ko', false); a.lang = 'ko'; f.appendChild(a);
+        var a = hlText(el('p', 'answer ko' + (it.ko.length > 40 ? ' long' : '')), it, 'ko', true); a.lang = 'ko'; f.appendChild(a);
 
         if (hj && s.hanja) { var hx = el('p', 'hanja', hj[0]); hx.lang = 'ko'; hx.appendChild(el('small', null, '(' + hj[1] + ')')); f.appendChild(hx); }
         // Saved/preset illustration appears only on the back below the Korean answer.
         if(window.NHI_IMAGES){try{var illustration=window.NHI_IMAGES.figure(it,val('img',it.id));if(illustration)f.appendChild(illustration);}catch(imageErr){console.warn('Nhi picture unavailable',imageErr);}}
         f.appendChild(hlText(el('p', 'vi-under'), it, 'vi', true));
+        if(window.NHI_ENGLISH)window.NHI_ENGLISH.mount(f,it.id,it.vi,it.ko);
       } else f.appendChild(hlText(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : '')), it, 'vi', true));
-      f.addEventListener('click', function (e) { if (e.target.closest('figure')) return; if (s.editing || e.target.closest('.ph.tap')) return; flip(); });
+      f.addEventListener('click', function (e) { if (e.target.closest('figure,.nhi-english-v5')) return; if (s.editing || e.target.closest('.ph.tap')) return; flip(); });
       c.appendChild(f);
       var nav = el('div', 'pnav');
       var pv = ibtn('parrow', 'left', function () { go(-1); }, 'Thẻ trước (←)'); pv.disabled = s.pos === 0; nav.appendChild(pv);
@@ -3705,7 +3728,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   $('card').addEventListener('click', function (e) {
     var say = e.target.closest('[data-say]');
     if (say) { e.stopPropagation(); speak(say.dataset.say); return; }
-    if (e.target.closest('.speak') || e.target.closest('.hl-list')) return;
+    if (e.target.closest('.speak,.hl-list,.nhi-english-v5')) return;
     var sg = e.target.closest('.ph');
     if (sg) { var c = currentCard(); if (c) { toggleHl(c.id, +sg.dataset.i); renderCard(); } return; }
     // Text without a pair does nothing; only empty space flips the card
@@ -4000,7 +4023,8 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       });
       $('menuDaily').addEventListener('click', function () { menu(false); PLAN.openDailyCreator(); });
       $('menuCover').addEventListener('click', function () { menu(false); cover(true); });
-      $('brandBtn').addEventListener('click', function () { menu(false); cover(true); });
+      $('brandFaceBtn').addEventListener('click', function () { menu(false); cover(true); });
+      $('brandBtn').addEventListener('click', function () { menu(false); PLAN.home(); if(state.mode !== 'plan'){state.mode='plan';saveUi();renderMode();} window.scrollTo({top:0,behavior:'smooth'}); });
       $('coverGo').addEventListener('click', function () { haptic(14); cover(false); });
       $('setBtn').addEventListener('click', function () { menu(false); sheet(true); });
       $('setSheet').addEventListener('click', function (e) {
@@ -4231,5 +4255,5 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 <script src="backup-portable-v1.js"></script>
 <script src="nhi-ai-resize-v2.js?v=1"></script>
 <script src="nhi-fireworks-v3.js?v=3"></script>
-<script src="nhi-interface-v4.js?v=4"></script>
+<script src="nhi-interface-v5.js?v=5"></script>
 </body></html>

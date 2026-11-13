@@ -41,6 +41,7 @@ jobs:
             nhi-updates-v1.css nhi-ai-resize-v2.js nhi-ai-resize-v2.css
             nhi-study-motion-v3.css nhi-fireworks-v3.js
             nhi-interface-v4.css nhi-interface-v4.js
+            nhi-interface-v5.css nhi-interface-v5.js nhi-phrases-v5.js nhi-english-v5.js
             recorded-voices-v11.js backup-portable-v1.js
             refresh-v9.css study-enhancements-v13.css
             icon-192.png icon-512.png nhi-avatar.png
@@ -51,6 +52,7 @@ jobs:
             test -f "$file" || { echo "Required asset missing: $file"; exit 1; }
             cp -- "$file" _site/
           done
+          if [ -f english.json ]; then cp english.json _site/; fi
           if [ -d pictures ]; then cp -R pictures _site/; fi
           if [ -d audio ]; then cp -R audio _site/; fi
           touch _site/.nojekyll

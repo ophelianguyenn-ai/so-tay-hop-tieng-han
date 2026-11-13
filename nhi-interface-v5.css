@@ -1,0 +1,105 @@
+/* Nhi UI v5: context-local ×, non-obtrusive cover decorations, precise highlights,
+   native English subtitles; do not change the mascot neck until user chooses a design. */
+#nhi-global-close-v4{display:none!important}
+.garden-control{display:none!important}
+
+/* Small decorative sun and moon integrated into the bottom right of the cover. */
+#nhi-cover-theme-v5{
+ position:absolute;z-index:4;right:max(17px,env(safe-area-inset-right,0px));
+ bottom:max(17px,env(safe-area-inset-bottom,0px));
+ display:flex;align-items:center;gap:10px;
+ background:transparent;border:0;box-shadow:none;padding:0;
+}
+#nhi-cover-theme-v5 button{
+ width:34px;height:34px;display:grid;place-items:center;border:0;
+ padding:0;background:transparent!important;box-shadow:none!important;
+ color:var(--ink);opacity:.45;text-shadow:0 2px 7px rgba(255,255,255,.19);
+ border-radius:50%;font-size:21px;line-height:1;cursor:pointer;
+ transition:opacity .2s ease,transform .2s ease,color .2s ease;
+}
+#nhi-cover-theme-v5 button:hover,
+#nhi-cover-theme-v5 button[aria-pressed="true"]{opacity:.95;color:var(--accent-t);transform:scale(1.11)}
+#nhi-cover-theme-v5 button:focus-visible{outline:2px solid var(--accent-t);outline-offset:3px}
+
+/* Independent mascot icon -> cover; product title -> calendar. */
+.nhi-brand-v5{display:flex;align-items:center;gap:8px}
+.nhi-brand-v5 .nhi-brand-icon-v5{
+ display:grid;place-items:center;border:0;background:transparent;padding:0;min-width:48px;
+ width:48px;height:48px;cursor:pointer;border-radius:50%;
+}
+.nhi-brand-v5 .nhi-brand-icon-v5 > #brandFace{display:grid;place-items:center;width:100%;height:100%}
+.nhi-brand-v5 .nhi-brand-title-v5{
+ display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:0;
+ background:transparent;color:inherit;border:0;padding:0;cursor:pointer;text-align:left;
+}
+.nhi-brand-v5 .nhi-brand-title-v5:hover{color:var(--accent-t)}
+.nhi-brand-v5 button:focus-visible{outline:2px solid var(--accent-t);outline-offset:2px}
+
+/* Context-local closing controls — inside their own panel, never globally on the cover. */
+#aiPanel .aihead .nhi-ai-close-v5{
+ display:grid!important;flex:none!important;order:-10;position:static!important;
+ margin-right:2px;width:33px;min-width:33px;height:33px;border:1px solid var(--line);
+ background:transparent;border-radius:9px;box-shadow:none;
+}
+#aiPanel .aihead{padding-left:12px!important}
+#aiPanel .aihead .nhi-ai-close-v5 svg{width:17px;height:17px}
+#planBox .nhi-editor-window-v5{position:relative;padding-top:max(43px,var(--s3));}
+#planBox .nhi-editor-window-v5 > .nhi-editor-close-v5{
+ position:absolute;left:8px;top:8px;right:auto;z-index:10;width:32px;min-width:32px;height:32px;
+ border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);
+ box-shadow:none;display:grid;place-items:center;
+}
+#planBox .nhi-editor-window-v5 > .nhi-editor-close-v5 svg{width:16px;height:16px}
+.nhi-picture-picker .nhi-picture-head{justify-content:flex-start!important;gap:9px}
+.nhi-picture-picker .nhi-picture-head > button{
+ order:-1!important;flex:none;min-width:31px!important;width:31px;height:31px;
+ padding:0!important;font-size:12px!important;display:grid;place-items:center;
+ border:1px solid var(--line);border-radius:8px;background:var(--surface);
+}
+.nhi-picture-picker .nhi-picture-head > strong{flex:1}
+
+/* Yellow first tap; teal second tap of SAME phrase; third tap clears. */
+#planBox .ph.nhi-hl-second,
+#view-cards .ph.nhi-hl-second,
+.ph.nhi-hl-second {
+ background:linear-gradient(transparent 24%,rgba(64,200,204,.55) 24%,rgba(64,200,204,.72) 90%,transparent 90%)!important;
+ color:var(--ink)!important;box-shadow:inset 0 -1px 0 #2698a0;
+ border-radius:3px;transition:background-color .15s,color .15s;
+}
+#planBox .ph.tap,#view-cards .ph.tap{cursor:pointer;touch-action:manipulation}
+
+/* EN meaning + IPA only on the back of the card. */
+.nhi-english-v5{
+ width:min(100%,640px);box-sizing:border-box;
+ margin:14px auto 6px;padding:11px 14px;
+ border-top:1px solid color-mix(in srgb,var(--accent-d) 42%,transparent);
+ border-radius:10px;background:color-mix(in srgb,var(--accent-soft) 40%,var(--surface));
+ color:var(--ink);display:flex;flex-direction:column;gap:5px;text-align:left;
+}
+.nhi-en-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.nhi-en-head strong{color:var(--accent-t);font-size:12px;letter-spacing:.025em}
+.nhi-english-v5 .nhi-en-translation{font-size:clamp(15px,3.5vw,19px);line-height:1.5;font-weight:700;overflow-wrap:anywhere;margin:0}
+.nhi-english-v5 .nhi-en-ipa{font-family:var(--ui);font-size:13px;line-height:1.45;color:var(--muted);overflow-wrap:anywhere;margin:0}
+.nhi-english-v5 .nhi-en-ipa[hidden]{display:none}
+.nhi-english-v5 .nhi-en-status{font-size:11px;line-height:1.4;color:var(--muted);margin:0}
+.nhi-english-v5 .nhi-en-speak,.nhi-english-v5 .nhi-en-translate{
+ cursor:pointer;border:1px solid var(--accent-d);background:var(--surface);
+ color:var(--accent-t);border-radius:9px;padding:6px 9px;font:700 12px var(--ui);
+ min-height:34px;
+}
+.nhi-english-v5 button[hidden]{display:none!important}
+#nhi-classic-english[hidden]{display:none!important}
+#nhi-classic-english{width:100%;max-width:100%;display:flex}
+#nhi-classic-english .nhi-english-v5{width:min(100%,640px)}
+@media(max-width:470px){
+ .nhi-brand-v5 .nhi-brand-icon-v5{width:42px;height:42px;min-width:42px}
+ .nhi-brand-v5 .nhi-brand-title-v5{font-size:inherit}
+ #nhi-cover-theme-v5{right:14px;bottom:14px;gap:7px}
+ #nhi-cover-theme-v5 button{width:30px;height:30px;font-size:19px}
+ #aiPanel .aihead{gap:5px;padding-inline:7px!important}
+ #aiPanel .aihead .nhi-ai-close-v5{width:30px;min-width:30px;height:30px}
+ .nhi-english-v5{padding:8px 10px}
+}
+@media(prefers-reduced-motion:reduce){
+ #nhi-cover-theme-v5 button{transition:none!important}
+}
