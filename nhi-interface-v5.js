@@ -42,23 +42,22 @@ function closeContext(name,box){
  }
 }
 let swallowUntil=0;
-window.NHI_V5_CHECK={context:function(){var c=getContext();return c?{type:c[0],visible:shown(c[1]),rect:c[1].getBoundingClientRect().toJSON()}:null;},events:[]};
 function init(){
  const old=$('#nhi-global-close-v4');if(old)old.remove();
  makeCover();
  // Each window keeps its X on the upper-left corner, not the page corner.
  function closeFromOutside(e){
-   const c=getContext();
-   window.NHI_V5_CHECK.events.push({event:e.type,context:c&&c[0],target:e.target&&e.target.tagName,ts:Date.now()});
-   if(!c)return;
+   const c=getContext();if(!c)return;
    const [name,box]=c,el=e.target instanceof Element?e.target:null;
    if(!el||box.contains(el))return;
    const trigger=el.closest('#aiBtn,.ai-resize-handle,#brandBtn,#brandFaceBtn');
    if(trigger&&name==='ai')return;
    // A click on empty space should only close the window, not flip a card.
-   swallowUntil=Date.now()+260;
    e.preventDefault();e.stopPropagation();
+   // Invoke the window's own X first. Otherwise the click-suppression guard
+   // mistakenly intercepts that programmatic button click as well.
    closeContext(name,box);
+   swallowUntil=Date.now()+260;
  }
  document.addEventListener('pointerdown',closeFromOutside,true);
  document.addEventListener('mousedown',closeFromOutside,true);
