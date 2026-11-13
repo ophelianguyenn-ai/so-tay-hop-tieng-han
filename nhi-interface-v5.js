@@ -59,7 +59,15 @@ function init(){
  },true);
  document.addEventListener('click',function(e){
    if(swallowUntil>Date.now()){e.preventDefault();e.stopImmediatePropagation();return;}
-   const btn=e.target instanceof Element?e.target.closest('button,[role="button"]'):null;
+   const opened=getContext(),el=e.target instanceof Element?e.target:null;
+   if(opened&&el&&!opened[1].contains(el)){
+     const trigger=el.closest('#aiBtn,.ai-resize-handle,#brandBtn,#brandFaceBtn');
+     if(!(trigger&&opened[0]==='ai')){
+       e.preventDefault();e.stopImmediatePropagation();
+       closeContext(opened[0],opened[1]);return;
+     }
+   }
+   const btn=el?el.closest('button,[role="button"]'):null;
    if(!btn||btn.disabled||!btn.isConnected||!window.matchMedia||matchMedia('(prefers-reduced-motion: reduce)').matches)return;
    const rect=btn.getBoundingClientRect();if(!rect.width||!rect.height)return;
    let glow=document.createElement('span');glow.className='nhi-button-ring-v4';glow.setAttribute('aria-hidden','true');
