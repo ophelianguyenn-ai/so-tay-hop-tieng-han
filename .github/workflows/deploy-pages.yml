@@ -80,6 +80,20 @@ jobs:
           done
           echo "Six seasonal backgrounds prepared; original spring illustrations unchanged."
 
+      - name: Prefer selected illustrated garden art when present
+        shell: bash
+        run: |
+          set -euo pipefail
+          for season in summer autumn winter; do
+            for lighting in day night; do
+              name="garden-${season}-${lighting}.webp"
+              if [ -s "$name" ]; then
+                cp -- "$name" "_site/$name"
+                echo "Selected illustrated artwork: $name"
+              fi
+            done
+          done
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
