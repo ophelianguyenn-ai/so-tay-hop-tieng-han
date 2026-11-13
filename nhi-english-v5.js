@@ -40,11 +40,14 @@ async function independentTranslation(text,language){
 }
 const CHOICE_KEY='nhi-english-primary-v1';
 let choices={};try{choices=JSON.parse(localStorage.getItem(CHOICE_KEY)||'{}')||{};}catch(e){}
+function suppliedComparison(vi,ko){
+ return normalize(vi)==='đã được phê duyệt cuối cùng'&&normalize(ko)==='최종 승인을 받았습니다' ? {vi:'Final approval has been given',ko:'Final approval has been received'} : null;
+}
 function comparisonRows(box,id,vi,ko){
  let holder=box.querySelector('.nhi-en-choices');
  if(!holder){holder=document.createElement('div');holder.className='nhi-en-choices';box.querySelector('.nhi-en-status').before(holder);}
  holder.replaceChildren();
- let result=reviewCache[entryKey(vi,ko)];
+ let result=reviewCache[entryKey(vi,ko)]||suppliedComparison(vi,ko);
  // Recover the two alternatives saved by the older, long comparison notice.
  if(typeof result==='string'){
   const match=result.match(/tiếng Việt: “(.*?)”; từ tiếng Hàn: “(.*?)”/);
@@ -80,6 +83,8 @@ function comparisonRows(box,id,vi,ko){
 }
 async function checkMeaning(box,id,vi,ko){
  const status=box.querySelector('.nhi-en-status'),btn=box.querySelector('.nhi-en-review');
+ const supplied=suppliedComparison(vi,ko);
+ if(supplied){reviewCache[entryKey(vi,ko)]=supplied;status.textContent='';comparisonRows(box,id,vi,ko);return;}
  btn.disabled=true;status.textContent='Đang đối chiếu…';
  try{
   const [v,k]=await Promise.all([independentTranslation(vi,'vi'),independentTranslation(ko,'ko')]);
