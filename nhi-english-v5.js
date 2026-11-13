@@ -261,7 +261,7 @@ function mount(parent,id,vi,ko){
  if(!parent)return;
  const before=parent.querySelector('.nhi-english-v5');if(before)before.remove();
  const box=document.createElement('section');box.className='nhi-english-v5';box.setAttribute('aria-label','Tiếng Anh');
- box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><p class="nhi-en-status" aria-live="polite"></p><button type="button" class="nhi-en-review">✓ Đối chiếu Việt–Hàn</button><button type="button" class="nhi-en-translate">Dịch tiếng Anh</button>';
+ box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><p class="nhi-en-status" aria-live="polite"></p><button type="button" class="nhi-en-review" title="Khi bấm, nội dung tiếng Việt và tiếng Hàn sẽ được gửi đến Google Translate để đối chiếu tự động. Đây không phải kiểm duyệt chuyên gia.">✓ Đối chiếu Việt–Hàn</button><button type="button" class="nhi-en-translate">Dịch tiếng Anh</button>';
  parent.appendChild(box);
  display(box,verifiedEntry(id,vi,ko),id,vi,ko);
  if(!data||!Object.keys(data).length){
