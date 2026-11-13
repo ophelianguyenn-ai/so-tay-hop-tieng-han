@@ -1,0 +1,81 @@
+name: Import six softer cartoon season covers (one time)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/import-cartoon-covers.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-artwork:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out website
+        uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install WebP image encoder
+        run: python -m pip install --quiet --disable-pip-version-check 'Pillow>=11,<14'
+      - name: Download six selected 16:9 image assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          jobs=()
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors --connect-timeout 15 --max-time 160 -o '/tmp/cartoon-summer-day.png' 'https://sdmntprseasia.oaiusercontent.com/files/00000000-b17c-8207-b4db-f758fb907c2d/raw?se=2026-11-13T07%3A07%3A03Z&sp=r&sv=2026-06-06&sr=b&scid=946c7b87-e93e-516a-8de0-530ec6fc36b1&skoid=6980ab1e-b994-4668-84de-ad0444c9d08b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-13T06%3A33%3A14Z&ske=2026-11-14T06%3A33%3A14Z&sks=b&skv=2026-06-06&sig=RyQ0AF4r/G%2Bi/VZuCoU0thZEB%2B5DN11Fn%2BERCdjSPrk%3D' &
+          jobs+=("$!")
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors --connect-timeout 15 --max-time 160 -o '/tmp/cartoon-summer-night.png' 'https://sdmntprseasia.oaiusercontent.com/files/00000000-9128-8207-ad28-b495901ea415/raw?se=2026-11-13T07%3A07%3A03Z&sp=r&sv=2026-06-06&sr=b&scid=faafd1a9-3066-58ce-843a-5e2e958d0a31&skoid=6980ab1e-b994-4668-84de-ad0444c9d08b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-13T01%3A07%3A19Z&ske=2026-11-14T01%3A07%3A19Z&sks=b&skv=2026-06-06&sig=j/CGPUrTWgdbVU7xbZsK8x5JXtSLwzKwHrxlr%2BR7X9o%3D' &
+          jobs+=("$!")
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors --connect-timeout 15 --max-time 160 -o '/tmp/cartoon-autumn-day.png' 'https://sdmntprindiasocentral.oaiusercontent.com/files/00000000-94b8-8211-889e-7d0a1fd2eab5/raw?se=2026-11-13T07%3A07%3A04Z&sp=r&sv=2026-06-06&sr=b&scid=c9ab0080-ebdf-5728-99b6-5c8719c94782&skoid=6980ab1e-b994-4668-84de-ad0444c9d08b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-13T00%3A26%3A17Z&ske=2026-11-14T00%3A26%3A17Z&sks=b&skv=2026-06-06&sig=47ZfrxoewoNag8ccBMVVbiV006uSwiDJKp%2BY7pRvzTc%3D' &
+          jobs+=("$!")
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors --connect-timeout 15 --max-time 160 -o '/tmp/cartoon-autumn-night.png' 'https://sdmntprseasia.oaiusercontent.com/files/00000000-dc18-8207-b608-d1b66f0186c1/raw?se=2026-11-13T07%3A07%3A03Z&sp=r&sv=2026-06-06&sr=b&scid=047b8734-4127-5b5a-8f08-06a56305729d&skoid=6980ab1e-b994-4668-84de-ad0444c9d08b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-13T01%3A07%3A20Z&ske=2026-11-14T01%3A07%3A20Z&sks=b&skv=2026-06-06&sig=4jndNOYA0fkb36/3EkmWlvXuRSwJqMy3Xs7AXc41eGE%3D' &
+          jobs+=("$!")
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors --connect-timeout 15 --max-time 160 -o '/tmp/cartoon-winter-day.png' 'https://sdmntprindiasocentral.oaiusercontent.com/files/00000000-cfe4-8211-a220-3b7507515397/raw?se=2026-11-13T07%3A07%3A04Z&sp=r&sv=2026-06-06&sr=b&scid=ce37f43f-6c34-55a1-b8cf-4df9cc5f61cf&skoid=6980ab1e-b994-4668-84de-ad0444c9d08b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-13T01%3A24%3A28Z&ske=2026-11-14T01%3A24%3A28Z&sks=b&skv=2026-06-06&sig=Zj8W8FicttUyrcSdi/rokgaBXjk22A4XUcA1yFiOvZY%3D' &
+          jobs+=("$!")
+          curl --fail --location --silent --show-error --retry 3 --retry-all-errors --connect-timeout 15 --max-time 160 -o '/tmp/cartoon-winter-night.png' 'https://sdmntprwestus2.oaiusercontent.com/files/00000000-16c8-81f8-9586-46a5d683d87a/raw?se=2026-11-13T07%3A07%3A09Z&sp=r&sv=2026-06-06&sr=b&scid=22effceb-98e1-548e-8403-f30766372db2&skoid=6980ab1e-b994-4668-84de-ad0444c9d08b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-13T02%3A37%3A36Z&ske=2026-11-14T02%3A37%3A36Z&sks=b&skv=2026-06-06&sig=3TzLEl/kLkBJ6EoOB1eAMjBpfoD8VYhbKNA1PER249w%3D' &
+          jobs+=("$!")
+          for job in "${jobs[@]}"; do wait "$job"; done
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          for season in ('summer','autumn','winter'):
+              for mode in ('day','night'):
+                  file=Path('/tmp/cartoon-'+season+'-'+mode+'.png')
+                  assert file.exists() and file.stat().st_size > 1_000_000, f'Missing illustration: {file}'
+                  with Image.open(file) as im:
+                      assert im.size == (1672,941), f'Unexpected size {file}: {im.size}'
+          print('All six original softer cartoon illustrations verified.')
+          PY
+      - name: Encode originals into permanent optimized WebP assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from PIL import Image
+          from pathlib import Path
+          for season in ('summer','autumn','winter'):
+              for mode in ('day','night'):
+                  inp=Path('/tmp/cartoon-'+season+'-'+mode+'.png')
+                  out=Path('garden-'+season+'-'+mode+'.webp')
+                  with Image.open(inp) as im:
+                      im.convert('RGB').save(out, 'WEBP', quality=86, method=6)
+                  assert out.stat().st_size > 180000, f'Unexpectedly small result {out}'
+                  print(out, out.stat().st_size, 'bytes')
+          PY
+      - name: Commit updated backgrounds to main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add garden-summer-day.webp garden-summer-night.webp garden-autumn-day.webp garden-autumn-night.webp garden-winter-day.webp garden-winter-night.webp
+          if git diff --cached --quiet; then
+            echo 'Assets already up to date.'
+          else
+            git commit -m 'Update six summer autumn winter backgrounds to soft storybook cartoon illustrations'
+            git push origin HEAD:main
+          fi
