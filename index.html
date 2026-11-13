@@ -2516,7 +2516,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   try { window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', applyTheme); } catch (e) { }
 
   /* Mascot: one girl, several moods. Drawn here so it works offline and in both themes. */
-  function girl(mood) {
+  function girl(mood, shortNeck) {
     var skin = '#FFF0E4', line = '#4A3728', hair = '#6B4E3D', hairL = '#8A6A55', pink = '#F9B8C6', pinkD = '#EE95AB', ol = ' stroke="' + line + '" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"';
     function heart(x, y, k, c) { return '<path transform="translate(' + x + ' ' + y + ') scale(' + k + ')" d="M5 3C5-1 0-1 0 3c0 3 5 6 5 8 0-2 5-5 5-8 0-4-5-4-5 0z" fill="' + c + '"/>'; }
     var s = '<svg class="mascot" viewBox="0 0 160 160" aria-hidden="true" focusable="false">';
@@ -2528,7 +2528,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     // sweater
     s += '<path d="M40 160c0-22 15-33 40-33s40 11 40 33z" fill="' + pink + '"' + ol + '/><path d="M66 129q14 9 28 0" fill="none" stroke="' + pinkD + '" stroke-width="4" stroke-linecap="round"/>';
     // Visible neck between face and sweater; source remains vector/editable.
-    s += '<path data-nhi-neck="true" d="M72 107v19c0 7 4 11 8 11s8-4 8-11v-19z" fill="' + skin + '"' + ol + '/>';
+    s += '<path data-nhi-neck="true" d="' + (shortNeck ? 'M73 107v13c0 4 3 7 7 7s7-3 7-7v-13z' : 'M72 107v19c0 7 4 11 8 11s8-4 8-11v-19z') + '" fill="' + skin + '"' + ol + '/>';
     s += '<path d="M68 132q12 9 24 0" fill="none" stroke="' + pinkD + '" stroke-width="2.5" stroke-linecap="round"/>';
     // face
     s += '<circle cx="46" cy="86" r="6.500" fill="' + skin + '"' + ol + '/>';
@@ -3114,7 +3114,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
       stat(s.late.length, 'bài quá hạn', s.late.length ? 'late' : '');
       stat(s.cards, 'thẻ');
       box.appendChild(txt);
-      var m = el('div', 'nhi-calendar-girl'); m.innerHTML = girl(n ? 'smile' : 'grin'); box.appendChild(m);
+      var m = el('div', 'nhi-calendar-girl'); m.innerHTML = girl(n ? 'smile' : 'grin', true); box.appendChild(m);
       box.appendChild(st);
       var act = el('div', 'tact');
       var first = s.late[0] || s.due[0];
