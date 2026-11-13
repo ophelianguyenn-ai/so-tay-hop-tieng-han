@@ -51,7 +51,7 @@
  left:auto;right:-11%;animation-name:nhi-fish-swim-reverse;
 }
 #cover #nhi-living-garden .nhi-life-fish svg{animation:nhi-fish-tail .8s ease-in-out infinite alternate}
-#cover #nhi-living-garden .nhi-life-fish.reverse svg{transform:scaleX(-1)}
+#cover #nhi-living-garden .nhi-life-fish.reverse svg{animation:nhi-fish-tail-reverse .8s ease-in-out infinite alternate;}
 #cover #nhi-living-garden .nhi-life-creature{
  left:-13%;top:var(--y);width:var(--size,73px);height:auto;
  animation:nhi-creature-cross var(--duration,27s) var(--delay,0s) linear infinite;
@@ -162,6 +162,7 @@
  0%{transform:rotate(-5deg)}
  100%{transform:rotate(6deg)}
 }
+@keyframes nhi-fish-tail-reverse{0%{transform:scaleX(-1) rotate(-5deg)}100%{transform:scaleX(-1) rotate(6deg)}}
 @keyframes nhi-creature-cross{
  0%{transform:translate3d(0,3px,0);opacity:0}
  5%{opacity:.9}
