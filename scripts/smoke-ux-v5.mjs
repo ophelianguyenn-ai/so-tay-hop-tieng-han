@@ -42,7 +42,7 @@ try{
     target:target?.tagName+'#'+target?.id+'.'+target?.className,contains:e?.contains(target)};
  });
  console.log('V5 OUTSIDE BEFORE',JSON.stringify(beforeOutside));
- await page.mouse.click(4,430);
+ await page.touchscreen.tap(4,430);
  const afterOutside=await page.evaluate(()=>({
    edit:!!document.querySelector('#planBox .editbox'),
    target:document.elementFromPoint(4,430)?.outerHTML.slice(0,140)
