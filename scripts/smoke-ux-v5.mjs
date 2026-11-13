@@ -30,6 +30,22 @@ try{
  }));
  console.log('V5 ENGLISH BACK',JSON.stringify(english));
  if(!english.english||!english.audio||!english.back)throw Error('English module not mounted on back');
+ // Manual English/IPA review never changes the original Vietnamese/Korean texts.
+ await page.waitForSelector('.nhi-en-edit',{timeout:5000});
+ await page.$eval('.nhi-en-edit',b=>b.click());
+ await page.waitForSelector('.nhi-en-edit-form',{timeout:5000});
+ await page.$eval('.nhi-en-edit-form textarea',x=>{x.value='Reviewed English sample';x.dispatchEvent(new Event('input',{bubbles:true}));});
+ await page.$eval('.nhi-en-edit-form input',x=>{x.value='rɪˈvjuːd ˈɪŋɡlɪʃ ˈsæmpəl';x.dispatchEvent(new Event('input',{bubbles:true}));});
+ await page.$eval('.nhi-en-edit-form button[type="submit"]',b=>b.click());
+ const revised=await page.evaluate(()=>({
+  text:document.querySelector('.nhi-en-translation')?.textContent,
+  ipa:document.querySelector('.nhi-en-ipa')?.textContent,
+  canRetranslate:!document.querySelector('.nhi-en-translate')?.hidden,
+  edits:Object.keys(JSON.parse(localStorage.getItem('nhi-english-edits-v5')||'{}')).length
+ }));
+ console.log('V5 ENGLISH REVIEW',JSON.stringify(revised));
+ if(revised.text!=='Reviewed English sample'||!revised.ipa?.includes('rɪˈvjuːd')||!revised.canRetranslate||!revised.edits)
+  throw Error('Manual English/IPA editor failed');
  await page.$eval('#planBox .cicons button[title*="Sửa thẻ"]',b=>b.click());
  await page.waitForSelector('#planBox .nhi-editor-close-v5',{timeout:5000});
  await page.$eval('#planBox .nhi-editor-close-v5',b=>b.click());
