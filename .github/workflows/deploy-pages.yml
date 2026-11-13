@@ -42,12 +42,16 @@ jobs:
             nhi-study-motion-v3.css nhi-fireworks-v3.js
             nhi-interface-v4.css nhi-interface-v4.js
             nhi-interface-v5.css nhi-interface-v5.js nhi-seasons-v1.css nhi-seasons-v1.js
+            nhi-living-garden-v1.css nhi-living-garden-v1.js
             refresh-app.html nhi-phrases-v5.js nhi-english-v5.js nhi-english-data-v6.js
             recorded-voices-v11.js backup-portable-v1.js
             refresh-v9.css study-enhancements-v13.css
             icon-192.png icon-512.png nhi-avatar.png
             nhi-mascot.webp nhi-puzzled.webp
             garden-day.webp garden-night.webp
+            garden-summer-day.webp garden-summer-night.webp
+            garden-autumn-day.webp garden-autumn-night.webp
+            garden-winter-day.webp garden-winter-night.webp
           )
           for file in "${files[@]}"; do
             test -f "$file" || { echo "Required asset missing: $file"; exit 1; }
@@ -61,38 +65,6 @@ jobs:
           test -s _site/index.html
           test -s _site/lessons.json
           echo "Static website assembled; data and illustrations preserved."
-
-      - name: Set up Python for seasonal garden illustrations
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Build matching summer autumn winter covers
-        shell: bash
-        run: |
-          set -euo pipefail
-          python -m pip install --quiet --disable-pip-version-check 'Pillow>=11,<14' 'numpy>=2,<3'
-          python scripts/build_season_gardens.py --output _site
-          for season in summer autumn winter; do
-            for lighting in day night; do
-              test -s "_site/garden-${season}-${lighting}.webp"
-            done
-          done
-          echo "Six seasonal backgrounds prepared; original spring illustrations unchanged."
-
-      - name: Prefer selected illustrated garden art when present
-        shell: bash
-        run: |
-          set -euo pipefail
-          for season in summer autumn winter; do
-            for lighting in day night; do
-              name="garden-${season}-${lighting}.webp"
-              if [ -s "$name" ]; then
-                cp -- "$name" "_site/$name"
-                echo "Selected illustrated artwork: $name"
-              fi
-            done
-          done
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
