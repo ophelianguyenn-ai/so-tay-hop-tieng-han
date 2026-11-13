@@ -62,6 +62,24 @@ jobs:
           test -s _site/lessons.json
           echo "Static website assembled; data and illustrations preserved."
 
+      - name: Set up Python for seasonal garden illustrations
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Build matching summer autumn winter covers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --disable-pip-version-check 'Pillow>=11,<14' 'numpy>=2,<3'
+          python scripts/build_season_gardens.py --output _site
+          for season in summer autumn winter; do
+            for lighting in day night; do
+              test -s "_site/garden-${season}-${lighting}.webp"
+            done
+          done
+          echo "Six seasonal backgrounds prepared; original spring illustrations unchanged."
+
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
