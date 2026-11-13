@@ -36,12 +36,13 @@ jobs:
           wait
           python - <<'PY'
           from pathlib import Path
-          from PIL import Image
+          import struct
           paths=[Path("/tmp/nhi-"+s+"-"+t+".png") for s in ("summer","autumn","winter") for t in ("day","night")]
           for p in paths:
               assert p.exists() and p.stat().st_size > 100_000, f"Image missing: {p}"
-              with Image.open(p) as pic:
-                  assert pic.size == (1672,941), f"Unexpected picture size: {p}"
+              header=p.read_bytes()[:24]
+              assert header[:8] == b"\\x89PNG\\r\\n\\x1a\\n", f"Not a PNG: {p}"
+              assert struct.unpack(">II",header[16:24]) == (1672,941), f"Unexpected picture size: {p}"
           print("All six illustrated originals downloaded with expected size.")
           PY
 
