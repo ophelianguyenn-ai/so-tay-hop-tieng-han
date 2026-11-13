@@ -46,7 +46,7 @@ function init(){
  const old=$('#nhi-global-close-v4');if(old)old.remove();
  makeCover();
  // Each window keeps its X on the upper-left corner, not the page corner.
- document.addEventListener('pointerdown',function(e){
+ function closeFromOutside(e){
    const c=getContext();if(!c)return;
    const [name,box]=c,el=e.target instanceof Element?e.target:null;
    if(!el||box.contains(el))return;
@@ -56,7 +56,10 @@ function init(){
    swallowUntil=Date.now()+260;
    e.preventDefault();e.stopPropagation();
    closeContext(name,box);
- },true);
+ }
+ document.addEventListener('pointerdown',closeFromOutside,true);
+ document.addEventListener('mousedown',closeFromOutside,true);
+ document.addEventListener('touchstart',closeFromOutside,{capture:true,passive:false});
  document.addEventListener('click',function(e){
    if(swallowUntil>Date.now()){e.preventDefault();e.stopImmediatePropagation();return;}
    const opened=getContext(),el=e.target instanceof Element?e.target:null;
