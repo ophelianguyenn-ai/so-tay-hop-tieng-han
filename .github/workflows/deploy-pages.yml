@@ -32,7 +32,7 @@ jobs:
           # Only publish files required by the app. Never upload .github,
           # scripts, Netlify settings, internal notes or credentials.
           files=(
-            index.html sw.js manifest.webmanifest
+            index.html nhi-neck-options.html sw.js manifest.webmanifest
             lessons.json technical-images.json audio-manifest.json
             qrcode.js garden-v10.js
             hanja-v9.js hanja-extra-v12.js
