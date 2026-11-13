@@ -1,0 +1,147 @@
+/* Nhi's Learning Corner — four seasonal SVG landscapes, one sun, two themes.
+   Scoped to the cover so card, calendar, editor and study UI remain unchanged. */
+#cover .landscape{isolation:isolate}
+#cover .landscape>.garden-art,
+#cover .landscape>.sun,
+#cover .landscape>.moon{display:none!important}
+#cover .landscape>.nhi-season-svg{
+  position:absolute;inset:0;z-index:0;display:block;width:100%;height:100%;
+  pointer-events:none;animation:nhi-season-reveal .65s cubic-bezier(.18,.72,.18,1) both;
+}
+#cover .landscape>.cloud,
+#cover .landscape>.birds,
+#cover .landscape>.flower,
+#cover .landscape>.butterfly,
+#cover .landscape>.star,
+#cover .landscape>.firefly,
+#cover .landscape>.shooting-star,
+#cover .landscape>.petal,
+#cover .landscape>.water-light{z-index:1}
+#cover[data-season="autumn"] .landscape>.flower,
+#cover[data-season="autumn"] .landscape>.butterfly,
+#cover[data-season="winter"] .landscape>.flower,
+#cover[data-season="winter"] .landscape>.butterfly,
+#cover:not([data-season="spring"]) .landscape>.petal{display:none!important}
+#cover[data-season="winter"] .landscape>.water-light{opacity:.15}
+#cover[data-season="winter"] .landscape>.cloud{opacity:.28}
+#cover[data-season="summer"] .landscape>.butterfly{animation-duration:7s}
+#cover .cover-in{z-index:3;padding-bottom:clamp(76px,11vh,110px);padding-top:22px}
+#cover .cover-in:before{inset:-20px -40px -12px;background:radial-gradient(ellipse,rgba(249,255,247,.80),transparent 74%)}
+:root[data-theme="dark"] #cover .cover-in:before{background:radial-gradient(ellipse,rgba(2,10,10,.76),transparent 73%)}
+
+/* Persistent four-season switcher, accessible on phone and desktop. */
+#nhi-season-controls{
+  position:absolute;z-index:5;left:50%;bottom:max(22px,env(safe-area-inset-bottom,0px));
+  transform:translateX(-50%);display:flex;align-items:center;justify-content:center;
+  flex-wrap:nowrap;gap:6px;padding:5px;border-radius:100px;
+  border:1px solid rgba(255,255,255,.44);
+  background:rgba(255,255,255,.46);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);box-shadow:0 5px 24px rgba(26,54,43,.16);
+  max-width:calc(100% - 130px);
+}
+:root[data-theme="dark"] #nhi-season-controls{
+  background:rgba(8,24,24,.72);border-color:rgba(223,255,239,.27);
+  box-shadow:0 5px 24px rgba(0,0,0,.26);
+}
+#nhi-season-controls button{
+  font:800 13px var(--ui);border:1px solid transparent;border-radius:100px;
+  padding:8px 11px;min-height:43px;min-width:53px;white-space:nowrap;
+  background:transparent;color:#1f4c38;cursor:pointer;
+  transition:transform .25s cubic-bezier(.22,1.6,.32,1),background .2s ease,color .2s ease,box-shadow .2s;
+}
+:root[data-theme="dark"] #nhi-season-controls button{color:#e0f7e8}
+#nhi-season-controls button:hover{transform:translateY(-2px)}
+#nhi-season-controls button[aria-pressed="true"]{
+  background:rgba(255,255,255,.93);border-color:rgba(70,130,103,.26);
+  box-shadow:0 2px 8px rgba(34,84,54,.18);transform:translateY(-1px);
+}
+:root[data-theme="dark"] #nhi-season-controls button[aria-pressed="true"]{
+  background:rgba(126,200,166,.21);border-color:rgba(167,246,199,.4);color:#fff;
+}
+#nhi-season-controls button:active{transform:scale(.88)}
+#nhi-season-controls button:focus-visible{outline:2px solid #228e65;outline-offset:3px}
+
+/* Bright, recognizable decorative daylight/night toggles without pill/background. */
+#nhi-cover-theme-v5{
+  position:absolute!important;z-index:6!important;
+  right:max(17px,env(safe-area-inset-right,0px))!important;
+  bottom:max(19px,env(safe-area-inset-bottom,0px))!important;
+  gap:8px!important;background:none!important;border:0!important;box-shadow:none!important;
+}
+#nhi-cover-theme-v5 button{
+  position:relative;isolation:isolate;width:43px!important;height:43px!important;
+  padding:0!important;border:0!important;outline-offset:3px;
+  background:transparent!important;box-shadow:none!important;
+  color:#e89b20!important;opacity:.88!important;font-size:29px!important;
+  text-shadow:0 1px 4px rgba(255,255,255,.95),0 1px 12px rgba(255,223,100,.6)!important;
+  transform:scale(1);transition:transform .23s cubic-bezier(.2,1.5,.3,1),opacity .2s,color .2s!important;
+}
+#nhi-cover-theme-v5 button[data-mode="dark"]{color:#715bd9!important;text-shadow:0 1px 5px #fff,0 0 12px #a3a3f6!important}
+:root[data-theme="dark"] #nhi-cover-theme-v5 button[data-mode="light"]{color:#ffd56d!important;text-shadow:0 0 10px #f5b74388!important}
+:root[data-theme="dark"] #nhi-cover-theme-v5 button[data-mode="dark"]{color:#fff0a6!important;text-shadow:0 0 12px #fff7bf,0 0 22px #a2afe9!important}
+#nhi-cover-theme-v5 button:hover,
+#nhi-cover-theme-v5 button[aria-pressed="true"]{opacity:1!important;transform:scale(1.2)!important}
+#nhi-cover-theme-v5 button:active{transform:scale(.79) rotate(-15deg)!important}
+#nhi-cover-theme-v5 button::after{
+  content:"";position:absolute;inset:1px;border:2px solid currentColor;border-radius:50%;
+  opacity:0;pointer-events:none;transform:scale(.45);
+}
+#nhi-cover-theme-v5 button.nhi-theme-pulse::after{animation:nhi-theme-ripple .6s ease-out both}
+#nhi-cover-theme-v5 button.nhi-theme-pulse{animation:nhi-theme-click .6s cubic-bezier(.15,.85,.28,1.3) both}
+
+/* Scene details: floating clouds, spinning sun rays, shimmering lake and firefly flights. */
+#cover .nhi-sun-rays{transform-box:fill-box;transform-origin:center;animation:nhi-sun-turn 65s linear infinite}
+#cover .nhi-svg-cloud{animation:nhi-cloud-glide 21s ease-in-out infinite alternate}
+#cover .nhi-svg-cloud.alt{animation-duration:28s;animation-delay:-12s}
+#cover .nhi-treetop{transform-box:fill-box;transform-origin:bottom center;animation:nhi-tree-breeze 6.5s ease-in-out infinite alternate}
+#cover .nhi-treetop.alt{animation-delay:-3.2s}
+#cover .nhi-ripple{animation:nhi-ripple-glow 3.2s ease-in-out infinite alternate}
+#cover .nhi-sun-orb,#cover .nhi-moon-orb{animation:nhi-orb-hover 10s ease-in-out infinite alternate}
+#cover .nhi-house-light{animation:nhi-lantern-flash 2.9s ease-in-out infinite alternate}
+#cover .nhi-night-glimmer{animation:nhi-night-glimmer 2.8s ease-in-out infinite alternate}
+#cover .nhi-night-glimmer:nth-of-type(3n){animation-delay:-1.6s;animation-duration:3.6s}
+#cover .nhi-owl{animation:nhi-owl-flutter 7s ease-in-out infinite alternate}
+#cover .nhi-smoke{animation:nhi-smoke-rise 4.6s ease-in-out infinite}
+#cover .landscape>.nhi-season-particle{
+  display:block;position:absolute;z-index:2;pointer-events:none;
+  left:var(--particle-x);top:-12%;font-size:var(--particle-size);line-height:1;
+  color:var(--particle-color);text-shadow:0 2px 6px rgba(255,255,255,.35);
+  animation:nhi-season-fall var(--particle-duration) var(--particle-delay) linear infinite;
+  will-change:transform;
+}
+#cover[data-season="winter"] .landscape>.nhi-season-particle{text-shadow:0 0 8px #e9fdff}
+#cover[data-season="summer"] .landscape>.nhi-season-particle{font-size:12px;filter:drop-shadow(0 0 5px #faffaf)}
+:root[data-theme="dark"] #cover .landscape>.nhi-season-particle{opacity:.85}
+#cover .landscape>.nhi-season-particle.summer{animation-name:nhi-summer-float}
+#cover .landscape>.nhi-season-particle.winter{animation-name:nhi-snow-fall}
+@keyframes nhi-season-reveal{from{opacity:.1;transform:scale(1.018)}to{opacity:1;transform:scale(1)}}
+@keyframes nhi-sun-turn{to{rotate:360deg}}
+@keyframes nhi-cloud-glide{from{translate:-24px 0}to{translate:33px -8px}}
+@keyframes nhi-tree-breeze{from{rotate:-2deg}to{rotate:2.5deg}}
+@keyframes nhi-ripple-glow{from{opacity:.23;translate:0 0}to{opacity:.73;translate:11px 0}}
+@keyframes nhi-orb-hover{to{translate:0 9px}}
+@keyframes nhi-lantern-flash{to{opacity:.54}}
+@keyframes nhi-night-glimmer{from{opacity:.25;scale:.7}to{opacity:1;scale:1.15}}
+@keyframes nhi-owl-flutter{to{transform:translate(22px,-10px) rotate(-3deg)}}
+@keyframes nhi-smoke-rise{0%{opacity:0;transform:translateY(13px)}60%{opacity:.4}100%{opacity:0;transform:translate(20px,-25px)}}
+@keyframes nhi-season-fall{0%{transform:translate3d(0,-5vh,0) rotate(0);opacity:0}15%{opacity:.85}90%{opacity:.75}100%{transform:translate3d(var(--particle-drift),112vh,0) rotate(620deg);opacity:0}}
+@keyframes nhi-snow-fall{0%{transform:translate3d(0,-5vh,0) rotate(0);opacity:0}10%{opacity:.9}100%{transform:translate3d(var(--particle-drift),108vh,0) rotate(90deg);opacity:0}}
+@keyframes nhi-summer-float{0%,100%{transform:translate(0,10vh) scale(.75);opacity:.2}50%{transform:translate(var(--particle-drift),55vh) scale(1.2);opacity:.85}}
+@keyframes nhi-theme-ripple{0%{transform:scale(.4);opacity:.65}100%{transform:scale(1.9);opacity:0}}
+@keyframes nhi-theme-click{0%{filter:brightness(1);rotate:0deg}40%{filter:brightness(1.35);rotate:20deg}100%{filter:brightness(1);rotate:0deg}}
+@media(max-width:700px){
+ #nhi-season-controls{bottom:max(70px,calc(64px + env(safe-area-inset-bottom,0px)));max-width:calc(100% - 22px);gap:2px;padding:4px}
+ #nhi-season-controls button{padding:7px 8px;font-size:12px;min-width:63px;min-height:40px}
+ #cover .cover-in{padding-bottom:135px;padding-top:18px}
+ #nhi-cover-theme-v5{right:16px!important;bottom:max(13px,env(safe-area-inset-bottom,0px))!important}
+ #nhi-cover-theme-v5 button{width:39px!important;height:39px!important;font-size:27px!important}
+}
+@media(max-width:360px){
+ #nhi-season-controls button{min-width:57px;padding-inline:6px;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+ #cover .landscape>.nhi-season-particle,#cover .nhi-sun-rays,#cover .nhi-svg-cloud,
+ #cover .nhi-treetop,#cover .nhi-ripple,#cover .nhi-moon-orb,#cover .nhi-sun-orb,
+ #cover .nhi-house-light,#cover .nhi-night-glimmer,#cover .nhi-owl,#cover .nhi-smoke,
+ #nhi-cover-theme-v5 button.nhi-theme-pulse{animation:none!important;transition:none!important}
+}
