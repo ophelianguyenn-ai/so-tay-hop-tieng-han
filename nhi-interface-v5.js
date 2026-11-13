@@ -63,7 +63,11 @@ function init(){
  document.addEventListener('mousedown',closeFromOutside,true);
  document.addEventListener('touchstart',closeFromOutside,{capture:true,passive:false});
  document.addEventListener('click',function(e){
-   if(swallowUntil>Date.now()){e.preventDefault();e.stopImmediatePropagation();return;}
+   // Suppress only the trailing trusted click on empty space, not a subsequent
+   // explicit button action (including keyboard/programmatic accessibility).
+   if(swallowUntil>Date.now()&&e.isTrusted&&!(e.target instanceof Element&&e.target.closest('button,[role="button"]'))){
+     e.preventDefault();e.stopImmediatePropagation();return;
+   }
    const opened=getContext(),el=e.target instanceof Element?e.target:null;
    if(opened&&el&&!opened[1].contains(el)){
      const trigger=el.closest('#aiBtn,.ai-resize-handle,#brandBtn,#brandFaceBtn');
