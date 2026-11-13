@@ -26,10 +26,15 @@ try{
  const english=await page.evaluate(()=>({
   english:!!document.querySelector('.nhi-english-v5'),
   audio:!!document.querySelector('.nhi-en-speak'),
-  back:!!document.querySelector('#planBox .pfront .answer.ko')
+  back:!!document.querySelector('#planBox .pfront .answer.ko'),
+  preloaded:Object.keys(window.NHI_ENGLISH_PRELOADED||{}).length,
+  text:document.querySelector('.nhi-en-translation')?.textContent,
+  ipa:document.querySelector('.nhi-en-ipa')?.textContent,
+  unknown:document.querySelector('.nhi-en-translation')?.textContent.includes('chưa có bản dịch')
  }));
- console.log('V5 ENGLISH BACK',JSON.stringify(english));
- if(!english.english||!english.audio||!english.back)throw Error('English module not mounted on back');
+ console.log('V6 PRETRANSLATED ENGLISH',JSON.stringify(english));
+ if(!english.english||!english.audio||!english.back||english.preloaded<1800||!english.text||english.unknown||!english.ipa)
+  throw Error('Pretranslated English or IPA missing from daily flashcard');
  // Manual English/IPA review never changes the original Vietnamese/Korean texts.
  await page.waitForSelector('.nhi-en-edit',{timeout:5000});
  await page.$eval('.nhi-en-edit',b=>b.click());
@@ -67,12 +72,14 @@ try{
  await page.waitForFunction(()=>!document.querySelector('#planBox .editbox'),{timeout:5000});
  await page.$eval('#aiBtn',b=>b.click());
  await page.waitForFunction(()=>document.body.classList.contains('ai-open'));
- const aiClose=await page.evaluate(()=>({
-  x:!!document.querySelector('#aiPanel .aihead > #aiClose'),
-  left:document.querySelector('#aiPanel .aihead > #aiClose')?.previousElementSibling===null
- }));
- console.log('V5 AI CLOSE',JSON.stringify(aiClose));
- if(!aiClose.x||!aiClose.left)throw Error('AI close is not at the left of its own panel');
+ const aiClose=await page.evaluate(()=>{
+  const b=document.querySelector('#aiPanel .aihead > #aiClose');
+  const bounds=b?.getBoundingClientRect(),header=b?.parentElement?.getBoundingClientRect();
+  return {x:!!b,right:bounds&&header?Math.abs(bounds.right-header.right)<25:false,
+    flexOrder:b?getComputedStyle(b).order:null};
+ });
+ console.log('V6 AI CLOSE TOP RIGHT',JSON.stringify(aiClose));
+ if(!aiClose.x||!aiClose.right)throw Error('AI close is not at top right inside its panel');
  await page.$eval('#aiClose',b=>b.click());
  await page.waitForFunction(()=>!document.body.classList.contains('ai-open'));
  await page.$eval('#brandFaceBtn',b=>b.click());
