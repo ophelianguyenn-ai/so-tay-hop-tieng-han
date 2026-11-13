@@ -97,7 +97,10 @@ async def main(args):
     MANIFEST.write_text(json.dumps(existing, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(f"Available: {done}; errors: {failed}; total manifest: {len(existing)}")
     if failed:
-        raise SystemExit(f"{failed} audio items failed; rerun to resume.")
+        if args.allow_partial:
+            print(f"WARNING: {failed} audio clips could not be generated; successful clips will still be published for use.", flush=True)
+        else:
+            raise SystemExit(f"{failed} audio items failed; rerun to resume.")
 
 
 if __name__ == "__main__":
@@ -106,4 +109,5 @@ if __name__ == "__main__":
     p.add_argument("--offset", type=int, default=0)
     p.add_argument("--limit", type=int, default=0, help="0 means all remaining")
     p.add_argument("--delay", type=float, default=0.35, help="Pause between requests to avoid bursts")
+    p.add_argument("--allow-partial", action="store_true", help="Publish successful audio clips even if some Edge TTS requests fail")
     asyncio.run(main(p.parse_args()))
