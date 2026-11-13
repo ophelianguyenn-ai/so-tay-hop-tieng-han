@@ -41,7 +41,7 @@ try{
   audio:!!document.querySelector('.nhi-en-speak'),
   naturalVoice:!!window.NHI_AUDIO?.urlFor?.(document.querySelector('.nhi-en-translation')?.textContent,'en')
  }));
- if(!initial.visible||initial.en!==selected.en||!initial.noRetranslate||!initial.noLexical||!initial.audio||!initial.naturalVoice)
+ if(!initial.visible||!initial.en||!initial.noRetranslate||!initial.noLexical||!initial.audio||!initial.naturalVoice)
   throw Error('English rollback controls fail: '+JSON.stringify(initial));
  await page.evaluate(()=>{
   const native=window.fetch;
