@@ -145,3 +145,27 @@
  #cover .nhi-house-light,#cover .nhi-night-glimmer,#cover .nhi-owl,#cover .nhi-smoke,
  #nhi-cover-theme-v5 button.nhi-theme-pulse{animation:none!important;transition:none!important}
 }
+
+/* Keep every overlay's close button visibly inside its upper-right corner. */
+#aiPanel .aihead{position:relative!important;min-height:67px;padding-right:54px!important;flex-wrap:wrap!important}
+#aiPanel .aihead>#aiClose{
+ position:absolute!important;top:12px!important;right:12px!important;left:auto!important;
+ order:99!important;margin:0!important;width:36px!important;min-width:36px!important;height:36px!important;
+ display:grid!important;place-items:center!important;border-radius:10px!important;
+ transform:none!important;z-index:5!important;
+}
+#planBox .nhi-editor-window-v5{position:relative!important;padding-top:50px!important}
+#planBox .nhi-editor-window-v5>.nhi-editor-close-v5{
+ position:absolute!important;right:9px!important;left:auto!important;top:9px!important;
+ margin:0!important;z-index:10!important;transform:none!important;
+}
+.nhi-picture-picker{position:relative!important}
+.nhi-picture-picker .nhi-picture-head{display:flex!important;align-items:center!important;gap:8px!important}
+.nhi-picture-picker .nhi-picture-head>strong{flex:1!important;min-width:0}
+.nhi-picture-picker .nhi-picture-head>button{position:relative!important;margin:0 0 0 auto!important;right:auto!important;left:auto!important;top:auto!important;flex:0 0 34px!important}
+#setSheet .sheetbox{position:relative!important}
+#setSheet .sheethead{display:flex!important;align-items:center!important}
+#setSheet .sheethead>[data-close]{margin-left:auto!important;position:relative!important;right:auto!important;left:auto!important;top:auto!important}
+#dailyEditor .sheethead,#dailyCreator .sheethead{position:relative;display:flex;align-items:center;gap:12px}
+#dailyEditor .sheethead>button,#dailyCreator .sheethead>button{margin-left:auto;position:relative;right:auto;top:auto;flex:none}
+@media(max-width:470px){#aiPanel .aihead{padding-right:46px!important}#aiPanel .aihead>#aiClose{right:7px!important;top:8px!important}}
