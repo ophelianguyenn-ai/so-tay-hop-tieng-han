@@ -52,7 +52,7 @@ jobs:
             test -f "$file" || { echo "Required asset missing: $file"; exit 1; }
             cp -- "$file" _site/
           done
-          if [ -f english.json ]; then cp english.json _site/; fi
+          if [ -f english.json ]; then cp english.json _site/; else printf '{"version":1,"cards":{}}\n' > _site/english.json; fi
           if [ -d pictures ]; then cp -R pictures _site/; fi
           if [ -d audio ]; then cp -R audio _site/; fi
           touch _site/.nojekyll
