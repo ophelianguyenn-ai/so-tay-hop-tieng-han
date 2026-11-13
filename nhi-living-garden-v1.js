@@ -17,6 +17,7 @@
 
   var svg = {
     bird: '<svg viewBox="0 0 104 62" aria-hidden="true"><path class="nhi-bird-wing nhi-bird-left" d="M52 26Q27 1 2 18Q25 21 43 38Z" fill="currentColor"/><path class="nhi-bird-wing nhi-bird-right" d="M52 26Q78 1 102 18Q79 21 61 38Z" fill="currentColor"/><path d="M43 30Q52 19 61 30L57 40L52 36L47 40Z" fill="currentColor"/><path d="M53 34Q54 45 44 58L53 51L62 58Q54 47 55 34" fill="currentColor" opacity=".85"/></svg>',
+    butterfly: '<svg viewBox="0 0 92 78" aria-hidden="true"><g class="nhi-elegant-wing nhi-elegant-left"><path d="M44 35C30 4 17-3 9 7C-2 19 6 36 39 42C24 44 10 53 17 66C26 78 41 61 44 43Z" fill="var(--wing-one,#d8abdd)" stroke="var(--wing-edge,#806185)" stroke-width="2.5" stroke-linejoin="round"/><path d="M39 40Q18 24 13 13M39 43Q25 53 22 64M39 39Q24 40 8 31" fill="none" stroke="var(--wing-vein,#fff4e3)" stroke-width="1.9" opacity=".73"/><circle cx="18" cy="25" r="4.4" fill="var(--wing-dot,#fbeab3)" opacity=".9"/></g><g class="nhi-elegant-wing nhi-elegant-right"><path d="M47 35C61 4 74-3 82 7C93 19 85 36 52 42C67 44 81 53 74 66C65 78 50 61 47 43Z" fill="var(--wing-two,#edc9aa)" stroke="var(--wing-edge,#806185)" stroke-width="2.5" stroke-linejoin="round"/><path d="M52 40Q73 24 78 13M52 43Q66 53 69 64M52 39Q67 40 83 31" fill="none" stroke="var(--wing-vein,#fff4e3)" stroke-width="1.9" opacity=".73"/><circle cx="73" cy="25" r="4.4" fill="var(--wing-dot,#fbeab3)" opacity=".9"/></g><path d="M45 33Q44 48 46 56" fill="none" stroke="#4c424c" stroke-width="4" stroke-linecap="round"/><path d="M45 36Q34 13 30 15M45 36Q56 13 61 15" fill="none" stroke="#4c424c" stroke-width="1.7" stroke-linecap="round"/></svg>',
     dragonfly: '<svg viewBox="0 0 100 62" aria-hidden="true"><path d="M50 25Q18-13 2 18Q24 39 49 31Q75-12 98 19Q77 42 51 31Z" fill="#c8ffff" stroke="#75c0cd" stroke-width="2" opacity=".88"/><path d="M50 26L50 56" stroke="#3b9b95" stroke-width="4" stroke-linecap="round"/><circle cx="50" cy="20" r="5" fill="#3b9b95"/></svg>',
     fish: '<svg viewBox="0 0 106 54" aria-hidden="true"><path d="M76 25L104 8L99 26L104 47L76 30Z" fill="var(--fish-tail,#efab60)"/><path d="M9 26Q34-4 77 25Q41 59 9 26Z" fill="var(--fish-body,#ffd08a)" stroke="#9d7659" stroke-width="2.2"/><path d="M37 10Q42 24 38 44M59 11Q50 25 58 42" stroke="#ef8867" fill="none" stroke-width="9" opacity=".72"/><circle cx="21" cy="24" r="3" fill="#384f52"/><path d="M31 18L42 6L53 15" fill="var(--fish-body,#ffd08a)"/></svg>',
     wind: '<svg viewBox="0 0 240 64" aria-hidden="true"><path d="M3 30Q70-5 135 24T236 14M29 48Q105 20 170 43" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7"/></svg>',
@@ -53,7 +54,7 @@
     layer.dataset.lighting=dark?'night':'day';
     if(reduced)return; // Everything animated here is decorative.
     var sky=dark?'#dce4ee':season==='winter'?'#526577':'#476b82';
-    var numbers={birds:phone?2:4,dragonflies:phone?1:2,fish:phone?2:4,
+    var numbers={birds:phone?2:4,butterflies:phone?6:10,dragonflies:phone?1:2,fish:phone?2:4,
       currents:phone?5:9,clouds:phone?2:4,wind:phone?2:4,
       blossoms:season==='winter'?0:(phone?3:6),
       fireflies:phone?8:17,reeds:phone?2:4};
@@ -69,6 +70,30 @@
         '--flap':(.45+rand(b,13)*.28).toFixed(2)+'s'
       });
       if(b%3===0)flying.classList.add('reverse');
+    }
+    // Ten distinctly patterned, pointed-wing storybook butterflies; no round/egg shapes.
+    // Small and translucent so the chosen original pictures still dominate the cover.
+    var butterflyPlaces=[[8,29],[20,43],[34,22],[81,28],[89,47],[72,61],[11,67],[92,66],[44,32],[60,20]];
+    var butterflyColors=[
+      ['#df9948','#efb86e','#643d38','#ffecd1'],
+      ['#a2cfea','#6faddc','#4f698b','#f6f8ff'],
+      ['#d2aedf','#ecc2de','#82618a','#fdf3dd'],
+      ['#f6d27d','#ebbb78','#8a684c','#fff5d2'],
+      ['#9ac7bc','#c3e6d7','#4e7978','#f8f9da']
+    ];
+    for(var bf=0;bf<numbers.butterflies;bf++){
+      var place=butterflyPlaces[bf],palette=butterflyColors[(bf+(season==='autumn'?2:season==='winter'?1:0))%butterflyColors.length];
+      add('nhi-life-elegant-butterfly'+(dark?' moonlit':''),svg.butterfly,{
+        '--x':place[0]+'%','--y':place[1]+'%',
+        '--scale':(.35+rand(bf,33)*.29).toFixed(2),
+        '--duration':(11+rand(bf,13)*8).toFixed(1)+'s',
+        '--delay':(-rand(bf,37)*20).toFixed(1)+'s',
+        '--flap':(.42+rand(bf,21)*.3).toFixed(2)+'s',
+        '--wing-one':dark?'#e2d6ec':palette[0],
+        '--wing-two':dark?'#f4e2cf':palette[1],
+        '--wing-edge':dark?'#a09abb':palette[2],
+        '--wing-dot':dark?'#f9f0cf':palette[3]
+      });
     }
     if(season!=='winter'){
       for(var d=0;d<numbers.dragonflies;d++){
@@ -132,7 +157,7 @@
       add('nhi-life-wind',svg.wind,{
         '--x':(rand(w,10)*78)+'%',
         '--y':(19+rand(w,20)*60)+'%',
-        '--duration':(7+rand(w,9)*7).toFixed(1)+'s',
+        '--duration':(19+rand(w,9)*10).toFixed(1)+'s',
         '--delay':(-rand(w,4)*17).toFixed(1)+'s',
         '--wind-color':dark?'#d2f1e6':'#eef9ff'
       });
