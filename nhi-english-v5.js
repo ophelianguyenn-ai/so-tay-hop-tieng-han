@@ -52,28 +52,52 @@ function cachedMeaning(vi,ko,dict){
  return approx&&!approx.ambiguous?approx:null;
 }
 async function onlineTranslation(vi){
- // MyMemory accepts short VI-EN text without a personal API key.
- // Work-related text is sent only when the learner views an untranslated card.
+ // Read the lesson corpus first. Only genuinely new text needs an online call.
+ // MyMemory accepts at most 500 UTF-8 BYTES per request (Vietnamese accents count).
  const text=clean(vi),chunks=[];let rest=text;
+ const bytes=s=>new TextEncoder().encode(s).length;
  while(rest){
-  if(chunks.length>=12)throw Error('Câu quá dài để tự dịch.');
-  let cut=Math.min(400,rest.length);
-  if(cut<rest.length){const last=rest.lastIndexOf(' ',cut);if(last>180)cut=last;}
+  if(chunks.length>=16)throw Error('Câu quá dài để tự dịch.');
+  let cut=Math.min(360,rest.length);
+  while(cut>1&&bytes(rest.slice(0,cut))>460)cut-=Math.max(1,Math.ceil(cut/12));
+  if(cut<rest.length){const last=rest.lastIndexOf(' ',cut);if(last>Math.floor(cut/2))cut=last;}
   chunks.push(rest.slice(0,cut));rest=rest.slice(cut).trim();
  }
- const outputs=[];
- for(const chunk of chunks){
-  const url='https://api.mymemory.translated.net/get?langpair=vi%7Cen&q='+encodeURIComponent(chunk);
-  const response=await fetch(url,{method:'GET',mode:'cors',cache:'no-store'});
-  if(!response.ok)throw Error('Dịch vụ dịch tạm ngừng (HTTP '+response.status+').');
-  const result=await response.json();
-  const translated=clean(result&&result.responseData&&result.responseData.translatedText);
-  if(!translated||Number(result.responseStatus||200)!==200)throw Error('Không nhận được bản dịch trực tuyến.');
-  outputs.push(translated);
+ async function fromMyMemory(){
+  const outputs=[];
+  for(const chunk of chunks){
+   const url='https://api.mymemory.translated.net/get?langpair=vi%7Cen&q='+encodeURIComponent(chunk);
+   const response=await fetch(url,{method:'GET',mode:'cors',cache:'no-store'});
+   if(!response.ok)throw Error('MyMemory HTTP '+response.status);
+   const result=await response.json();
+   const translated=clean(result&&result.responseData&&result.responseData.translatedText);
+   if(!translated||Number(result.responseStatus||200)!==200)throw Error('MyMemory trả về lỗi hoặc hết hạn mức.');
+   outputs.push(translated);
+  }
+  return {en:clean(outputs.join(' ')),ipa:'',source:'online'};
  }
- const en=clean(outputs.join(' '));
- if(!en||normalize(en)===normalize(text))throw Error('Dịch vụ chưa trả về bản dịch tiếng Anh.');
- return {en,ipa:'',source:'online'};
+ async function fromGoogle(){
+  // Unofficial public endpoint: secondary fallback, subject to provider availability.
+  const outputs=[];
+  for(const chunk of chunks){
+   const url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=vi&tl=en&dt=t&q='+encodeURIComponent(chunk);
+   const response=await fetch(url,{method:'GET',mode:'cors'});
+   if(!response.ok)throw Error('Google Translate HTTP '+response.status);
+   const result=await response.json();
+   const translated=clean(Array.isArray(result&&result[0])?result[0].map(part=>part&&part[0]||'').join(''):'');
+   if(!translated)throw Error('Google Translate không trả về nội dung.');
+   outputs.push(translated);
+  }
+  return {en:clean(outputs.join(' ')),ipa:'',source:'online-google'};
+ }
+ let result;
+ try{result=await fromMyMemory();}
+ catch(firstError){
+  try{result=await fromGoogle();}
+  catch(secondError){throw Error('MyMemory và dịch vụ dự phòng đều không khả dụng.');}
+ }
+ if(!clean(result.en)||normalize(result.en)===normalize(text))throw Error('Chưa nhận được bản dịch tiếng Anh khác nội dung gốc.');
+ return result;
 }
 async function resolveAutomatic(id,vi,ko,box){
  if(clean((edits[id]||(data&&data[id])||{}).en))return;
@@ -155,7 +179,7 @@ function display(box,entry,id,vi,ko){
  const play=box.querySelector('.nhi-en-speak'),generate=box.querySelector('.nhi-en-translate');
  play.hidden=!en;play.onclick=()=>speakEnglish(en);
  generate.hidden=false;generate.textContent=en?'↻ Dịch lại tiếng Anh':'Dịch lại tự động';generate.onclick=()=>translate(id,vi,ko,box);
- box.querySelector('.nhi-en-status').textContent=en&&(entry.source==='machine'||entry.source==='online')?'Bản dịch tự động chưa kiểm duyệt'+(entry.source==='online'?' · từ MyMemory; nội dung tiếng Việt được gửi đến dịch vụ dịch':'')+' · hãy kiểm tra thuật ngữ và số liệu':(entry&&entry.source==='manual'?'Đã sửa thủ công trên thiết bị này':'');var editBtn=box.querySelector('.nhi-en-edit');if(editBtn)editBtn.onclick=()=>editEnglish(box,id,vi,ko);
+ box.querySelector('.nhi-en-status').textContent=en&&(entry.source==='machine'||entry.source==='online'||entry.source==='online-google')?'Bản dịch tự động chưa kiểm duyệt'+(entry.source==='online'?' · từ MyMemory':entry.source==='online-google'?' · từ Google Translate':'')+(entry.source==='online'||entry.source==='online-google'?' · nội dung tiếng Việt được gửi đến dịch vụ dịch':'')+' · hãy kiểm tra thuật ngữ và số liệu':(entry&&entry.source==='manual'?'Đã sửa thủ công trên thiết bị này':'');var editBtn=box.querySelector('.nhi-en-edit');if(editBtn)editBtn.onclick=()=>editEnglish(box,id,vi,ko);
 }
 function editEnglish(box,id,vi,ko) {
   var open=box.querySelector('.nhi-en-edit-form');if(open){open.remove();return;}
