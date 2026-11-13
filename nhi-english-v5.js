@@ -5,6 +5,102 @@ const STORE='nhi-english-edits-v5';
 let edits={};try{edits=JSON.parse(localStorage.getItem(STORE)||'{}')||{};}catch(e){}
 let data=window.NHI_ENGLISH_PRELOADED||null,once=null;
 const clean=s=>String(s||'').trim();
+
+/* Match dynamic daily-card content against the already pretranslated lesson corpus;
+   for genuinely new content, translate on first view and cache by text. */
+const AUTO_STORE='nhi-english-bytext-v1';
+let byText={};try{byText=JSON.parse(localStorage.getItem(AUTO_STORE)||'{}')||{};}catch(e){}
+const normalize=s=>clean(s).normalize('NFC').toLowerCase().replace(/\s+/g,' ').replace(/[.!?。？！]+$/,'').trim();
+const entryKey=(vi,ko)=>normalize(vi)+'\u001f'+normalize(ko);
+let corpus=null,corpusPromise=null;
+const inFlight=new Map();
+function cacheEntry(id,vi,ko,entry){
+ if(!entry||!clean(entry.en))return;
+ edits[id]=entry;
+ try{localStorage.setItem(STORE,JSON.stringify(edits));}catch(e){}
+ const key=entryKey(vi,ko);
+ byText[key]=entry;
+ try{
+  const keys=Object.keys(byText);if(keys.length>400)keys.slice(0,keys.length-400).forEach(k=>delete byText[k]);
+  localStorage.setItem(AUTO_STORE,JSON.stringify(byText));
+ }catch(e){}
+}
+function indexCorpus(){
+ if(corpus)return Promise.resolve(corpus);
+ if(!corpusPromise)corpusPromise=fetch(new URL('lessons.json',document.baseURI),{cache:'force-cache'})
+  .then(r=>{if(!r.ok)throw Error('Lesson index unavailable');return r.json();})
+  .then(j=>{
+   const exact=new Map(),byVi=new Map();
+   (j.lessons||[]).forEach(L=>(L.items||[]).forEach(row=>{
+    const entry=data&&data[row[0]];
+    if(!entry||!clean(entry.en))return;
+    exact.set(entryKey(row[3],row[4]),entry);
+    const key=normalize(row[3]),previous=byVi.get(key);
+    if(!previous)byVi.set(key,entry);
+    else if(clean(previous.en)!==clean(entry.en))byVi.set(key,{ambiguous:true});
+   }));
+   corpus={exact,byVi};return corpus;
+  }).catch(()=>{corpus={exact:new Map(),byVi:new Map()};return corpus;});
+ return corpusPromise;
+}
+function cachedMeaning(vi,ko,dict){
+ const text=byText[entryKey(vi,ko)];
+ if(text&&clean(text.en))return text;
+ const exact=dict.exact.get(entryKey(vi,ko));
+ if(exact)return exact;
+ const approx=dict.byVi.get(normalize(vi));
+ return approx&&!approx.ambiguous?approx:null;
+}
+async function onlineTranslation(vi){
+ // MyMemory accepts short VI-EN text without a personal API key.
+ // Work-related text is sent only when the learner views an untranslated card.
+ const text=clean(vi),chunks=[];let rest=text;
+ while(rest){
+  if(chunks.length>=12)throw Error('Câu quá dài để tự dịch.');
+  let cut=Math.min(400,rest.length);
+  if(cut<rest.length){const last=rest.lastIndexOf(' ',cut);if(last>180)cut=last;}
+  chunks.push(rest.slice(0,cut));rest=rest.slice(cut).trim();
+ }
+ const outputs=[];
+ for(const chunk of chunks){
+  const url='https://api.mymemory.translated.net/get?langpair=vi%7Cen&q='+encodeURIComponent(chunk);
+  const response=await fetch(url,{method:'GET',mode:'cors',cache:'no-store'});
+  if(!response.ok)throw Error('Dịch vụ dịch tạm ngừng (HTTP '+response.status+').');
+  const result=await response.json();
+  const translated=clean(result&&result.responseData&&result.responseData.translatedText);
+  if(!translated||Number(result.responseStatus||200)!==200)throw Error('Không nhận được bản dịch trực tuyến.');
+  outputs.push(translated);
+ }
+ const en=clean(outputs.join(' '));
+ if(!en||normalize(en)===normalize(text))throw Error('Dịch vụ chưa trả về bản dịch tiếng Anh.');
+ return {en,ipa:'',source:'online'};
+}
+async function resolveAutomatic(id,vi,ko,box){
+ if(clean((edits[id]||(data&&data[id])||{}).en))return;
+ const key=entryKey(vi,ko);
+ try{
+  const dict=await indexCorpus(),found=cachedMeaning(vi,ko,dict);
+  if(found){
+   cacheEntry(id,vi,ko,found);
+   if(box&&box.isConnected)display(box,found,id,vi,ko);
+   return;
+  }
+  let promise=inFlight.get(key);
+  if(!promise){
+   promise=onlineTranslation(vi).finally(()=>inFlight.delete(key));
+   inFlight.set(key,promise);
+  }
+  const result=await promise;
+  cacheEntry(id,vi,ko,result);
+  if(box&&box.isConnected)display(box,result,id,vi,ko);
+ }catch(e){
+  if(box&&box.isConnected&&!clean((edits[id]||{}).en)){
+   const status=box.querySelector('.nhi-en-status');
+   if(status)status.textContent='Chưa lấy được bản dịch tự động ('+String(e.message||e).slice(0,100)+'). Có thể dùng Dịch lại hoặc Sửa.';
+  }
+ }
+}
+
 function load(){
  if(data && Object.keys(data).length)return Promise.resolve(data);
  if(!once)once=fetch(new URL('english.json',document.baseURI),{cache:'no-cache'}).then(r=>{
@@ -25,7 +121,13 @@ async function translate(id,vi,ko,box){
  const status=box.querySelector('.nhi-en-status'),button=box.querySelector('.nhi-en-translate');
  let config={};try{config=JSON.parse(localStorage.getItem('nlc-ai-v1')||'{}')||{};}catch(e){}
  const key=clean(config.k&&config.k.gemini);
- if(!key){status.textContent='Hãy cấu hình API key Gemini trong cửa sổ AI trước.';return;}
+ if(!key){
+  button.disabled=true;status.textContent='Đang dịch tự động sang tiếng Anh…';
+  try{const entry=await onlineTranslation(vi);cacheEntry(id,vi,ko,entry);display(box,entry,id,vi,ko);}
+  catch(e){status.textContent='Không thể dịch tự động: '+String(e.message||e).slice(0,120);}
+  finally{button.disabled=false;}
+  return;
+ }
  button.disabled=true;status.textContent='Đang dịch và tạo phiên âm…';
  try{
   const model=clean(config.m&&config.m.gemini||'gemini-3.5-flash-lite').replace(/^models\//,'');
@@ -38,8 +140,8 @@ async function translate(id,vi,ko,box){
   const raw=(answer.candidates&&answer.candidates[0]&&answer.candidates[0].content&&answer.candidates[0].content.parts||[]).map(p=>p.text||'').join('');
   const parsed=JSON.parse(raw);
   if(!clean(parsed.en))throw Error('Không tìm được bản dịch');
-  edits[id]={en:clean(parsed.en),ipa:clean(parsed.ipa),source:'gemini'};
-  localStorage.setItem(STORE,JSON.stringify(edits));display(box,edits[id],id,vi,ko);
+  cacheEntry(id,vi,ko,{en:clean(parsed.en),ipa:clean(parsed.ipa),source:'gemini'});
+  display(box,edits[id],id,vi,ko);
  }catch(e){status.textContent='Không thể dịch: '+String(e.message||e).slice(0,140);}
  finally{button.disabled=false;}
 }
@@ -48,12 +150,12 @@ function display(box,entry,id,vi,ko){
  // isConnected is false during the first render, even though the box is valid.
  if(!box)return;
  const en=clean(entry&&entry.en),ipa=clean(entry&&entry.ipa);
- box.querySelector('.nhi-en-translation').textContent=en||'Thẻ mới chưa có bản dịch tiếng Anh';
+ box.querySelector('.nhi-en-translation').textContent=en||'Đang chuẩn bị bản dịch tiếng Anh…';
  const span=box.querySelector('.nhi-en-ipa');span.textContent=ipa?'/'+ipa.replace(/^\/|\/$/g,'')+'/':'';span.hidden=!ipa;
  const play=box.querySelector('.nhi-en-speak'),generate=box.querySelector('.nhi-en-translate');
  play.hidden=!en;play.onclick=()=>speakEnglish(en);
- generate.hidden=false;generate.textContent=en?'↻ Dịch lại bằng Gemini':'Dịch tiếng Anh';generate.onclick=()=>translate(id,vi,ko,box);
- box.querySelector('.nhi-en-status').textContent=en&&entry.source==='machine'?'Bản dịch tự động chưa kiểm duyệt · hãy đối chiếu thuật ngữ, tên riêng và số liệu':(entry&&entry.source==='manual'?'Đã sửa thủ công trên thiết bị này':'');var editBtn=box.querySelector('.nhi-en-edit');if(editBtn)editBtn.onclick=()=>editEnglish(box,id,vi,ko);
+ generate.hidden=false;generate.textContent=en?'↻ Dịch lại tiếng Anh':'Dịch lại tự động';generate.onclick=()=>translate(id,vi,ko,box);
+ box.querySelector('.nhi-en-status').textContent=en&&(entry.source==='machine'||entry.source==='online')?'Bản dịch tự động chưa kiểm duyệt'+(entry.source==='online'?' · từ MyMemory; nội dung tiếng Việt được gửi đến dịch vụ dịch':'')+' · hãy kiểm tra thuật ngữ và số liệu':(entry&&entry.source==='manual'?'Đã sửa thủ công trên thiết bị này':'');var editBtn=box.querySelector('.nhi-en-edit');if(editBtn)editBtn.onclick=()=>editEnglish(box,id,vi,ko);
 }
 function editEnglish(box,id,vi,ko) {
   var open=box.querySelector('.nhi-en-edit-form');if(open){open.remove();return;}
@@ -73,7 +175,7 @@ function editEnglish(box,id,vi,ko) {
   form.addEventListener('submit',function(e){
     e.preventDefault();var en=clean(field.value),reading=clean(ipa.value);
     if(!en){field.focus();return;}
-    edits[id]={en:en,ipa:reading,source:'manual'};
+    cacheEntry(id,vi,ko,{en:en,ipa:reading,source:'manual'});
     try{localStorage.setItem(STORE,JSON.stringify(edits));}
     catch(err){box.querySelector('.nhi-en-status').textContent='Không thể lưu thay đổi.';return;}
     form.remove();display(box,edits[id],id,vi,ko);
@@ -87,7 +189,9 @@ function mount(parent,id,vi,ko){
  box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><p class="nhi-en-status" aria-live="polite"></p><button type="button" class="nhi-en-translate">Dịch tiếng Anh</button>';
  parent.appendChild(box);
  display(box,edits[id]||(data&&data[id]),id,vi,ko);
- if(!data||!data[id])load().then(()=>display(box,edits[id]||(data&&data[id]),id,vi,ko));
+ if(!data||!Object.keys(data).length){
+  load().then(()=>{display(box,edits[id]||(data&&data[id]),id,vi,ko);if(!edits[id]&&!(data&&data[id]))resolveAutomatic(id,vi,ko,box);});
+ }else if(!edits[id]&&!(data&&data[id]))resolveAutomatic(id,vi,ko,box);
  return box;
 }
 window.NHI_ENGLISH={mount,load,speakEnglish};
