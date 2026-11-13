@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex"><meta http-equiv="Cache-Control" content="no-store">
+<title>Cập nhật Nhi's Learning Corner</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#1a3b35;background:#f1faf7}
+*{box-sizing:border-box}body{min-height:100dvh;margin:0;display:grid;place-items:center;padding:20px}
+main{max-width:530px;width:100%;background:#fff;border:1px solid #c9e5d9;border-radius:24px;padding:28px;box-shadow:0 14px 40px #093f2a13}
+h1{font-size:clamp(22px,6vw,29px);line-height:1.25;margin:0 0 12px}p{line-height:1.65}
+button{border:0;border-radius:15px;background:#177f67;color:white;font:750 17px system-ui;padding:16px 22px;cursor:pointer;min-height:52px;width:100%}
+button:disabled{opacity:.65;cursor:progress}button:focus-visible{outline:3px solid #ffa44a;outline-offset:3px}
+small{display:block;color:#52675f;line-height:1.6;margin-top:12px}a{color:#075e4f}
+#status{min-height:3em;border-radius:10px;background:#eaf5f0;padding:10px 12px}
+</style></head><body>
+<main><h1>🌸 Cập nhật Learning Corner</h1>
+<p>Kiểm tra phiên bản SVG bốn mùa, làm mới bộ nhớ đệm của trang và trở về bìa. <b>Không xoá thẻ, bài học hoặc tiến độ học.</b></p>
+<p id="status" role="status" aria-live="polite">Đang kiểm tra tệp mới trên GitHub Pages…</p>
+<button id="repair" type="button">Làm mới và mở trang bìa</button>
+<small id="check">Phiên bản: 2026-11-13 · 4 mùa + cổ A + dịch Anh.</small>
+<small>Nếu trang báo chưa thấy mã mới, bản GitHub Pages có thể chưa được xuất bản. Khi đó cần kiểm tra GitHub → Actions và Settings → Pages.</small>
+</main>
+<script>
+(function(){
+ 'use strict';
+ var status=document.getElementById('status'),btn=document.getElementById('repair');
+ var base=new URL('./',location.href);
+ function check(){
+  return fetch(new URL('nhi-seasons-v1.js?v=verify-'+Date.now(),base),{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw Error('Mã HTTP '+r.status);return r.text()})
+    .then(function(s){
+     if(!s.includes('nhi-season-controls'))throw Error('Tệp được trả về không phải phiên bản bốn mùa');
+     status.textContent='✓ Đã tìm thấy bộ cảnh SVG bốn mùa trên GitHub Pages. Có thể làm mới an toàn.';
+     return true;
+    }).catch(function(e){
+     status.textContent='Chưa xác nhận được phiên bản mới trên GitHub Pages: '+e.message+'. Mã đã lưu trên GitHub nhưng chưa chắc đã xuất bản.';
+     return false;
+    });
+ }
+ check();
+ btn.addEventListener('click',async function(){
+  btn.disabled=true;btn.textContent='Đang làm mới…';
+  try{
+   if('serviceWorker' in navigator){
+    var registrations=await navigator.serviceWorker.getRegistrations();
+    await Promise.all(registrations.filter(function(r){return r.scope.indexOf(base.pathname)>=0})
+      .map(function(r){return r.unregister()}));
+   }
+   if('caches' in window){
+    var keys=await caches.keys();
+    await Promise.all(keys.filter(function(k){return /^nhi-corner-v/.test(k)})
+      .map(function(k){return caches.delete(k)}));
+   }
+  }catch(e){status.textContent='Không xoá hết bộ nhớ tạm: '+e.message+'. Vẫn thử mở trang mới.'}
+  var latest=await check();
+  if(!latest){
+   btn.disabled=false;btn.textContent='Thử làm mới lại';
+   return;
+  }
+  location.replace(new URL('./?v=20261113-seasons-refresh-'+Date.now(),base));
+ });
+})();
+</script></body></html>
