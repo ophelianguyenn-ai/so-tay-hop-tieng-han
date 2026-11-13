@@ -202,22 +202,22 @@
   background-image:url('garden-night.webp')!important;
 }
 #cover[data-season="summer"] .landscape>.garden-art.day-only{
-  background-image:url('garden-summer-day.webp?v=hd-20261113-94')!important;
+  background-image:url('garden-summer-day.webp?v=cartoon-soft-20261113-1')!important;
 }
 #cover[data-season="summer"] .landscape>.garden-art.night-only{
-  background-image:url('garden-summer-night.webp?v=hd-20261113-94')!important;
+  background-image:url('garden-summer-night.webp?v=cartoon-soft-20261113-1')!important;
 }
 #cover[data-season="autumn"] .landscape>.garden-art.day-only{
-  background-image:url('garden-autumn-day.webp?v=hd-20261113-94')!important;
+  background-image:url('garden-autumn-day.webp?v=cartoon-soft-20261113-1')!important;
 }
 #cover[data-season="autumn"] .landscape>.garden-art.night-only{
-  background-image:url('garden-autumn-night.webp?v=hd-20261113-94')!important;
+  background-image:url('garden-autumn-night.webp?v=cartoon-soft-20261113-1')!important;
 }
 #cover[data-season="winter"] .landscape>.garden-art.day-only{
-  background-image:url('garden-winter-day.webp?v=hd-20261113-94')!important;
+  background-image:url('garden-winter-day.webp?v=cartoon-soft-20261113-1')!important;
 }
 #cover[data-season="winter"] .landscape>.garden-art.night-only{
-  background-image:url('garden-winter-night.webp?v=hd-20261113-94')!important;
+  background-image:url('garden-winter-night.webp?v=cartoon-soft-20261113-1')!important;
 }
 
 /* The sun and crescent are ALREADY painted in the garden images.
