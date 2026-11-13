@@ -4,7 +4,7 @@ import puppeteer from 'puppeteer-core';
 const lessons=JSON.parse(fs.readFileSync('lessons.json','utf8')).lessons;
 const manifest=JSON.parse(fs.readFileSync('audio-manifest.json','utf8'));
 const prefix='window.NHI_ENGLISH_PRELOADED=';
-const data=JSON.parse(fs.readFileSync('nhi-english-data-v6.js','utf8').split(prefix,2)[1].trim().replace(/;\\s*$/,''));
+const data=JSON.parse(fs.readFileSync('nhi-english-data-v6.js','utf8').split(prefix,2)[1].trim().replace(/;\s*$/,''));
 let selected;
 for(const lesson of lessons){
  const first=(lesson.items||[])[0];if(!first)continue;
@@ -31,6 +31,7 @@ try{
  await page.waitForSelector('#planBox .pcard',{timeout:12000});
  await page.$eval('#planBox .pflip',b=>b.click());
  await page.waitForSelector('.nhi-english-v5',{timeout:6500});
+ await page.evaluate(async()=>{if(window.NHI_AUDIO?.ready)await window.NHI_AUDIO.ready;});
  const initial=await page.evaluate(()=>({
   en:document.querySelector('.nhi-en-translation')?.textContent,
   visible:!!document.querySelector('.nhi-en-translation'),
