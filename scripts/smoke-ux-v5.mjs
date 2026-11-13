@@ -38,13 +38,13 @@ try{
  await page.waitForSelector('#planBox .editbox',{timeout:5000});
  const beforeOutside=await page.evaluate(()=>{
    var e=document.querySelector('#planBox .editbox'),r=e?.getBoundingClientRect(),target=document.elementFromPoint(4,430);
-   return {rect:r?{x:r.x,y:r.y,w:r.width,h:r.height}:null,
+   return {diag:window.NHI_V5_CHECK?.context(),events:window.NHI_V5_CHECK?.events?.slice(-6),rect:r?{x:r.x,y:r.y,w:r.width,h:r.height}:null,
     target:target?.tagName+'#'+target?.id+'.'+target?.className,contains:e?.contains(target)};
  });
  console.log('V5 OUTSIDE BEFORE',JSON.stringify(beforeOutside));
  await page.touchscreen.tap(4,430);
  const afterOutside=await page.evaluate(()=>({
-   edit:!!document.querySelector('#planBox .editbox'),
+   edit:!!document.querySelector('#planBox .editbox'),diag:window.NHI_V5_CHECK?.context(),events:window.NHI_V5_CHECK?.events?.slice(-9),
    target:document.elementFromPoint(4,430)?.outerHTML.slice(0,140)
  }));
  console.log('V5 OUTSIDE AFTER',JSON.stringify(afterOutside));
