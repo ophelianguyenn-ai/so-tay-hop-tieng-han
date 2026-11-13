@@ -1,0 +1,103 @@
+name: Record English Neural MP3 (Microsoft Jenny)
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/generate-english-neural.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
+
+concurrency:
+  group: english-neural-speech
+  cancel-in-progress: false
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Microsoft neural TTS client and MP3 metadata checker
+        run: python -m pip install --quiet --disable-pip-version-check 'edge-tts>=7,<8' 'mutagen>=1.47,<2'
+      - name: Generate natural English MP3 shard
+        run: python scripts/generate_english_neural.py --shard ${{ matrix.shard }} --shards 8
+      - name: Save English MP3 shard for final merge
+        uses: actions/upload-artifact@v4
+        with:
+          name: english-neural-${{ matrix.shard }}
+          path: english-neural-build/
+          include-hidden-files: true
+          retention-days: 2
+
+  publish:
+    needs: record
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download completed English MP3 shards
+        uses: actions/download-artifact@v4
+        with:
+          pattern: english-neural-*
+          path: english-neural-build/
+          merge-multiple: true
+      - name: Merge validated audio and update complete manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json, pathlib, shutil
+          root=pathlib.Path('.')
+          temp=root/'english-neural-build'
+          records={}
+          for shard in range(8):
+              file=temp/f'.en-manifest-{shard}.json'
+              assert file.is_file(), f'English shard {shard} missing manifest'
+              records.update(json.loads(file.read_text(encoding='utf-8')))
+          assert len(records)>1100,f'Not enough English MP3 clips: {len(records)}'
+          output=root/'audio'/'en'
+          output.mkdir(parents=True,exist_ok=True)
+          for item in records.values():
+              from_file=temp/item['src']
+              assert from_file.is_file() and from_file.stat().st_size>2000, f'MP3 missing: {from_file}'
+              shutil.copy2(from_file,output/from_file.name)
+          manifest=root/'audio-manifest.json'
+          old=json.loads(manifest.read_text(encoding='utf-8')) if manifest.exists() else {}
+          old.update(records)
+          manifest.write_text(json.dumps(old,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
+          print(f'English Neural MP3 saved: {len(records)} unique phrases')
+          print(f'Audio manifest entries across all languages: {len(old)}')
+          PY
+      - name: Commit MP3 recordings and manifest safely
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add audio/en/ audio-manifest.json
+          if git diff --cached --quiet; then
+            echo "All English MP3 recordings are up to date."
+          else
+            git commit -m "Publish natural English Jenny neural MP3 and audio manifest"
+            for attempt in 1 2 3 4 5; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                echo "English neural MP3 published."
+                exit 0
+              fi
+              sleep 6
+            done
+            echo "Could not publish audio after safe retries." >&2
+            exit 1
+          fi
