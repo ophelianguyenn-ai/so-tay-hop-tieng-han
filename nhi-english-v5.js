@@ -59,7 +59,9 @@ async function checkMeaning(box,id,vi,ko){
 let corpus=null,corpusPromise=null;
 const inFlight=new Map();
 function cacheEntry(id,vi,ko,entry){
- if(!entry||!clean(entry.en))return;
+ if(!entry||!clean(entry.en)||((entry.source==='online'||entry.source==='online-google'||entry.source==='machine')&&suspect(entry.en,vi,ko)))return;
+ delete reviewCache[entryKey(vi,ko)];
+ try{localStorage.setItem(REVIEW_KEY,JSON.stringify(reviewCache));}catch(e){}
  edits[id]=entry;
  try{localStorage.setItem(STORE,JSON.stringify(edits));}catch(e){}
  const key=entryKey(vi,ko);
@@ -88,12 +90,13 @@ function indexCorpus(){
  return corpusPromise;
 }
 function cachedMeaning(vi,ko,dict){
- const text=byText[entryKey(vi,ko)];
- if(text&&clean(text.en))return text;
- const exact=dict.exact.get(entryKey(vi,ko));
- if(exact)return exact;
+ const key=entryKey(vi,ko),text=byText[key];
+ if(text&&clean(text.en)&&!suspect(text.en,vi,ko))return text;
+ if(text){delete byText[key];try{localStorage.setItem(AUTO_STORE,JSON.stringify(byText));}catch(e){}}
+ const exact=dict.exact.get(key);
+ if(exact&&!suspect(exact.en,vi,ko))return exact;
  const approx=dict.byVi.get(normalize(vi));
- return approx&&!approx.ambiguous?approx:null;
+ return approx&&!approx.ambiguous&&!suspect(approx.en,vi,ko)?approx:null;
 }
 async function onlineTranslation(vi){
  // Read the lesson corpus first. Only genuinely new text needs an online call.
