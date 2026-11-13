@@ -209,3 +209,164 @@
  #cover #nhi-living-garden{display:none!important}
  #cover .landscape>.nhi-season-particle{display:none!important}
 }
+
+
+/* 2026-11-13 requested refinements: unobtrusive seasonal UI and natural living water. */
+/* These round CSS butterflies were the two shiny pink oval wings shown in the screenshot. */
+#cover .landscape>.butterfly,
+#cover .landscape>.birds,
+#cover .landscape>.flower,
+#cover #nhi-living-garden .nhi-life-butterfly,
+#cover #nhi-living-garden .nhi-life-creature{display:none!important}
+
+/* Restrict aquatic overlays to a small illustrated stream corridor, not the meadow.
+   Clip the water zone: fish cannot be drawn outside it even during animation. */
+#cover #nhi-living-garden>.nhi-life-water{
+ position:absolute;left:24%;top:79.5%;width:46%;height:19%;
+ overflow:hidden;pointer-events:none;z-index:1;
+ clip-path:polygon(0% 70%,7% 43%,22% 16%,45% 1%,70% 6%,89% 30%,100% 54%,100% 100%,0% 100%);
+ -webkit-clip-path:polygon(0% 70%,7% 43%,22% 16%,45% 1%,70% 6%,89% 30%,100% 54%,100% 100%,0% 100%);
+ opacity:.9;
+}
+#cover[data-season="summer"] #nhi-living-garden>.nhi-life-water{
+ left:26%;top:77%;width:48%;height:22%;
+}
+#cover[data-season="autumn"] #nhi-living-garden>.nhi-life-water{
+ left:29%;top:78%;width:43%;height:21%;
+}
+#cover[data-season="winter"] #nhi-living-garden>.nhi-life-water{
+ left:31%;top:79%;width:48%;height:20%;
+}
+#cover #nhi-living-garden .nhi-life-water .nhi-life-fish{
+ width:calc(86px * var(--scale,.3));
+ left:var(--x,10%);top:var(--y,36%);
+ opacity:.46!important;mix-blend-mode:soft-light;filter:drop-shadow(0 0 3px #b4f4fc77);
+ animation:nhi-submerged-fish var(--duration,14s) var(--delay,0s) ease-in-out infinite alternate;
+}
+#cover #nhi-living-garden .nhi-life-water .nhi-life-fish.reverse{
+ left:var(--x,42%);right:auto;animation:nhi-submerged-fish-back var(--duration,14s) var(--delay,0s) ease-in-out infinite alternate;
+}
+#cover[data-season="summer"] #nhi-living-garden .nhi-life-water .nhi-life-fish{opacity:.58!important}
+:root[data-theme="dark"] #cover #nhi-living-garden .nhi-life-water .nhi-life-fish{
+ opacity:.42!important;mix-blend-mode:screen;filter:drop-shadow(0 0 4px #a1f0ff55);
+}
+#cover #nhi-living-garden .nhi-life-current{
+ left:var(--x);top:var(--y);width:var(--width,100px);
+ opacity:.43;filter:drop-shadow(0 0 4px #e2feff55);
+ animation:nhi-water-current var(--duration,4s) var(--delay,0s) ease-in-out infinite;
+}
+:root[data-theme="dark"] #cover #nhi-living-garden .nhi-life-current{opacity:.56}
+@keyframes nhi-submerged-fish{
+ from{transform:translate3d(-7px,1px,0) rotate(-3deg)}
+ 50%{transform:translate3d(18px,-2px,0) rotate(2deg)}
+ to{transform:translate3d(35px,2px,0) rotate(-2deg)}
+}
+@keyframes nhi-submerged-fish-back{
+ from{transform:translate3d(30px,1px,0) rotate(3deg)}
+ 50%{transform:translate3d(7px,-2px,0) rotate(-2deg)}
+ to{transform:translate3d(-15px,2px,0) rotate(2deg)}
+}
+@keyframes nhi-water-current{
+ 0%{opacity:.12;transform:translate3d(-30px,6px,0) scaleX(.76)}
+ 40%{opacity:.78}
+ 100%{opacity:.06;transform:translate3d(52px,0,0) scaleX(1.1)}
+}
+
+/* Foreground flowers are anchored to their stems and actually sway in the wind. */
+#cover #nhi-living-garden .nhi-life-bloom{
+ left:var(--x);bottom:var(--bottom,0);
+ width:calc(80px * var(--scale,.35));
+ height:auto;transform-origin:50% 100%;
+ opacity:.74;filter:drop-shadow(0 1px 2px #365b5630);
+ animation:nhi-flower-wind var(--duration,5s) var(--delay,0s) ease-in-out infinite alternate;
+}
+#cover #nhi-living-garden .nhi-life-bloom svg{transform-origin:50% 92%;overflow:visible}
+:root[data-theme="dark"] #cover #nhi-living-garden .nhi-life-bloom{
+ opacity:.54;filter:drop-shadow(0 0 3px #eff6e038);
+}
+@keyframes nhi-flower-wind{
+ 0%{transform:translate3d(-3px,0,0) rotate(-5deg)}
+ 50%{transform:translate3d(2px,-2px,0) rotate(1deg)}
+ 100%{transform:translate3d(5px,1px,0) rotate(6deg)}
+}
+
+/* Let the illustrated stream feel more active while preserving the original artwork. */
+#cover .landscape>.water-light{
+ display:block!important;left:27%;bottom:4%;width:46%;height:17%;
+ opacity:.64!important;z-index:1;
+ background:
+  repeating-linear-gradient(174deg,transparent 0 9px,#e8fbff75 10px 11px,transparent 12px 24px),
+  repeating-linear-gradient(4deg,transparent 0 14px,#f7ffff6b 15px 16px,transparent 17px 34px);
+ mask-image:radial-gradient(ellipse at 45% 68%,#000 9%,transparent 78%);
+ -webkit-mask-image:radial-gradient(ellipse at 45% 68%,#000 9%,transparent 78%);
+ animation:nhi-water-flow-brisk 2.5s linear infinite!important;
+}
+:root[data-theme="dark"] #cover .landscape>.water-light{opacity:.4!important}
+#cover[data-season="winter"] .landscape>.water-light{opacity:.4!important}
+@keyframes nhi-water-flow-brisk{
+ from{background-position:0 0,0 0}
+ to{background-position:72px 32px,-58px 26px}
+}
+
+/* Season selection should sit lower and visually blend into the garden.
+   Keyboard focus/hover increases legibility, rather than using an opaque pill. */
+#cover #nhi-season-controls{
+ bottom:max(5px,env(safe-area-inset-bottom,0px))!important;
+ padding:2px 5px!important;gap:1px!important;
+ max-width:calc(100% - 150px)!important;
+ background:rgba(255,255,255,.12)!important;
+ border:1px solid rgba(255,255,255,.24)!important;
+ box-shadow:0 2px 12px rgba(28,62,45,.035)!important;
+ backdrop-filter:blur(15px) saturate(.8)!important;
+ -webkit-backdrop-filter:blur(15px) saturate(.8)!important;
+ opacity:.69!important;z-index:5!important;
+ transition:opacity .2s ease;
+}
+:root[data-theme="dark"] #cover #nhi-season-controls{
+ background:rgba(14,32,34,.16)!important;
+ border-color:rgba(213,255,239,.16)!important;
+ box-shadow:none!important;
+}
+#cover #nhi-season-controls:hover,
+#cover #nhi-season-controls:focus-within{opacity:1!important}
+#cover #nhi-season-controls button{
+ min-width:49px!important;min-height:34px!important;
+ padding:4px 8px!important;font-size:12px!important;
+ font-weight:600!important;color:rgba(19,61,45,.74)!important;
+ background:transparent!important;box-shadow:none!important;
+ border:1px solid transparent!important;
+ transform:none!important;
+}
+:root[data-theme="dark"] #cover #nhi-season-controls button{color:rgba(236,255,245,.80)!important}
+#cover #nhi-season-controls button[aria-pressed="true"]{
+ background:rgba(255,255,255,.16)!important;
+ border-color:rgba(255,255,255,.18)!important;
+ color:rgba(18,58,42,.92)!important;
+}
+:root[data-theme="dark"] #cover #nhi-season-controls button[aria-pressed="true"]{
+ background:rgba(220,255,238,.11)!important;
+ border-color:rgba(220,255,238,.12)!important;
+ color:rgba(255,255,255,.96)!important;
+}
+#cover #nhi-season-controls button:hover{background:rgba(255,255,255,.15)!important}
+#cover #nhi-season-controls button:active{transform:scale(.94)!important}
+@media(max-width:700px){
+ #cover #nhi-season-controls{
+   bottom:max(6px,env(safe-area-inset-bottom,0px))!important;
+   max-width:calc(100% - 16px)!important;
+   gap:0!important;
+ }
+ #cover #nhi-season-controls button{
+   min-width:57px!important;min-height:32px!important;
+   font-size:11px!important;padding:4px 7px!important;
+ }
+ /* Move theme icons one level above the bottom bar to avoid overlapping taps. */
+ #cover #nhi-cover-theme-v5{
+   bottom:max(54px,calc(47px + env(safe-area-inset-bottom,0px)))!important;
+ }
+ #cover #nhi-living-garden>.nhi-life-water{left:25%;top:83%;width:55%;height:14%}
+ #cover #nhi-living-garden .nhi-life-bloom{opacity:.62}
+}
+@media(prefers-reduced-motion:reduce){
+ #cover .landscape>.water-light,#cover #nhi-living-garden .nhi-life-bloom{animation:none!important}
+}
