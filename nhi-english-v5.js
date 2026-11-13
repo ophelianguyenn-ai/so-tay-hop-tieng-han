@@ -3,10 +3,11 @@
 'use strict';
 const STORE='nhi-english-edits-v5';
 let edits={};try{edits=JSON.parse(localStorage.getItem(STORE)||'{}')||{};}catch(e){}
-let data=null,once=null;
+let data=window.NHI_ENGLISH_PRELOADED||null,once=null;
 const clean=s=>String(s||'').trim();
 function load(){
- if(!once)once=fetch('english.json',{cache:'no-cache'}).then(r=>{
+ if(data && Object.keys(data).length)return Promise.resolve(data);
+ if(!once)once=fetch(new URL('english.json',document.baseURI),{cache:'no-cache'}).then(r=>{
   if(!r.ok)throw Error('No English dataset');
   return r.json();
  }).then(j=>{data=j.cards||{};return data;}).catch(()=>{data={};return data;});
@@ -45,7 +46,7 @@ async function translate(id,vi,ko,box){
 function display(box,entry,id,vi,ko){
  if(!box.isConnected)return;
  const en=clean(entry&&entry.en),ipa=clean(entry&&entry.ipa);
- box.querySelector('.nhi-en-translation').textContent=en||'Chưa có bản dịch tiếng Anh';
+ box.querySelector('.nhi-en-translation').textContent=en||'Thẻ mới chưa có bản dịch tiếng Anh';
  const span=box.querySelector('.nhi-en-ipa');span.textContent=ipa?'/'+ipa.replace(/^\/|\/$/g,'')+'/':'';span.hidden=!ipa;
  const play=box.querySelector('.nhi-en-speak'),generate=box.querySelector('.nhi-en-translate');
  play.hidden=!en;play.onclick=()=>speakEnglish(en);
@@ -84,7 +85,7 @@ function mount(parent,id,vi,ko){
  box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><p class="nhi-en-status" aria-live="polite"></p><button type="button" class="nhi-en-translate">Dịch tiếng Anh</button>';
  parent.appendChild(box);
  display(box,edits[id]||(data&&data[id]),id,vi,ko);
- load().then(()=>display(box,edits[id]||(data&&data[id]),id,vi,ko));
+ if(!data||!data[id])load().then(()=>display(box,edits[id]||(data&&data[id]),id,vi,ko));
  return box;
 }
 window.NHI_ENGLISH={mount,load,speakEnglish};

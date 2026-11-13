@@ -113,3 +113,10 @@
 .nhi-en-edit-actions{display:flex;flex-wrap:wrap;gap:9px}
 .nhi-en-edit-actions button{min-height:38px;padding:5px 12px;border-radius:10px}
 .nhi-en-status{font-size:11px;line-height:1.4}
+
+/* v6: the × is inside the TOP-RIGHT corner of each panel. */
+#nhi-global-close-v4{display:none!important}
+#aiPanel .aihead>.nhi-ai-close-v5,#aiPanel .aihead>#aiClose{order:99!important;margin-left:auto!important;margin-right:0!important;position:relative!important;left:auto!important;right:auto!important;top:auto!important;flex:0 0 34px!important}
+#planBox .nhi-editor-window-v5>.nhi-editor-close-v5{left:auto!important;right:8px!important;top:8px!important;position:absolute!important;z-index:10!important}
+.nhi-picture-picker .nhi-picture-head>button{order:99!important;margin-left:auto!important;margin-right:0!important}
+.nhi-picture-picker .nhi-picture-head>strong{order:0!important}
