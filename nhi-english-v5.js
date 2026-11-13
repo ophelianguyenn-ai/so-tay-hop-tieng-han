@@ -44,7 +44,9 @@ async function translate(id,vi,ko,box){
  finally{button.disabled=false;}
 }
 function display(box,entry,id,vi,ko){
- if(!box.isConnected)return;
+ // Cards are constructed off-DOM, then appended; populate immediately.
+ // isConnected is false during the first render, even though the box is valid.
+ if(!box)return;
  const en=clean(entry&&entry.en),ipa=clean(entry&&entry.ipa);
  box.querySelector('.nhi-en-translation').textContent=en||'Thẻ mới chưa có bản dịch tiếng Anh';
  const span=box.querySelector('.nhi-en-ipa');span.textContent=ipa?'/'+ipa.replace(/^\/|\/$/g,'')+'/':'';span.hidden=!ipa;
