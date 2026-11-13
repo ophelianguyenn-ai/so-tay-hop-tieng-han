@@ -43,11 +43,11 @@ jobs:
           python-version: "3.12"
       - name: Install voice generator and audio inspector
         run: python -m pip install --upgrade "edge-tts>=7,<8" "mutagen>=1.47,<2"
-      - name: Generate first 100 Korean/Vietnamese natural MP3 samples (manual dispatch can extend coverage)
+      - name: Generate the next 400 natural Korean/Vietnamese speech clips
         env:
           VOICE_LANG: ${{ inputs.language || 'both' }}
-          VOICE_OFFSET: ${{ inputs.offset || '0' }}
-          VOICE_LIMIT: ${{ inputs.limit || '100' }}
+          VOICE_OFFSET: ${{ inputs.offset || '100' }}
+          VOICE_LIMIT: ${{ inputs.limit || '400' }}
         run: |
           python scripts/generate_tts.py --lang "$VOICE_LANG" --offset "$VOICE_OFFSET" --limit "$VOICE_LIMIT"
       - name: Publish generated MP3 and manifest
