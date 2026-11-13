@@ -956,7 +956,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     <button type="button" class="primary white" id="coverGo">Vào học thôi!</button>
   </div>
 </div>
-<script>(function () { try { if (/^#\/bai\//.test(location.hash) || /^#lk=/.test(location.hash) || sessionStorage.getItem('nlc-cover-seen') || (localStorage.getItem('viko-plan-sess-v1') || '').length > 2) document.getElementById('cover').hidden = true; else document.body.classList.add('cover-on'); } catch (e) { } })();</script>
+<script>(function () { try { var forceCover = /(?:[?&])cover=1(?:&|$)/.test(location.search); if (!forceCover && (/^#\/bai\//.test(location.hash) || /^#lk=/.test(location.hash) || sessionStorage.getItem('nlc-cover-seen') || (localStorage.getItem('viko-plan-sess-v1') || '').length > 2)) document.getElementById('cover').hidden = true; else document.body.classList.add('cover-on'); } catch (e) { } })();</script>
 <canvas id="confetti" hidden></canvas>
 
 <script>
