@@ -17,6 +17,7 @@ on:
       - 'nhi-interface-v4.js'
       - 'scripts/smoke-ux-v4.mjs'
       - 'scripts/smoke-ux-v5.mjs'
+      - 'scripts/smoke-english-v7.mjs'
       - 'nhi-interface-v5.js'
       - 'nhi-interface-v5.css'
       - 'nhi-phrases-v5.js'
@@ -54,3 +55,5 @@ jobs:
         run: node scripts/smoke-ux-v3.mjs
       - name: Check independent window closing, cover theme, English and phrase segments
         run: node scripts/smoke-ux-v5.mjs
+      - name: Verify English original survives compare, synonyms and neural download
+        run: node scripts/smoke-english-v7.mjs
