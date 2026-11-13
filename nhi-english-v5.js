@@ -12,6 +12,50 @@ const AUTO_STORE='nhi-english-bytext-v1';
 let byText={};try{byText=JSON.parse(localStorage.getItem(AUTO_STORE)||'{}')||{};}catch(e){}
 const normalize=s=>clean(s).normalize('NFC').toLowerCase().replace(/\s+/g,' ').replace(/[.!?。？！]+$/,'').trim();
 const entryKey=(vi,ko)=>normalize(vi)+'\u001f'+normalize(ko);
+
+const REVIEW_KEY='nhi-english-reviewed-v1';
+let reviewCache={};try{reviewCache=JSON.parse(localStorage.getItem(REVIEW_KEY)||'{}')||{};}catch(e){}
+function numbers(x){return (clean(x).replace(/,/g,'.').match(/\d+(?:\.\d+)?/g)||[]).map(t=>''+Number(t));}
+function suspect(en,vi,ko){
+ const x=clean(en),v=clean(vi),k=clean(ko);
+ if(!x)return true;
+ if(/^(test result|translation result|hello|undefined|null|n\/a|error|too many requests)$/i.test(x)&&!/(kết quả|thử nghiệm|kiểm tra|결과|시험|검사|테스트)/i.test(v+' '+k))return true;
+ if(v.length>35&&x.split(/\s+/).length<3)return true;
+ if(numbers(v).some(t=>!numbers(x).includes(t)))return true;
+ const tags=v.match(/\b(?:R|T|S|P|HE|EV|AG|CT)-\d{2,4}[A-Z]?(?:\/[A-Z])?\b/gi)||[];
+ if(tags.some(t=>x.toUpperCase().indexOf(t.toUpperCase())===-1))return true;
+ return false;
+}
+function verifiedEntry(id,vi,ko){
+ const record=edits[id]||(data&&data[id]);
+ if(!record)return null;
+ if(['manual','editorial','verified'].includes(record.source)||!suspect(record.en,vi,ko))return record;
+ if(edits[id]){delete edits[id];try{localStorage.setItem(STORE,JSON.stringify(edits));}catch(e){}}
+ return null;
+}
+async function independentTranslation(text,language){
+ const url='https://translate.googleapis.com/translate_a/single?client=gtx&sl='+language+'&tl=en&dt=t&q='+encodeURIComponent(text);
+ const res=await fetch(url,{mode:'cors',cache:'no-store'});if(!res.ok)throw Error('Dịch vụ đối chiếu đang lỗi.');
+ const data=await res.json();return clean((data&&data[0]||[]).map(p=>p&&p[0]||'').join(''));
+}
+async function checkMeaning(box,id,vi,ko){
+ const status=box.querySelector('.nhi-en-status'),btn=box.querySelector('.nhi-en-review');
+ btn.disabled=true;status.textContent='Đang đối chiếu bản Việt, bản Hàn và số liệu…';
+ try{
+  const results=await Promise.all([independentTranslation(vi,'vi'),independentTranslation(ko,'ko')]);
+  const v=results[0],k=results[1],cur=verifiedEntry(id,vi,ko);
+  const norm=x=>new Set((clean(x).toLowerCase().match(/[a-z]{3,}|\d+/g)||[]).filter(w=>!['the','and','for','with','from','into','this','that','are','you','have','which'].includes(w)));
+  const similarity=(a,b)=>{let left=norm(a),right=norm(b),hits=0;for(let w of left)if(right.has(w))hits++;return hits/Math.max(left.size,right.size,1);};
+  let note;
+  if(!suspect(v,vi,ko)&&!suspect(k,vi,ko)&&cur&&!suspect(cur.en,vi,ko)&&similarity(v,k)>=.35&&similarity(v,cur.en)>=.30)
+   note='Đã ĐỐI CHIẾU TỰ ĐỘNG giữa tiếng Việt và tiếng Hàn; chưa phải kiểm duyệt chuyên gia.';
+  else note='CẦN RÀ SOÁT: bản Việt → Anh: “'+v+'”; bản Hàn → Anh: “'+k+'”. Vui lòng kiểm tra và sửa nếu cần.';
+  reviewCache[entryKey(vi,ko)]=note;try{localStorage.setItem(REVIEW_KEY,JSON.stringify(reviewCache));}catch(e){}
+  status.textContent=note;
+ }catch(e){status.textContent='Không đối chiếu được: '+String(e.message||e)+'. Chưa đánh dấu đã kiểm duyệt.';}
+ finally{btn.disabled=false;}
+}
+
 let corpus=null,corpusPromise=null;
 const inFlight=new Map();
 function cacheEntry(id,vi,ko,entry){
@@ -71,7 +115,7 @@ async function onlineTranslation(vi){
    if(!response.ok)throw Error('MyMemory HTTP '+response.status);
    const result=await response.json();
    const translated=clean(result&&result.responseData&&result.responseData.translatedText);
-   if(!translated||Number(result.responseStatus||200)!==200)throw Error('MyMemory trả về lỗi hoặc hết hạn mức.');
+   if(!translated||Number(result.responseStatus||200)!==200||suspect(translated,chunk,''))throw Error('MyMemory trả về kết quả sai hoặc hết hạn mức.');
    outputs.push(translated);
   }
   return {en:clean(outputs.join(' ')),ipa:'',source:'online'};
@@ -85,7 +129,7 @@ async function onlineTranslation(vi){
    if(!response.ok)throw Error('Google Translate HTTP '+response.status);
    const result=await response.json();
    const translated=clean(Array.isArray(result&&result[0])?result[0].map(part=>part&&part[0]||'').join(''):'');
-   if(!translated)throw Error('Google Translate không trả về nội dung.');
+   if(!translated||suspect(translated,chunk,''))throw Error('Google Translate không trả về kết quả đạt kiểm tra.');
    outputs.push(translated);
   }
   return {en:clean(outputs.join(' ')),ipa:'',source:'online-google'};
@@ -100,7 +144,7 @@ async function onlineTranslation(vi){
  return result;
 }
 async function resolveAutomatic(id,vi,ko,box){
- if(clean((edits[id]||(data&&data[id])||{}).en))return;
+ if(verifiedEntry(id,vi,ko))return;
  const key=entryKey(vi,ko);
  try{
   const dict=await indexCorpus(),found=cachedMeaning(vi,ko,dict);
@@ -115,6 +159,7 @@ async function resolveAutomatic(id,vi,ko,box){
    inFlight.set(key,promise);
   }
   const result=await promise;
+  if(suspect(result.en,vi,ko))throw Error('Bản dịch không qua kiểm tra số liệu.');
   cacheEntry(id,vi,ko,result);
   if(box&&box.isConnected)display(box,result,id,vi,ko);
  }catch(e){
@@ -179,7 +224,10 @@ function display(box,entry,id,vi,ko){
  const play=box.querySelector('.nhi-en-speak'),generate=box.querySelector('.nhi-en-translate');
  play.hidden=!en;play.onclick=()=>speakEnglish(en);
  generate.hidden=false;generate.textContent=en?'↻ Dịch lại tiếng Anh':'Dịch lại tự động';generate.onclick=()=>translate(id,vi,ko,box);
- box.querySelector('.nhi-en-status').textContent=en&&(entry.source==='machine'||entry.source==='online'||entry.source==='online-google')?'Bản dịch tự động chưa kiểm duyệt'+(entry.source==='online'?' · từ MyMemory':entry.source==='online-google'?' · từ Google Translate':'')+(entry.source==='online'||entry.source==='online-google'?' · nội dung tiếng Việt được gửi đến dịch vụ dịch':'')+' · hãy kiểm tra thuật ngữ và số liệu':(entry&&entry.source==='manual'?'Đã sửa thủ công trên thiết bị này':'');var editBtn=box.querySelector('.nhi-en-edit');if(editBtn)editBtn.onclick=()=>editEnglish(box,id,vi,ko);
+ var notice=!en?'Chưa có bản dịch đạt kiểm tra.':entry&&entry.source==='editorial'?'Đã rà soát và biên tập theo câu Việt–Hàn ngày 13/11/2026.':entry&&entry.source==='manual'?'Bản dịch đã được bạn chỉnh sửa trên thiết bị này.':'Bản dịch tự động, chưa qua kiểm duyệt chuyên môn; có thể đối chiếu Việt–Hàn.';
+ box.querySelector('.nhi-en-status').textContent=reviewCache[entryKey(vi,ko)]||notice;
+ var review=box.querySelector('.nhi-en-review');if(review){review.hidden=!en;review.onclick=()=>checkMeaning(box,id,vi,ko);}
+ var editBtn=box.querySelector('.nhi-en-edit');if(editBtn)editBtn.onclick=()=>editEnglish(box,id,vi,ko);
 }
 function editEnglish(box,id,vi,ko) {
   var open=box.querySelector('.nhi-en-edit-form');if(open){open.remove();return;}
@@ -210,12 +258,12 @@ function mount(parent,id,vi,ko){
  if(!parent)return;
  const before=parent.querySelector('.nhi-english-v5');if(before)before.remove();
  const box=document.createElement('section');box.className='nhi-english-v5';box.setAttribute('aria-label','Tiếng Anh');
- box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><p class="nhi-en-status" aria-live="polite"></p><button type="button" class="nhi-en-translate">Dịch tiếng Anh</button>';
+ box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><p class="nhi-en-status" aria-live="polite"></p><button type="button" class="nhi-en-review">✓ Đối chiếu Việt–Hàn</button><button type="button" class="nhi-en-translate">Dịch tiếng Anh</button>';
  parent.appendChild(box);
- display(box,edits[id]||(data&&data[id]),id,vi,ko);
+ display(box,verifiedEntry(id,vi,ko),id,vi,ko);
  if(!data||!Object.keys(data).length){
-  load().then(()=>{display(box,edits[id]||(data&&data[id]),id,vi,ko);if(!edits[id]&&!(data&&data[id]))resolveAutomatic(id,vi,ko,box);});
- }else if(!edits[id]&&!(data&&data[id]))resolveAutomatic(id,vi,ko,box);
+  load().then(()=>{display(box,verifiedEntry(id,vi,ko),id,vi,ko);if(!verifiedEntry(id,vi,ko))resolveAutomatic(id,vi,ko,box);});
+ }else if(!verifiedEntry(id,vi,ko))resolveAutomatic(id,vi,ko,box);
  return box;
 }
 window.NHI_ENGLISH={mount,load,speakEnglish};
