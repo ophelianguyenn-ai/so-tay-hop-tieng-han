@@ -36,7 +36,18 @@ try{
  await page.waitForFunction(()=>!document.querySelector('#planBox .editbox'),{timeout:5000});
  await page.$eval('#planBox .cicons button[title*="Sửa thẻ"]',b=>b.click());
  await page.waitForSelector('#planBox .editbox',{timeout:5000});
+ const beforeOutside=await page.evaluate(()=>{
+   var e=document.querySelector('#planBox .editbox'),r=e?.getBoundingClientRect(),target=document.elementFromPoint(4,430);
+   return {rect:r?{x:r.x,y:r.y,w:r.width,h:r.height}:null,
+    target:target?.tagName+'#'+target?.id+'.'+target?.className,contains:e?.contains(target)};
+ });
+ console.log('V5 OUTSIDE BEFORE',JSON.stringify(beforeOutside));
  await page.mouse.click(4,430);
+ const afterOutside=await page.evaluate(()=>({
+   edit:!!document.querySelector('#planBox .editbox'),
+   target:document.elementFromPoint(4,430)?.outerHTML.slice(0,140)
+ }));
+ console.log('V5 OUTSIDE AFTER',JSON.stringify(afterOutside));
  await page.waitForFunction(()=>!document.querySelector('#planBox .editbox'),{timeout:5000});
  await page.$eval('#aiBtn',b=>b.click());
  await page.waitForFunction(()=>document.body.classList.contains('ai-open'));
