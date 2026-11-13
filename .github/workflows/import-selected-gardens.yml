@@ -1,0 +1,78 @@
+name: Import six selected Nhi cover illustrations (one time)
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/import-selected-gardens.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout website repository
+        uses: actions/checkout@v4
+
+      - name: Setup image conversion
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Download six user-selected original illustrations
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Time-limited one-use image links from the connected art workspace.
+          # This workflow is removed after binary assets are committed.
+          curl -fL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 150 -o "/tmp/nhi-summer-day.png" 'https://sdmntprseasia.oaiusercontent.com/files/00000000-d514-8207-b2d5-ad59be94d5ae/raw?se=2026-11-13T03%3A56%3A24Z&sp=r&sv=2026-06-06&sr=b&scid=59a1561f-e49f-5e30-b356-1b8e3d16fb52&skoid=6980ab1e-b994-4668-84de-ad0444c9d08b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-13T02%3A25%3A31Z&ske=2026-11-14T02%3A25%3A31Z&sks=b&skv=2026-06-06&sig=anJS%2BAaXJpcnJWbsxKM5xw2TkPZa7U0kKsWL0KUdlRc%3D' &
+          curl -fL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 150 -o "/tmp/nhi-summer-night.png" 'https://sdmntprseasia.oaiusercontent.com/files/00000000-e330-8207-9d95-81e2eea9b6a5/raw?se=2026-11-13T03%3A56%3A25Z&sp=r&sv=2026-06-06&sr=b&scid=081f34b8-1ed4-50ff-bace-b4e6154d2027&skoid=6980ab1e-b994-4668-84de-ad0444c9d08b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-13T02%3A45%3A18Z&ske=2026-11-14T02%3A45%3A18Z&sks=b&skv=2026-06-06&sig=GLE8MN/2SzAC6Vla0Q7ItKlfybtj3cjdTAK6DXltRaY%3D' &
+          curl -fL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 150 -o "/tmp/nhi-autumn-day.png" 'https://sdmntprindiasocentral.oaiusercontent.com/files/00000000-6388-8211-ac04-4d442eb6a82d/raw?se=2026-11-13T03%3A56%3A25Z&sp=r&sv=2026-06-06&sr=b&scid=42e6c217-e3c8-590f-8746-e4055635114f&skoid=6980ab1e-b994-4668-84de-ad0444c9d08b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-13T01%3A33%3A24Z&ske=2026-11-14T01%3A33%3A24Z&sks=b&skv=2026-06-06&sig=zoRE5KW5K5T1HAitHUAzBTFJQNgeahZLyJ8j55%2BlDV4%3D' &
+          curl -fL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 150 -o "/tmp/nhi-autumn-night.png" 'https://sdmntprseasia.oaiusercontent.com/files/00000000-56e8-8207-a639-1adef0abfb03/raw?se=2026-11-13T03%3A56%3A25Z&sp=r&sv=2026-06-06&sr=b&scid=7aec832c-7453-55a7-8c66-48b1817acc9a&skoid=6980ab1e-b994-4668-84de-ad0444c9d08b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-13T01%3A14%3A19Z&ske=2026-11-14T01%3A14%3A19Z&sks=b&skv=2026-06-06&sig=glDptQ7tF5YqcqsTyaB7iK85ByfK%2BL9GUmTa4Tspb2I%3D' &
+          curl -fL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 150 -o "/tmp/nhi-winter-day.png" 'https://sdmntprseasia.oaiusercontent.com/files/00000000-5428-8207-94e4-69f5e79bfa11/raw?se=2026-11-13T03%3A56%3A25Z&sp=r&sv=2026-06-06&sr=b&scid=20baff79-45e9-5929-b08d-447316342b00&skoid=6980ab1e-b994-4668-84de-ad0444c9d08b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-13T01%3A07%3A20Z&ske=2026-11-14T01%3A07%3A20Z&sks=b&skv=2026-06-06&sig=k4L9DXseUx0Dp9WNZ8M0RirqTm0ezCUy3hr9JIxOEEU%3D' &
+          curl -fL --retry 3 --retry-all-errors --connect-timeout 15 --max-time 150 -o "/tmp/nhi-winter-night.png" 'https://sdmntprseasia.oaiusercontent.com/files/00000000-a64c-8207-a1d2-408402f8ed2b/raw?se=2026-11-13T03%3A56%3A27Z&sp=r&sv=2026-06-06&sr=b&scid=184a4d85-3cae-5aee-b45c-44dfb9d5fb6b&skoid=6980ab1e-b994-4668-84de-ad0444c9d08b&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2026-11-12T23%3A02%3A15Z&ske=2026-11-13T23%3A02%3A15Z&sks=b&skv=2026-06-06&sig=il8xwvbZxPXOSyhkqJtEKgxN2okgrwStyvUfUZTyLHY%3D' &
+          wait
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          paths=[Path("/tmp/nhi-"+s+"-"+t+".png") for s in ("summer","autumn","winter") for t in ("day","night")]
+          for p in paths:
+              assert p.exists() and p.stat().st_size > 100_000, f"Image missing: {p}"
+              with Image.open(p) as pic:
+                  assert pic.size == (1672,941), f"Unexpected picture size: {p}"
+          print("All six illustrated originals downloaded with expected size.")
+          PY
+
+      - name: Convert selected PNG art to optimized permanent WebP files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install --quiet --disable-pip-version-check 'Pillow>=11,<14'
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          for season in ('summer','autumn','winter'):
+              for phase in ('day','night'):
+                  source=Path('/tmp/nhi-'+season+'-'+phase+'.png')
+                  output=Path('garden-'+season+'-'+phase+'.webp')
+                  with Image.open(source) as pic:
+                      pic.convert('RGB').save(output, format='WEBP',quality=88, method=6)
+                  assert output.stat().st_size > 250000, f'Output image unexpectedly small: {output}'
+                  print(output, output.stat().st_size, 'bytes')
+          PY
+
+      - name: Save illustrated covers into GitHub repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add garden-summer-day.webp garden-summer-night.webp garden-autumn-day.webp garden-autumn-night.webp garden-winter-day.webp garden-winter-night.webp
+          if git diff --cached --quiet; then
+            echo "All six selected assets already committed."
+          else
+            git commit -m "Import six chosen illustrated garden backgrounds for summer autumn winter"
+            git push origin HEAD:main
+          fi
