@@ -1,6 +1,6 @@
 // Offline support: network-first for GitHub Pages and static assets.
 // Fall back to cache only when offline. Different cache key forces eviction of earlier stale CSS/JS.
-const CACHE = 'nhi-corner-v30-illustrated-seasons-living-garden';
+const CACHE = 'nhi-corner-v31-illustrated-seasons-motion-v2';
 const CORE = [
   './','index.html','manifest.webmanifest','qrcode.js','lessons.json',
   'icon-192.png','icon-512.png','refresh-v9.css','study-enhancements-v13.css',
