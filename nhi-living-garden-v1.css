@@ -1,0 +1,210 @@
+/* Living garden: lightweight independent SVG motion over the selected storybook paintings.
+   Kept behind title/buttons; no interactions blocked and no existing study UI modified. */
+#cover .landscape > #nhi-living-garden{
+ position:absolute!important;inset:0!important;z-index:2!important;
+ display:block;overflow:hidden;pointer-events:none!important;user-select:none!important;
+ contain:layout paint style;isolation:isolate;
+}
+#cover #nhi-living-garden .nhi-life{
+ display:block;position:absolute;pointer-events:none;user-select:none;
+ will-change:transform,opacity;backface-visibility:hidden;
+}
+#cover #nhi-living-garden .nhi-life svg{display:block;width:100%;height:auto;overflow:visible}
+#cover #nhi-living-garden .nhi-life-bird{
+ left:-12%;top:var(--y);width:calc(118px * var(--scale,.55));
+ color:var(--bird-color,#607688);
+ filter:drop-shadow(0 1px 1px rgba(12,22,31,.15));
+ animation:nhi-flight var(--duration,25s) var(--delay,0s) linear infinite;
+ opacity:.86;
+}
+#cover #nhi-living-garden .nhi-life-bird.reverse{
+ left:auto;right:-12%;
+ animation-name:nhi-flight-reverse;
+}
+#cover #nhi-living-garden .nhi-bird-wing{
+ transform-box:fill-box;transform-origin:center 72%;
+ animation:nhi-wing-flutter var(--flap,.54s) ease-in-out infinite alternate;
+}
+#cover #nhi-living-garden .nhi-bird-right{animation-delay:-.12s}
+#cover #nhi-living-garden .nhi-life-butterfly{
+ left:var(--x);top:var(--y);width:calc(73px * var(--scale,.55));
+ filter:drop-shadow(0 2px 3px rgba(24,28,44,.2));
+ animation:nhi-butterfly-orbit var(--duration,9s) var(--delay,0s) ease-in-out infinite alternate;
+}
+#cover #nhi-living-garden .nhi-butter-wing{
+ transform-box:fill-box;animation:nhi-butter-wing-flap .29s ease-in-out infinite alternate;
+}
+#cover #nhi-living-garden .nhi-butter-left{transform-origin:right center}
+#cover #nhi-living-garden .nhi-butter-right{transform-origin:left center;animation-delay:-.145s}
+#cover #nhi-living-garden .night-moth{filter:drop-shadow(0 0 8px rgba(255,248,177,.48))}
+#cover #nhi-living-garden .nhi-life-dragonfly{
+ left:var(--x);top:var(--y);width:calc(93px * var(--scale,.47));
+ animation:nhi-dragonfly-dance var(--duration,8s) var(--delay,0s) ease-in-out infinite alternate;
+ filter:drop-shadow(0 2px 4px #467b91aa);
+}
+#cover #nhi-living-garden .nhi-life-fish{
+ left:-11%;top:var(--y);width:calc(104px * var(--scale,.4));
+ animation:nhi-fish-swim var(--duration,17s) var(--delay,0s) linear infinite;
+ opacity:.76;filter:drop-shadow(0 0 4px rgba(148,234,247,.44));
+}
+#cover #nhi-living-garden .nhi-life-fish.reverse{
+ left:auto;right:-11%;animation-name:nhi-fish-swim-reverse;
+}
+#cover #nhi-living-garden .nhi-life-fish svg{animation:nhi-fish-tail .8s ease-in-out infinite alternate}
+#cover #nhi-living-garden .nhi-life-fish.reverse svg{transform:scaleX(-1)}
+#cover #nhi-living-garden .nhi-life-creature{
+ left:-13%;top:var(--y);width:var(--size,73px);height:auto;
+ animation:nhi-creature-cross var(--duration,27s) var(--delay,0s) linear infinite;
+ filter:drop-shadow(1px 2px 2px rgba(31,39,27,.18));opacity:.90;
+}
+#cover #nhi-living-garden .nhi-life-creature svg{animation:nhi-creature-bounce .53s ease-in-out infinite alternate}
+#cover #nhi-living-garden .nhi-creature-leg{
+ transform-box:fill-box;transform-origin:center top;
+ animation:nhi-creature-legs .45s ease-in-out infinite alternate;
+}
+#cover #nhi-living-garden .nhi-life-creature .nhi-creature-leg:nth-of-type(2){animation-delay:-.22s}
+#cover #nhi-living-garden .nhi-life-cloud{
+ top:var(--y);left:-26%;width:var(--width,150px);height:22px;
+ background:rgba(255,255,255,.82);border-radius:50% 52% 30% 39%;
+ opacity:var(--cloud-opacity,.24);
+ filter:blur(1.5px);mix-blend-mode:screen;
+ animation:nhi-cloud-journey var(--duration,65s) var(--delay,0s) linear infinite;
+}
+#cover #nhi-living-garden .nhi-life-cloud::before,
+#cover #nhi-living-garden .nhi-life-cloud::after{
+ content:"";position:absolute;border-radius:50%;background:inherit;
+}
+#cover #nhi-living-garden .nhi-life-cloud::before{
+ width:50%;height:220%;left:17%;bottom:0;
+}
+#cover #nhi-living-garden .nhi-life-cloud::after{
+ width:42%;height:250%;right:12%;bottom:0;
+}
+#cover #nhi-living-garden[data-lighting="night"] .nhi-life-cloud{
+ background:#bad5dd;filter:blur(3.5px);opacity:.10;
+}
+#cover #nhi-living-garden .nhi-life-wind{
+ left:var(--x);top:var(--y);width:clamp(90px,13vw,200px);
+ color:var(--wind-color,#f5faff);opacity:.19;
+ animation:nhi-wind-gust var(--duration,9s) var(--delay,0s) ease-in-out infinite;
+}
+#cover #nhi-living-garden[data-lighting="night"] .nhi-life-wind{
+ opacity:.16;filter:drop-shadow(0 0 4px #e7f8ff33);
+}
+#cover #nhi-living-garden .nhi-life-reeds{
+ left:var(--x);top:var(--y);
+ width:calc(140px * var(--scale,.6));height:auto;opacity:.49;
+ transform-origin:bottom center;
+ animation:nhi-grass-sway 6.4s var(--delay,0s) ease-in-out infinite alternate;
+}
+#cover #nhi-living-garden[data-lighting="night"] .nhi-life-reeds{opacity:.35}
+#cover #nhi-living-garden .nhi-life-firefly{
+ left:var(--x);top:var(--y);width:5px;height:5px;border-radius:50%;
+ background:#f2faa6;box-shadow:0 0 5px 3px #f1fd9f99,0 0 18px 8px #d3fa7a55;
+ animation:nhi-firefly-meander var(--duration,5s) var(--delay,0s) ease-in-out infinite alternate;
+}
+#cover #nhi-living-garden[data-season="winter"] .nhi-life-creature{
+ filter:drop-shadow(0 1px 3px #648fa15e);
+}
+#cover #nhi-living-garden[data-season="autumn"] .nhi-life-butterfly{opacity:.70}
+#cover #nhi-living-garden[data-season="winter"] .nhi-life-butterfly{opacity:.48}
+#cover #nhi-living-garden[data-season="summer"] .nhi-life-fish{opacity:.94}
+
+@keyframes nhi-flight{
+ 0%{transform:translate3d(0,0,0) rotate(-2deg);opacity:0}
+ 6%{opacity:.8}
+ 48%{transform:translate3d(58vw,-4.4vh,0) rotate(2deg)}
+ 95%{opacity:.85}
+ 100%{transform:translate3d(124vw,1.5vh,0) rotate(-2deg);opacity:0}
+}
+@keyframes nhi-flight-reverse{
+ 0%{transform:translate3d(0,0,0) scaleX(-1);opacity:0}
+ 6%{opacity:.85}
+ 50%{transform:translate3d(-60vw,-5vh,0) scaleX(-1)}
+ 95%{opacity:.9}
+ 100%{transform:translate3d(-124vw,1vh,0) scaleX(-1);opacity:0}
+}
+@keyframes nhi-wing-flutter{
+ from{transform:rotate(-6deg) scaleY(1)}
+ to{transform:rotate(11deg) scaleY(.42)}
+}
+@keyframes nhi-butterfly-orbit{
+ 0%{transform:translate3d(-28px,19px,0) rotate(-14deg)}
+ 30%{transform:translate3d(42px,-39px,0) rotate(12deg)}
+ 65%{transform:translate3d(-22px,-16px,0) rotate(-10deg)}
+ 100%{transform:translate3d(69px,20px,0) rotate(16deg)}
+}
+@keyframes nhi-butter-wing-flap{
+ 0%{transform:scaleX(1)}
+ 100%{transform:scaleX(.24)}
+}
+@keyframes nhi-dragonfly-dance{
+ 0%{transform:translate3d(0,11px,0) rotate(2deg)}
+ 35%{transform:translate3d(65px,-27px,0) rotate(-10deg)}
+ 70%{transform:translate3d(-14px,19px,0) rotate(8deg)}
+ 100%{transform:translate3d(89px,-18px,0) rotate(-8deg)}
+}
+@keyframes nhi-fish-swim{
+ 0%{transform:translate3d(0,0,0);opacity:0}
+ 7%{opacity:.76}
+ 50%{transform:translate3d(57vw,-1.5vh,0)}
+ 92%{opacity:.76}
+ 100%{transform:translate3d(124vw,1.5vh,0);opacity:0}
+}
+@keyframes nhi-fish-swim-reverse{
+ 0%{transform:translate3d(0,0,0);opacity:0}
+ 7%{opacity:.76}
+ 50%{transform:translate3d(-57vw,1.5vh,0)}
+ 92%{opacity:.76}
+ 100%{transform:translate3d(-124vw,-1.5vh,0);opacity:0}
+}
+@keyframes nhi-fish-tail{
+ 0%{transform:rotate(-5deg)}
+ 100%{transform:rotate(6deg)}
+}
+@keyframes nhi-creature-cross{
+ 0%{transform:translate3d(0,3px,0);opacity:0}
+ 5%{opacity:.9}
+ 50%{transform:translate3d(60vw,-15px,0)}
+ 95%{opacity:.86}
+ 100%{transform:translate3d(123vw,2px,0);opacity:0}
+}
+@keyframes nhi-creature-bounce{
+ 0%{transform:translateY(0) rotate(-2deg)}
+ 100%{transform:translateY(-11px) rotate(4deg)}
+}
+@keyframes nhi-creature-legs{
+ from{transform:rotate(-14deg)}
+ to{transform:rotate(13deg)}
+}
+@keyframes nhi-cloud-journey{
+ 0%{transform:translate3d(-6vw,0,0);opacity:0}
+ 10%{opacity:var(--cloud-opacity,.24)}
+ 88%{opacity:var(--cloud-opacity,.24)}
+ 100%{transform:translate3d(143vw,-16px,0);opacity:0}
+}
+@keyframes nhi-wind-gust{
+ 0%{transform:translate3d(-35px,8px,0);opacity:0}
+ 35%{opacity:.32}
+ 72%{opacity:.25}
+ 100%{transform:translate3d(130px,-21px,0);opacity:0}
+}
+@keyframes nhi-grass-sway{
+ 0%{transform:rotate(-7deg) translateX(-3px)}
+ 100%{transform:rotate(8deg) translateX(5px)}
+}
+@keyframes nhi-firefly-meander{
+ 0%{transform:translate3d(-8px,14px,0) scale(.55);opacity:.15}
+ 32%{opacity:.9}
+ 70%{transform:translate3d(22px,-21px,0) scale(1.1);opacity:.7}
+ 100%{transform:translate3d(-9px,-30px,0) scale(.6);opacity:.3}
+}
+@media(max-width:700px){
+ #cover #nhi-living-garden .nhi-life-cloud{filter:blur(2px);opacity:.17}
+ #cover #nhi-living-garden .nhi-life-wind{opacity:.12}
+ #cover #nhi-living-garden .nhi-life-reeds{opacity:.34}
+}
+@media(prefers-reduced-motion:reduce){
+ #cover #nhi-living-garden{display:none!important}
+ #cover .landscape>.nhi-season-particle{display:none!important}
+}
