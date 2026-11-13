@@ -120,3 +120,17 @@
 #planBox .nhi-editor-window-v5>.nhi-editor-close-v5{left:auto!important;right:8px!important;top:8px!important;position:absolute!important;z-index:10!important}
 .nhi-picture-picker .nhi-picture-head>button{order:99!important;margin-left:auto!important;margin-right:0!important}
 .nhi-picture-picker .nhi-picture-head>strong{order:0!important}
+
+
+/* Translation QA: distinguish automated source comparisons from editorial review. */
+.nhi-english-v5 .nhi-en-review{
+  border:1px solid color-mix(in srgb,var(--accent-d) 65%,transparent);
+  background:color-mix(in srgb,var(--accent-soft) 24%,var(--surface));
+  color:var(--accent-t);border-radius:9px;
+  padding:9px 11px;font:700 12px var(--ui);
+  cursor:pointer;min-height:38px;width:100%;
+}
+.nhi-english-v5 .nhi-en-review:hover{filter:brightness(1.09)}
+.nhi-english-v5 .nhi-en-review:focus-visible{outline:2px solid var(--accent-t);outline-offset:2px}
+.nhi-english-v5 .nhi-en-review:disabled{cursor:progress;opacity:.55}
+.nhi-english-v5 .nhi-en-status{line-height:1.55;overflow-wrap:anywhere;white-space:normal}
