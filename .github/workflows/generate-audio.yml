@@ -57,5 +57,18 @@ jobs:
           git add audio/ audio-manifest.json
           if ! git diff --cached --quiet; then
             git commit -m "Generate Korean Vietnamese neural MP3 and audio manifest"
-            git push
+            # Main may advance while speech generation is running.
+            # Rebase the finished audio commit rather than discarding generated MP3.
+            for attempt in 1 2 3 4 5; do
+              git fetch origin main
+              git rebase origin/main
+              if git push origin HEAD:main; then
+                echo "Neural audio published successfully."
+                exit 0
+              fi
+              echo "Branch advanced again; retrying audio push ${attempt}/5."
+              sleep 6
+            done
+            echo "Could not publish generated audio after 5 safe retries." >&2
+            exit 1
           fi
