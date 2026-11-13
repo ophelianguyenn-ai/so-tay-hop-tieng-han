@@ -95,6 +95,7 @@
     // Visible aquatic shoals use the bottom stretch of water.
     for(var fish=0;fish<numbers.fish;fish++){
       var swimmer=add('nhi-life-fish',svg.fish,{
+        '--x':(season==='summer'?32:23)+rand(fish,35)*20+'%',
         '--y':(76+rand(fish,7)*13)+'%',
         '--scale':(.24+rand(fish,19)*.32).toFixed(2),
         '--duration':(12+rand(fish,23)*18).toFixed(1)+'s',
@@ -107,7 +108,8 @@
     for(var cr=0;cr<numbers.animals;cr++){
       var animal=animals[cr%animals.length];
       add('nhi-life-creature',svg[animal],{
-        '--y':(67+rand(cr,29)*15)+'%',
+        '--x':(54+rand(cr,13)*12)+'%',
+        '--y':(60+rand(cr,29)*14)+'%',
         '--size':(phone?51:70+cr*9)+'px',
         '--duration':(20+rand(cr,31)*19).toFixed(1)+'s',
         '--delay':(-rand(cr,27)*39).toFixed(1)+'s',
