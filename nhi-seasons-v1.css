@@ -172,9 +172,9 @@
 
 
 /* =============================================================
-   Garden restoration v2: spring is the ORIGINAL, untouched artwork.
-   The other seasons use same-composition WebP transformations built
-   from that artwork during the GitHub Pages workflow.
+   HD cover v3: spring is the ORIGINAL, untouched artwork.
+   Summer, autumn and winter are six distinct premium illustrated covers,
+   selected by the user, stored permanently in the repository as WebP.
    This section overrides the experimental full-screen SVG scenery.
    ============================================================= */
 #cover .landscape>.nhi-season-svg{display:none!important}
@@ -202,22 +202,22 @@
   background-image:url('garden-night.webp')!important;
 }
 #cover[data-season="summer"] .landscape>.garden-art.day-only{
-  background-image:url('garden-summer-day.webp')!important;
+  background-image:url('garden-summer-day.webp?v=hd-20261113-94')!important;
 }
 #cover[data-season="summer"] .landscape>.garden-art.night-only{
-  background-image:url('garden-summer-night.webp')!important;
+  background-image:url('garden-summer-night.webp?v=hd-20261113-94')!important;
 }
 #cover[data-season="autumn"] .landscape>.garden-art.day-only{
-  background-image:url('garden-autumn-day.webp')!important;
+  background-image:url('garden-autumn-day.webp?v=hd-20261113-94')!important;
 }
 #cover[data-season="autumn"] .landscape>.garden-art.night-only{
-  background-image:url('garden-autumn-night.webp')!important;
+  background-image:url('garden-autumn-night.webp?v=hd-20261113-94')!important;
 }
 #cover[data-season="winter"] .landscape>.garden-art.day-only{
-  background-image:url('garden-winter-day.webp')!important;
+  background-image:url('garden-winter-day.webp?v=hd-20261113-94')!important;
 }
 #cover[data-season="winter"] .landscape>.garden-art.night-only{
-  background-image:url('garden-winter-night.webp')!important;
+  background-image:url('garden-winter-night.webp?v=hd-20261113-94')!important;
 }
 
 /* The sun and crescent are ALREADY painted in the garden images.
