@@ -596,7 +596,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 }
 </style>
 
-<script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="nhi-google-images-v1.js?v=1"></script><script src="nhi-hard-minimal-v1.js?v=1"></script><script src="nhi-phrases-v5.js?v=5"></script><script src="nhi-english-data-v6.js?v=20261113-reviewed-173"></script><script src="nhi-english-v5.js?v=20261113-rollback-stable-v1"></script><script src="recorded-voices-v11.js?v=20261113-en1887"></script>
+<script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="nhi-google-images-v1.js?v=1"></script><script src="nhi-hard-minimal-v1.js?v=1"></script><script src="nhi-phrases-v5.js?v=5"></script><script src="nhi-english-data-v6.js?v=20261113-reviewed-173"></script><script src="nhi-english-v5.js?v=20261113-compact-choice-v2"></script><script src="recorded-voices-v11.js?v=20261113-en1887"></script>
 <script src="qrcode.js" defer></script>
 <link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14"><link rel="stylesheet" href="nhi-updates-v1.css?v=1"><link rel="stylesheet" href="nhi-ai-resize-v2.css?v=1"><link rel="stylesheet" href="nhi-study-motion-v3.css?v=3"><link rel="stylesheet" href="nhi-interface-v4.css?v=4"><link rel="stylesheet" href="nhi-interface-v5.css?v=20261113-rollback-stable-v1"><link rel="stylesheet" href="nhi-seasons-v1.css?v=20261113-cartoon-soft-1">
 <link rel="stylesheet" href="nhi-living-garden-v1.css?v=20261113-cartoon-butterflies-v1">
@@ -611,6 +611,10 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 #nhi-mascot-restore{position:fixed;right:12px;bottom:18px;z-index:48;border-radius:18px;padding:9px 12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);box-shadow:var(--sh-1);cursor:pointer}
 .auto-illustration figcaption{font-size:12px}
 @media(max-width:480px){#nhi-movable{padding:2px 4px 4px}.nhi-mascot-controls button{min-width:26px}}
+</style>
+<style>
+.nhi-en-choices{display:grid;gap:3px;margin:5px 0}.nhi-en-choice{display:flex;align-items:center;gap:6px;padding:4px 7px!important;min-height:32px!important;text-align:left;font-size:13px!important;line-height:1.4;white-space:normal;overflow-wrap:anywhere}.nhi-en-choice span{flex:1}.nhi-en-choice small{opacity:0;font-size:11px}.nhi-en-choice:hover small,.nhi-en-choice:focus-visible small,.nhi-en-choice[aria-pressed="true"] small{opacity:1}.nhi-en-choice[aria-pressed="true"]{border-color:var(--accent,#7c3aed)}.nhi-en-tools{display:flex;gap:5px;flex-wrap:wrap;align-items:center}.nhi-en-tools button{font-size:12px!important;min-height:30px!important;padding:3px 7px!important}.nhi-en-lexicon{font-size:13px;margin-top:5px}.nhi-en-lexicon form{display:flex;gap:5px}.nhi-en-lexicon input{min-width:0;width:100%;flex:1;padding:5px}.nhi-en-status:empty{display:none}.nhi-en-original{font-size:12px!important}.nhi-en-translation{overflow-wrap:anywhere}
+@media(hover:none){.nhi-en-choice small{opacity:1}}
 </style>
 </head>
 <body>
@@ -841,8 +845,9 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
         <div class="voice-grid">
           <div class="voice-row"><label for="voiceKo">Tiếng Hàn</label><select id="voiceKo"></select><button type="button" class="ghost" data-test="ko">Nghe thử</button></div>
           <div class="voice-row"><label for="voiceVi">Tiếng Việt</label><select id="voiceVi"></select><button type="button" class="ghost" data-test="vi">Nghe thử</button></div>
+          <div class="voice-row"><label for="voiceEn">Tiếng Anh</label><select id="voiceEn"></select><button type="button" class="ghost" data-test="en">Nghe thử</button></div>
           <p class="voice-note" id="voiceStatus"></p>
-          <p class="voice-note"><b>Cách có giọng tự nhiên trên máy này:</b> <span id="voiceGuide"></span></p>
+          <p class="voice-note"><b>Giọng tự nhiên:</b> <span id="voiceGuide"></span></p>
           <p class="voice-note" id="voiceMissing" hidden></p>
         </div>
       </div>
@@ -1224,9 +1229,9 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   function mulberry(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
   function shuffle(arr, rnd) { var a = arr.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   var canSpeak = ('speechSynthesis' in window) && typeof window.SpeechSynthesisUtterance !== 'undefined';
-  if (!canSpeak) document.documentElement.classList.add('no-tts');
-  var VOICE_KEY = 'viko-ko-meeting-voice-v1', VOICE_PREF = { ko: '', vi: '' };
-  try { var vp = JSON.parse(lsGet(VOICE_KEY) || '{}'); if (vp && typeof vp === 'object') { VOICE_PREF.ko = vp.ko || ''; VOICE_PREF.vi = vp.vi || ''; } } catch (e) { }
+  // Recorded Neural MP3 works even without device speech synthesis.
+  var VOICE_KEY = 'viko-ko-meeting-voice-v1', VOICE_PREF = { ko: '', vi: '', en: '' };
+  try { var vp = JSON.parse(lsGet(VOICE_KEY) || '{}'); if (vp && typeof vp === 'object') { VOICE_PREF.ko = vp.ko || ''; VOICE_PREF.vi = vp.vi || ''; VOICE_PREF.en = vp.en || '';  } } catch (e) { }
   function saveVoice() { lsSet(VOICE_KEY, JSON.stringify(VOICE_PREF)); }
   // Rank the device's voices so the most natural one wins (Edge "Natural", Chrome "Google", Apple Premium/Enhanced)
   function voiceScore(v, pre) {
@@ -1254,19 +1259,31 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
     if (want) { for (var i = 0; i < list.length; i++) { if (list[i].voiceURI === want) return list[i]; } }
     return list[0];
   }
-  function speak(text, lang, onend) {
-    if (window.NHI_AUDIO) { if(canSpeak)window.speechSynthesis.cancel(); if(window.NHI_AUDIO.play(text,lang||'ko-KR',RATE[state.rate]||1,onend))return; window.NHI_AUDIO.stop(); }
-    if (!canSpeak) { if (onend) onend(); return; }
+  var speechRequest = 0;
+  async function speak(text, lang, onend) {
+    var request = ++speechRequest;
     lang = lang || 'ko-KR';
     var pre = lang.slice(0, 2).toLowerCase();
+    if (canSpeak) window.speechSynthesis.cancel();
+    if (window.NHI_AUDIO) {
+      window.NHI_AUDIO.stop();
+      await window.NHI_AUDIO.ready;
+      if (request !== speechRequest) return;
+      if (!VOICE_PREF[pre] && window.NHI_AUDIO.play(text, lang, RATE[state.rate] || 1, onend)) return;
+    }
+    if (!canSpeak) { toast('Câu này chưa có MP3 Neural; trình duyệt chưa có giọng dự phòng.'); if (onend) onend(); return; }
     try {
       var u = new SpeechSynthesisUtterance(text.replace(/\[\s*\]/g, ' '));
       u.lang = lang; u.rate = (pre === 'vi' ? 1 : 0.9) * (RATE[state.rate] || 1);
       if (onend) { u.onend = onend; u.onerror = onend; }
-      var v = pickVoice(pre); if (!v) { toast('Thiết bị chưa có giọng ' + (pre === 'ko' ? 'tiếng Hàn' : 'tiếng Việt') + '. Mở Cài đặt → Giọng đọc để kiểm tra.'); if (onend) onend(); return; } u.voice = v; u.lang = v.lang;
-      window.speechSynthesis.cancel(); window.speechSynthesis.speak(u);
+      var v = pickVoice(pre);
+      if (!v) { toast('Câu này chưa có MP3 Neural hoặc giọng dự phòng. Bản gốc có âm thanh vẫn nghe được.'); if (onend) onend(); return; }
+      u.voice = v; u.lang = v.lang;
+      window.speechSynthesis.speak(u);
     } catch (e) { if (onend) onend(); }
   }
+  window.NHI_SPEECH = {speak: speak};
+
 
   /* ---------- Custom decks & cards (made by the learner, synced between devices) ---------- */
   var CUSTOM_KEY = 'viko-custom-v1';
@@ -2255,7 +2272,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   /* ================= Flashcards: hands-free auto play ================= */
   var auto = { on: false, token: 0 };
   function paintAutoBtn() { var b = $('autoPlay'); b.textContent = auto.on ? '■ Dừng tự phát' : '▶ Tự phát'; b.setAttribute('aria-pressed', String(auto.on)); }
-  function stopAuto() { if(window.NHI_AUDIO)window.NHI_AUDIO.stop(); if (!auto.on) return; auto.on = false; auto.token++; paintAutoBtn(); if (canSpeak) { try { window.speechSynthesis.cancel(); } catch (e) { } } }
+  function stopAuto() { speechRequest++; if(window.NHI_AUDIO)window.NHI_AUDIO.stop(); if (!auto.on) return; auto.on = false; auto.token++; paintAutoBtn(); if (canSpeak) { try { window.speechSynthesis.cancel(); } catch (e) { } } }
   function startAuto() {
     if (!queue.length) return;
     auto.on = true; var tk = ++auto.token; paintAutoBtn();
@@ -2418,19 +2435,11 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   };
   var NATURAL = /natural|neural|online|google|premium|enhanced|cao cấp|nâng cao|siri/i;
   function paintVoiceStatus() {
-    var plat = platform(); $('voiceGuide').textContent = GUIDE[plat] || GUIDE.other;
-    var parts = [];
+    $('voiceGuide').textContent = 'Chọn Neural để nghe MP3 có sẵn, không cần cài giọng. Câu mới chưa có MP3 dùng giọng dự phòng nếu có.';
     var clips = window.NHI_AUDIO && window.NHI_AUDIO.count && window.NHI_AUDIO.count();
-    if (clips && (clips.ko || clips.vi))
-      parts.push('MP3 giọng Neural: Hàn ' + clips.ko + ' đoạn (SunHi), Việt ' + clips.vi + ' đoạn (HoaiMy); ưu tiên phát MP3 khi có');
-    if (!canSpeak) { parts.push('Trình duyệt không có giọng dự phòng; vẫn nghe được MP3 đã ghi sẵn.'); $('voiceStatus').textContent = parts.join('  ·  '); return; }
-    [['ko', 'Tiếng Hàn'], ['vi', 'Tiếng Việt']].forEach(function (x) {
-      var v = pickVoice(x[0]);
-      if (!v) parts.push(x[1] + ': chưa có giọng dự phòng trên máy này');
-      else parts.push(x[1] + ': giọng dự phòng ' + v.name + (NATURAL.test(v.name + ' ' + v.voiceURI) ? ' · tự nhiên' : ' · cơ bản'));
-    });
-    $('voiceStatus').textContent = parts.join('  ·  ');
+    $('voiceStatus').textContent = clips ? 'MP3 Neural: Hàn ' + clips.ko + ' · Việt ' + clips.vi + ' · Anh ' + clips.en : 'Đang tải âm thanh Neural…';
   }
+
   function paintRate() { Array.prototype.forEach.call(document.querySelectorAll('[data-rate]'), function (b) { b.setAttribute('aria-pressed', String(b.dataset.rate === state.rate)); }); }
 
   /* ================= Sync panel ================= */
@@ -3687,35 +3696,36 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
   });
 
   // Voice picker
-  var SAMPLE = { ko: '난간과 탱크 지붕 철판의 용접을 진행하여 상부 구조의 연결부를 보강했습니다.', vi: 'Đã hàn lan can và thép tấm mái bồn để gia cố các chỗ nối của kết cấu phía trên.' };
+  var SAMPLE = { en: 'A furniture company is coming in today to re-examine the scene.', ko: '난간과 탱크 지붕 철판의 용접을 진행하여 상부 구조의 연결부를 보강했습니다.', vi: 'Đã hàn lan can và thép tấm mái bồn để gia cố các chỗ nối của kết cấu phía trên.' };
   function fillVoiceSelects() {
-    if (!canSpeak) return;
     var missing = [];
-    [['ko', 'voiceKo', 'tiếng Hàn'], ['vi', 'voiceVi', 'tiếng Việt']].forEach(function (x) {
+    [['ko', 'voiceKo', 'tiếng Hàn'], ['vi', 'voiceVi', 'tiếng Việt'], ['en', 'voiceEn', 'tiếng Anh']].forEach(function (x) {
       var sel = $(x[1]), list = voicesFor(x[0]);
       sel.textContent = '';
       var auto = document.createElement('option'); auto.value = '';
-      auto.textContent = list.length ? ('Tự chọn giọng tốt nhất (' + list[0].name + ')') : ('Máy này chưa có giọng ' + x[2]);
+      auto.textContent = 'Neural · ' + ({ko:'SunHi',vi:'HoaiMy',en:'Jenny'})[x[0]] + ' (không cần cài)';
       sel.appendChild(auto);
       list.forEach(function (v) { var o = document.createElement('option'); o.value = v.voiceURI; o.textContent = v.name + (v.localService ? '' : ' · trực tuyến'); sel.appendChild(o); });
       var has = VOICE_PREF[x[0]] && list.some(function (v) { return v.voiceURI === VOICE_PREF[x[0]]; });
+      if (!has && VOICE_PREF[x[0]]) { VOICE_PREF[x[0]] = ''; saveVoice(); }
       sel.value = has ? VOICE_PREF[x[0]] : '';
-      sel.disabled = !list.length;
+      sel.disabled = false;
       if (!list.length) missing.push(x[2]);
     });
     var m = $('voiceMissing');
-    m.hidden = !missing.length;
+    m.hidden = true;
     m.textContent = missing.length ? ('Máy này chưa có giọng ' + missing.join(' và ') + '. Hãy cài thêm giọng trong phần cài đặt giọng nói của máy rồi tải lại trang.') : '';
   }
+  fillVoiceSelects();
   if (canSpeak) {
-    fillVoiceSelects();
     try { window.speechSynthesis.addEventListener('voiceschanged', fillVoiceSelects); } catch (e) { window.speechSynthesis.onvoiceschanged = fillVoiceSelects; }
   }
   $('voiceKo').addEventListener('change', function () { VOICE_PREF.ko = this.value; saveVoice(); paintVoiceStatus(); speak(SAMPLE.ko, 'ko-KR'); });
+  $('voiceEn').addEventListener('change', function () { VOICE_PREF.en = this.value; saveVoice(); paintVoiceStatus(); speak(SAMPLE.en, 'en-US'); });
   $('voiceVi').addEventListener('change', function () { VOICE_PREF.vi = this.value; saveVoice(); paintVoiceStatus(); speak(SAMPLE.vi, 'vi-VN'); });
   $('voicePanel').addEventListener('click', function (e) {
     var b = e.target.closest('[data-test]'); if (!b) return;
-    if (b.dataset.test === 'ko') speak(SAMPLE.ko, 'ko-KR'); else speak(SAMPLE.vi, 'vi-VN');
+    var lang = b.dataset.test; speak(SAMPLE[lang], {ko:'ko-KR',vi:'vi-VN',en:'en-US'}[lang]);
   });
 
   // Swipe left/right on the card (phones, tablets)
