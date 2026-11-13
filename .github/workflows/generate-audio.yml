@@ -27,6 +27,7 @@ on:
         default: "0"
 permissions:
   contents: write
+  actions: write
 concurrency:
   group: generate-korean-vietnamese-audio
   cancel-in-progress: false
@@ -43,13 +44,13 @@ jobs:
           python-version: "3.12"
       - name: Install voice generator and audio inspector
         run: python -m pip install --upgrade "edge-tts>=7,<8" "mutagen>=1.47,<2"
-      - name: Generate the next 400 natural Korean/Vietnamese speech clips
+      - name: Generate remaining Korean/Vietnamese Neural MP3 for all lesson cards
         env:
           VOICE_LANG: ${{ inputs.language || 'both' }}
-          VOICE_OFFSET: ${{ inputs.offset || '100' }}
-          VOICE_LIMIT: ${{ inputs.limit || '400' }}
+          VOICE_OFFSET: ${{ inputs.offset || '500' }}
+          VOICE_LIMIT: ${{ inputs.limit || '0' }}
         run: |
-          python scripts/generate_tts.py --lang "$VOICE_LANG" --offset "$VOICE_OFFSET" --limit "$VOICE_LIMIT"
+          python scripts/generate_tts.py --lang "$VOICE_LANG" --offset "$VOICE_OFFSET" --limit "$VOICE_LIMIT" --allow-partial
       - name: Publish generated MP3 and manifest
         run: |
           git config user.name "github-actions[bot]"
@@ -72,3 +73,12 @@ jobs:
             echo "Could not publish generated audio after 5 safe retries." >&2
             exit 1
           fi
+      - name: Request GitHub Pages deployment after audio has been pushed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api --method POST -H "Accept: application/vnd.github+json" \
+            "repos/$GITHUB_REPOSITORY/actions/workflows/deploy-pages.yml/dispatches" \
+            -f ref=main
+          echo "GitHub Pages deployment dispatched for newly generated audio."
