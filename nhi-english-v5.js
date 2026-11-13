@@ -68,7 +68,7 @@ async function checkMeaning(box,id,vi,ko){
 let corpus=null,corpusPromise=null;
 const inFlight=new Map();
 function cacheEntry(id,vi,ko,entry){
- if(!entry||!clean(entry.en)||((entry.source==='online'||entry.source==='online-google'||entry.source==='machine')&&suspect(entry.en,vi,ko)))return;
+ if(!entry||!clean(entry.en)||((entry.source==='online'||entry.source==='online-google'||entry.source==='machine'||entry.source==='gemini')&&suspect(entry.en,vi,ko)))return;
  delete reviewCache[entryKey(vi,ko)];
  try{localStorage.setItem(REVIEW_KEY,JSON.stringify(reviewCache));}catch(e){}
  edits[id]=entry;
@@ -153,11 +153,12 @@ async function onlineTranslation(vi,ko){
  if(!en||normalize(en)===normalize(text)||suspect(en,vi,ko))throw Error('Bản dịch cần kiểm tra lại.');
  return {en,ipa:'',source:'online-google'};
 }
-async function resolveAutomatic(id,vi,ko,box){
- if(verifiedEntry(id,vi,ko))return;
+async function resolveAutomatic(id,vi,ko,box,refreshMachine){
+ if(!refreshMachine&&verifiedEntry(id,vi,ko))return;
+ if(refreshMachine&&edits[id])return;
  const key=entryKey(vi,ko);
  try{
-  const dict=await indexCorpus(),found=cachedMeaning(vi,ko,dict);
+  const dict=refreshMachine?null:await indexCorpus(),found=refreshMachine?null:cachedMeaning(vi,ko,dict);
   if(found){
    cacheEntry(id,vi,ko,found);
    if(box&&box.isConnected)display(box,found,id,vi,ko);
@@ -319,9 +320,17 @@ function mount(parent,id,vi,ko){
  box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh giọng tự nhiên">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><div class="nhi-en-mini-actions"><button type="button" class="nhi-en-syn" title="Xem từ đồng nghĩa. Chọn một từ tiếng Anh trong câu trước khi bấm nếu cần.">≈ Đồng nghĩa</button><button type="button" class="nhi-en-ant" title="Xem từ trái nghĩa. Chọn một từ tiếng Anh trong câu trước khi bấm nếu cần.">↔ Trái nghĩa</button></div><div class="nhi-en-lex-panel" hidden></div><div class="nhi-en-compare-panel" hidden></div><p class="nhi-en-status" aria-live="polite"></p><div class="nhi-en-tools"><button type="button" class="nhi-en-review" title="Chỉ hiển thị bản đối chiếu riêng, không thay đổi nghĩa gốc">✓ Đối chiếu Việt–Hàn</button><button type="button" class="nhi-en-translate">Dịch tiếng Anh</button></div>';
  parent.appendChild(box);
  display(box,verifiedEntry(id,vi,ko),id,vi,ko);
+ const maybeRefresh=()=>{
+  const current=verifiedEntry(id,vi,ko);
+  if(!current){resolveAutomatic(id,vi,ko,box);return;}
+  // Legacy Argos translations are useful as offline fallback, but prioritize
+  // fresh Gemini/Google results over them when an online source is available.
+  // Never modify saved manual edits or reviewed/editorial entries.
+  if(!edits[id]&&current.source==='machine')resolveAutomatic(id,vi,ko,box,true);
+ };
  if(!data||!Object.keys(data).length){
-  load().then(()=>{display(box,verifiedEntry(id,vi,ko),id,vi,ko);if(!verifiedEntry(id,vi,ko))resolveAutomatic(id,vi,ko,box);});
- }else if(!verifiedEntry(id,vi,ko))resolveAutomatic(id,vi,ko,box);
+  load().then(()=>{display(box,verifiedEntry(id,vi,ko),id,vi,ko);maybeRefresh();});
+ }else maybeRefresh();
  return box;
 }
 window.NHI_ENGLISH={mount,load,speakEnglish};
