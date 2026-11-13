@@ -9,14 +9,10 @@ const marker='window.NHI_ENGLISH_PRELOADED=';
 const preloaded=JSON.parse(preloadFile.split(marker,2)[1].trim().replace(/;\s*$/,''));
 let chosen;
 for(const lesson of lessons){
- for(const item of lesson.items||[]){
-  const en=preloaded[item[0]]?.en;
-  if(en&&manifest['en|'+en]){
-   chosen={lessonId:lesson.id,id:item[0],en};
-   break;
-  }
- }
- if(chosen)break;
+ const item=(lesson.items||[])[0];
+ if(!item)continue;
+ const en=preloaded[item[0]]?.en;
+ if(en&&manifest['en|'+en]){chosen={lessonId:lesson.id,id:item[0],en};break;}
 }
 if(!chosen)throw Error('No lesson card with recorded English neural MP3 found');
 const browser=await puppeteer.launch({headless:true,executablePath:process.env.CHROME_BIN||'/usr/bin/google-chrome',args:['--no-sandbox','--disable-setuid-sandbox','--disable-dev-shm-usage']});
