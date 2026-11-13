@@ -39,20 +39,29 @@ async function independentTranslation(text,language){
  const data=await res.json();return clean((data&&data[0]||[]).map(p=>p&&p[0]||'').join(''));
 }
 async function checkMeaning(box,id,vi,ko){
+ // Side-by-side context only: NEVER replace/edit the card's original English.
  const status=box.querySelector('.nhi-en-status'),btn=box.querySelector('.nhi-en-review');
- btn.disabled=true;status.textContent='Đang đối chiếu bản Việt, bản Hàn và số liệu…';
+ const panel=box.querySelector('.nhi-en-compare-panel');
+ const original=clean(box.querySelector('.nhi-en-translation').textContent);
+ btn.disabled=true;status.textContent='Đang đối chiếu tiếng Việt và tiếng Hàn…';
  try{
   const results=await Promise.all([independentTranslation(vi,'vi'),independentTranslation(ko,'ko')]);
-  const v=results[0],k=results[1],cur=verifiedEntry(id,vi,ko);
-  const norm=x=>new Set((clean(x).toLowerCase().match(/[a-z]{3,}|\d+/g)||[]).filter(w=>!['the','and','for','with','from','into','this','that','are','you','have','which'].includes(w)));
-  const similarity=(a,b)=>{let left=norm(a),right=norm(b),hits=0;for(let w of left)if(right.has(w))hits++;return hits/Math.max(left.size,right.size,1);};
-  let note;
-  if(!suspect(v,vi,ko)&&!suspect(k,vi,ko)&&cur&&!suspect(cur.en,vi,ko)&&similarity(v,k)>=.35&&similarity(v,cur.en)>=.30)
-   note='Đã ĐỐI CHIẾU TỰ ĐỘNG giữa tiếng Việt và tiếng Hàn; chưa phải kiểm duyệt chuyên gia.';
-  else note='CẦN RÀ SOÁT: bản Việt → Anh: “'+v+'”; bản Hàn → Anh: “'+k+'”. Vui lòng kiểm tra và sửa nếu cần.';
-  reviewCache[entryKey(vi,ko)]=note;try{localStorage.setItem(REVIEW_KEY,JSON.stringify(reviewCache));}catch(e){}
-  status.textContent=note;
- }catch(e){status.textContent='Không đối chiếu được: '+String(e.message||e)+'. Chưa đánh dấu đã kiểm duyệt.';}
+  if(!box.isConnected)return;
+  panel.replaceChildren();
+  const heading=document.createElement('strong');heading.textContent='Đối chiếu nghĩa (tham khảo)';panel.appendChild(heading);
+  [['Từ gốc đang học',original],['Dịch từ tiếng Việt',results[0]],['Dịch từ tiếng Hàn',results[1]]].forEach(pair=>{
+   const p=document.createElement('p'),strong=document.createElement('b');
+   strong.textContent=pair[0]+': ';p.appendChild(strong);p.appendChild(document.createTextNode(pair[1]||'Không có kết quả.'));
+   panel.appendChild(p);
+  });
+  const back=document.createElement('button');back.type='button';back.className='nhi-en-compare-back';
+  back.textContent='↩ Trở về từ gốc';back.onclick=()=>{
+   panel.hidden=true;status.textContent='';
+   // .nhi-en-translation was never touched.
+  };
+  panel.appendChild(back);panel.hidden=false;
+  status.textContent='';
+ }catch(e){status.textContent='Chưa đối chiếu được. Bản dịch gốc vẫn được giữ nguyên.';}
  finally{btn.disabled=false;}
 }
 
@@ -98,53 +107,51 @@ function cachedMeaning(vi,ko,dict){
  const approx=dict.byVi.get(normalize(vi));
  return approx&&!approx.ambiguous&&!suspect(approx.en,vi,ko)?approx:null;
 }
-async function onlineTranslation(vi){
- // Read the lesson corpus first. Only genuinely new text needs an online call.
- // MyMemory accepts at most 500 UTF-8 BYTES per request (Vietnamese accents count).
+function configuredGemini(){
+ let config={};try{config=JSON.parse(localStorage.getItem('nlc-ai-v1')||'{}')||{};}catch(e){}
+ return {key:clean(config.k&&config.k.gemini),model:clean(config.m&&config.m.gemini||'gemini-2.5-flash-lite').replace(/^models\//,'')};
+}
+async function geminiEnglish(vi,ko){
+ const {key,model}=configuredGemini();if(!key)throw Error('Chưa cấu hình Gemini API.');
+ const prompt='Translate to idiomatic, precise workplace English. Use the Vietnamese source as primary and the Korean source to disambiguate technical meaning. Retain numbers, equipment IDs, measurements and units EXACTLY. Do not invent terms. Output ONLY JSON with keys en and ipa (IPA may be empty). Vietnamese: '+vi+' \n Korean context: '+ko;
+ const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',{
+  method:'POST',headers:{'content-type':'application/json','x-goog-api-key':key},
+  body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json',temperature:0}})
+ });
+ const body=await r.json();if(!r.ok)throw Error((body.error&&body.error.message)||'Gemini HTTP '+r.status);
+ const raw=(body.candidates&&body.candidates[0]&&body.candidates[0].content&&body.candidates[0].content.parts||[]).map(p=>p.text||'').join('');
+ const parsed=JSON.parse(raw);
+ if(!parsed.en||suspect(parsed.en,vi,ko))throw Error('Kết quả chưa đạt kiểm tra thuật ngữ hoặc số liệu.');
+ return {en:clean(parsed.en),ipa:clean(parsed.ipa),source:'gemini'};
+}
+async function onlineTranslation(vi,ko){
+ // Use official Gemini when configured. Do NOT send material to MyMemory.
+ const config=configuredGemini();
+ if(config.key)return geminiEnglish(vi,ko);
+ // Public Google Translate web endpoint is a best-effort fallback, not an
+ // authenticated Google Cloud Translation API and may change independently.
  const text=clean(vi),chunks=[];let rest=text;
  const bytes=s=>new TextEncoder().encode(s).length;
  while(rest){
-  if(chunks.length>=16)throw Error('Câu quá dài để tự dịch.');
+  if(chunks.length>=16)throw Error('Câu quá dài để dịch.');
   let cut=Math.min(360,rest.length);
   while(cut>1&&bytes(rest.slice(0,cut))>460)cut-=Math.max(1,Math.ceil(cut/12));
-  if(cut<rest.length){const last=rest.lastIndexOf(' ',cut);if(last>Math.floor(cut/2))cut=last;}
+  if(cut<rest.length){const last=rest.lastIndexOf(' ',cut);if(last>cut/2)cut=last;}
   chunks.push(rest.slice(0,cut));rest=rest.slice(cut).trim();
  }
- async function fromMyMemory(){
-  const outputs=[];
-  for(const chunk of chunks){
-   const url='https://api.mymemory.translated.net/get?langpair=vi%7Cen&q='+encodeURIComponent(chunk);
-   const response=await fetch(url,{method:'GET',mode:'cors',cache:'no-store'});
-   if(!response.ok)throw Error('MyMemory HTTP '+response.status);
-   const result=await response.json();
-   const translated=clean(result&&result.responseData&&result.responseData.translatedText);
-   if(!translated||Number(result.responseStatus||200)!==200||suspect(translated,chunk,''))throw Error('MyMemory trả về kết quả sai hoặc hết hạn mức.');
-   outputs.push(translated);
-  }
-  return {en:clean(outputs.join(' ')),ipa:'',source:'online'};
+ const output=[];
+ for(const chunk of chunks){
+  const url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=vi&tl=en&dt=t&q='+encodeURIComponent(chunk);
+  const response=await fetch(url,{mode:'cors',cache:'no-store'});
+  if(!response.ok)throw Error('Dịch vụ dịch đang bận.');
+  const result=await response.json();
+  const translated=clean(Array.isArray(result&&result[0])?result[0].map(part=>part&&part[0]||'').join(''):'');
+  if(!translated||suspect(translated,chunk,''))throw Error('Không nhận được bản dịch phù hợp.');
+  output.push(translated);
  }
- async function fromGoogle(){
-  // Unofficial public endpoint: secondary fallback, subject to provider availability.
-  const outputs=[];
-  for(const chunk of chunks){
-   const url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=vi&tl=en&dt=t&q='+encodeURIComponent(chunk);
-   const response=await fetch(url,{method:'GET',mode:'cors'});
-   if(!response.ok)throw Error('Google Translate HTTP '+response.status);
-   const result=await response.json();
-   const translated=clean(Array.isArray(result&&result[0])?result[0].map(part=>part&&part[0]||'').join(''):'');
-   if(!translated||suspect(translated,chunk,''))throw Error('Google Translate không trả về kết quả đạt kiểm tra.');
-   outputs.push(translated);
-  }
-  return {en:clean(outputs.join(' ')),ipa:'',source:'online-google'};
- }
- let result;
- try{result=await fromMyMemory();}
- catch(firstError){
-  try{result=await fromGoogle();}
-  catch(secondError){throw Error('MyMemory và dịch vụ dự phòng đều không khả dụng.');}
- }
- if(!clean(result.en)||normalize(result.en)===normalize(text))throw Error('Chưa nhận được bản dịch tiếng Anh khác nội dung gốc.');
- return result;
+ const en=clean(output.join(' '));
+ if(!en||normalize(en)===normalize(text)||suspect(en,vi,ko))throw Error('Bản dịch cần kiểm tra lại.');
+ return {en,ipa:'',source:'online-google'};
 }
 async function resolveAutomatic(id,vi,ko,box){
  if(verifiedEntry(id,vi,ko))return;
@@ -158,7 +165,7 @@ async function resolveAutomatic(id,vi,ko,box){
   }
   let promise=inFlight.get(key);
   if(!promise){
-   promise=onlineTranslation(vi).finally(()=>inFlight.delete(key));
+   promise=onlineTranslation(vi,ko).finally(()=>inFlight.delete(key));
    inFlight.set(key,promise);
   }
   const result=await promise;
@@ -181,40 +188,34 @@ function load(){
  }).then(j=>{data=j.cards||{};return data;}).catch(()=>{data={};return data;});
  return once;
 }
-function speakEnglish(t){
- if(!t||!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined')return;
- const msg=new SpeechSynthesisUtterance(t);msg.lang='en-US';msg.rate=.87;
+async function speakEnglish(t){
+ if(!t)return;
+ // Prefer actual downloadable neural MP3 whenever recorded in the English manifest.
+ if(window.NHI_AUDIO){
+  try{
+   if(window.NHI_AUDIO.ready)await window.NHI_AUDIO.ready;
+   if(window.NHI_AUDIO.play(t,'en',1))return;
+  }catch(e){}
+ }
+ if(!('speechSynthesis' in window)||typeof SpeechSynthesisUtterance==='undefined')return;
+ const msg=new SpeechSynthesisUtterance(t);msg.lang='en-US';msg.rate=.92;msg.pitch=1.02;
  const voices=speechSynthesis.getVoices().filter(v=>/^en(?:-|$)/i.test(v.lang||''));
- voices.sort((a,b)=>Number(/Natural|Google|Premium|Enhanced/i.test(b.name))-Number(/Natural|Google|Premium|Enhanced/i.test(a.name)));
+ voices.sort((a,b)=>{
+  const weight=v=>(/Natural|Premium|Neural|Enhanced/i.test(v.name)?4:0)+(/Microsoft|Google/i.test(v.name)?2:0)+(/en-US/i.test(v.lang)?1:0);
+  return weight(b)-weight(a);
+ });
  if(voices[0]){msg.voice=voices[0];msg.lang=voices[0].lang;}
  speechSynthesis.cancel();speechSynthesis.speak(msg);
 }
 async function translate(id,vi,ko,box){
  const status=box.querySelector('.nhi-en-status'),button=box.querySelector('.nhi-en-translate');
- let config={};try{config=JSON.parse(localStorage.getItem('nlc-ai-v1')||'{}')||{};}catch(e){}
- const key=clean(config.k&&config.k.gemini);
- if(!key){
-  button.disabled=true;status.textContent='Đang dịch tự động sang tiếng Anh…';
-  try{const entry=await onlineTranslation(vi);cacheEntry(id,vi,ko,entry);display(box,entry,id,vi,ko);}
-  catch(e){status.textContent='Không thể dịch tự động: '+String(e.message||e).slice(0,120);}
-  finally{button.disabled=false;}
-  return;
- }
- button.disabled=true;status.textContent='Đang dịch và tạo phiên âm…';
+ button.disabled=true;status.textContent='Đang tạo bản dịch tiếng Anh…';
  try{
-  const model=clean(config.m&&config.m.gemini||'gemini-3.5-flash-lite').replace(/^models\//,'');
-  const prompt='Translate Vietnamese workplace material into accurate natural English, using Korean as context. Provide English IPA. Return a JSON object only, keys en and ipa. Vietnamese: '+vi+'; Korean: '+ko;
-  const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',{
-   method:'POST',headers:{'content-type':'application/json','x-goog-api-key':key},
-   body:JSON.stringify({contents:[{role:'user',parts:[{text:prompt}]}],generationConfig:{responseMimeType:'application/json',temperature:0.1}})
-  });
-  const answer=await r.json();if(!r.ok)throw Error(answer.error&&answer.error.message||'HTTP '+r.status);
-  const raw=(answer.candidates&&answer.candidates[0]&&answer.candidates[0].content&&answer.candidates[0].content.parts||[]).map(p=>p.text||'').join('');
-  const parsed=JSON.parse(raw);
-  if(!clean(parsed.en))throw Error('Không tìm được bản dịch');
-  cacheEntry(id,vi,ko,{en:clean(parsed.en),ipa:clean(parsed.ipa),source:'gemini'});
+  const entry=await onlineTranslation(vi,ko);
+  cacheEntry(id,vi,ko,entry);
+  if(!edits[id])throw Error('Bản dịch không vượt qua kiểm tra chất lượng.');
   display(box,edits[id],id,vi,ko);
- }catch(e){status.textContent='Không thể dịch: '+String(e.message||e).slice(0,140);}
+ }catch(e){status.textContent='Chưa thể cập nhật bản dịch: '+String(e.message||e).slice(0,130);}
  finally{button.disabled=false;}
 }
 function display(box,entry,id,vi,ko){
@@ -227,10 +228,64 @@ function display(box,entry,id,vi,ko){
  const play=box.querySelector('.nhi-en-speak'),generate=box.querySelector('.nhi-en-translate');
  play.hidden=!en;play.onclick=()=>speakEnglish(en);
  generate.hidden=false;generate.textContent=en?'↻ Dịch lại tiếng Anh':'Dịch lại tự động';generate.onclick=()=>translate(id,vi,ko,box);
- var notice=!en?'Chưa có bản dịch đạt kiểm tra.':entry&&entry.source==='editorial'?'Đã rà soát và biên tập theo câu Việt–Hàn ngày 13/11/2026.':entry&&entry.source==='manual'?'Bản dịch đã được bạn chỉnh sửa trên thiết bị này.':'Bản dịch tự động, chưa qua kiểm duyệt chuyên môn; có thể đối chiếu Việt–Hàn.';
- box.querySelector('.nhi-en-status').textContent=reviewCache[entryKey(vi,ko)]||notice;
+ box.querySelector('.nhi-en-status').textContent='';
+ const panel=box.querySelector('.nhi-en-compare-panel');if(panel){panel.hidden=true;panel.replaceChildren();}
+ const lex=box.querySelector('.nhi-en-lex-panel');if(lex){lex.hidden=true;}
  var review=box.querySelector('.nhi-en-review');if(review){review.hidden=!en;review.onclick=()=>checkMeaning(box,id,vi,ko);}
+ box.querySelector('.nhi-en-syn').onclick=()=>openLexical(box,'syn',en);
+ box.querySelector('.nhi-en-ant').onclick=()=>openLexical(box,'ant',en);
+ box.querySelector('.nhi-en-syn').hidden=!en;
+ box.querySelector('.nhi-en-ant').hidden=!en;
  var editBtn=box.querySelector('.nhi-en-edit');if(editBtn)editBtn.onclick=()=>editEnglish(box,id,vi,ko);
+}
+const lexicalStop=new Set('a an and as at be been by for from in into is it of on or our that the their this to was were will with you your we i my are very have has had if not do did does can should must one two three some any all each'.split(' '));
+const lexCache=new Map();
+function selectLexicalWord(box,en){
+ try{
+  const sel=window.getSelection&&window.getSelection();
+  const chosen=clean(sel&&sel.toString());
+  if(chosen&&chosen.length<50&&/^[a-z]+(?:[- ][a-z]+)?$/i.test(chosen)&&box.contains(sel.anchorNode))
+   return chosen.toLowerCase();
+ }catch(e){}
+ const chunks=(en.toLowerCase().match(/[a-z]+(?:-[a-z]+)*/g)||[]).filter(w=>w.length>=3&&!lexicalStop.has(w));
+ return chunks[0]||'';
+}
+async function lexicalQuery(word,kind){
+ const key=kind+'|'+word;
+ if(lexCache.has(key))return lexCache.get(key);
+ // Datamuse's rel_syn / rel_ant results are drawn from WordNet lexical sets.
+ const url='https://api.datamuse.com/words?'+(kind==='syn'?'rel_syn':'rel_ant')+'='+encodeURIComponent(word)+'&max=8';
+ const res=await fetch(url,{cache:'force-cache'});
+ if(!res.ok)throw Error('Không tải được từ điển.');
+ const data=await res.json();
+ const words=(Array.isArray(data)?data:[]).map(row=>clean(row.word)).filter(Boolean).slice(0,8);
+ lexCache.set(key,words);return words;
+}
+function openLexical(box,kind,en){
+ const panel=box.querySelector('.nhi-en-lex-panel');panel.replaceChildren();panel.hidden=false;
+ const form=document.createElement('form');form.className='nhi-en-lex-form';
+ const label=document.createElement('label');label.textContent='Tra từ tiếng Anh: ';
+ const input=document.createElement('input');input.type='text';input.autocomplete='off';input.maxLength=55;
+ input.value=selectLexicalWord(box,en);input.setAttribute('aria-label','Từ tiếng Anh cần tra đồng nghĩa hoặc trái nghĩa');
+ const go=document.createElement('button');go.type='submit';go.textContent='Tra';
+ label.appendChild(input);form.appendChild(label);form.appendChild(go);panel.appendChild(form);
+ const body=document.createElement('p');body.className='nhi-en-lex-results';body.textContent='Đang tra…';panel.appendChild(body);
+ const source=document.createElement('small');source.textContent='Nguồn: Datamuse / WordNet · chỉ tham khảo theo nghĩa của từ, không thay thế bản dịch gốc.';panel.appendChild(source);
+ const close=document.createElement('button');close.type='button';close.className='nhi-en-lex-close';close.textContent='× Đóng';close.onclick=()=>{panel.hidden=true};panel.appendChild(close);
+ let request=0;
+ const run=async()=>{
+  const token=++request,word=clean(input.value).toLowerCase();
+  if(!/^[a-z]+(?:[- ][a-z]+)?$/i.test(word)){body.textContent='Hãy nhập một từ tiếng Anh.';return;}
+  body.textContent='Đang tìm '+(kind==='syn'?'từ đồng nghĩa':'từ trái nghĩa')+'…';go.disabled=true;
+  try{
+   const words=await lexicalQuery(word,kind);
+   if(token!==request||!panel.isConnected)return;
+   body.textContent=words.length?words.join(' · '):'Chưa tìm thấy kết quả phù hợp với từ này.';
+  }catch(e){if(token===request)body.textContent='Không kết nối được từ điển. Hãy thử lại.';}
+  finally{go.disabled=false;}
+ };
+ form.addEventListener('submit',e=>{e.preventDefault();run();});
+ run();
 }
 function editEnglish(box,id,vi,ko) {
   var open=box.querySelector('.nhi-en-edit-form');if(open){open.remove();return;}
@@ -261,7 +316,7 @@ function mount(parent,id,vi,ko){
  if(!parent)return;
  const before=parent.querySelector('.nhi-english-v5');if(before)before.remove();
  const box=document.createElement('section');box.className='nhi-english-v5';box.setAttribute('aria-label','Tiếng Anh');
- box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><p class="nhi-en-status" aria-live="polite"></p><button type="button" class="nhi-en-review" title="Khi bấm, nội dung tiếng Việt và tiếng Hàn sẽ được gửi đến Google Translate để đối chiếu tự động. Đây không phải kiểm duyệt chuyên gia.">✓ Đối chiếu Việt–Hàn</button><button type="button" class="nhi-en-translate">Dịch tiếng Anh</button>';
+ box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh giọng tự nhiên">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><div class="nhi-en-mini-actions"><button type="button" class="nhi-en-syn" title="Xem từ đồng nghĩa. Chọn một từ tiếng Anh trong câu trước khi bấm nếu cần.">≈ Đồng nghĩa</button><button type="button" class="nhi-en-ant" title="Xem từ trái nghĩa. Chọn một từ tiếng Anh trong câu trước khi bấm nếu cần.">↔ Trái nghĩa</button></div><div class="nhi-en-lex-panel" hidden></div><div class="nhi-en-compare-panel" hidden></div><p class="nhi-en-status" aria-live="polite"></p><div class="nhi-en-tools"><button type="button" class="nhi-en-review" title="Chỉ hiển thị bản đối chiếu riêng, không thay đổi nghĩa gốc">✓ Đối chiếu Việt–Hàn</button><button type="button" class="nhi-en-translate">Dịch tiếng Anh</button></div>';
  parent.appendChild(box);
  display(box,verifiedEntry(id,vi,ko),id,vi,ko);
  if(!data||!Object.keys(data).length){
