@@ -228,6 +228,23 @@ function display(box,entry,id,vi,ko){
  const span=box.querySelector('.nhi-en-ipa');span.textContent=ipa?'/'+ipa.replace(/^\/|\/$/g,'')+'/':'';span.hidden=!ipa;
  const play=box.querySelector('.nhi-en-speak'),generate=box.querySelector('.nhi-en-translate');
  play.hidden=!en;play.onclick=()=>speakEnglish(en);
+ const download=box.querySelector('.nhi-en-download');
+ if(download){
+  download.hidden=true;download.onclick=null;
+  if(en&&window.NHI_AUDIO){
+   Promise.resolve(window.NHI_AUDIO.ready).then(()=>{
+    if(!box.isConnected||clean(box.querySelector('.nhi-en-translation').textContent)!==en)return;
+    const path=window.NHI_AUDIO.urlFor&&window.NHI_AUDIO.urlFor(en,'en');
+    if(!path)return;
+    download.hidden=false;
+    download.onclick=()=>{
+     const a=document.createElement('a');a.href=new URL(path,document.baseURI).href;
+     a.download='nhi-english-'+(en.toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,45)||'audio')+'.mp3';
+     document.body.appendChild(a);a.click();a.remove();
+    };
+   }).catch(()=>{});
+  }
+ }
  generate.hidden=false;generate.textContent=en?'↻ Dịch lại tiếng Anh':'Dịch lại tự động';generate.onclick=()=>translate(id,vi,ko,box);
  box.querySelector('.nhi-en-status').textContent='';
  const panel=box.querySelector('.nhi-en-compare-panel');if(panel){panel.hidden=true;panel.replaceChildren();}
@@ -317,7 +334,7 @@ function mount(parent,id,vi,ko){
  if(!parent)return;
  const before=parent.querySelector('.nhi-english-v5');if(before)before.remove();
  const box=document.createElement('section');box.className='nhi-english-v5';box.setAttribute('aria-label','Tiếng Anh');
- box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh giọng tự nhiên">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><div class="nhi-en-mini-actions"><button type="button" class="nhi-en-syn" title="Xem từ đồng nghĩa. Chọn một từ tiếng Anh trong câu trước khi bấm nếu cần.">≈ Đồng nghĩa</button><button type="button" class="nhi-en-ant" title="Xem từ trái nghĩa. Chọn một từ tiếng Anh trong câu trước khi bấm nếu cần.">↔ Trái nghĩa</button></div><div class="nhi-en-lex-panel" hidden></div><div class="nhi-en-compare-panel" hidden></div><p class="nhi-en-status" aria-live="polite"></p><div class="nhi-en-tools"><button type="button" class="nhi-en-review" title="Chỉ hiển thị bản đối chiếu riêng, không thay đổi nghĩa gốc">✓ Đối chiếu Việt–Hàn</button><button type="button" class="nhi-en-translate">Dịch tiếng Anh</button></div>';
+ box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh giọng tự nhiên">🔊 Nghe</button><button type="button" class="nhi-en-download" hidden title="Tải MP3 giọng Anh tự nhiên" aria-label="Tải MP3 giọng Anh tự nhiên">⬇ MP3</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><div class="nhi-en-reading-row"><p class="nhi-en-translation"></p><div class="nhi-en-mini-actions"><button type="button" class="nhi-en-syn" title="Xem từ đồng nghĩa. Chọn một từ tiếng Anh trong câu trước khi bấm nếu cần.">≈ Đồng nghĩa</button><button type="button" class="nhi-en-ant" title="Xem từ trái nghĩa. Chọn một từ tiếng Anh trong câu trước khi bấm nếu cần.">↔ Trái nghĩa</button></div></div><p class="nhi-en-ipa"></p><div class="nhi-en-lex-panel" hidden></div><div class="nhi-en-compare-panel" hidden></div><p class="nhi-en-status" aria-live="polite"></p><div class="nhi-en-tools"><button type="button" class="nhi-en-review" title="Chỉ hiển thị bản đối chiếu riêng, không thay đổi nghĩa gốc">✓ Đối chiếu Việt–Hàn</button><button type="button" class="nhi-en-translate">Dịch tiếng Anh</button></div>';
  parent.appendChild(box);
  display(box,verifiedEntry(id,vi,ko),id,vi,ko);
  const maybeRefresh=()=>{
