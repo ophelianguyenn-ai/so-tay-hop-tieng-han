@@ -1,6 +1,6 @@
 // Offline support: network-first for the site and static assets so Netlify redeploys appear promptly.
 // Fall back to cache only when offline. Different cache key forces eviction of earlier stale CSS/JS.
-const CACHE = 'nhi-corner-v25-phrases-english-windows';
+const CACHE = 'nhi-corner-v26-english-reviewable';
 const CORE = [
   './','index.html','manifest.webmanifest','qrcode.js','lessons.json',
   'icon-192.png','icon-512.png','refresh-v9.css','study-enhancements-v13.css',
