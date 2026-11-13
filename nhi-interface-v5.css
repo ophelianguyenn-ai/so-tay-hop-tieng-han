@@ -134,3 +134,48 @@
 .nhi-english-v5 .nhi-en-review:focus-visible{outline:2px solid var(--accent-t);outline-offset:2px}
 .nhi-english-v5 .nhi-en-review:disabled{cursor:progress;opacity:.55}
 .nhi-english-v5 .nhi-en-status{line-height:1.55;overflow-wrap:anywhere;white-space:normal}
+
+
+/* Compact English lexical controls — viewing results never changes the translation. */
+.nhi-english-v5 .nhi-en-mini-actions{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:2px}
+.nhi-english-v5 .nhi-en-mini-actions>button{
+ border:1px solid color-mix(in srgb,var(--accent-d) 34%,transparent);
+ background:transparent;color:var(--muted);font:600 10px var(--ui);
+ border-radius:9px;padding:3px 7px;line-height:1.4;min-height:25px;cursor:pointer;
+}
+.nhi-english-v5 .nhi-en-mini-actions>button:hover{color:var(--accent-t);background:var(--accent-soft)}
+.nhi-english-v5 .nhi-en-mini-actions>button:focus-visible{outline:2px solid var(--accent-t);outline-offset:2px}
+.nhi-english-v5 .nhi-en-compare-panel,.nhi-english-v5 .nhi-en-lex-panel{
+ padding:10px 12px;margin:3px 0;background:var(--surface);
+ color:var(--ink);border:1px solid var(--line);border-radius:10px;line-height:1.5;
+ font-size:12px;overflow-wrap:anywhere;
+}
+.nhi-english-v5 .nhi-en-compare-panel[hidden],
+.nhi-english-v5 .nhi-en-lex-panel[hidden]{display:none!important}
+.nhi-english-v5 .nhi-en-compare-panel>p{margin:6px 0;font-weight:400}
+.nhi-english-v5 .nhi-en-compare-panel>p:first-of-type{
+ padding:5px 7px;border-left:2px solid var(--accent-d);
+ background:color-mix(in srgb,var(--accent-soft) 28%,var(--surface));
+}
+.nhi-english-v5 .nhi-en-lex-panel>small{display:block;font-size:10px;color:var(--muted);margin:6px 0}
+.nhi-english-v5 .nhi-en-lex-form{display:flex;align-items:flex-end;gap:6px;margin:0}
+.nhi-english-v5 .nhi-en-lex-form label{display:grid;gap:3px;flex:1;font-size:11px;font-weight:600;min-width:0}
+.nhi-english-v5 .nhi-en-lex-form input{font:500 13px var(--ui);background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:6px 8px;width:100%;min-width:0}
+.nhi-english-v5 .nhi-en-lex-results{line-height:1.6;margin:8px 0;font-weight:600}
+.nhi-english-v5 .nhi-en-lex-form button,
+.nhi-english-v5 .nhi-en-lex-close,
+.nhi-english-v5 .nhi-en-compare-back{
+ cursor:pointer;font:650 11px var(--ui);border:1px solid var(--line);
+ border-radius:8px;background:var(--accent-soft);color:var(--accent-t);padding:6px 9px;min-height:31px
+}
+.nhi-english-v5 .nhi-en-lex-close{background:transparent;color:var(--muted);font-size:10px;min-height:26px}
+.nhi-english-v5 .nhi-en-status:empty{display:none}
+.nhi-english-v5 .nhi-en-tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.nhi-english-v5 .nhi-en-tools>.nhi-en-review{
+ width:auto;min-height:32px;padding:6px 9px;flex:1;font-size:11px
+}
+.nhi-english-v5 .nhi-en-tools>.nhi-en-translate{min-height:32px;padding:5px 8px;font-size:11px;flex:0 0 auto}
+@media(max-width:450px){
+ .nhi-english-v5 .nhi-en-mini-actions>button{font-size:10px;padding:3px 6px}
+ .nhi-english-v5 .nhi-en-tools>.nhi-en-review{font-size:10px}
+}
