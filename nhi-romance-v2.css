@@ -242,3 +242,10 @@
  #cover #coverHero>.nhi-luong-v2{width:48%!important;right:-6%!important;top:-7%!important}
  #cover .nhi-romance-title-v2{font-size:clamp(28px,7vw,42px)!important}
 }
+
+/* Explicit final title state, independent of seasonal CSS overrides. */
+#cover.nhi-romance-v2-running .nhi-romance-title-v2.nhi-title-revealed{
+ opacity:1!important;filter:none!important;
+ animation:nhi-v2-show-love 2.4s cubic-bezier(.2,.9,.25,1) both!important;
+ visibility:visible!important;
+}
