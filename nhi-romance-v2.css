@@ -186,3 +186,26 @@
  transform:translateX(-50%)!important}
  #cover .nhi-drawn-heart,#cover .nhi-drawn-petal{display:none!important}
 }
+
+/* After the kiss the pair stays together with a quiet playful sway. */
+#cover.nhi-romance-v2-running.nhi-v2-idle #coverHero>.nhi-luong-v2{
+ opacity:1!important;
+ animation:nhi-v2-boy-happy 3.6s ease-in-out infinite!important;
+}
+#cover.nhi-romance-v2-running.nhi-v2-idle #coverHero>.nhi-original{
+ animation:nhi-v2-girl-happy 3.8s ease-in-out infinite!important;
+}
+@keyframes nhi-v2-boy-happy{
+ 0%,100%{transform:translate(-11px,0) scale(1) rotate(0)}
+ 50%{transform:translate(-12px,-4px) scale(1.005) rotate(1.3deg)}
+}
+@keyframes nhi-v2-girl-happy{
+ 0%,100%{transform:translateY(0) rotate(0)}
+ 50%{transform:translateY(-3px) rotate(-.9deg)}
+}
+@media(prefers-reduced-motion:reduce){
+ #cover.nhi-romance-v2-running.nhi-v2-idle #coverHero>.nhi-luong-v2{
+ animation:none!important;transform:translate(-11px,0) scale(1)!important}
+ #cover.nhi-romance-v2-running.nhi-v2-idle #coverHero>.nhi-original{
+ animation:none!important}
+}
