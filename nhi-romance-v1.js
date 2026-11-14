@@ -74,6 +74,20 @@ function hearts(count){
  layer.append(frag);
  later(()=>{layer.replaceChildren();},14500);
 }
+function setLearningTextHidden(hide){
+ for(const selector of ['.cover-in>h1','.cover-in>.lead','#coverGo']){
+  const node=cover.querySelector(selector);
+  if(!node)continue;
+  if(hide)node.style.setProperty('display','none','important');
+  else node.style.removeProperty('display');
+ }
+}
+new MutationObserver(()=>{
+ if(!cover.hidden)return;
+ setLearningTextHidden(false);
+ cover.classList.remove('nhi-romance-on','nhi-love-preview');
+ document.getElementById('nhiLoveTitle')?.classList.remove('nhi-visible');
+}).observe(cover,{attributes:true,attributeFilter:['hidden']});
 function startScene(){
  timers.forEach(clearTimeout);timers=[];
  const layer=document.getElementById('nhiRomanceHearts');layer.replaceChildren();
@@ -83,6 +97,7 @@ function startScene(){
  hero.querySelector('.nhi-luong').style.removeProperty('transform');
  void cover.offsetWidth;
  cover.classList.add('nhi-romance-on');
+ setLearningTextHidden(true);
  if(reduced()){title.classList.add('nhi-visible');talk();return;}
  later(()=>hearts(innerWidth<700?6:9),5300);
  later(()=>hearts(innerWidth<700?5:7),11300);
