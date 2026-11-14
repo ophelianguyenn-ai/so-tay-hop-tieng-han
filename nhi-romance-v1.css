@@ -122,3 +122,7 @@
 @keyframes nhi-sun-guide{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(.93)}
  50%{opacity:.9;transform:translate(-50%,-50%) scale(1.13)}}
 #cover #nhiBridgeMusic[aria-pressed="true"]::after{content:"♫";color:#ffe6f3;animation:nhi-sun-guide 3s ease-in-out infinite}
+
+/* Give the sun a generous tappable area across cropped laptop/phone scenes. */
+#cover #nhiSunKiss{left:64%!important;top:4%!important;width:27%!important;height:28%!important}
+@media(max-width:620px){#cover #nhiSunKiss{left:61%!important;top:4%!important;width:33%!important;height:29%!important}}
