@@ -596,7 +596,7 @@ section:not([hidden]) > .quiz, section:not([hidden]) > #cardWrap, .list > .row:n
 }
 </style>
 
-<script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="nhi-google-images-v1.js?v=20261114-study-v6"></script><script src="nhi-hard-minimal-v1.js?v=20261114-study-v6"></script><script src="nhi-phrases-v5.js?v=20261114-study-v6"></script><script src="nhi-english-data-v6.js?v=20261113-reviewed-173"></script><script src="nhi-english-v5.js?v=20261114-study-v6"></script><script src="recorded-voices-v11.js?v=20261114-study-v6"></script>
+<script src="hanja-v9.js?v=12"></script><script src="hanja-extra-v12.js"></script><script src="card-images-v11.js"></script><script src="nhi-google-images-v1.js?v=20261114-study-v7"></script><script src="nhi-hard-minimal-v1.js?v=20261114-study-v7"></script><script src="nhi-phrases-v5.js?v=20261114-study-v7"></script><script src="nhi-english-data-v6.js?v=20261113-reviewed-173"></script><script src="nhi-english-v5.js?v=20261114-study-v7"></script><script src="recorded-voices-v11.js?v=20261114-study-v7"></script>
 <script src="qrcode.js" defer></script>
 <link rel="stylesheet" href="refresh-v9.css?v=13"><link rel="stylesheet" href="study-enhancements-v13.css?v=14"><link rel="stylesheet" href="nhi-updates-v1.css?v=1"><link rel="stylesheet" href="nhi-ai-resize-v2.css?v=1"><link rel="stylesheet" href="nhi-study-motion-v3.css?v=3"><link rel="stylesheet" href="nhi-interface-v4.css?v=4"><link rel="stylesheet" href="nhi-interface-v5.css?v=20261113-rollback-stable-v1"><link rel="stylesheet" href="nhi-seasons-v1.css?v=20261113-cartoon-soft-1">
 <link rel="stylesheet" href="nhi-living-garden-v1.css?v=20261113-cartoon-butterflies-v1">
@@ -642,7 +642,7 @@ button,input,select,textarea{font-family:var(--ui)}
 .nhi-en-head strong{letter-spacing:normal}
 @media(hover:none){.nhi-en-choice small{opacity:1}}
 </style>
-<link rel="stylesheet" href="study-update-v6.css?v=20261114">
+<link rel="stylesheet" href="study-update-v6.css?v=20261114-v7">
 </head>
 <body>
 <header class="topbar" id="topbar">
@@ -886,6 +886,8 @@ button,input,select,textarea{font-family:var(--ui)}
       <div class="setrow"><label for="fxChk">Biểu cảm và pháo giấy</label><span class="check"><input type="checkbox" id="fxChk" checked></span></div>
       <div class="setrow"><label for="hapticChk">Rung nhẹ khi bấm (điện thoại Android)</label><span class="check"><input type="checkbox" id="hapticChk" checked></span></div>
     </div>
+
+    <div class="setgroup" id="nhiCardFontSettings"><h3>Cỡ chữ trên thẻ</h3></div>
 
     <div class="setgroup">
       <h3>Dữ liệu</h3>
@@ -2578,10 +2580,10 @@ button,input,select,textarea{font-family:var(--ui)}
     s += '<path d="M80 14C46 14 26 38 26 72c0 9-9 12-8 21 1 7 6 10 3 17-3 8-9 11-6 20 2 8 9 13 19 13h92c10 0 17-5 19-13 3-9-3-12-6-20-3-7 2-10 3-17 1-9-8-12-8-21 0-34-20-58-54-58z" fill="' + hair + '"' + ol + '/>';
     s += '<path d="M30 96c-3 10 4 16 1 26M40 104c-3 9 3 15 0 24M130 96c3 10-4 16-1 26M120 104c3 9-3 15 0 24" fill="none" stroke="' + hairL + '" stroke-width="2.4" stroke-linecap="round"/>';
     // sweater
-    s += '<path d="M40 160c0-22 15-33 40-33s40 11 40 33z" fill="' + pink + '"' + ol + '/><path d="M66 129q14 9 28 0" fill="none" stroke="' + pinkD + '" stroke-width="4" stroke-linecap="round"/>';
+    s += '<path d="' + (shortNeck ? 'M40 160v-8c0-22 15-33 40-33s40 11 40 33v8z' : 'M40 160c0-22 15-33 40-33s40 11 40 33z') + '" fill="' + pink + '"' + ol + '/><path d="M66 125q14 9 28 0" fill="none" stroke="' + pinkD + '" stroke-width="4" stroke-linecap="round"/>';
     // Visible neck between face and sweater; source remains vector/editable.
-    s += '<path data-nhi-neck="true" d="' + (shortNeck ? 'M73 107v13c0 4 3 7 7 7s7-3 7-7v-13z' : 'M72 107v19c0 7 4 11 8 11s8-4 8-11v-19z') + '" fill="' + skin + '"' + ol + '/>';
-    s += '<path d="M68 132q12 9 24 0" fill="none" stroke="' + pinkD + '" stroke-width="2.5" stroke-linecap="round"/>';
+    s += '<path data-nhi-neck="true" d="' + (shortNeck ? 'M73 108v14q7 9 14 0v-14z' : 'M72 107v19c0 7 4 11 8 11s8-4 8-11v-19z') + '" fill="' + skin + '"' + ol + '/>';
+    s += '<path d="' + (shortNeck ? 'M65 124q15 11 30 0' : 'M68 132q12 9 24 0') + '" fill="none" stroke="' + pinkD + '" stroke-width="2.5" stroke-linecap="round"/>';
     // face
     s += '<circle cx="46" cy="86" r="6.500" fill="' + skin + '"' + ol + '/>';
     s += '<ellipse cx="80" cy="80" rx="35" ry="32" fill="' + skin + '"' + ol + '/>';
@@ -2794,7 +2796,7 @@ button,input,select,textarea{font-family:var(--ui)}
       var dlg = el('dialog'); dlg.id = 'dailyEditor'; dlg.setAttribute('aria-labelledby', 'dailyEditTitle');
       dlg.style.cssText = 'width:min(600px,calc(100% - 24px));max-height:90dvh;overflow:auto;border:2px solid var(--line);border-radius:26px;padding:24px;background:var(--surface);color:var(--ink);box-shadow:var(--sh-2)';
       var form = el('form', 'panel'); form.style.cssText = 'display:grid;gap:16px';
-      var head = el('div', 'sheethead'), h = el('h2', null, 'Sửa tên học phần'); h.id = 'dailyEditTitle'; head.appendChild(h); head.appendChild(btn('ghost', 'Đóng', function () { dlg.close(); })); form.appendChild(head);
+      var head = el('div', 'sheethead'), h = el('h2', null, 'Sửa tên học phần'); h.id = 'dailyEditTitle'; head.appendChild(h); head.appendChild(btn('ghost', '×', function () { dlg.close(); })); form.appendChild(head);
       var date = txt('date', '', L.date); date.type = 'date'; date.required = true; form.appendChild(labeled('Ngày học phần', date));
       var title = txt('title', 'Tên học phần', L.title); title.required = true; title.maxLength = 200; form.appendChild(labeled('Tên học phần', title));
       form.appendChild(el('p', 'listinfo', 'Đổi ngày để bài tự xếp lại theo thứ tự trong lịch. Bạn cũng có thể sửa ngày trong tên, ví dụ “Bài ngày 12.11.2026”. Nội dung và tiến độ đã học được giữ nguyên.'));
@@ -2815,7 +2817,7 @@ button,input,select,textarea{font-family:var(--ui)}
       dlg.style.cssText = 'width:min(640px,calc(100% - 24px));max-height:90dvh;overflow:auto;border:2px solid var(--line);border-radius:26px;padding:24px;background:var(--surface);color:var(--ink);box-shadow:var(--sh-2)';
       var form = el('form', 'panel'); form.style.cssText = 'display:grid;gap:16px';
       var head = el('div', 'sheethead'); var h = el('h2', null, 'Tạo học phần theo ngày'); h.id = 'dailyTitle'; head.appendChild(h);
-      var close = btn('ghost', 'Đóng', function () { dlg.close(); }); head.appendChild(close); form.appendChild(head);
+      var close = btn('ghost', '×', function () { dlg.close(); }); head.appendChild(close); form.appendChild(head);
       form.appendChild(el('p', 'listinfo', 'Bài mới dùng cùng giao diện, lịch ôn và các chế độ học như những bài theo ngày trước.'));
       var date = txt('date', '', today()); date.type = 'date'; date.required = true; form.appendChild(labeled('Ngày bài học', date));
       var title = txt('title', 'Ví dụ: DGG – Giải trình thanh toán & nghiệm thu'); title.required = true; title.maxLength = 160; form.appendChild(labeled('Tên bài học', title));
@@ -3001,7 +3003,7 @@ button,input,select,textarea{font-family:var(--ui)}
         sp.dataset.hi = g.i; sp.dataset.item = it.id; elm.appendChild(sp); pos = g.e;
       });
       if (pos < text.length) elm.appendChild(document.createTextNode(text.slice(pos)));
-      if(window.NHI_STUDY)window.NHI_STUDY.markText(elm,(val('fmt',it.id)||{})[lang]||[]);
+      if(window.NHI_STUDY)window.NHI_STUDY.formatText(elm,val('fmt',it.id)||{},lang);
       return elm;
     }
     function toggleHl(id, i) {
@@ -3403,14 +3405,14 @@ button,input,select,textarea{font-family:var(--ui)}
         function updateKind(){hanInput.disabled=readingInput.disabled=kindInput.value==='none';}kindInput.addEventListener('change',updateKind);updateKind();
         section.appendChild(links);section.appendChild(el('p','hint','Lưu để đồng bộ với tiến độ học. Chọn “Không phải từ Hán–Hàn” để ẩn nút 漢.')); f.appendChild(section);
       }
-      var imageEditor = window.NHI_IMAGES.editor(it, val('img',it.id), function(value){put('img',it.id,value);}); f.appendChild(imageEditor);
       var l1 = el('label', 'flabel'); l1.appendChild(el('span', null, 'Tiếng Hàn')); var ko = el('textarea', 'field'); ko.rows = 2; ko.lang = 'ko'; ko.value = it.ko; ko.name = 'ko'; l1.appendChild(ko); f.appendChild(l1);
       var l2 = el('label', 'flabel'); l2.appendChild(el('span', null, 'Nghĩa tiếng Việt')); var vi = el('textarea', 'field'); vi.rows = 2; vi.value = it.vi; vi.name = 'vi'; l2.appendChild(vi); f.appendChild(l2);
-      var formatting=window.NHI_STUDY?window.NHI_STUDY.editor(f,{vi:vi,ko:ko},val('fmt',it.id)||{}):null;
+      var enLabel=el('label','flabel');enLabel.appendChild(el('span',null,'Tiếng Anh'));var en=el('textarea','field');en.name='en';en.lang='en';en.rows=2;var enEntry=window.NHI_ENGLISH?window.NHI_ENGLISH.entry(it.id,it.vi,it.ko):{};en.value=enEntry.en||'';enLabel.appendChild(en);f.appendChild(enLabel);
       var nl=el('label','flabel');nl.appendChild(el('span',null,'Ghi chú dưới nghĩa'));var notes=el('textarea','field');notes.name='note';notes.rows=3;notes.value=(val('note',it.id)||{}).text||it.note||'';nl.appendChild(notes);f.appendChild(nl);
-      var nc=el('select','field');nc.name='noteColor';nc.setAttribute('aria-label','Màu nền ghi chú');
-      [['#dbeefe','Xanh biển'],['#fce1ed','Hồng'],['#fff3c4','Vàng'],['#ffe4cc','Cam'],['#ffdddd','Đỏ nhạt'],['#e6e0fa','Tím'],['#ddf4e4','Xanh lá']].forEach(function(x){var o=el('option',null,x[1]);o.value=x[0];nc.appendChild(o);});
-      var colors=['#dbeefe','#fce1ed','#fff3c4','#ffe4cc','#ffdddd','#e6e0fa','#ddf4e4'];nc.value=(val('note',it.id)||{}).color||colors[sess.pos%colors.length];f.appendChild(nc);
+      var nc=el('input');nc.type='hidden';nc.name='noteColor';nc.value=(val('note',it.id)||{}).color||'#dbeefe';f.appendChild(nc);
+      vi.parentElement.after(nl);
+      var savedFormat=Object.assign({},val('fmt',it.id)||{});if(enEntry.format){savedFormat.en=enEntry.format.en||savedFormat.en;savedFormat._sizes=Object.assign({},savedFormat._sizes||{},Number((enEntry.format._sizes||{}).en)?{en:enEntry.format._sizes.en}:{});}
+      var formatting=window.NHI_STUDY?window.NHI_STUDY.editor(f,{ko:ko,vi:vi,note:notes,en:en},savedFormat,{noteColor:nc}):null;
       var pl=el('label','flabel');pl.appendChild(el('span',null,'Cặp từ Việt | Hàn (mỗi dòng một cặp, có thể sửa khi tách tự động chưa đúng)'));var pairs=el('textarea','field');pairs.name='pairs';pairs.rows=4;pairs.value=it.pairs.filter(function(p){return p[0]&&p[1];}).map(function(p){return p.join(' | ');}).join('\n');pl.appendChild(pairs);f.appendChild(pl);var originalPairText=pairs.value;
       var row = el('div', 'btnrow'), ok = el('button', 'primary', 'Lưu'); ok.type = 'submit'; row.appendChild(ok);
       row.appendChild(btn('ghost', 'Huỷ', function () { sess.editing = false; render(); }));
@@ -3428,11 +3430,11 @@ button,input,select,textarea{font-family:var(--ui)}
         if(pairs.value===originalPairText&&(k!==it.ko||w!==it.vi))pairList=[[w,k]];
         if(pairList.some(function(p){return p.length!==2||!p[0]||!p[1]||!w.toLocaleLowerCase('vi').includes(p[0].toLocaleLowerCase('vi'))||!k.includes(p[1]);})){toast('Mỗi cặp cần đúng dạng Việt | Hàn và có trong nội dung thẻ.');return;}
         put('ed',it.id,{vi:w,ko:k,pairs:pairList.length?pairList:[[w,k]]});
+        if(en.value.trim()&&window.NHI_ENGLISH)window.NHI_ENGLISH.saveEntry(it.id,it.vi,it.ko,Object.assign({},enEntry,{en:en.value.trim(),source:'manual',format:formatting?formatting():{}}));
         put('note',it.id,{text:notes.value.trim(),color:nc.value});if(formatting)put('fmt',it.id,formatting()); applyEd(it.id);
         sess.editing = false; render(); toast('Đã lưu bản sửa.');
       });
       f.addEventListener('click', function (e) { e.stopPropagation(); });
-      setTimeout(function () { try { vi.focus(); } catch (e) { } }, 30);
       return f;
     }
     function legendPop() {
@@ -3472,7 +3474,6 @@ button,input,select,textarea{font-family:var(--ui)}
       ci.appendChild(ibtn('iconbtn sm', 'edit', function () { s.editing = !s.editing; legendOpen = false; render(); }, 'Sửa thẻ, chữ Hán và hình ảnh'));
       var bk = ibtn('iconbtn sm', 'book', function () { legendOpen = !legendOpen; render(); }, 'Chú giải phím tắt và thao tác'); bk.setAttribute('aria-expanded', String(legendOpen)); ci.appendChild(bk);
       ci.appendChild(ibtn('iconbtn sm', 'vol', function () { toggleSpeech(s.flipped ? it.ko : it.vi, s.flipped ? 'ko-KR' : 'vi-VN'); }, 'Phát âm / Dừng mặt thẻ hiện tại'));
-      if(window.NHI_STUDY)window.NHI_STUDY.dictionaryButtons(ci, function(){return s.selectedKo || it.ko;});
       var hj = null;
       if (it.type === 'w') { try { hj = lookupHanja(it.ko, it.id); if(hj&&(!hj[0]||!hj[1]))hj=null; } catch(hanjaErr) { console.warn('Nhi Hanja unavailable for this card', hanjaErr); } }
       if (it.type === 'w') {
@@ -3492,13 +3493,14 @@ button,input,select,textarea{font-family:var(--ui)}
         var a = hlText(el('p', 'answer ko' + (it.ko.length > 40 ? ' long' : '')), it, 'ko', true); a.lang = 'ko'; f.appendChild(a);
 
         if (hj && s.hanja) { var hx = el('p', 'hanja', hj[0]); hx.lang = 'ko'; hx.appendChild(el('small', null, '(' + hj[1] + ')')); f.appendChild(hx); }
-        // Saved/preset illustration appears only on the back below the Korean answer.
-        if(window.NHI_IMAGES){try{var illustration=window.NHI_IMAGES.figure(it,val('img',it.id));if(illustration)f.appendChild(illustration);}catch(imageErr){console.warn('Nhi picture unavailable',imageErr);}}
         f.appendChild(hlText(el('p', 'vi-under'), it, 'vi', true));
-        if(window.NHI_ENGLISH)window.NHI_ENGLISH.mount(f,it.id,it.vi,it.ko,{unremembered:!!val('enHard',it.id),toggle:function(on){put('enHard',it.id,on?1:null);}});
-        var note=val('note',it.id)||{text:it.note,color:'#dbeefe'};if(note&&note.text){var nt=el('p','nhi-card-note',note.text);nt.style.background=note.color||'#dbeefe';f.appendChild(nt);}
+        var dictionaries=el('div','nhi-card-dictionaries');if(window.NHI_STUDY)window.NHI_STUDY.dictionaryButtons(dictionaries,function(){return s.selectedKo||it.ko;});f.appendChild(dictionaries);
+        var note=val('note',it.id)||{text:it.note,color:'#dbeefe'};if(note&&note.text){var nt=el('p','nhi-card-note',note.text);nt.style.background=note.color||'#dbeefe';if(window.NHI_STUDY)window.NHI_STUDY.formatText(nt,val('fmt',it.id)||{},'note');f.appendChild(nt);}
+        var englishBox=window.NHI_ENGLISH?window.NHI_ENGLISH.mount(f,it.id,it.vi,it.ko,{format:val('fmt',it.id)||{},unremembered:!!val('enHard',it.id),toggle:function(on){put('enHard',it.id,on?1:null);}}):null;
+        if(nt&&englishBox){var details=el('div','nhi-card-details');nt.before(details);details.appendChild(nt);details.appendChild(englishBox);}
+        if(window.NHI_IMAGES){try{var illustration=window.NHI_IMAGES.figure(it,val('img',it.id));if(illustration){f.classList.add('nhi-with-image');f.appendChild(illustration);}}catch(imageErr){console.warn('Nhi picture unavailable',imageErr);}}
       } else f.appendChild(hlText(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : '')), it, 'vi', true));
-      f.addEventListener('click', function (e) { if (e.target.closest('figure,.nhi-english-v5')) return; if (s.editing || e.target.closest('.ph.tap')) return; flip(); });
+      f.addEventListener('click', function (e) { if (e.target.closest('figure,.nhi-english-v5,button,input,a,.nhi-card-dictionaries')) return; if (s.editing || e.target.closest('.ph.tap')) return; flip(); });
       c.appendChild(f);
       var nav = el('div', 'pnav');
       var pv = ibtn('parrow', 'left', function () { go(-1); }, 'Thẻ trước (←)'); pv.disabled = s.pos === 0; nav.appendChild(pv);
@@ -3520,6 +3522,7 @@ button,input,select,textarea{font-family:var(--ui)}
       }
       if(s.editing){var scrim=el('div','nhi-edit-scrim');scrim.setAttribute('aria-hidden','true');scrim.addEventListener('click',function(){s.editing=false;render();});c.appendChild(scrim);c.appendChild(editForm(it));}
       wrap.appendChild(c); v.appendChild(wrap);
+      if(s.editing){var rich=c.querySelector('[data-language=vi]');if(rich)rich.focus();}
       if (window.NHI_HARD_MASCOT && window.NHI_HARD_MASCOT.sync) window.NHI_HARD_MASCOT.sync(c);
       if (c.animate && !reduceMotion() && prefs.fx && anim) {
         var ease = 'cubic-bezier(.16,.78,.23,1)';
@@ -3583,6 +3586,7 @@ button,input,select,textarea{font-family:var(--ui)}
       }
       function finish(){
         if (token !== ratingToken || sess !== s || s.pos !== pos) return;
+        if(window.NHI_HARD_MASCOT&&window.NHI_HARD_MASCOT.resizing&&window.NHI_HARD_MASCOT.resizing()){setTimeout(finish,200);return;}
         ratingPending = false; pendingRatingFinish=null;
         if(window.NHI_HARD_MASCOT)window.NHI_HARD_MASCOT.clear();
         s.stats[k] = (s.stats[k] || 0) + 1; s.picked[pos] = k;
@@ -3645,7 +3649,7 @@ button,input,select,textarea{font-family:var(--ui)}
           && !(e.target && (e.target.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)))) {
         e.preventDefault(); undoDelete(); return;
       }
-      if (state.mode !== 'plan' || !sess || e.metaKey || e.ctrlKey || e.altKey || e.isComposing || e.repeat || e.defaultPrevented || (e.target&&e.target.closest('#aiPanel'))) return;
+      if (state.mode !== 'plan' || !sess || e.metaKey || e.ctrlKey || e.altKey || e.isComposing || e.repeat || e.defaultPrevented || (e.target&&e.target.closest('#aiPanel,.nhi-dictionary-dock,.nhi-en-word'))) return;
       if (sess.imagePicker) { if (e.key === 'Escape') { e.preventDefault(); sess.imagePicker = false; render(); } return; }
       if (page && (!sess.L || sess.L.id !== page)) return;
       if (e.target && (e.target.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName))) { if (e.key === 'Escape' && sess.editing) { sess.editing = false; render(); } return; }
@@ -3653,15 +3657,16 @@ button,input,select,textarea{font-family:var(--ui)}
       if (document.querySelector('dialog[open]') || !$('cover').hidden || !$('setSheet').hidden || sess.editing) return;
       if (e.key === 'Escape') { if (legendOpen) { legendOpen = false; render(); } else if (document.body.classList.contains('focus')) { setFocus(false); render(); } return; }
       if (sess.pos >= sess.queue.length) { if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); } return; }
+      if (['ArrowRight','ArrowLeft','Enter',' ','1','2','f','F','a','A','Delete','Backspace'].indexOf(e.key)>=0)e.stopImmediatePropagation();
       if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
       else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
       else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); }
       else if (e.key === '1') {e.preventDefault();rate('hard');}
       else if (e.key === '2') {e.preventDefault();rate('mid');}
-      else if (e.key === 'f' || e.key === 'F') { setFocus(!document.body.classList.contains('focus')); render(); }
+      else if (e.key === 'f' || e.key === 'F') { e.preventDefault(); setFocus(!document.body.classList.contains('focus')); render(); }
       else if (e.key === 'a' || e.key === 'A') { e.preventDefault(); askAi(); }
       else if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); del(sess.queue[sess.pos]); anim = 'next'; saveSess(); render(); }
-    });
+    }, true);
     var tx = null;
     document.addEventListener('touchstart', function (e) { if (state.mode === 'plan' && sess && !sess.editing && e.target.closest('.pfront')) tx = { x: e.touches[0].clientX, y: e.touches[0].clientY }; else tx = null; }, { passive: true });
     document.addEventListener('touchend', function (e) { if (!tx) return; var t = e.changedTouches[0], dx = t.clientX - tx.x, dy = t.clientY - tx.y; tx = null; if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.5) go(dx < 0 ? 1 : -1); }, { passive: true });
@@ -4291,6 +4296,7 @@ button,input,select,textarea{font-family:var(--ui)}
 
   /* ---------- Start ---------- */
   SHELL.init(); AI.init();
+  document.addEventListener('nhi-study-ready',function(){PLAN.render();});
   buildQueue();
   renderAll();
   SYNC.start(mergeRemote);
@@ -4319,9 +4325,9 @@ button,input,select,textarea{font-family:var(--ui)}
 <script src="garden-v10.js"></script>
 
 <script src="backup-portable-v1.js"></script>
-<script src="nhi-ai-resize-v2.js?v=20261114-study-v6"></script>
+<script src="nhi-ai-resize-v2.js?v=20261114-study-v7"></script>
 <script src="nhi-fireworks-v3.js?v=3"></script>
-<script src="study-update-v6.js?v=20261114"></script>
+<script src="study-update-v6.js?v=20261114-v7"></script>
 <script src="nhi-interface-v5.js?v=20261114"></script>
 <script src="nhi-seasons-v1.js?v=20261113-original-garden-v2"></script>
 <script src="nhi-living-garden-v1.js?v=20261113-cartoon-butterflies-v1"></script>

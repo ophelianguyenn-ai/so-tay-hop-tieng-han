@@ -56,16 +56,17 @@ function comparisonRows(box,id,vi,ko){
  if(!result||typeof result!=='object')return;
  for(const [lang,flag] of [['vi','🇻🇳'],['ko','🇰🇷']]){
   if(!clean(result[lang]))continue;
-  const button=document.createElement('button');button.type='button';button.className='nhi-en-choice';
+  const button=document.createElement('div');button.className='nhi-en-choice';
   const active=clean((choices[entryKey(vi,ko)]||{}).en)===result[lang];
   button.setAttribute('aria-pressed',String(active));
   button.title='Chọn bản dịch từ '+(lang==='vi'?'tiếng Việt':'tiếng Hàn')+' làm tiếng Anh chính';
   const text=document.createElement('span');text.textContent=flag+' “'+result[lang]+'”';
-  const action=document.createElement('small');action.textContent=active?'✓ Chính':'Chọn';
+  const action=document.createElement('input');action.type='checkbox';action.checked=active;action.setAttribute('aria-label','Chọn bản dịch từ '+(lang==='vi'?'tiếng Việt':'tiếng Hàn'));
+  const flagIcon=document.createElement('span');flagIcon.className='nhi-comparison-flag';flagIcon.textContent=flag;flagIcon.setAttribute('aria-label',lang==='vi'?'Từ tiếng Việt':'Từ tiếng Hàn');
   if(window.NHI_STUDY)window.NHI_STUDY.wordElements(text,result[lang]);
-  button.append(text,action);button.onclick=()=>{
+  button.append(flagIcon,text,action);action.onchange=()=>{
    const key=entryKey(vi,ko),previous=choices[key];
-   choices[key]={en:result[lang],ipa:'',source:'comparison',language:lang};
+   if(action.checked)choices[key]={en:result[lang],ipa:'',source:'comparison',language:lang};else delete choices[key];
    try{localStorage.setItem(CHOICE_KEY,JSON.stringify(choices));}
    catch(e){if(previous)choices[key]=previous;else delete choices[key];box.querySelector('.nhi-en-status').textContent='Không lưu được lựa chọn.';return;}
    display(box,verifiedEntry(id,vi,ko),id,vi,ko);
@@ -234,7 +235,7 @@ function display(box,entry,id,vi,ko){
  if(!box)return;
  entry=choices[entryKey(vi,ko)]||entry;
  const en=clean(entry&&entry.en),ipa=clean(entry&&entry.ipa);
- const translation=box.querySelector('.nhi-en-translation');translation.textContent=en||'Đang chuẩn bị bản dịch tiếng Anh…';if(en&&window.NHI_STUDY)window.NHI_STUDY.wordElements(translation,en);
+ const translation=box.querySelector('.nhi-en-translation');translation.textContent=en||'Đang chuẩn bị bản dịch tiếng Anh…';if(en&&window.NHI_STUDY){window.NHI_STUDY.wordElements(translation,en);window.NHI_STUDY.formatText(translation,entry?.format||box._format||{},'en');}
  const span=box.querySelector('.nhi-en-ipa');span.textContent=ipa?'/'+ipa.replace(/^\/|\/$/g,'')+'/':'';span.hidden=!ipa;
  const play=box.querySelector('.nhi-en-speak');
  play.hidden=!en;play.onclick=()=>window.NHI_SPEECH?window.NHI_SPEECH.toggle(en,'en-US'):speakEnglish(en);
@@ -254,6 +255,7 @@ function editEnglish(box,id,vi,ko) {
   var labelIPA=document.createElement('label');labelIPA.textContent='Phiên âm IPA';
   var ipa=document.createElement('input');ipa.className='field';ipa.type='text';ipa.value=clean(current.ipa);
   labelIPA.appendChild(ipa);form.appendChild(labelIPA);
+  var formatting=window.NHI_STUDY?window.NHI_STUDY.editor(form,{en:field},current.format||{}):null;
   var actions=document.createElement('div');actions.className='nhi-en-edit-actions';
   var save=document.createElement('button');save.type='submit';save.className='primary';save.textContent='Lưu bản dịch';
   var cancel=document.createElement('button');cancel.type='button';cancel.textContent='Hủy';cancel.className='ghost';
@@ -262,21 +264,23 @@ function editEnglish(box,id,vi,ko) {
   form.addEventListener('submit',function(e){
     e.preventDefault();var en=clean(field.value),reading=clean(ipa.value);
     if(!en){field.focus();return;}
-    cacheEntry(id,vi,ko,{en:en,ipa:reading,source:'manual'});
+    cacheEntry(id,vi,ko,{en:en,ipa:reading,source:'manual',format:formatting?formatting():{}});
     try{localStorage.setItem(STORE,JSON.stringify(edits));}
     catch(err){box.querySelector('.nhi-en-status').textContent='Không thể lưu thay đổi.';return;}
     delete choices[entryKey(vi,ko)];
     try{localStorage.setItem(CHOICE_KEY,JSON.stringify(choices));}catch(e){}
     form.remove();display(box,edits[id],id,vi,ko);
   });
-  box.appendChild(form);field.focus();
+  box.appendChild(form);(form.querySelector('[data-language=en]')||field).focus();
 }
 function mount(parent,id,vi,ko,options){
  if(!parent)return;
  const before=parent.querySelector('.nhi-english-v5');if(before)before.remove();
- const box=document.createElement('section');box.className='nhi-english-v5';box.setAttribute('aria-label','Tiếng Anh');
- box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><p class="nhi-en-status" aria-live="polite"></p><div class="nhi-en-tools"><button type="button" class="nhi-en-review" title="Khi bấm, nội dung tiếng Việt và tiếng Hàn sẽ được gửi đến Google Translate để đối chiếu tự động. Đây không phải kiểm duyệt chuyên gia.">✓ Đối chiếu</button></div>';
- if(options){const label=document.createElement('label');label.className='nhi-en-forgot';const check=document.createElement('input');check.type='checkbox';check.checked=!!options.unremembered;check.onchange=()=>options.toggle(check.checked);label.append(check,document.createTextNode('Chưa nhớ tiếng Anh'));box.querySelector('.nhi-en-tools').append(label);}
+ const box=document.createElement('section');box._format=options?.format;box.className='nhi-english-v5';box.setAttribute('aria-label','Tiếng Anh');
+ box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh">🎧</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✏️</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><p class="nhi-en-status" aria-live="polite"></p><div class="nhi-en-tools"><button type="button" class="nhi-en-review" title="Khi bấm, nội dung tiếng Việt và tiếng Hàn sẽ được gửi đến Google Translate để đối chiếu tự động. Đây không phải kiểm duyệt chuyên gia.">✓ Đối chiếu</button></div>';
+ if(window.NHI_STUDY){box.querySelector('.nhi-en-speak').innerHTML=window.NHI_STUDY.icon('headphones');box.querySelector('.nhi-en-edit').innerHTML=window.NHI_STUDY.icon('pencil');}
+ if(options?.toggle){const holder=document.createElement('span');holder.className='nhi-en-forgot';const check=document.createElement('button');check.type='button';check.className='nhi-thinking-button';check.setAttribute('aria-label','Chưa nhớ tiếng Anh');check.title='Chưa nhớ tiếng Anh';check.setAttribute('aria-pressed',String(!!options.unremembered));check.innerHTML='<img src="pictures/thinking.png" alt="">';const bubble=document.createElement('span');bubble.className='nhi-forgot-bubble';bubble.hidden=true;bubble.setAttribute('role','status');check.onclick=()=>{const on=check.getAttribute('aria-pressed')!=='true';check.setAttribute('aria-pressed',String(on));options.toggle(on);bubble.textContent=on?'Mình sẽ ôn lại tiếng Anh nhé!':'Đã nhớ tiếng Anh rồi!';bubble.hidden=false;clearTimeout(holder._timer);holder._timer=setTimeout(()=>bubble.hidden=true,2800);};holder.append(check,bubble);box.querySelector('.nhi-en-tools').append(holder);}
+
  box.addEventListener('click',e=>e.stopPropagation());
  box.addEventListener('dblclick',e=>e.stopPropagation());
  box.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest('button,input,textarea,[role="button"]'))e.stopPropagation();});
@@ -287,5 +291,5 @@ function mount(parent,id,vi,ko,options){
  }else if(!verifiedEntry(id,vi,ko))resolveAutomatic(id,vi,ko,box);
  return box;
 }
-window.NHI_ENGLISH={mount,load,speakEnglish};
+window.NHI_ENGLISH={mount,load,speakEnglish,entry:(id,vi,ko)=>choices[entryKey(vi,ko)]||verifiedEntry(id,vi,ko)||{},saveEntry:(id,vi,ko,entry)=>{cacheEntry(id,vi,ko,entry);delete choices[entryKey(vi,ko)];try{localStorage.setItem(CHOICE_KEY,JSON.stringify(choices));}catch(e){}}};
 })();

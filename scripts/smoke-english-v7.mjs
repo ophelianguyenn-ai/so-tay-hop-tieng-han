@@ -57,7 +57,7 @@ try{
  await page.waitForFunction(()=>document.querySelectorAll('.nhi-en-choice').length===2,{timeout:5000});
  const after=await page.$eval('.nhi-en-translation',x=>x.textContent);
  if(after!==initial.en)throw Error('Comparison overwrote original translation');
- await page.$eval('.nhi-en-choice:nth-child(2)',b=>b.click());
+ await page.$eval('.nhi-en-choice:nth-child(2) input',b=>b.click());
  if(await page.$eval('.nhi-en-translation',x=>x.textContent)!=='Final approval has been received')throw Error('Korean alternative not selected');
  if(!await page.$eval('.nhi-en-ipa',x=>x.hidden))throw Error('Old IPA kept for a new translation');
  await page.reload({waitUntil:'domcontentloaded'});
@@ -66,7 +66,7 @@ try{
  await page.waitForSelector('#planBox .pflip');await page.$eval('#planBox .pflip',b=>b.click());
  await page.waitForSelector('.nhi-en-original');
  if(await page.$eval('.nhi-en-translation',x=>x.textContent)!=='Final approval has been received')throw Error('Selection not retained on reload');
- await page.$eval('.nhi-en-choice:first-child',b=>b.click());
+ await page.$eval('.nhi-en-choice:first-child input',b=>b.click());
  if(await page.$eval('.nhi-en-translation',x=>x.textContent)!=='Final approval has been given')throw Error('Vietnamese alternative not selected');
  await page.$eval('.nhi-en-original',b=>b.click());
  if(await page.$eval('.nhi-en-translation',x=>x.textContent)!==initial.en)throw Error('Original not restored');

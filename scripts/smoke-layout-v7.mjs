@@ -1,0 +1,39 @@
+/* End-to-end regressions for saved typography, direct formatting and simultaneous panels. */
+import fs from 'node:fs';import puppeteer from 'puppeteer-core';
+const assert=(ok,message)=>{if(!ok)throw Error(message);};
+const lesson=JSON.parse(fs.readFileSync('lessons.json','utf8')).lessons.find(x=>x.items.length>8);
+const browser=await puppeteer.launch({headless:true,executablePath:process.env.CHROME_BIN||'/usr/bin/google-chrome',args:['--no-sandbox','--disable-dev-shm-usage']});
+try{
+ const page=await browser.newPage(),errors=[];page.on('pageerror',e=>errors.push(String(e)));await page.setViewport({width:1440,height:1000});
+ await page.evaluateOnNewDocument(()=>{sessionStorage.setItem('nlc-cover-seen','1');localStorage.setItem('nlc-prefs-v1',JSON.stringify({fx:false}));});
+ async function start(){await page.waitForSelector('#planBox .ppage');await page.evaluate(()=>[...document.querySelectorAll('#planBox button')].find(b=>/Học ngay|Học trước|Học lại|Tiếp tục/.test(b.textContent)).click());await page.waitForSelector('.pcard');}
+ await page.goto('http://127.0.0.1:8765/#/bai/'+lesson.id,{waitUntil:'domcontentloaded'});await start();
+ await page.click('#setBtn');await page.select('#nhiFont-ko','42');await page.select('#nhiFont-vi','30');await page.select('#nhiFont-en','26');await page.click('#setSheet button[data-close]');
+ await page.keyboard.press('Enter');await page.waitForSelector('.answer.ko');
+ assert(await page.$eval('.answer.ko',e=>getComputedStyle(e).fontSize)==='42px','Korean card size not applied');
+ assert(await page.$eval('.nhi-en-translation',e=>getComputedStyle(e).fontSize)==='26px','English card size not applied');
+ assert(await page.$eval('.nhi-en-translation',e=>getComputedStyle(e).fontFamily.includes('Times New Roman')),'English serif missing');
+ await page.click('.cicons [title*="Sửa thẻ"]');assert(await page.$$eval('.nhi-format-tools',a=>a.length)===1,'More than one formatting toolbar');assert(await page.$$eval('.nhi-format-preview,.nhi-google-editor,input[type=color],select[name=noteColor]',a=>a.length)===0,'Legacy editor controls remain');
+ async function selectAll(lang){await page.$eval('[data-language='+lang+']',e=>{e.focus();const r=document.createRange();r.selectNodeContents(e);getSelection().removeAllRanges();getSelection().addRange(r);});}
+ await selectAll('ko');await page.click('[aria-label="Gạch chân / bỏ gạch chân"]');assert(await page.$eval('[data-language=ko]',e=>!!e.querySelector('[style*="underline"]')),'Underline not immediately visible');await page.click('[aria-label="Gạch chân / bỏ gạch chân"]');assert(await page.$eval('[data-language=ko]',e=>!e.querySelector('[style*="underline"]')),'Underline cannot toggle off');
+ await selectAll('vi');await page.click('[aria-label="In đậm / bỏ in đậm"]');await page.click('[aria-label="In đậm / bỏ in đậm"]');assert(await page.$eval('[data-language=vi]',e=>!e.querySelector('[style*="font-weight"]')),'Bold cannot toggle off');
+ await page.click('[aria-label="Vàng / bỏ màu"]');await page.click('[aria-label="Vàng / bỏ màu"]');assert(await page.$eval('[data-language=vi]',e=>!e.querySelector('[style*="background-color"]')),'Color cannot toggle off');
+ await page.$eval('[data-language=note]',e=>{e.focus();e.textContent='기억하세요 · Ghi chú';e.dispatchEvent(new Event('input',{bubbles:true}));});await page.click('[aria-label="Hồng / bỏ màu"]');
+ await selectAll('en');await page.select('[aria-label="Cỡ chữ phần đang sửa"]','28');await page.click('.editbox button[type=submit]');
+ assert(await page.$eval('.pfront',e=>{const vi=e.querySelector('.vi-under'),note=e.querySelector('.nhi-card-note'),en=e.querySelector('.nhi-english-v5');return !!(vi.compareDocumentPosition(note)&Node.DOCUMENT_POSITION_FOLLOWING)&&!!(note.compareDocumentPosition(en)&Node.DOCUMENT_POSITION_FOLLOWING)&&Math.abs(note.getBoundingClientRect().height-en.getBoundingClientRect().height)<2;}),'Note position or equal frame size is wrong');
+ assert(await page.$eval('.nhi-en-translation',e=>getComputedStyle(e).fontSize)==='28px','Per-card English size missing');
+ await page.click('.nhi-dict-button');await page.waitForSelector('#nhiDictionary:not([hidden])');
+ const dict=await page.$eval('#nhiDictionary',e=>{const r=e.getBoundingClientRect();return {x:r.x,width:r.width};});
+ await page.mouse.move(dict.x,500);await page.mouse.down();await page.mouse.move(dict.x-64,500,{steps:4});await page.mouse.up();const dictSaved=await page.evaluate(()=>Number(localStorage.getItem('nhi-dictionary-width-v1')));assert(dictSaved>dict.width+40,'Dictionary width did not persist');
+ await page.click('.pflip');await page.waitForSelector('.prompt');assert(await page.$eval('#nhiDictionary',e=>!e.hidden),'Dictionary closed on flip');await page.keyboard.press('ArrowRight');assert((await page.$eval('#planBox .counter',e=>e.textContent)).startsWith('2 /'),'Hotkeys fail with dictionary open');
+ await page.click('#aiBtn');await page.waitForFunction(()=>document.body.classList.contains('ai-open'));
+ await page.waitForFunction(()=>document.querySelector('#aiPanel').getBoundingClientRect().right<=innerWidth+1);
+ const bounds=await page.evaluate(()=>{const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {left:r.left,right:r.right,width:r.width};};return {card:rect('.pcard'),dict:rect('#nhiDictionary'),ai:rect('#aiPanel')};});assert(Math.abs(bounds.card.right-bounds.dict.left)<4&&Math.abs(bounds.dict.right-bounds.ai.left)<4,'Panels have a gap or overlap: '+JSON.stringify(bounds));
+ assert(await page.$$eval('.nhi-reader-toolbar button',a=>a.length)===0,'Pause/resume controls remain');
+ await page.evaluate(()=>{const msg=document.createElement('div');msg.className='aimsg ai';msg.innerText='Đoạn đầu.\nĐoạn thứ hai.\nĐoạn thứ ba.';document.getElementById('aiLog').replaceChildren(msg);});await page.waitForSelector('.nhi-read-message');
+ await page.evaluate(()=>{window.__read=[];window.__callback=null;NHI_SPEECH.speak=(t,l,cb)=>{__read.push(t);__callback=cb;};NHI_SPEECH.active=()=>true;});await page.$eval('.nhi-ai-paragraph:nth-child(2) button',e=>e.click());await page.evaluate(()=>__callback());assert(await page.evaluate(()=>__read.join('|'))==='Đoạn thứ hai.|Đoạn thứ ba.','Reader did not continue from chosen paragraph');await page.$eval('.nhi-ai-paragraph:nth-child(2) button',e=>e.click());
+ await page.click('#aiClose');await page.click('#nhiDictionary .nhi-dialog-head button');
+ await page.evaluate(()=>NHI_HARD_MASCOT.show(document.querySelector('.pcard')));await page.$eval('#nhi-hard-mascot',async e=>{e.scrollIntoView({block:'center'});await Promise.all(e.getAnimations().map(a=>a.finished));});const mascot=await page.$eval('#nhi-hard-mascot img',e=>{const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};});await page.mouse.move(mascot.x,mascot.y);await page.mouse.down();await page.mouse.move(mascot.x+45,mascot.y+45,{steps:4});await page.mouse.up();console.log('COMPANION RESIZE',await page.evaluate(()=>({saved:localStorage.getItem('nhi-companion-size-v1'),size:document.getElementById('nhi-hard-mascot')?.style.cssText})));assert(await page.evaluate(()=>Number(localStorage.getItem('nhi-companion-size-v1')))>180,'Companion drag size did not persist');assert(await page.$$eval('#nhi-hard-mascot button',a=>a.length)===0,'Companion has controls');
+ await page.reload({waitUntil:'domcontentloaded'});await page.waitForSelector('#nhiFont-ko');assert(await page.$eval('#nhiFont-ko',e=>e.value)==='42','Global font lost on reload');assert(await page.evaluate(()=>Number(localStorage.getItem('nhi-dictionary-width-v1')))===dictSaved,'Dictionary size lost on reload');
+ assert(!errors.length,errors.join('\n'));console.log('LAYOUT V7 PASS',JSON.stringify({notes:true,formatToggle:true,fonts:true,dictionaryResize:true,parallelPanels:bounds,reader:true,mascotResize:true}));
+}finally{await browser.close();}

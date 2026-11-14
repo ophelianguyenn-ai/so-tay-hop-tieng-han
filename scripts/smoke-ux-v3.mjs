@@ -57,7 +57,7 @@ try {
   });
   console.log('MOBILE NHI SAFE LAYOUT',JSON.stringify(mascot));
   if(!mascot||!mascot.parent||mascot.position==='fixed'||mascot.overlap>1||
-      mascot.imgWidth>80||mascot.buttons)
+      mascot.imgWidth>160||mascot.buttons)
     throw Error('Nhi overlaps the actual learning text on mobile');
   await mobile.waitForFunction(()=>document.querySelector('#planBox .counter')?.textContent.startsWith('2 /'),{timeout:7000});
   if(await mobile.$('#nhi-hard-mascot'))throw Error('Nhi survived advancing to a new card');

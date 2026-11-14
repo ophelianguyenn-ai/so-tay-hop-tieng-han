@@ -1,6 +1,6 @@
 // Offline support: network-first for GitHub Pages and static assets.
 // Fall back to cache only when offline. Different cache key forces eviction of earlier stale CSS/JS.
-const CACHE = 'nhi-corner-v40-study-controls';
+const CACHE = 'nhi-corner-v41-study-layout';
 const CORE = [
   'study-update-v6.js','study-update-v6.css',
   './','index.html','manifest.webmanifest','qrcode.js','lessons.json',
