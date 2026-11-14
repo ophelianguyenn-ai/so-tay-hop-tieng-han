@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 370" role="img" aria-label="Lương chibi tóc đen, má hồng, áo polo nâu như GIF gốc">
+<defs>
+<linearGradient id="skin" x1=".1" y1=".15" x2=".95" y2="1"><stop stop-color="#fff6ed"/><stop offset=".65" stop-color="#ffe0d3"/><stop offset="1" stop-color="#f6c6c0"/></linearGradient>
+<linearGradient id="hair" x1=".05" y1=".1" x2=".88" y2=".8"><stop stop-color="#393230"/><stop offset=".68" stop-color="#302a29"/><stop offset="1" stop-color="#1f1f20"/></linearGradient>
+<linearGradient id="shirt" x1=".1" y1="0" x2="1" y2="1"><stop stop-color="#65504a"/><stop offset=".7" stop-color="#503a34"/><stop offset="1" stop-color="#41302c"/></linearGradient>
+<pattern id="stripe" patternUnits="userSpaceOnUse" width="13" height="10"><path d="M3 0v11" stroke="#291f1d" opacity=".32" stroke-width="1.7"/><path d="M9 0v11" stroke="#a68a77" opacity=".22" stroke-width="1.1"/></pattern>
+<radialGradient id="blush"><stop stop-color="#f39a9c" stop-opacity=".87"/><stop offset="1" stop-color="#fca9ad" stop-opacity="0"/></radialGradient>
+</defs>
+<!-- legs and rounded brown shoes -->
+<ellipse cx="136" cy="358" rx="80" ry="7" fill="#a88473" opacity=".22"/>
+<path d="M94 275Q92 317 88 349Q98 362 120 355L136 307 144 353Q161 360 177 349L189 276Z" fill="#302c2b" stroke="#2b2424" stroke-width="4" stroke-linejoin="round"/>
+<path d="M126 299q1 28 8 51M163 302l-5 34" fill="none" stroke="#1a191b" stroke-width="3"/>
+<path d="M84 346q-9 8-12 15 7 8 43 5l6-11zM145 353q-2 12 4 15l40-3q2-10-17-20" fill="#3d3030" stroke="#242123" stroke-width="3.5" stroke-linejoin="round"/>
+<path d="M76 362h39M148 365h39" stroke="#9b7771" stroke-width="2" opacity=".8"/>
+<!-- neck -->
+<path d="M113 151l-2 42q20 20 42-1l-5-42" fill="url(#skin)" stroke="#443034" stroke-width="3.5"/>
+<!-- back and left arm -->
+<path d="M105 174Q80 176 71 202L59 256Q60 282 85 284L102 254" fill="#5a413b" stroke="#2d2222" stroke-width="4"/>
+<path d="M70 208l-8 45q-5 19 15 25" fill="none" stroke="#8f716b" stroke-width="2"/>
+<!-- right arm and pocket -->
+<path d="M178 189q28 9 34 35l-11 59q-7 16-25 19l-11-17q10-15 11-35l-2-41" fill="url(#skin)" stroke="#35292a" stroke-width="4" stroke-linejoin="round"/>
+<path d="M197 279q-5 10-13 13l-9-9" stroke="#dca59a" stroke-width="2" fill="none"/>
+<g fill="#6e4737" stroke="#332320" stroke-width="1.6"><circle cx="175" cy="292" r="4.5"/><circle cx="182" cy="294" r="4.5"/><circle cx="189" cy="294" r="4.5"/><circle cx="196" cy="290" r="4.5"/></g>
+<!-- polo shirt -->
+<path d="M102 174Q77 179 75 201L65 288Q121 315 181 288l11-81Q187 182 155 177l-21 14Z" fill="url(#shirt)" stroke="#352725" stroke-width="4.3" stroke-linejoin="round"/>
+<path d="M102 174Q77 179 75 201L65 288Q121 315 181 288l11-81Q187 182 155 177l-21 14Z" fill="url(#stripe)" opacity=".86"/>
+<path d="M95 183Q77 185 73 202L65 235l25 12 13-40" fill="#59403b" stroke="#342627" stroke-width="3.5"/>
+<path d="M95 185l-18 53 17 8" stroke="#8b6c61" stroke-width="1.8" fill="none"/>
+<path d="M179 187q15 4 21 16l17 43-40 16-18-45" fill="url(#shirt)" stroke="#332624" stroke-width="4"/>
+<path d="M179 187q15 4 21 16l17 43-40 16-18-45" fill="url(#stripe)"/>
+<path d="M176 256q15-1 37-15" fill="none" stroke="#2b2222" stroke-width="2.5"/>
+<!-- collar button placket -->
+<path d="M109 174q10 12 24 18l-17 20-20-27zM155 175q-6 11-22 17l17 20 18-27z" fill="#47332f" stroke="#312528" stroke-width="3.3" stroke-linejoin="round"/>
+<path d="M132 194l1 45" stroke="#2d2525" stroke-width="3.2"/>
+<path d="M125 198l7 6 6-6" fill="#322728" stroke="#272123" stroke-width="2"/>
+<circle cx="132" cy="207" r="3" fill="#ba9686" stroke="#261f20" stroke-width="1.2"/><circle cx="132" cy="227" r="2.6" fill="#ba9686" stroke="#261f20" stroke-width="1.1"/>
+<!-- head & ears -->
+<path d="M54 106q0-55 58-74Q161 16 185 51q26 18 21 61l-8 30q-4 22-20 32-25 21-66 12Q73 180 58 154q-17-14-12-34z" fill="url(#skin)" stroke="#342629" stroke-width="4.2" stroke-linejoin="round"/>
+<path d="M184 131q20-9 26 5 7 19-12 29-15 7-22-4" fill="url(#skin)" stroke="#342629" stroke-width="3.4"/>
+<path d="M190 145q10-12 12 0-3 12-13 11" fill="none" stroke="#e5aaa5" stroke-width="2.8" stroke-linecap="round"/>
+<!-- main hair: side swept irregular spikes matching GIF -->
+<path d="M50 114Q40 90 49 71L37 75q10-17 23-20L55 45q15 2 27-6Q70 34 60 36q17-10 39-10Q91 19 83 20q22-8 48-2Q141 6 134 11q29 0 45 18l11-3q2 5 11 15l10-2q4 16 2 21l13 1q6 13 1 26l9 14q-4 8-12 10l3 14q-5 29-24 35-12 9-30 8l-23-5Q155 141 159 119q-10-15-34-20Q101 94 82 83q-15 22-20 41z"
+ fill="url(#hair)" stroke="#282327" stroke-width="4.3" stroke-linejoin="round"/>
+<path d="M50 84q25-21 66-22 26 7 41 15M77 47q27-16 56-7M117 26q28 8 39 20M163 32q18 18 21 37M181 57q25 20 20 54"
+ fill="none" stroke="#776c64" opacity=".40" stroke-width="3.5" stroke-linecap="round"/>
+<path d="M76 67q40-16 75 9M135 37q24 18 37 33M194 88q9 19-1 40" fill="none" stroke="#211f22" stroke-width="2.5" opacity=".72"/>
+<path d="M174 131q18-7 19-25" stroke="#1d1b1e" stroke-width="4" fill="none"/>
+<!-- dark brows, closed crescent eyes -->
+<path d="M73 123q11-10 23-1M131 119q12-8 25-1" stroke="#3e2a2c" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+<path d="M76 136q13 14 27 2M129 135q12 15 26 0" stroke="#30272b" stroke-width="5.5" fill="none" stroke-linecap="round"/>
+<ellipse cx="88" cy="148" rx="24" ry="16" fill="url(#blush)"/>
+<ellipse cx="150" cy="149" rx="24" ry="17" fill="url(#blush)"/>
+<path d="M78 151l4 5m5-8 3 7m51-6-3 7m11-8-3 7" fill="none" stroke="#df8d8d" opacity=".57" stroke-width="2" stroke-linecap="round"/>
+<path d="M112 146q-3 8 3 10" fill="none" stroke="#ca8e87" stroke-width="2.4" stroke-linecap="round"/>
+<path d="M109 160q9 10 20-1" fill="none" stroke="#9e626b" stroke-width="2.7" stroke-linecap="round"/>
+</svg>
