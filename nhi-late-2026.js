@@ -50,7 +50,28 @@ function setupEnglish(box){
   try{localStorage.setItem(STORE,String(w));}catch(_e){}
  });
 }
+function compactEditor(editor){
+ if(editor.dataset.autoFitEditor)return;
+ editor.dataset.autoFitEditor='true';
+ const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');
+ const resize=()=>{
+  for(const node of editor.querySelectorAll('.nhi-rich-field,textarea[name="pairs"]')){
+   const style=getComputedStyle(node);
+   if(ctx)ctx.font=style.font;
+   const lines=String(node.value??node.textContent??'').split(/\\n/);
+   let widest=0;
+   for(const line of lines)widest=Math.max(widest,ctx?ctx.measureText(line).width:line.length*10);
+   const max=Math.min(690,Math.max(260,editor.clientWidth-36));
+   const width=Math.max(245,Math.min(max,Math.ceil(widest+65)));
+   node.style.setProperty('--nhi-field-width',width+'px');
+  }
+ };
+ editor.addEventListener('input',resize,true);
+ window.addEventListener('resize',resize,{passive:true});
+ resize();
+}
 function update(){
+ document.querySelectorAll('#planBox .nhi-editor-window-v5').forEach(compactEditor);
  document.querySelectorAll('#planBox .nhi-english-v5').forEach(setupEnglish);
  document.querySelectorAll('#planBox .cicons button[title*="Phát âm / Dừng"]').forEach(b=>{
   if(b.dataset.neonReader || !window.NHI_STUDY)return;
