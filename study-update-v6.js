@@ -31,7 +31,9 @@ function dictionary(word,kind){
   dock=make('aside','nhi-dictionary-dock');dock.id='nhiDictionary';dock.setAttribute('aria-label','Cửa sổ từ điển');
   const grip=make('div','nhi-dict-resize');grip.tabIndex=0;grip.setAttribute('role','separator');grip.setAttribute('aria-label','Đổi độ rộng từ điển');grip.setAttribute('aria-orientation','vertical');
   const head=make('div','nhi-dialog-head'),title=make('strong');head.append(title,button('×',()=>{document.body.classList.remove('dictionary-open');dock.hidden=true;layout();}));head.lastChild.setAttribute('aria-label','Đóng từ điển');
-  const link=make('a','nhi-dictionary-external','Mở riêng ↗');link.target='_blank';link.rel='noopener noreferrer';
+  const link=make('a','nhi-dictionary-external');link.target='_blank';link.rel='noopener noreferrer';
+  link.title='Mở từ điển trong tab mới';link.setAttribute('aria-label',link.title);
+  link.innerHTML='<svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="nhiExternalBubble" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#6ed4ec"/><stop offset="1" stop-color="#39a9d8"/></linearGradient></defs><path d="M32 4C16 4 5 16 5 31c0 12 8 22 19 26l-1 5 12-5c13-1 24-12 24-26C59 16 47 4 32 4Z" fill="url(#nhiExternalBubble)"/><path d="M22 39 42 20M27 20h15v15" stroke="#17334c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
   const hint=make('p','hint','Nếu trang từ điển chặn nhúng, bấm Mở riêng ↗.');
   const frame=make('iframe');frame.title='Từ điển';frame.referrerPolicy='no-referrer';
   dock.append(grip,head,link,hint,frame);document.body.append(dock);
@@ -46,7 +48,34 @@ function dictionary(word,kind){
  dock.querySelector('iframe').src=url;dock.querySelector('a').href=url;dock.hidden=false;document.body.classList.add('dictionary-open');layout();
 }
 function dictionaryButtons(root,value){
- for(const kind of ['ko-vi','ko-en']){const b=button('',()=>dictionary(value(),kind));b.innerHTML=dictionaryIcon(kind);b.className='iconbtn sm nhi-dict-button';b.title=kind==='ko-vi'?'Tra Naver Hàn–Việt: từ đã chọn':'Tra Naver Hàn–Anh: từ đã chọn';b.setAttribute('aria-label',b.title);root.append(b);}
+ const pair=make('div','nhi-dict-pair');pair.setAttribute('role','group');pair.setAttribute('aria-label','Từ điển Hàn–Việt và Hàn–Anh');
+ const kinds=[['ko-vi','VN','#ff4770','#ff7592','Tra từ điển Hàn–Việt'],['ko-en','EN','#54bade','#86d9f0','Tra từ điển Hàn–Anh']];
+ for(const [kind,word,dark,light,label] of kinds){
+  const b=button('',()=>{
+   if(b.disabled)return;
+   const selected=String(value()||'').trim();if(!selected)return;
+   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+   if(reduce){dictionary(selected,kind);return;}
+   b.disabled=true;b.classList.add('nhi-burst');
+   for(let i=0;i<9;i++){
+    const spark=make('i','nhi-pop-spark');spark.setAttribute('aria-hidden','true');
+    const angle=2*Math.PI*i/9,distance=24+(i%3)*8;
+    spark.style.setProperty('--dx',Math.cos(angle)*distance+'px');
+    spark.style.setProperty('--dy',Math.sin(angle)*distance+'px');
+    spark.style.setProperty('--spark-color',dark);
+    spark.style.left=(b.offsetLeft+b.offsetWidth/2)+'px';
+    spark.style.top=(b.offsetTop+b.offsetHeight/2)+'px';
+    pair.append(spark);setTimeout(()=>spark.remove(),440);
+   }
+   setTimeout(()=>{dictionary(selected,kind);},270);
+   setTimeout(()=>{b.classList.remove('nhi-burst');b.disabled=false;},470);
+  });
+  b.className='nhi-dict-bubble';b.dataset.dict=kind;
+  b.title=label;b.setAttribute('aria-label',label);
+  b.innerHTML='<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path d="M31 3C14 3 3 16 3 32c0 11 7 21 17 26l-2 5 14-6c17-1 29-12 29-28C61 14 48 3 31 3Z" fill="'+dark+'"/><path d="M17 19C23 12 32 10 39 11" stroke="'+light+'" stroke-width="5" stroke-linecap="round" opacity=".8" fill="none"/><text x="32" y="40" text-anchor="middle" fill="'+(kind==='ko-vi'?'#fff':'#14283f')+'" font-family="Arial,sans-serif" font-size="21" font-weight="800">'+word+'</text></svg>';
+  pair.append(b);
+ }
+ root.append(pair);
 }
 function wordElements(root,text){
  root.replaceChildren();for(const part of String(text).split(/([\p{L}\p{N}]+(?:['’'-][\p{L}\p{N}]+)*)/u)){

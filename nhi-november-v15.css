@@ -1,0 +1,159 @@
+/* November 2026: responsive study cards, paired dictionaries and accessible controls. */
+#topbar #aiBtn{display:none!important}
+#aiPanel .aihead{display:flex!important;align-items:center!important;flex-wrap:nowrap!important;gap:6px!important;padding:10px 12px!important}
+#aiPanel .aihead>h2{min-width:0;margin:0;flex:1 1 auto;font-size:16px}
+#aiPanel .aihead>#aiClose,#aiPanel .aihead>#aiCfgBtn,#aiPanel .aihead>#aiNewBtn{
+  order:0!important;flex:0 0 36px!important;width:36px!important;min-width:36px!important;
+  height:36px!important;margin:0!important;padding:0!important;display:grid!important;place-items:center!important;
+  border:1px solid var(--line)!important;border-radius:10px!important;background:var(--surface)!important;
+  position:static!important;box-shadow:none!important;line-height:1!important
+}
+#aiPanel .aihead>#aiClose{order:5!important}
+#aiPanel .aihead .ai-font-control{flex:0 0 auto;display:flex;align-items:center;gap:3px}
+#aiPanel .ai-font-control>span{font-size:12px;font-weight:800;letter-spacing:-.04em;color:var(--muted)}
+#aiPanel .ai-font-control select{max-width:56px;min-width:48px;height:36px;border-radius:10px;padding:0 3px}
+#planBox .cicons>.hjbtn{width:36px!important;min-width:36px!important;height:36px!important;padding:0!important;
+ display:inline-grid!important;place-items:center!important;font-size:16px!important;line-height:1!important}
+.nhi-en-head-actions{display:flex!important;flex-wrap:nowrap!important;gap:5px!important}
+.nhi-en-head-actions>.nhi-en-forgot{margin:0!important;display:inline-flex!important;align-items:center}
+.nhi-thinking-button{width:36px!important;height:36px!important;display:grid!important;place-items:center!important;
+ border-radius:50%!important;transition:transform .25s ease,filter .25s ease}
+.nhi-thinking-button img{object-fit:contain!important;mix-blend-mode:multiply}
+.nhi-thinking-button:hover{transform:rotate(-7deg) scale(1.1)}
+.nhi-thinking-button[aria-pressed=true]{animation:nhi-thinking-yes .58s cubic-bezier(.2,.8,.2,1) both}
+@keyframes nhi-thinking-yes{0%{transform:scale(.6) rotate(-18deg)}38%{transform:scale(1.3) rotate(12deg);filter:drop-shadow(0 0 12px #f7bd27)}70%{transform:scale(.96) rotate(-5deg)}100%{transform:scale(1)}}
+.nhi-forgot-bubble{animation:nhi-help-popup .28s ease both}
+@keyframes nhi-help-popup{from{opacity:0;transform:translateY(8px) scale(.8)}to{opacity:1;transform:translateY(0) scale(1)}}
+.nhi-en-choice,.nhi-en-choice span,.nhi-en-choice .nhi-en-word{transition:color .18s ease,background-color .18s ease!important;text-decoration:none!important}
+.nhi-english-v5 .nhi-en-choice:hover span,
+.nhi-english-v5 .nhi-en-choice:focus-within span,
+.nhi-english-v5 .nhi-en-choice:hover .nhi-en-word,
+.nhi-english-v5 .nhi-en-choice:focus-within .nhi-en-word{
+  color:var(--accent-t)!important;text-decoration:none!important
+}
+.nhi-english-v5 .nhi-en-choice:hover,
+.nhi-english-v5 .nhi-en-choice:focus-within{background:color-mix(in srgb,var(--accent-soft) 46%,transparent)!important}
+.nhi-english-v5 .nhi-en-choice[aria-pressed=true]{position:relative;border-radius:12px!important;
+  background:color-mix(in srgb,#e7fbe8 60%,var(--surface))!important;
+  animation:nhi-choice-pop .46s cubic-bezier(.17,.84,.24,1.2) both!important}
+.nhi-english-v5 .nhi-en-choice[aria-pressed=true]::after{
+ content:"✓";display:grid;place-items:center;position:absolute;right:25px;top:-10px;
+ width:20px;height:20px;border-radius:50%;background:#1db480;color:white;
+ font:700 13px system-ui;box-shadow:0 0 0 4px #36caa620;animation:nhi-check-glow .65s ease both}
+@keyframes nhi-choice-pop{0%{opacity:.5;scale:.97;filter:saturate(.7)}55%{scale:1.017;filter:saturate(1.3)}100%{opacity:1;scale:1}}
+@keyframes nhi-check-glow{from{opacity:0;transform:scale(.3)}60%{opacity:1;transform:scale(1.25)}to{transform:scale(1)}}
+.nhi-en-choice input:checked{accent-color:#18ac7e}
+#planBox .pcard .pfront{display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+ align-content:start!important;justify-items:center!important;gap:8px 10px!important;padding-top:8px}
+#planBox .pfront>.nhi-ko-line{grid-column:1/-1!important;width:100%;min-width:0;box-sizing:border-box;
+ position:relative;display:flex;align-items:center;justify-content:center;min-height:44px;padding:0 72px}
+#planBox .nhi-ko-line>.answer.ko{width:100%;max-width:100%;margin:0!important;
+ text-align:center!important;word-break:keep-all;overflow-wrap:anywhere}
+#planBox .pfront>.vi-under{grid-column:1/-1!important;width:100%!important;max-width:100%!important;
+ justify-self:center!important;text-align:center!important;margin:0 auto!important;
+ font-family:"Times New Roman",Times,serif!important;font-weight:500!important;
+ line-height:1.35!important;color:var(--muted)}
+#planBox .pfront>.hanja{grid-column:1/-1!important;margin:0!important;justify-self:center;text-align:center}
+#planBox .pfront>.nhi-card-details{grid-column:1/-1!important;width:100%!important;grid-auto-rows:auto!important;
+ display:grid;grid-template-columns:minmax(0,1fr);justify-items:center;align-items:start;gap:9px}
+#planBox .nhi-card-details>.nhi-card-note,#planBox .pfront>.nhi-card-note{
+  width:max-content!important;max-width:min(100%,72ch)!important;min-height:0!important;height:auto!important;
+  padding:7px 13px!important;border-radius:10px!important;box-sizing:border-box!important;
+  background-color:#fff0c8;border:1px solid #e2b96d!important;
+  justify-self:center!important;font-family:"Times New Roman",Times,serif!important;
+  color:#5c4219!important;line-height:1.35!important;white-space:pre-wrap}
+#planBox .nhi-card-details>.nhi-english-v5{grid-column:1!important;width:100%!important;
+ max-width:100%!important;height:auto!important;min-height:0!important;justify-self:stretch}
+#planBox .pfront.nhi-with-image{grid-template-columns:minmax(0,1fr) minmax(100px,min(45%,var(--nhi-image-width,220px)))!important;
+ align-items:start!important}
+#planBox .pfront.nhi-with-image>.nhi-ko-line,
+#planBox .pfront.nhi-with-image>.hanja,
+#planBox .pfront.nhi-with-image>.vi-under,
+#planBox .pfront.nhi-with-image>.nhi-card-details{grid-column:1!important}
+#planBox .pfront.nhi-with-image>.card-illustration{
+  grid-column:2!important;grid-row:1/span 4!important;margin:0!important;width:100%!important;
+  min-width:0;max-width:100%!important;align-self:start;justify-self:end}
+#planBox .card-illustration img{width:100%!important;max-height:none!important;height:auto!important;
+ object-fit:contain!important;display:block}
+#planBox .card-illustration[data-resizable="true"]{cursor:nwse-resize;touch-action:pan-y;
+ border-radius:12px;outline:1px dashed transparent;transition:outline-color .2s ease}
+#planBox .card-illustration[data-resizable="true"]:hover{outline-color:color-mix(in srgb,var(--accent-t) 65%,transparent)}
+#planBox .card-illustration.nhi-image-dragging{outline:2px dashed var(--accent-t)!important;touch-action:none}
+#planBox .card-illustration.nhi-image-dragging img{pointer-events:none}
+#planBox .nhi-ko-line>.nhi-card-dictionaries{position:absolute;right:0;top:50%;transform:translateY(-50%);
+ display:flex!important;align-items:center;justify-content:flex-end;gap:0!important;z-index:3}
+.nhi-dict-pair{display:flex;align-items:center;width:80px;height:48px;position:relative;isolation:isolate}
+.nhi-dict-bubble{position:absolute;width:48px;height:46px;min-width:0!important;padding:0!important;
+ border:0!important;box-shadow:none!important;background:transparent!important;
+ display:grid;place-items:center;cursor:pointer;transition:transform .2s ease,filter .2s ease;
+ overflow:visible!important;border-radius:50%!important}
+.nhi-dict-bubble svg{width:100%;height:100%;overflow:visible}
+.nhi-dict-bubble[data-dict="ko-vi"]{left:0;z-index:2}
+.nhi-dict-bubble[data-dict="ko-en"]{right:0;z-index:1}
+.nhi-dict-bubble:hover{z-index:5;transform:translateY(-3px) scale(1.12);filter:drop-shadow(0 3px 7px #0002)}
+.nhi-dict-bubble.nhi-burst{animation:nhi-bubble-pop .31s ease-out both}
+@keyframes nhi-bubble-pop{0%{scale:1;opacity:1}48%{scale:1.34;opacity:.95}100%{scale:.12;opacity:0}}
+.nhi-pop-spark{position:absolute;width:5px;height:5px;border-radius:50%;z-index:10;pointer-events:none;
+ background:var(--spark-color,#fd4e72);left:50%;top:50%;animation:nhi-spark .4s ease-out forwards}
+@keyframes nhi-spark{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{
+ opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.3)}}
+#nhiDictionary{background:#f7fbfe}
+#nhiDictionary>.nhi-dialog-head{position:absolute;top:9px;left:12px;z-index:8;
+ padding:0!important;pointer-events:none;background:transparent!important;width:40px}
+#nhiDictionary>.nhi-dialog-head strong{display:none!important}
+#nhiDictionary>.nhi-dialog-head button{pointer-events:auto;border-radius:50%;width:37px;height:37px;
+ display:grid;place-items:center;color:#15314b;background:#ffffffed;border:1px solid #d5e3eb;
+ box-shadow:0 3px 12px #0002}
+#nhiDictionary>.hint{display:none!important}
+#nhiDictionary>.nhi-dictionary-external{position:absolute;right:12px;top:9px;z-index:8;
+ display:grid;place-items:center;width:44px;height:44px;margin:0!important;
+ border:0!important;background:transparent!important;font-size:0!important;text-decoration:none!important}
+#nhiDictionary>.nhi-dictionary-external svg{width:40px;height:40px;filter:drop-shadow(0 3px 8px #0002)}
+#nhiDictionary iframe{height:100%;width:100%;margin:0!important;border:0!important;flex:1}
+#nhiAiQuickEditor .nhi-prompt-scopes{display:flex;gap:6px;margin:9px 0;flex-wrap:wrap}
+#nhiAiQuickEditor .nhi-prompt-scopes button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent-t)}
+#nhiAiQuickEditor .nhi-prompt-rows{display:grid;gap:7px;margin:9px 0}
+#nhiAiQuickEditor .nhi-prompt-row{display:flex;align-items:center;gap:7px}
+#nhiAiQuickEditor .nhi-prompt-row input{flex:1;min-width:0}
+#nhiAiQuickEditor .nhi-prompt-row button{width:36px;height:36px;flex:0 0 36px}
+#nhiAiQuickEditor .nhi-prompt-actions{display:flex;flex-wrap:wrap;gap:8px}
+#nhiAiQuickEditor input{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:9px}
+#nhiAccentStatus:empty{display:none}
+@media(min-width:720px) and (min-height:600px){
+ body.nhi-viewport-fit #planBox .pcard:not(:has(.nhi-editor-window-v5,.nhi-picture-picker)){
+  height:var(--nhi-card-fit)!important;min-height:0!important;display:flex!important;
+  flex-direction:column!important;overflow:hidden!important;box-sizing:border-box}
+ body.nhi-viewport-fit #planBox .pcard>.card-top,
+ body.nhi-viewport-fit #planBox .pcard>.cmeta,
+ body.nhi-viewport-fit #planBox .pcard>.pnav,
+ body.nhi-viewport-fit #planBox .pcard>.prate{flex:0 0 auto}
+ body.nhi-viewport-fit #planBox .pcard>.pfront{flex:1 1 auto!important;min-height:0!important;
+  overflow-y:auto!important;overscroll-behavior:contain;align-content:start!important}
+ body.nhi-viewport-fit #planBox .pcard>.prate{position:relative;z-index:3;background:var(--surface);padding-top:4px}
+ body.nhi-viewport-fit #planBox .pcard>.pnav{padding-top:5px}
+}
+@container (max-width:660px){
+ #planBox .pfront.nhi-with-image{grid-template-columns:minmax(0,1fr)!important}
+ #planBox .pfront.nhi-with-image>.card-illustration{grid-column:1!important;grid-row:auto!important;
+ width:min(100%,var(--nhi-image-width,220px))!important;justify-self:center!important}
+ #planBox .pfront.nhi-with-image>.nhi-ko-line,#planBox .pfront.nhi-with-image>.hanja,
+ #planBox .pfront.nhi-with-image>.vi-under,#planBox .pfront.nhi-with-image>.nhi-card-details{grid-column:1!important}
+}
+@media(max-width:580px){
+ #planBox .pfront>.nhi-ko-line{padding-inline:55px}
+ .nhi-dict-pair{width:65px;height:39px}.nhi-dict-bubble{width:39px;height:39px}
+ #aiPanel .aihead{gap:4px!important;padding-inline:6px!important}
+ #aiPanel .aihead>h2{font-size:14px}#aiPanel .ai-font-control select{max-width:45px;min-width:40px}
+ #aiPanel .aihead>#aiClose,#aiPanel .aihead>#aiCfgBtn,#aiPanel .aihead>#aiNewBtn{flex-basis:32px!important;width:32px!important;min-width:32px!important;height:32px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .nhi-dict-bubble,.nhi-thinking-button,.nhi-en-choice{animation:none!important;transition:none!important}
+}
+
+/* Keep the supplied thinking-face emoji crisp, independent of image files. */
+.nhi-emoji-think{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;font-size:30px!important;line-height:1!important;display:grid;place-items:center;width:100%;height:100%;flex:0 0 auto!important}
+.nhi-choice-check{display:inline-flex;gap:4px;align-items:center;justify-content:flex-end;
+  white-space:nowrap;font:600 13px var(--ui)!important;color:var(--muted);flex:0 0 auto!important;cursor:pointer}
+.nhi-en-choice[aria-pressed=true] .nhi-choice-check{color:#087b60}
+.nhi-choice-check input{margin:0}
+@media(hover:hover){.nhi-en-choice:hover .nhi-choice-check{color:var(--accent-t)}}

@@ -36,7 +36,7 @@ try{
  await page.$eval('.nhi-en-translation .nhi-en-word',e=>e.dispatchEvent(new MouseEvent('dblclick',{bubbles:true,cancelable:true})));
  assert(await page.$eval('.nhi-dictionary-dock iframe',e=>e.src).then(x=>x.includes('vdict.com')&&x.includes(encodeURIComponent(word))),'VDict dialog missing');
  await page.click('.nhi-dictionary-dock .nhi-dialog-head button');
- await page.click('.nhi-dict-button');assert(await page.$eval('.nhi-dictionary-dock iframe',e=>e.src).then(x=>x.includes('kovidict')),'Naver VI dialog missing');await page.click('.nhi-dictionary-dock .nhi-dialog-head button');
+ await page.click('.nhi-dict-bubble[data-dict="ko-vi"]');await page.waitForFunction(()=>document.querySelector('.nhi-dictionary-dock iframe')?.src.includes('kovidict'));assert(await page.$eval('.nhi-dictionary-dock iframe',e=>e.src).then(x=>x.includes('kovidict')),'Naver VI bubble dialog missing');await page.click('.nhi-dictionary-dock .nhi-dialog-head button');
  // Image picker accepts clipboard files; no redundant link-save or API panel.
  await page.click('.cicons [title*="Tìm ảnh"]');
  assert(await page.$eval('.nhi-picture-picker',e=>!e.textContent.includes('Lưu ảnh từ liên kết')&&!e.textContent.includes('Đã có Google Custom Search')),'Legacy image controls remain');
@@ -53,7 +53,7 @@ try{
  await page.keyboard.press('1');await page.waitForSelector('#nhi-hard-mascot');
  assert(await page.$eval('.pcard',e=>e.contains(document.getElementById('nhi-hard-mascot'))),'Mascot is detached from card');
  await page.keyboard.press('ArrowRight');assert(await page.$('#nhi-hard-mascot')===null,'Mascot survived card transition');
- await page.click('#aiBtn');await page.waitForFunction(()=>document.body.classList.contains('ai-open'));
+ await page.click('#menuBtn');await page.click('#menuAi');await page.waitForFunction(()=>document.body.classList.contains('ai-open'));
  await page.waitForSelector('.nhi-reader-toolbar');
  await page.waitForFunction(()=>document.querySelector('#aiPanel').getBoundingClientRect().right<=innerWidth+1);
  console.log('CHAT INPUT BOUNDS',await page.$eval('#aiInput',e=>{const r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom,width:r.width,height:r.height,viewport:innerHeight};}));

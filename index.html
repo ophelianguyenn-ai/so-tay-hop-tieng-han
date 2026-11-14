@@ -643,6 +643,7 @@ button,input,select,textarea{font-family:var(--ui)}
 @media(hover:none){.nhi-en-choice small{opacity:1}}
 </style>
 <link rel="stylesheet" href="study-update-v6.css?v=20261114-v7">
+<link rel="stylesheet" href="nhi-november-v15.css?v=20261114-ux-v15">
 </head>
 <body>
 <header class="topbar" id="topbar">
@@ -871,7 +872,10 @@ button,input,select,textarea{font-family:var(--ui)}
       <div class="voice" id="voicePanel">
         <div class="voice-grid">
           <div class="voice-row"><label for="voiceKo">Tiếng Hàn</label><select id="voiceKo"></select><button type="button" class="ghost" data-test="ko">Nghe thử</button></div>
+<div class="voice-row nhi-accent-row"><label for="voiceKoAccent">Vùng Hàn</label><select id="voiceKoAccent"><option value="auto">Tự động / Neural</option><option value="seoul">Seoul (giọng chuẩn)</option></select></div>
           <div class="voice-row"><label for="voiceVi">Tiếng Việt</label><select id="voiceVi"></select><button type="button" class="ghost" data-test="vi">Nghe thử</button></div>
+<div class="voice-row nhi-accent-row"><label for="voiceViAccent">Vùng Việt</label><select id="voiceViAccent"><option value="auto">Tự động / Neural</option><option value="south">Miền Nam (nếu thiết bị hỗ trợ)</option></select></div>
+<p class="voice-note" id="nhiAccentStatus" role="status"></p>
           <div class="voice-row"><label for="voiceEn">Tiếng Anh</label><select id="voiceEn"></select><button type="button" class="ghost" data-test="en">Nghe thử</button></div>
           <p class="voice-note" id="voiceStatus"></p>
           <p class="voice-note"><b>Giọng tự nhiên:</b> <span id="voiceGuide"></span></p>
@@ -947,7 +951,7 @@ button,input,select,textarea{font-family:var(--ui)}
   <div class="aihead">
     <button type="button" class="iconbtn sm nhi-ai-close-v5" id="aiClose" aria-label="Đóng chat AI" title="Đóng chat AI" data-ic="x"></button>
     <h2><span class="mi" id="aiFace"></span>Hỏi AI</h2>
-    <label class="ai-font-control" for="aiFontSize"><span>Cỡ chữ</span><select id="aiFontSize" aria-label="Cỡ chữ khung chat AI">
+    <label class="ai-font-control" for="aiFontSize"><span aria-hidden="true">Aa</span><select id="aiFontSize" aria-label="Cỡ chữ khung chat AI">
       <option value="13">13</option><option value="14">14</option><option value="15">15</option>
       <option value="16">16</option><option value="18">18</option><option value="20">20</option><option value="22">22</option>
     </select></label>
@@ -1260,6 +1264,10 @@ button,input,select,textarea{font-family:var(--ui)}
   var canSpeak = ('speechSynthesis' in window) && typeof window.SpeechSynthesisUtterance !== 'undefined';
   // Recorded Neural MP3 works even without device speech synthesis.
   var VOICE_KEY = 'viko-ko-meeting-voice-v1', VOICE_PREF = { ko: '', vi: '', en: '' };
+  var VOICE_REGION_KEY = 'nhi-voice-region-v15', VOICE_REGION = {ko:'auto',vi:'auto'};
+  try { var regionSaved=JSON.parse(lsGet(VOICE_REGION_KEY)||'{}'); if(regionSaved.ko==='seoul')VOICE_REGION.ko='seoul'; if(regionSaved.vi==='south')VOICE_REGION.vi='south'; }catch(e){}
+  function regionalName(v,pre){var n=((v.name||'')+' '+(v.voiceURI||'')).toLowerCase();return pre==='vi'?/southern|south|saigon|sài gòn|ho chi minh|hồ chí minh|miền nam|nam bộ/.test(n):/seoul|서울|표준|sunhi|seoyeon|yuna/.test(n);}
+  function preferredRegionalVoice(pre){var kind=VOICE_REGION[pre];if(!kind||kind==='auto')return null;return voicesFor(pre).find(function(v){return regionalName(v,pre);})||null;}
   try { var vp = JSON.parse(lsGet(VOICE_KEY) || '{}'); if (vp && typeof vp === 'object') { VOICE_PREF.ko = vp.ko || ''; VOICE_PREF.vi = vp.vi || ''; VOICE_PREF.en = vp.en || '';  } } catch (e) { }
   function saveVoice() { lsSet(VOICE_KEY, JSON.stringify(VOICE_PREF)); }
   // Rank the device's voices so the most natural one wins (Edge "Natural", Chrome "Google", Apple Premium/Enhanced)
@@ -1286,7 +1294,7 @@ button,input,select,textarea{font-family:var(--ui)}
     var list = voicesFor(pre); if (!list.length) return null;
     var want = VOICE_PREF[pre];
     if (want) { for (var i = 0; i < list.length; i++) { if (list[i].voiceURI === want) return list[i]; } }
-    return list[0];
+    return preferredRegionalVoice(pre)||list[0];
   }
   var speechRequest = 0, speaking = false, pausedSpeech = false;
   function stopSpeech() { ++speechRequest; speaking = false; pausedSpeech = false; if (window.NHI_AUDIO) window.NHI_AUDIO.stop(); if (canSpeak) window.speechSynthesis.cancel(); }
@@ -1303,7 +1311,9 @@ button,input,select,textarea{font-family:var(--ui)}
       window.NHI_AUDIO.stop();
       await window.NHI_AUDIO.ready;
       if (request !== speechRequest) return;
-      if ((!VOICE_PREF[pre] || !voicesFor(pre).some(function(v){return v.voiceURI===VOICE_PREF[pre];})) && window.NHI_AUDIO.play(text, lang, speed || RATE[state.rate] || 1, complete)) return;
+      var hasChosenVoice=!!(VOICE_PREF[pre]&&voicesFor(pre).some(function(v){return v.voiceURI===VOICE_PREF[pre];}));
+       var hasRegionalVoice=!!preferredRegionalVoice(pre);
+       if (!hasChosenVoice && !hasRegionalVoice && window.NHI_AUDIO.play(text, lang, speed || RATE[state.rate] || 1, complete)) return;
     }
     if (!canSpeak) { toast('Câu này chưa có MP3 Neural; trình duyệt chưa có giọng dự phòng.'); complete(); return; }
     try {
@@ -3490,15 +3500,17 @@ button,input,select,textarea{font-family:var(--ui)}
       if (legendOpen) c.appendChild(legendPop());
       var f = el('div', 'stage pfront');
       if (s.flipped) {
-        var a = hlText(el('p', 'answer ko' + (it.ko.length > 40 ? ' long' : '')), it, 'ko', true); a.lang = 'ko'; f.appendChild(a);
+        var koRow=el('div','nhi-ko-line');
+         var a = hlText(el('p', 'answer ko' + (it.ko.length > 40 ? ' long' : '')), it, 'ko', true); a.lang = 'ko'; koRow.appendChild(a);
+         var dictionaries=el('div','nhi-card-dictionaries');if(window.NHI_STUDY)window.NHI_STUDY.dictionaryButtons(dictionaries,function(){return s.selectedKo||it.ko;});koRow.appendChild(dictionaries);f.appendChild(koRow);
 
         if (hj && s.hanja) { var hx = el('p', 'hanja', hj[0]); hx.lang = 'ko'; hx.appendChild(el('small', null, '(' + hj[1] + ')')); f.appendChild(hx); }
         f.appendChild(hlText(el('p', 'vi-under'), it, 'vi', true));
-        var dictionaries=el('div','nhi-card-dictionaries');if(window.NHI_STUDY)window.NHI_STUDY.dictionaryButtons(dictionaries,function(){return s.selectedKo||it.ko;});f.appendChild(dictionaries);
-        var note=val('note',it.id)||{text:it.note,color:'#dbeefe'};if(note&&note.text){var nt=el('p','nhi-card-note',note.text);nt.style.background=note.color||'#dbeefe';if(window.NHI_STUDY)window.NHI_STUDY.formatText(nt,val('fmt',it.id)||{},'note');f.appendChild(nt);}
+        
+        var note=val('note',it.id)||{text:it.note,color:'#fff1ce'};if(note&&note.text){var nt=el('p','nhi-card-note',note.text);nt.style.background=(note.color&&note.color!=='#dbeefe')?note.color:'#fff1ce';if(window.NHI_STUDY)window.NHI_STUDY.formatText(nt,val('fmt',it.id)||{},'note');f.appendChild(nt);}
         var englishBox=window.NHI_ENGLISH?window.NHI_ENGLISH.mount(f,it.id,it.vi,it.ko,{format:val('fmt',it.id)||{},unremembered:!!val('enHard',it.id),toggle:function(on){put('enHard',it.id,on?1:null);}}):null;
         if(nt&&englishBox){var details=el('div','nhi-card-details');nt.before(details);details.appendChild(nt);details.appendChild(englishBox);}
-        if(window.NHI_IMAGES){try{var illustration=window.NHI_IMAGES.figure(it,val('img',it.id));if(illustration){f.classList.add('nhi-with-image');f.appendChild(illustration);}}catch(imageErr){console.warn('Nhi picture unavailable',imageErr);}}
+        if(window.NHI_IMAGES){try{var illustration=window.NHI_IMAGES.figure(it,val('img',it.id),function(img){put('img',it.id,img);});if(illustration){f.classList.add('nhi-with-image');f.appendChild(illustration);}}catch(imageErr){console.warn('Nhi picture unavailable',imageErr);}}
       } else f.appendChild(hlText(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : '')), it, 'vi', true));
       f.addEventListener('click', function (e) { if (e.target.closest('figure,.nhi-english-v5,button,input,a,.nhi-card-dictionaries')) return; if (s.editing || e.target.closest('.ph.tap')) return; flip(); });
       c.appendChild(f);
@@ -3779,6 +3791,22 @@ button,input,select,textarea{font-family:var(--ui)}
   $('voiceKo').addEventListener('change', function () { VOICE_PREF.ko = this.value; saveVoice(); paintVoiceStatus(); speak(SAMPLE.ko, 'ko-KR'); });
   $('voiceEn').addEventListener('change', function () { VOICE_PREF.en = this.value; saveVoice(); paintVoiceStatus(); speak(SAMPLE.en, 'en-US'); });
   $('voiceVi').addEventListener('change', function () { VOICE_PREF.vi = this.value; saveVoice(); paintVoiceStatus(); speak(SAMPLE.vi, 'vi-VN'); });
+   [['voiceKoAccent','ko'],['voiceViAccent','vi']].forEach(function(x){
+     var control=$(x[0]);control.value=VOICE_REGION[x[1]];
+     control.addEventListener('change',function(){
+       VOICE_REGION[x[1]]=this.value;VOICE_PREF[x[1]]='';saveVoice();
+       lsSet(VOICE_REGION_KEY,JSON.stringify(VOICE_REGION));fillVoiceSelects();
+       paintAccentStatus();speak(SAMPLE[x[1]],x[1]==='ko'?'ko-KR':'vi-VN');
+     });
+   });
+   function paintAccentStatus(){
+     var missing=[];
+     if(VOICE_REGION.vi==='south'&&!preferredRegionalVoice('vi'))missing.push('Giọng miền Nam chưa được trình duyệt xác nhận; sẽ dùng giọng hiện có, không bảo đảm đúng vùng.');
+     if(VOICE_REGION.ko==='seoul'&&!preferredRegionalVoice('ko'))missing.push('Giọng Seoul chưa được xác nhận; tiếng Hàn chuẩn ko-KR được ưu tiên nếu có.');
+     $('nhiAccentStatus').textContent=missing.join(' ');
+   }
+   paintAccentStatus();
+   if(canSpeak){try{window.speechSynthesis.addEventListener('voiceschanged',paintAccentStatus);}catch(e){}}
   $('voicePanel').addEventListener('click', function (e) {
     var b = e.target.closest('[data-test]'); if (!b) return;
     var lang = b.dataset.test; speak(SAMPLE[lang], {ko:'ko-KR',vi:'vi-VN',en:'en-US'}[lang]);
@@ -4183,7 +4211,8 @@ button,input,select,textarea{font-family:var(--ui)}
     }
     function paintQuick() {
       var q = $('aiQuick'), c = PLAN.ctx(); q.textContent = '';
-      var items = c && c.ko ? ['Giải thích thẻ này', 'Phân tích ngữ pháp', 'Cho 3 ví dụ khác', 'Cách nói lịch sự hơn', 'Bản dịch này tự nhiên chưa?'] : ['Cách chào sếp buổi sáng', 'Phân biệt 은/는 và 이/가', 'Mẫu câu báo cáo tiến độ'];
+      var defaults = c && c.ko ? ['Giải thích thẻ này', 'Phân tích ngữ pháp', 'Cho 3 ví dụ khác', 'Cách nói lịch sự hơn', 'Bản dịch này tự nhiên chưa?'] : ['Cách chào sếp buổi sáng', 'Phân biệt 은/는 và 이/가', 'Mẫu câu báo cáo tiến độ'];
+      var items=window.NHI_PROMPTS?window.NHI_PROMPTS.list(!!(c&&c.ko),defaults):defaults;
       items.forEach(function (t) { var b = mkBtn('', t); b.addEventListener('click', function () { send(t); }); q.appendChild(b); });
     }
     function paintLog() {
@@ -4329,6 +4358,7 @@ button,input,select,textarea{font-family:var(--ui)}
 <script src="nhi-fireworks-v3.js?v=3"></script>
 <script src="study-update-v6.js?v=20261114-v7"></script>
 <script src="nhi-interface-v5.js?v=20261114"></script>
+<script src="nhi-november-v15.js?v=20261114-ux-v15"></script>
 <script src="nhi-seasons-v1.js?v=20261113-original-garden-v2"></script>
 <script src="nhi-living-garden-v1.js?v=20261113-cartoon-butterflies-v1"></script>
 </body></html>
