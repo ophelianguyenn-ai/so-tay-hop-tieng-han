@@ -90,7 +90,7 @@ async function setup(){
  });
  cover.append(button);
  const stored=await readDb();
- if(stored){showGif(URL.createObjectURL(stored),null);return;}
+ if(stored){const localUrl=URL.createObjectURL(stored);showGif(localUrl,localUrl);return;}
  try{
   const text=localStorage.getItem(KEY);
   if(text&&text.startsWith('data:image/gif;base64,')){showGif(text,null);return;}
