@@ -33,7 +33,7 @@ jobs:
           # scripts, Netlify settings, internal notes or credentials.
           files=(
             study-update-v6.js study-update-v6.css nhi-november-v15.js nhi-november-v15.css
-            nhi-late-2026.js nhi-late-2026.css nhi-romance-v1.js nhi-romance-v1.css nhi-luong-v1.svg
+            nhi-late-2026.js nhi-late-2026.css nhi-romance-v1.js nhi-romance-v1.css nhi-luong-v1.svg nhi-couple-gif-v1.js nhi-couple-gif-v1.css
             index.html nhi-neck-options.html sw.js manifest.webmanifest
             lessons.json technical-images.json audio-manifest.json
             qrcode.js garden-v10.js
@@ -60,6 +60,8 @@ jobs:
             cp -- "$file" _site/
           done
           if [ -f english.json ]; then cp english.json _site/; else printf '{"version":1,"cards":{}}\n' > _site/english.json; fi
+          # Original GIF, when provided in the repository root, is published as-is.
+          if [ -f luong-nhi-goc.gif ]; then cp -- luong-nhi-goc.gif _site/; fi
           if [ -d pictures ]; then cp -R pictures _site/; fi
           if [ -d audio ]; then cp -R audio _site/; fi
           touch _site/.nojekyll
