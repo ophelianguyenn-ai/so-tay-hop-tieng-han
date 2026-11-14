@@ -27,8 +27,8 @@ try{save({url:c.toDataURL('image/jpeg',0.7),caption:it.vi||it.ko||''});}catch(e)
 function picker(it,save,close){
 var root=E('section','nhi-picture-picker');root.setAttribute('role','dialog');root.setAttribute('aria-label','Tìm ảnh minh họa Google');
 var top=E('div','nhi-picture-head');top.appendChild(E('strong',null,'Hình ảnh minh họa · Google'));
-var quit=E('button','ghost','× Đóng');quit.type='button';quit.addEventListener('click',close);top.appendChild(quit);root.appendChild(top);
-root.appendChild(E('p','nhi-google-note','Chỉ lưu ảnh bạn chọn, và chỉ hiện ở mặt sau thẻ dưới chữ Hàn.'));
+var quit=E('button','ghost','×');quit.setAttribute('aria-label','Đóng chọn ảnh');quit.type='button';quit.addEventListener('click',close);top.appendChild(quit);root.appendChild(top);
+
 var form=E('form','nhi-picture-search'),input=E('input','field');input.type='search';input.value=term(it);input.placeholder='Ví dụ: industrial heat exchanger';input.setAttribute('aria-label','Từ khóa tìm Google Hình ảnh');
 var go=E('button','primary','Tìm');go.type='submit';form.appendChild(input);form.appendChild(go);root.appendChild(form);
 var link=E('a','ghost','Mở Google Hình ảnh');link.href=searchUrl(input.value);link.target='_blank';link.rel='noopener noreferrer';root.appendChild(link);

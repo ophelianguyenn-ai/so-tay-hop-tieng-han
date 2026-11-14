@@ -39,7 +39,7 @@ try{
  await page.waitForSelector('.nhi-en-edit',{timeout:5000});
  await page.$eval('.nhi-en-edit',b=>b.click());
  await page.waitForSelector('.nhi-en-edit-form',{timeout:5000});
- await page.$eval('.nhi-en-edit-form textarea',x=>{x.value='Reviewed English sample';x.dispatchEvent(new Event('input',{bubbles:true}));});
+ await page.$eval('.nhi-en-edit-form [data-language=en]',x=>{x.textContent='Reviewed English sample';x.dispatchEvent(new Event('input',{bubbles:true}));});
  await page.$eval('.nhi-en-edit-form input',x=>{x.value='rɪˈvjuːd ˈɪŋɡlɪʃ ˈsæmpəl';x.dispatchEvent(new Event('input',{bubbles:true}));});
  await page.$eval('.nhi-en-edit-form button[type="submit"]',b=>b.click());
  const revised=await page.evaluate(()=>({

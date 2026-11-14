@@ -23,20 +23,20 @@ try{
  await page.click('.cicons [title*="Sửa thẻ"]');
  const bounds=await page.$eval('.editbox',e=>{const r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom,height:innerHeight,position:getComputedStyle(e).position};});
  assert(bounds.position==='fixed'&&bounds.top>=0&&bounds.bottom<=bounds.height,'Editor is outside viewport');
- await page.$eval('textarea[name="vi"]',e=>{e.focus();e.setSelectionRange(0,Math.min(2,e.value.length));});
- await page.$eval('textarea[name="vi"]',e=>e.parentElement.nextElementSibling.querySelector('button').click());
- await page.$eval('textarea[name="note"]',e=>{e.value='Ghi chú kiểm tra';});
+ await page.$eval('[data-language="vi"]',e=>{e.focus();const r=document.createRange();r.selectNodeContents(e);const sel=getSelection();sel.removeAllRanges();sel.addRange(r);});
+ await page.click('.nhi-format-tools button[aria-label^="In đậm"]');
+ await page.$eval('[data-language="note"]',e=>{e.focus();e.textContent='Ghi chú kiểm tra';e.dispatchEvent(new Event('input',{bubbles:true}));});
  await page.$eval('.editbox button[type="submit"]',e=>e.click());
  await page.keyboard.press('Enter');await page.waitForSelector('.nhi-card-note');
  assert(await page.$eval('.nhi-card-note',e=>e.textContent)==='Ghi chú kiểm tra','Note did not save');
  assert(await page.$eval('.vi-under',e=>!!e.querySelector('[style*="font-weight"]')),'Selected text bold format missing');
- await page.click('.nhi-en-forgot input');
+ await page.click('.nhi-thinking-button');
  const stored=await page.evaluate(()=>JSON.parse(localStorage.getItem('viko-plan-v1')));assert(Object.values(stored.enHard).some(x=>x.v===1),'English unremembered flag missing');
  const word=await page.$eval('.nhi-en-translation .nhi-en-word',e=>e.textContent);
  await page.$eval('.nhi-en-translation .nhi-en-word',e=>e.dispatchEvent(new MouseEvent('dblclick',{bubbles:true,cancelable:true})));
- assert(await page.$eval('dialog iframe',e=>e.src).then(x=>x.includes('vdict.com')&&x.includes(encodeURIComponent(word))),'VDict dialog missing');
- await page.click('dialog button');
- await page.click('.nhi-dict-button');assert(await page.$eval('dialog iframe',e=>e.src).then(x=>x.includes('kovidict')),'Naver VI dialog missing');await page.click('dialog button');
+ assert(await page.$eval('.nhi-dictionary-dock iframe',e=>e.src).then(x=>x.includes('vdict.com')&&x.includes(encodeURIComponent(word))),'VDict dialog missing');
+ await page.click('.nhi-dictionary-dock .nhi-dialog-head button');
+ await page.click('.nhi-dict-button');assert(await page.$eval('.nhi-dictionary-dock iframe',e=>e.src).then(x=>x.includes('kovidict')),'Naver VI dialog missing');await page.click('.nhi-dictionary-dock .nhi-dialog-head button');
  // Image picker accepts clipboard files; no redundant link-save or API panel.
  await page.click('.cicons [title*="Tìm ảnh"]');
  assert(await page.$eval('.nhi-picture-picker',e=>!e.textContent.includes('Lưu ảnh từ liên kết')&&!e.textContent.includes('Đã có Google Custom Search')),'Legacy image controls remain');
@@ -71,3 +71,4 @@ try{
  assert(errors.length===0,'Page runtime errors: '+errors.join('; '));
  console.log('STUDY V6 PASS',JSON.stringify({spoken,editor:bounds,notes:true,formatting:true,englishReview:true,dictionaries:true,pasteImage:true,undo:true,keyboard:true,mascot:true,chatEnter:true}));
 }finally{await browser.close();}
+await import('./smoke-layout-v7.mjs');

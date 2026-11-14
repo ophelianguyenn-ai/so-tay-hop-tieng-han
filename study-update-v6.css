@@ -42,3 +42,71 @@ html body #planBox .pcard .nhi-editor-window-v5,html body .nhi-picture-picker{po
 #aiPanel .aisetup{flex:0 1 auto;min-height:0;max-height:36dvh;overflow:auto;overscroll-behavior:contain}
 #aiPanel .ailog{min-height:0;flex:1 1 0;overflow:auto}
 #aiPanel .aiquick{flex-shrink:0;max-height:110px;overflow:auto}
+/* November card controls: a single editing toolbar and contiguous side panes. */
+:root{--nhi-card-ko:36px;--nhi-card-vi:26px;--nhi-card-en:22px;--nhi-dock-width:0px;--nhi-ai-effective:520px;--nhi-dict-effective:480px}
+html body #planBox .pcard .prompt{font-size:var(--nhi-card-vi)!important}
+html body #planBox .pcard .answer.ko{font-size:var(--nhi-card-ko)!important}
+html body #planBox .vi-under{font-size:var(--nhi-card-vi)!important}
+html body .nhi-english-v5,html body .nhi-en-choices,html body .nhi-en-choice,html body .nhi-en-choice *{font-family:"Times New Roman",Times,serif!important}
+html body .nhi-english-v5 .nhi-en-translation{font-family:"Times New Roman",Times,serif!important;font-size:var(--nhi-card-en)!important;font-weight:400!important}
+#planBox .pfront{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:10px 12px;align-items:start}
+#planBox .pfront>.answer,#planBox .pfront>.hanja,#planBox .pfront>.prompt{grid-column:1/-1;max-width:100%;margin:0;text-align:center}
+#planBox .pfront>.vi-under{grid-column:1;grid-row:auto;margin:0;align-self:center}
+.nhi-card-dictionaries{grid-column:2;display:flex;gap:6px;align-self:center}
+html body .nhi-dict-button{padding:0!important;min-width:36px!important;width:36px!important;height:36px!important;border:0!important;border-radius:5px;overflow:hidden;background:transparent!important}
+.nhi-dict-button svg{width:100%;height:100%}
+html body #planBox .nhi-card-note,html body #planBox .nhi-english-v5{grid-column:1/-1;width:100%!important;max-width:none!important;box-sizing:border-box;margin:0!important;padding:12px 16px!important;border-radius:12px;min-height:64px}
+#planBox .pfront.nhi-with-image{grid-template-columns:minmax(0,1fr) auto minmax(100px,30%)}
+#planBox .pfront.nhi-with-image>.answer,#planBox .pfront.nhi-with-image>.hanja,#planBox .pfront.nhi-with-image>.nhi-card-note,#planBox .pfront.nhi-with-image>.nhi-english-v5{grid-column:1/3}
+html body #planBox .pfront.nhi-with-image>.card-illustration{grid-column:3;grid-row:1/12;width:100%!important;max-width:none!important;margin:0!important;align-self:center}
+html body #planBox .card-illustration img{width:100%;max-height:300px;object-fit:contain}
+.nhi-en-head-actions{display:flex;align-items:center;gap:8px;margin-left:auto}
+html body .nhi-en-speak,html body .nhi-en-edit{display:inline-grid;place-items:center;width:34px;height:34px;padding:3px!important;border:0!important;background:transparent!important}
+.nhi-en-speak svg,.nhi-en-edit svg{width:29px;height:29px}
+.nhi-en-forgot{position:relative;display:inline-flex!important;margin-left:auto}
+.nhi-thinking-button{border:0;background:transparent;padding:0;width:38px;height:38px;cursor:pointer}
+.nhi-thinking-button img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.nhi-thinking-button[aria-pressed=true]{filter:drop-shadow(0 0 4px #e9ac31)}
+.nhi-forgot-bubble{position:absolute;right:0;bottom:calc(100% + 8px);width:max-content;max-width:230px;padding:9px 12px;background:var(--surface);color:var(--ink);box-shadow:var(--sh-2);border:1px solid var(--line);border-radius:14px;font:14px/1.4 var(--ui)!important;z-index:6}
+.nhi-forgot-bubble[hidden]{display:none}
+html body .nhi-en-choice{display:flex!important;gap:8px;align-items:start;width:100%;padding:8px 0!important;cursor:default}
+.nhi-en-choice>span:nth-child(2){flex:1;min-width:0}
+.nhi-en-choice input{appearance:auto!important;width:19px!important;height:19px!important;flex-shrink:0;accent-color:var(--accent-t);cursor:pointer}
+.nhi-comparison-flag{font-family:system-ui!important;font-size:22px;flex-shrink:0}
+.nhi-format-tools{position:sticky;top:-48px;z-index:4;display:flex;background:var(--surface);padding:8px 0;border-bottom:1px solid var(--line);gap:6px;margin:0 0 8px}
+.nhi-format-tools select{min-height:32px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px}
+.nhi-format-active{min-width:48px;color:var(--muted);font-size:13px}
+.nhi-format-tools [aria-pressed=true]{outline:2px solid var(--accent-t);outline-offset:1px}
+.nhi-color-swatch{width:25px;height:25px;min-height:25px!important;padding:0!important;border:1px solid #788a9980;border-radius:50%}
+.nhi-rich-field{display:block;min-height:70px;white-space:pre-wrap;overflow-wrap:anywhere;cursor:text;text-align:left;font-size:18px;font-weight:400;line-height:1.55}
+.nhi-rich-field[lang=en]{font-family:"Times New Roman",Times,serif}
+.nhi-rich-field[lang=ko]{font-family:var(--ko)}
+.editbox textarea[hidden],.nhi-en-edit-form textarea[hidden]{display:none!important}
+.nhi-en-edit-form .nhi-format-tools{position:static}
+.nhi-dictionary-dock{position:fixed;top:0;bottom:0;right:var(--nhi-ai-effective,0px);width:var(--nhi-dict-effective);z-index:44;background:var(--surface);color:var(--ink);display:flex;flex-direction:column;min-width:0;border-left:1px solid var(--line)}
+.nhi-dictionary-dock[hidden]{display:none}
+.nhi-dictionary-dock .nhi-dialog-head{padding:10px;gap:6px;flex-wrap:wrap}
+.nhi-dictionary-dock .nhi-dialog-head strong{flex:1;min-width:70px;overflow-wrap:anywhere}
+.nhi-dictionary-dock .nhi-dialog-head button{font:24px/1 var(--ui);padding:3px 7px}
+.nhi-dictionary-dock>a,.nhi-dictionary-dock>.hint{margin:4px 10px;font-size:12px}
+.nhi-dictionary-dock iframe{width:100%;flex:1;min-height:0;border:0;background:white;margin:0}
+.nhi-dict-resize{position:absolute;left:-4px;top:0;bottom:0;width:8px;cursor:ew-resize;touch-action:none;z-index:5}
+.nhi-dict-resize:focus-visible{outline:2px solid var(--accent-t)}
+html body.nhi-docked .app{width:calc(100% - var(--nhi-dock-width))!important;max-width:none!important;margin-left:0!important;margin-right:var(--nhi-dock-width)!important;padding-right:0!important;padding-left:0!important;overflow-x:clip}
+html body.nhi-docked #view-plan,html body.nhi-docked #planBox,html body.nhi-docked .pcardwrap{width:100%!important;max-width:none!important;margin-inline:0!important}
+html body.nhi-docked #planBox .pcard{width:100%!important;max-width:none!important;margin:0!important;border-top-right-radius:0;border-bottom-right-radius:0}
+html body.nhi-docked .topbar{padding-right:calc(var(--nhi-dock-width) + 8px)!important}
+html body.nhi-docked .menu{right:var(--nhi-dock-width)!important}
+html body.ai-open #aiPanel.aipanel{width:var(--nhi-ai-effective)!important;box-shadow:none!important}
+html body #aiResizeHandle{left:-4px;width:8px;height:100%;top:0;transform:none;border:0;border-radius:0;background:transparent;box-shadow:none}
+#aiResizeHandle span{display:none}
+.nhi-ai-paragraph{display:flex;align-items:flex-start;gap:7px;margin:0 0 9px}
+.nhi-ai-paragraph-text{white-space:pre-wrap;min-width:0;overflow-wrap:anywhere}
+html body .nhi-read-message{flex:0 0 24px;width:24px;height:27px;display:inline-grid;place-items:center;margin:0;padding:0;border:0;background:transparent}
+.nhi-read-message svg{width:23px;height:23px}
+.nhi-read-message[aria-pressed=true]{background:var(--accent-soft);border-radius:50%}
+html body #nhi-hard-mascot{width:min(var(--nhi-companion-size,180px),40%)!important;pointer-events:auto!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible}
+html body #nhi-hard-mascot img{pointer-events:auto!important;touch-action:none!important;cursor:nwse-resize!important;filter:none!important;user-select:none}
+html body #nhi-hard-mascot .nhi-hard-caption{background:transparent!important;border:0!important;box-shadow:none!important}
+html body #planBox .pcard.nhi-mascot-active .pfront{padding-left:var(--nhi-companion-space,190px)!important}
+@media(max-width:699px){html body.nhi-docked .topbar{padding-right:8px!important;width:calc(100% - var(--nhi-dock-width))}.nhi-dictionary-dock .nhi-dialog-head{font-size:12px}.nhi-card-dictionaries{gap:3px}html body .nhi-dict-button{width:30px!important;min-width:30px!important;height:30px!important}#planBox .pfront.nhi-with-image{grid-template-columns:minmax(0,1fr) auto minmax(65px,27%)}#planBox .pcard{padding-inline:10px!important}.nhi-format-tools{top:-48px}.nhi-en-head{flex-wrap:wrap}html body.ai-open .aihead{flex-wrap:wrap!important}.nhi-format-active{min-width:35px}}
