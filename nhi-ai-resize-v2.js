@@ -9,7 +9,7 @@ function init(){
  var panel=document.getElementById('aiPanel'),handle=document.getElementById('aiResizeHandle'),font=document.getElementById('aiFontSize');
  if(!panel||!handle||!font)return;
  function min(){return 340;}
- function max(){return Math.max(min(),Math.min(980,innerWidth-460));}
+ function max(){return Math.max(min(),Math.min(980,innerWidth-420));}
  function render(){
    if(innerWidth>=700){
      pref.width=clamp(Number(pref.width)||520,min(),max());

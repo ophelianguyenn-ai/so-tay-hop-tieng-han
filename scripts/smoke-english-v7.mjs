@@ -16,6 +16,7 @@ const browser=await puppeteer.launch({headless:true,executablePath:process.env.C
 const errors=[];
 try{
  const page=await browser.newPage();
+ await page.evaluateOnNewDocument(()=>{try{localStorage.setItem('nlc-prefs-v1',JSON.stringify({fx:false}));}catch(e){}});
  page.on('pageerror',e=>errors.push(String(e)));
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});
  await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
@@ -74,7 +75,7 @@ try{
   return {serif:getComputedStyle(document.body).fontFamily.includes('Times New Roman'),
    plain:rows.length===2&&rows.every(row=>{const css=getComputedStyle(row);return css.backgroundColor==='rgba(0, 0, 0, 0)'&&css.borderTopWidth==='0px'&&css.boxShadow==='none';})};
  });
- if(!appearance.serif||!appearance.plain)throw Error('Serif or plain comparison styling missing: '+JSON.stringify(appearance));
+ if(appearance.serif||!appearance.plain)throw Error('Sans Vietnamese or plain comparison styling missing: '+JSON.stringify(appearance));
  const noDevice=await page.evaluate(async text=>{
   const old=speechSynthesis.getVoices;speechSynthesis.getVoices=()=>[];speechSynthesis.dispatchEvent(new Event('voiceschanged'));
   const selectors=['voiceKo','voiceVi','voiceEn'].every(id=>!document.getElementById(id).disabled&&document.getElementById(id).options[0].textContent.includes('Neural'));
