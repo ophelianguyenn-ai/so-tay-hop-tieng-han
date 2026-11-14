@@ -61,7 +61,10 @@ try{
  await page.waitForFunction(()=>document.querySelector('#aiLog').textContent.includes('Giải thích từ này'));
  console.log('CHAT CONTROL BOUNDS',await page.$eval('#aiClose',e=>{const r=e.getBoundingClientRect();return {display:getComputedStyle(e).display,top:r.top,bottom:r.bottom,width:r.width,height:r.height,viewport:innerHeight};}));
  await page.click('#aiClose');
+ await page.waitForFunction(()=>document.querySelector('#aiPanel').getBoundingClientRect().left>=innerWidth-1);
  await page.click('#planBox .shead button:first-child');
+ await page.waitForSelector('#planBox .phero');
+ console.log('ENGLISH REVIEW LESSON',await page.$eval('#planBox',e=>e.innerText.slice(0,450)));
  await page.evaluate(()=>[...document.querySelectorAll('#planBox button')].find(b=>b.textContent.includes('Ôn chưa nhớ tiếng Anh')).click());
  await page.waitForSelector('#planBox .pcard');
  assert((await page.$eval('#planBox .counter',e=>e.textContent)).endsWith('/ 1'),'English review includes unrelated cards');

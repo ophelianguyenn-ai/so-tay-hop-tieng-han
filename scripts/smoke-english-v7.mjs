@@ -16,6 +16,7 @@ const browser=await puppeteer.launch({headless:true,executablePath:process.env.C
 const errors=[];
 try{
  const page=await browser.newPage();
+ await page.evaluateOnNewDocument(()=>localStorage.setItem('nlc-prefs-v1',JSON.stringify({fx:false}))); 
  page.on('pageerror',e=>errors.push(String(e)));
  await page.setViewport({width:390,height:844,isMobile:true,hasTouch:true,deviceScaleFactor:1});
  await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
