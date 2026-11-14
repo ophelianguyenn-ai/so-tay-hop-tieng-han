@@ -58,7 +58,7 @@ function compactEditor(editor){
   for(const node of editor.querySelectorAll('.nhi-rich-field,textarea[name="pairs"]')){
    const style=getComputedStyle(node);
    if(ctx)ctx.font=style.font;
-   const lines=String(node.value??node.textContent??'').split(/\\n/);
+   const lines=String(node.value??node.textContent??'').split(/\n/);
    let widest=0;
    for(const line of lines)widest=Math.max(widest,ctx?ctx.measureText(line).width:line.length*10);
    const max=Math.min(690,Math.max(260,editor.clientWidth-36));
