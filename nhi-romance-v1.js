@@ -34,6 +34,11 @@ function setup(){
  bridge.addEventListener('click',e=>{e.stopPropagation();const now=toggleMusic();bridge.setAttribute('aria-pressed',String(now));if(now)roses();});
  const layer=make('div','nhi-story-layer');layer.id='nhiRomanceHearts';layer.setAttribute('aria-hidden','true');cover.append(layer);
  const roseLayer=make('div','nhi-story-layer');roseLayer.id='nhiRomanceRoses';roseLayer.setAttribute('aria-hidden','true');cover.append(roseLayer);
+ const enter=make('button','nhi-romance-enter');
+ enter.id='nhiRomanceEnter';enter.type='button';enter.textContent='→';
+ enter.title='Vào học';enter.setAttribute('aria-label','Vào học');
+ enter.addEventListener('click',e=>{e.stopPropagation();document.getElementById('coverGo')?.click();});
+ cover.append(enter);
  const name=make('div','nhi-romance-title');name.id='nhiLoveTitle';name.setAttribute('aria-live','polite');
  name.append(document.createTextNode('Lương '));const h=make('b');h.textContent='❤️';name.append(h,document.createTextNode(' Nhi'));cover.append(name);
 }
