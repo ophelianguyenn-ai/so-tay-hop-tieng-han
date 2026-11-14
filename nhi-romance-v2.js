@@ -56,7 +56,7 @@ function setup(){
 }
 function reset(){
  sceneId++;scheduled.forEach(clearTimeout);scheduled=[];
- cover.classList.remove('nhi-romance-v2-running','nhi-v2-kissing','nhi-v2-done','nhi-v2-talking');
+ cover.classList.remove('nhi-romance-v2-running','nhi-v2-kissing','nhi-v2-done','nhi-v2-talking','nhi-v2-preview');
  document.querySelector('.nhi-illustrated-hearts')?.replaceChildren();
  document.querySelector('.nhi-illustrated-flowers')?.replaceChildren();
 }
