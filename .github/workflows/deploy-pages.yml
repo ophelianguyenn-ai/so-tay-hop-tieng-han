@@ -34,6 +34,8 @@ jobs:
           files=(
             study-update-v6.js study-update-v6.css nhi-november-v15.js nhi-november-v15.css
             nhi-late-2026.js nhi-late-2026.css nhi-romance-v1.js nhi-romance-v1.css nhi-luong-v1.svg nhi-couple-gif-v1.js nhi-couple-gif-v1.css
+            nhi-romance-v2.js nhi-romance-v2.css nhi-controls-v3.css nhi-bubble-effects-v3.css
+            nhi-luong-reference-v2.svg nhi-luong-kiss-v2.svg
             index.html nhi-neck-options.html sw.js manifest.webmanifest
             lessons.json technical-images.json audio-manifest.json
             qrcode.js garden-v10.js
