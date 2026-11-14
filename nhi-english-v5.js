@@ -235,7 +235,7 @@ function display(box,entry,id,vi,ko){
  if(!box)return;
  entry=choices[entryKey(vi,ko)]||entry;
  const en=clean(entry&&entry.en),ipa=clean(entry&&entry.ipa);
- const translation=box.querySelector('.nhi-en-translation');translation.textContent=en||'Đang chuẩn bị bản dịch tiếng Anh…';if(en&&window.NHI_STUDY){window.NHI_STUDY.wordElements(translation,en);window.NHI_STUDY.formatText(translation,box._format||entry?.format||{},'en');}
+ const translation=box.querySelector('.nhi-en-translation');translation.textContent=en||'Đang chuẩn bị bản dịch tiếng Anh…';if(en&&window.NHI_STUDY){window.NHI_STUDY.wordElements(translation,en);window.NHI_STUDY.formatText(translation,entry?.format||box._format||{},'en');}
  const span=box.querySelector('.nhi-en-ipa');span.textContent=ipa?'/'+ipa.replace(/^\/|\/$/g,'')+'/':'';span.hidden=!ipa;
  const play=box.querySelector('.nhi-en-speak');
  play.hidden=!en;play.onclick=()=>window.NHI_SPEECH?window.NHI_SPEECH.toggle(en,'en-US'):speakEnglish(en);
@@ -271,7 +271,7 @@ function editEnglish(box,id,vi,ko) {
     try{localStorage.setItem(CHOICE_KEY,JSON.stringify(choices));}catch(e){}
     form.remove();display(box,edits[id],id,vi,ko);
   });
-  box.appendChild(form);field.focus();
+  box.appendChild(form);(form.querySelector('[data-language=en]')||field).focus();
 }
 function mount(parent,id,vi,ko,options){
  if(!parent)return;

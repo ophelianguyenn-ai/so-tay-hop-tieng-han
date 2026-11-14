@@ -110,3 +110,5 @@ html body #nhi-hard-mascot img{pointer-events:auto!important;touch-action:none!i
 html body #nhi-hard-mascot .nhi-hard-caption{background:transparent!important;border:0!important;box-shadow:none!important}
 html body #planBox .pcard.nhi-mascot-active .pfront{padding-left:var(--nhi-companion-space,190px)!important}
 @media(max-width:699px){html body.nhi-docked .topbar{padding-right:8px!important;width:calc(100% - var(--nhi-dock-width))}.nhi-dictionary-dock .nhi-dialog-head{font-size:12px}.nhi-card-dictionaries{gap:3px}html body .nhi-dict-button{width:30px!important;min-width:30px!important;height:30px!important}#planBox .pfront.nhi-with-image{grid-template-columns:minmax(0,1fr) auto minmax(65px,27%)}#planBox .pcard{padding-inline:10px!important}.nhi-format-tools{top:-48px}.nhi-en-head{flex-wrap:wrap}html body.ai-open .aihead{flex-wrap:wrap!important}.nhi-format-active{min-width:35px}}
+#cPrompt:not(.ko),#cAnswer:not(.ko){font-size:var(--nhi-card-vi)!important}#cPrompt.ko,#cAnswer.ko{font-size:var(--nhi-card-ko)!important}
+html body .nhi-picture-picker .nhi-picture-head>button{font-size:24px!important}
