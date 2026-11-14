@@ -1,8 +1,8 @@
 // Offline support: network-first for GitHub Pages and static assets.
 // Fall back to cache only when offline. Different cache key forces eviction of earlier stale CSS/JS.
-const CACHE = 'nhi-corner-v41-study-layout';
+const CACHE = 'nhi-corner-v42-november-polish';
 const CORE = [
-  'study-update-v6.js','study-update-v6.css',
+  'study-update-v6.js','study-update-v6.css','nhi-november-v15.js','nhi-november-v15.css',
   './','index.html','manifest.webmanifest','qrcode.js','lessons.json',
   'icon-192.png','icon-512.png','refresh-v9.css','study-enhancements-v13.css',
   'hanja-v9.js','hanja-extra-v12.js','nhi-avatar.png','nhi-mascot.webp',
