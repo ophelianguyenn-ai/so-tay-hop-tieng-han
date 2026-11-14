@@ -1735,7 +1735,9 @@ button,input,select,textarea{font-family:var(--ui)}
     var cfg = null, es = null, pending = {}, flushing = false, flushTimer = null, connected = false, lastErr = '', onRemote = null;
     try { cfg = JSON.parse(lsGet(SYNC_CFG_KEY) || 'null'); } catch (e) { cfg = null; }
     if (cfg && !(cfg.url && cfg.code && validDbUrl(cfg.url))) cfg = null;
-    if (!cfg && SYNC_PRESET.url && SYNC_PRESET.code && validDbUrl(SYNC_PRESET.url)) cfg = { url: cleanDbUrl(SYNC_PRESET.url), code: SYNC_PRESET.code };
+    var localPreview = /^(localhost|127\.0\.0\.1)$/.test(location.hostname);
+    if(localPreview)cfg=null;
+    if (!cfg && !localPreview && SYNC_PRESET.url && SYNC_PRESET.code && validDbUrl(SYNC_PRESET.url)) cfg = { url: cleanDbUrl(SYNC_PRESET.url), code: SYNC_PRESET.code };
     try { pending = JSON.parse(lsGet(SYNC_PEND_KEY) || '{}') || {}; } catch (e) { pending = {}; }
     function base() { return cfg.url + '/sync/' + cfg.code; }
     function savePending() { lsSet(SYNC_PEND_KEY, JSON.stringify(pending)); }
