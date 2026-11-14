@@ -18,7 +18,7 @@ window.NHI_PROMPTS={list};
 function node(tag,className,text){const e=document.createElement(tag);if(className)e.className=className;if(text!==undefined)e.textContent=text;return e;}
 function makeBtn(text,action){const b=node('button','ghost',text);b.type='button';b.addEventListener('click',action);return b;}
 function setupPrompts(){
- const target=document.getElementById('nhiCardFontSettings');if(!target)return;
+ const target=document.getElementById('aiSetup');if(!target)return;
  const root=node('section','setgroup');root.id='nhiAiQuickEditor';
  root.append(node('h3',null,'Câu hỏi mẫu trong chatbox AI'));
  root.append(node('p','voice-note','Thêm, sửa hoặc xóa câu hỏi nhanh. Nội dung được lưu trên trình duyệt này.'));
@@ -35,7 +35,7 @@ function setupPrompts(){
    const row=node('div','nhi-prompt-row');
    const field=node('input','field');field.type='text';field.value=v;field.maxLength=140;
    field.setAttribute('aria-label','Câu hỏi mẫu '+(i+1));
-   field.addEventListener('change',()=>{const copy=current();copy[i]=field.value.trim();setCurrent(copy.filter(Boolean));draw();});
+   field.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();field.blur();}});field.addEventListener('change',()=>{const copy=current();copy[i]=field.value.trim();setCurrent(copy.filter(Boolean));draw();});
    const remove=makeBtn('×',()=>{const copy=current();copy.splice(i,1);setCurrent(copy);draw();});
    remove.title='Xóa câu hỏi '+(i+1);remove.setAttribute('aria-label',remove.title);
    row.append(field,remove);rows.append(row);
@@ -50,7 +50,7 @@ function setupPrompts(){
   if(last){last.focus();last.select();}
  });
  const restore=makeBtn('Khôi phục mặc định',()=>{delete data[scope];save();draw();});
- actions.append(add,restore);root.append(tabs,rows,actions);target.before(root);draw();
+ actions.append(add,restore);root.append(tabs,rows,actions);target.append(root);draw();
 }
 function setupMenu(){
  const menu=document.getElementById('menuList'),top=document.getElementById('aiBtn');if(!menu||!top)return;
