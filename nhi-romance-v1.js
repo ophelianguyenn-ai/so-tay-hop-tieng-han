@@ -50,16 +50,19 @@ function hearts(count){
  const layer=document.getElementById('nhiRomanceHearts');
  if(!layer||reduced())return;
  const frag=document.createDocumentFragment();
- const marks=['❤️','💗','💕','💖','💓','💞','✨','♥'];
+ const marks=['♡','♥','♡','♥'];
  for(let i=0;i<count;i++){
   const item=make('span','nhi-love-heart');item.textContent=marks[i%marks.length];
-  item.style.setProperty('--heart-size',random(13,39)+'px');
+  item.style.setProperty('--heart-size',random(15,26)+'px');
+  item.style.setProperty('--heart-color',['#f296a6','#ed6f83','#e3a64f','#ffbb71'][i%4]);
+  item.style.left=(i%2===0?'17%':'83%');
+  item.style.top=random(34,55)+'%';
   item.style.setProperty('--heart-time',random(5.3,10)+'s');
   item.style.setProperty('--heart-delay',random(0,4)+'s');
-  item.style.setProperty('--start-x',random(-145,145)+'px');
-  item.style.setProperty('--start-y',random(-80,180)+'px');
-  item.style.setProperty('--end-x',random(-innerWidth*.47,innerWidth*.47)+'px');
-  item.style.setProperty('--end-y',random(-innerHeight*.8,-innerHeight*1.3)+'px');
+  item.style.setProperty('--start-x',random(-35,35)+'px');
+  item.style.setProperty('--start-y',random(0,75)+'px');
+  item.style.setProperty('--end-x',(i%2===0?-1:1)*random(35,115)+'px');
+  item.style.setProperty('--end-y',random(-innerHeight*.55,-innerHeight*.9)+'px');
   item.style.setProperty('--turn',random(-250,250)+'deg');
   frag.append(item);
  }
@@ -76,15 +79,15 @@ function startScene(){
  void cover.offsetWidth;
  cover.classList.add('nhi-romance-on');
  if(reduced()){title.classList.add('nhi-visible');talk();return;}
- later(()=>hearts(innerWidth<700?90:170),5300);
- later(()=>hearts(innerWidth<700?75:130),11300);
+ later(()=>hearts(innerWidth<700?6:9),5300);
+ later(()=>hearts(innerWidth<700?5:7),11300);
  later(()=>talk(),17300);
  later(()=>title.classList.add('nhi-visible'),19200);
 }
 function roses(){
  const layer=document.getElementById('nhiRomanceRoses');if(!layer||reduced())return;
  layer.replaceChildren();const frag=document.createDocumentFragment();
- for(let i=0;i<(innerWidth<700?65:105);i++){
+ for(let i=0;i<(innerWidth<700?24:42);i++){
   const item=make('span','nhi-rose');item.textContent=i%5===0?'🌸':'🌹';
   item.style.setProperty('--rose-x',random(0,100)+'%');
   item.style.setProperty('--rose-size',random(17,36)+'px');
