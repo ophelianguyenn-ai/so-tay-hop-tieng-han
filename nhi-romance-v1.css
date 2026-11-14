@@ -98,3 +98,27 @@
  #cover .nhi-romance-title.nhi-visible{opacity:1;animation:none;transform:translateX(-50%)}
  #cover .nhi-love-heart,#cover .nhi-rose{display:none}
 }
+
+/* Discoverable hotspots over the sun and wooden bridge in the painted scene. */
+#cover #nhiSunKiss::before{
+ content:"";position:absolute;left:50%;top:50%;width:60px;height:60px;
+ border:2px solid rgba(255,249,179,.68);border-radius:50%;
+ transform:translate(-50%,-50%);pointer-events:none;
+ box-shadow:0 0 0 7px rgba(255,241,151,.12),0 0 26px 10px rgba(255,233,139,.25);
+ animation:nhi-sun-guide 4.5s ease-in-out infinite;
+}
+#cover #nhiSunKiss::after{
+ content:"♡";position:absolute;top:48%;left:50%;
+ transform:translate(-50%,-50%);color:#fff5d2;
+ font:900 18px system-ui,sans-serif;text-shadow:0 1px 5px #ab7955;
+ pointer-events:none;opacity:.84;
+}
+#cover #nhiBridgeMusic::after{
+ content:"♪";position:absolute;left:50%;top:51%;
+ transform:translate(-50%,-50%);color:#fff1cb;
+ font:900 20px Georgia,serif;text-shadow:0 2px 5px #503a29;
+ pointer-events:none;opacity:.76;
+}
+@keyframes nhi-sun-guide{0%,100%{opacity:.45;transform:translate(-50%,-50%) scale(.93)}
+ 50%{opacity:.9;transform:translate(-50%,-50%) scale(1.13)}}
+#cover #nhiBridgeMusic[aria-pressed="true"]::after{content:"♫";color:#ffe6f3;animation:nhi-sun-guide 3s ease-in-out infinite}
