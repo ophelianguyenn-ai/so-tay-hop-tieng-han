@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
 /* Exact GIF presentation on the seasonal cover, preserving all original frames. */
 #cover #nhiPickOriginalGif{
  position:fixed;z-index:18;bottom:max(20px,env(safe-area-inset-bottom,0px));
@@ -55,7 +56,7 @@
  transition:transform 2.2s cubic-bezier(.22,.66,.26,1)!important;
 }
 /* Preserve the hand-lettered look when the original GIF is not selected. */
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
 #cover .nhi-romance-title{
  top:max(30px,9vh)!important;
  font-family:'Great Vibes','Brush Script MT','Snell Roundhand',cursive!important;
@@ -73,4 +74,12 @@
 }
 @media(prefers-reduced-motion:reduce){
  #cover.nhi-gif-loaded.nhi-romance-on #coverHero>.nhi-exact-couple-gif{animation:none!important;transform:none!important;opacity:1!important}
+}
+
+/* Tiny heart illustrations travel behind the characters, never across faces. */
+#cover #nhiRomanceHearts{z-index:1!important;overflow:hidden!important}
+#cover .nhi-love-heart{
+ -webkit-text-stroke:1.4px rgba(255,255,255,.9);
+ text-shadow:1px 2px 0 #a03f5e50,0 4px 7px #c96a7944!important;
+ font-family:system-ui,sans-serif;font-weight:900;pointer-events:none!important;
 }
