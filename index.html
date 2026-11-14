@@ -1314,6 +1314,7 @@ button,input,select,textarea{font-family:var(--ui)}
       window.speechSynthesis.speak(u);
     } catch (e) { complete(); }
   }
+  document.addEventListener('visibilitychange',function(){if(document.hidden)stopSpeech();});
   window.NHI_SPEECH = {speak:speak, stop:stopSpeech, toggle:toggleSpeech,
     pause:function(){ pausedSpeech=true; if(window.NHI_AUDIO)window.NHI_AUDIO.pause(); if(canSpeak)window.speechSynthesis.pause(); },
     resume:function(){ pausedSpeech=false; if(window.NHI_AUDIO)window.NHI_AUDIO.resume(); if(canSpeak)window.speechSynthesis.resume(); },
@@ -2695,7 +2696,7 @@ button,input,select,textarea{font-family:var(--ui)}
     function put(sec, k, v) { var e = { v: v, t: Date.now() }; ps[sec][k] = e; save(); SYNC.queue('L/' + sec + '/' + k, e); }
     var view = 'days', sess = null, page = null;
     var lastKey = '', anim = '', flipping = false, legendOpen = false, query = '', topicSel = '';
-    var ratingPending = false, ratingToken = 0;
+    var ratingPending = false, ratingToken = 0, pendingRatingFinish = null;
 
     function today() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
     function parse(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
@@ -3509,7 +3510,7 @@ button,input,select,textarea{font-family:var(--ui)}
           s.imagePicker = false; render(); toast('Đã lưu ảnh minh họa vào thẻ.');
         }, function () { s.imagePicker = false; render(); }));
       }
-      if(s.editing)c.appendChild(editForm(it));
+      if(s.editing){var scrim=el('div','nhi-edit-scrim');scrim.setAttribute('aria-hidden','true');scrim.addEventListener('click',function(){s.editing=false;render();});c.appendChild(scrim);c.appendChild(editForm(it));}
       wrap.appendChild(c); v.appendChild(wrap);
       if (window.NHI_HARD_MASCOT && window.NHI_HARD_MASCOT.sync) window.NHI_HARD_MASCOT.sync(c);
       if (c.animate && !reduceMotion() && prefs.fx && anim) {
@@ -3532,7 +3533,8 @@ button,input,select,textarea{font-family:var(--ui)}
       if (!s.flipped && !s.editing && !s.imagePicker && s.spoken !== s.pos) { s.spoken = s.pos; speak(it.vi, 'vi-VN'); }
     }
     function flip() {
-      if (!sess || sess.pos >= sess.queue.length || sess.editing || flipping || ratingPending) return;
+      if(ratingPending&&pendingRatingFinish)pendingRatingFinish();
+      if (!sess || sess.pos >= sess.queue.length || sess.editing || flipping) return;
       var pos0 = sess.pos, c = document.querySelector('#planBox .pcard');
       stopSpeech(); haptic(8); legendOpen = false;
       function turn() { flipping = false; if (!sess || sess.pos !== pos0) return; sess.flipped = !sess.flipped; sess.hanja = sess.flipped; if(window.NHI_HARD_MASCOT)window.NHI_HARD_MASCOT.clear(); var item=ITEMS[sess.queue[sess.pos]]; sess.spoken=sess.pos; speak(sess.flipped?item.ko:item.vi,sess.flipped?'ko-KR':'vi-VN'); anim = 'flip'; render(); }
@@ -3548,7 +3550,8 @@ button,input,select,textarea{font-family:var(--ui)}
       else turn();
     }
     function go(d) {
-      if (!sess || ratingPending) return;
+      if (!sess) return;
+      if(ratingPending&&pendingRatingFinish){pendingRatingFinish();if(d<0)go(-2);return;}
       var n = sess.pos + d; if (n < 0) return;
       expireUndo(); stopSpeech();
       ++ratingToken;
@@ -3564,7 +3567,7 @@ button,input,select,textarea{font-family:var(--ui)}
       if (!id) return;
       var token = ++ratingToken;
       var animated = !!(card && card.isConnected && prefs.fx && !reduceMotion());
-      ratingPending = animated;
+      ratingPending = animated || k==='hard';
       if (animated) {
         card.classList.add('nhi-rating-busy', 'nhi-rate-' + k);
         var button = card.querySelector('.prate .' + k);
@@ -3572,7 +3575,8 @@ button,input,select,textarea{font-family:var(--ui)}
       }
       function finish(){
         if (token !== ratingToken || sess !== s || s.pos !== pos) { ratingPending = false; return; }
-        ratingPending = false;
+        ratingPending = false; pendingRatingFinish=null;
+        if(window.NHI_HARD_MASCOT)window.NHI_HARD_MASCOT.clear();
         s.stats[k] = (s.stats[k] || 0) + 1; s.picked[pos] = k;
         put('rate', id, k);
         var T = today();
@@ -3583,12 +3587,10 @@ button,input,select,textarea{font-family:var(--ui)}
         s.selectedKo=''; s.spoken=-1; s.pos++; s.flipped = false; s.hanja = false; s.editing = false; s.imagePicker = false;
         legendOpen = false; flipping = false; anim = 'next';
         saveSess(); render();
-        // Add Nhi to the NEW card; on mobile this is a dedicated row BELOW the text.
-        if (k === 'hard' && s.pos < s.queue.length) {
-          react(k, document.querySelector('#planBox .pcard'));
-        } else if(window.NHI_HARD_MASCOT) window.NHI_HARD_MASCOT.clear();
       }
-      if (animated) setTimeout(finish, 430);
+      pendingRatingFinish=finish;
+      if(k==='hard'){react(k,card);setTimeout(finish,2200);}
+      else if(animated)setTimeout(finish,430);
       else finish();
     }
     function renderDone(v) {
@@ -3635,7 +3637,7 @@ button,input,select,textarea{font-family:var(--ui)}
           && !(e.target && (e.target.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName)))) {
         e.preventDefault(); undoDelete(); return;
       }
-      if (state.mode !== 'plan' || !sess || e.metaKey || e.ctrlKey || e.altKey || e.isComposing || e.repeat) return;
+      if (state.mode !== 'plan' || !sess || e.metaKey || e.ctrlKey || e.altKey || e.isComposing || e.repeat || e.defaultPrevented || (e.target&&e.target.closest('#aiPanel'))) return;
       if (sess.imagePicker) { if (e.key === 'Escape') { e.preventDefault(); sess.imagePicker = false; render(); } return; }
       if (page && (!sess.L || sess.L.id !== page)) return;
       if (e.target && (e.target.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(e.target.tagName))) { if (e.key === 'Escape' && sess.editing) { sess.editing = false; render(); } return; }

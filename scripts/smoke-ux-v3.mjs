@@ -42,7 +42,7 @@ try {
   console.log('MOBILE HARD FEEDBACK',JSON.stringify(pressed));
   if(!pressed.busy||!pressed.hard||pressed.before===pressed.after)
     throw Error('Hard rating did not recolor learning text before advance');
-  await mobile.waitForFunction(()=>document.querySelector('#planBox .counter')?.textContent.startsWith('2 /'),{timeout:7000});
+  await mobile.waitForSelector('#nhi-hard-mascot');
   const mascot=await mobile.evaluate(()=>{
     const root=document.querySelector('#nhi-hard-mascot'),card=document.querySelector('#planBox .pcard');
     if(!root||!card)return null;
@@ -59,6 +59,8 @@ try {
   if(!mascot||!mascot.parent||mascot.position==='fixed'||mascot.overlap>1||
       mascot.imgWidth>80||mascot.buttons)
     throw Error('Nhi overlaps the actual learning text on mobile');
+  await mobile.waitForFunction(()=>document.querySelector('#planBox .counter')?.textContent.startsWith('2 /'),{timeout:7000});
+  if(await mobile.$('#nhi-hard-mascot'))throw Error('Nhi survived advancing to a new card');
   const mid=await mobile.evaluate(()=>{
     const card=document.querySelector('#planBox .pcard'),text=card.querySelector('.pfront .prompt');
     const before=getComputedStyle(text).color;

@@ -56,13 +56,13 @@ function feedback(kind){
 }
 function initReader(){
  const panel=document.getElementById('aiPanel'),log=document.getElementById('aiLog');if(!panel||!log)return;
- const bar=make('div','nhi-reader-toolbar'),speed=make('select');speed.setAttribute('aria-label','Tốc độ đọc AI');
+ const bar=make('div','nhi-reader-toolbar'),speed=make('select'),language=make('select');language.setAttribute('aria-label','Ngôn ngữ đọc AI');for(const [value,label]of [['auto','Tự nhận diện'],['vi-VN','Tiếng Việt'],['ko-KR','Tiếng Hàn'],['en-US','Tiếng Anh']]){const o=make('option',null,label);o.value=value;language.append(o);}speed.setAttribute('aria-label','Tốc độ đọc AI');
  for(const r of [.5,.75,1,1.25,1.5,2]){const o=make('option',null,r+'×');o.value=r;o.selected=r===1;speed.append(o);}
  let selected='',lastMessage=null;
  document.addEventListener('selectionchange',()=>{const selection=getSelection();if(selection&&selection.rangeCount&&log.contains(selection.anchorNode)&&log.contains(selection.focusNode)&&selection.toString().trim())selected=selection.toString().trim();});
  const pause=button('⏸ Tạm dừng',()=>{const speech=window.NHI_SPEECH;if(speech.paused()){speech.resume();pause.textContent='⏸ Tạm dừng';}else{speech.pause();pause.textContent='▶ Tiếp tục';}});
- const read=(text)=>{window.NHI_SPEECH.speak(text,/[가-힣]/.test(text)&&!/[àáạảãăâđêôơư]/i.test(text)?'ko-KR':'vi-VN',null,Number(speed.value));pause.textContent='⏸ Tạm dừng';};
- bar.append(button('🔊 Đọc đoạn chọn',()=>{const text=selected;if(text)read(text);}),button('Đọc trả lời cuối',()=>{const msg=log.querySelector('.aimsg.ai:last-of-type');if(msg)read(msg.innerText.replace('🔊 Đọc đoạn này',''));}),speed,pause,button('■ Dừng',()=>{window.NHI_SPEECH.stop();pause.textContent='⏸ Tạm dừng';}));
+ const read=(text)=>{window.NHI_SPEECH.speak(text,language.value!=='auto'?language.value:/[àáạảãăâđêôơư]/i.test(text)?'vi-VN':/[가-힣]/.test(text)?'ko-KR':'en-US',null,Number(speed.value));pause.textContent='⏸ Tạm dừng';};
+ bar.append(button('🔊 Đọc đoạn chọn',()=>{const text=selected;if(text)read(text);}),button('Đọc trả lời cuối',()=>{const msg=log.querySelector('.aimsg.ai:last-of-type');if(msg)read(msg.innerText.replace('🔊 Đọc đoạn này',''));}),language,speed,pause,button('■ Dừng',()=>{window.NHI_SPEECH.stop();pause.textContent='⏸ Tạm dừng';}));
  log.before(bar);
  function mount(){for(const msg of log.querySelectorAll('.aimsg.ai:not(.wait)')){if(msg.querySelector('.nhi-read-message'))continue;const b=button('🔊 Đọc đoạn này',()=>{lastMessage=msg;read(msg.innerText.replace('🔊 Đọc đoạn này',''));});b.classList.add('nhi-read-message');msg.append(b);}}
  new MutationObserver(mount).observe(log,{childList:true});mount();
