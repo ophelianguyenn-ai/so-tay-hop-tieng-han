@@ -37,3 +37,8 @@ html body #planBox .pcard .nhi-editor-window-v5,html body .nhi-picture-picker{po
 
 .nhi-edit-scrim{position:fixed;inset:0;z-index:209;background:#10233166;backdrop-filter:blur(3px)}
 #planBox .nhi-editor-window-v5{box-shadow:0 20px 70px #0005!important}
+/* Keep chat controls in the viewport when setup or a long reply is open. */
+#aiPanel .aihead,#aiPanel .aiform,#aiPanel .aictx{flex-shrink:0!important}
+#aiPanel .aisetup{flex:0 1 auto;min-height:0;max-height:36dvh;overflow:auto;overscroll-behavior:contain}
+#aiPanel .ailog{min-height:0;flex:1 1 0;overflow:auto}
+#aiPanel .aiquick{flex-shrink:0;max-height:110px;overflow:auto}

@@ -57,6 +57,7 @@ try{
  await page.waitForSelector('.nhi-reader-toolbar');
  await page.click('#aiInput');await page.type('#aiInput','Giải thích từ này');await page.keyboard.press('Enter');
  await page.waitForFunction(()=>document.querySelector('#aiLog').textContent.includes('Giải thích từ này'));
+ console.log('CHAT CONTROL BOUNDS',await page.$eval('#aiClose',e=>{const r=e.getBoundingClientRect();return {display:getComputedStyle(e).display,top:r.top,bottom:r.bottom,width:r.width,height:r.height,viewport:innerHeight};}));
  await page.click('#aiClose');
  await page.click('#planBox .shead button:first-child');
  await page.evaluate(()=>[...document.querySelectorAll('#planBox button')].find(b=>b.textContent.includes('Ôn chưa nhớ tiếng Anh')).click());
