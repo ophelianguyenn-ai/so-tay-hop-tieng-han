@@ -1,0 +1,43 @@
+/* Original two touching VN / EN speech bubbles stay visually untouched. */
+#planBox .nhi-dict-pair{position:relative!important;isolation:isolate}
+#planBox .nhi-dict-pair>.nhi-dict-bubble{
+ overflow:visible!important;will-change:transform,opacity;
+}
+#planBox .nhi-dict-pair>.nhi-dict-bubble>.nhi-glitter{
+ display:none!important;
+}
+#planBox .nhi-dict-pair>.nhi-dict-bubble.nhi-burst{
+ animation:nhi-bubble-flash-v3 .79s cubic-bezier(.24,.6,.2,1) both!important;
+}
+@keyframes nhi-bubble-flash-v3{
+ 0%{opacity:1;transform:scale(1);filter:brightness(1)}
+ 15%{opacity:1;transform:scale(1.28);filter:brightness(1.4) saturate(1.2)}
+ 28%{opacity:.95;transform:scale(.81);filter:brightness(1.8)}
+ 47%{opacity:0;transform:scale(1.95) rotate(15deg);filter:brightness(2)}
+ 70%{opacity:0;transform:scale(.1)}
+ 100%{opacity:1;transform:scale(1);filter:brightness(1)}
+}
+#planBox .nhi-dict-pair>.nhi-dict-shockwave{
+ position:absolute;z-index:30;pointer-events:none;
+ width:34px;height:34px;display:block;border:2px solid var(--ring-color,#f9a2bf);
+ border-radius:50%;box-shadow:0 0 0 3px #ffffff74,0 0 12px var(--ring-color);
+ animation:nhi-shockwave-v3 .84s var(--ring-delay,0s) ease-out forwards;
+}
+@keyframes nhi-shockwave-v3{
+ 0%{opacity:0;transform:translate(-50%,-50%) scale(.2);border-width:4px}
+ 18%{opacity:1}
+ 100%{opacity:0;transform:translate(-50%,-50%) scale(4.2);border-width:.5px}
+}
+#planBox .nhi-dict-pair>.nhi-pop-spark{
+ border-radius:36% 60% 37% 50%!important;
+ transform-origin:center!important;
+}
+#planBox .nhi-dict-pair>.nhi-pop-spark:nth-of-type(4n){
+ clip-path:polygon(50% 0%,62% 34%,98% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 34%);
+ background:#fffbce!important;
+ box-shadow:0 0 11px #fff0bd!important;
+}
+@media(prefers-reduced-motion:reduce){
+ #planBox .nhi-dict-bubble.nhi-burst{animation:none!important}
+ #planBox .nhi-dict-shockwave,#planBox .nhi-pop-spark{display:none!important}
+}
