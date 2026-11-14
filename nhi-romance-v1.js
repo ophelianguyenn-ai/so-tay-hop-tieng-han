@@ -20,6 +20,16 @@ function setup(){
  bouquet.addEventListener('click',e=>{e.stopPropagation();talk();});
  const sun=make('button','nhi-love-hotspot');sun.id='nhiSunKiss';sun.type='button';sun.setAttribute('aria-label','Bấm vào mặt trời để xem Lương và Nhi hôn nhau');sun.title='Mặt trời: Lương và Nhi';cover.append(sun);
  sun.addEventListener('click',e=>{e.stopPropagation();startScene();});
+ // The sun is part of a background painting: its visual position can shift
+ // with the viewport crop. Catch the painted upper-right area as well.
+ cover.addEventListener('click',e=>{
+  if(e.target.closest('#nhiSunKiss,#nhiBridgeMusic,#nhiBouquetLove,#nhi-season-controls,#coverGo'))return;
+  const r=cover.getBoundingClientRect();
+  const x=(e.clientX-r.left)/Math.max(1,r.width),y=(e.clientY-r.top)/Math.max(1,r.height);
+  if(x>=.62&&x<=.93&&y>=.035&&y<=.33){
+   e.preventDefault();e.stopImmediatePropagation();startScene();
+  }
+ },true);
  const bridge=make('button','nhi-love-hotspot');bridge.id='nhiBridgeMusic';bridge.type='button';bridge.setAttribute('aria-label','Bấm vào cầu: bật hoặc tắt nhạc và hoa hồng rơi');bridge.title='Cây cầu: âm nhạc và hoa hồng';bridge.setAttribute('aria-pressed','false');cover.append(bridge);
  bridge.addEventListener('click',e=>{e.stopPropagation();const now=toggleMusic();bridge.setAttribute('aria-pressed',String(now));if(now)roses();});
  const layer=make('div','nhi-story-layer');layer.id='nhiRomanceHearts';layer.setAttribute('aria-hidden','true');cover.append(layer);
