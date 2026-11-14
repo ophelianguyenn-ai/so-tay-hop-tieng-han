@@ -3510,9 +3510,31 @@ button,input,select,textarea{font-family:var(--ui)}
         var note=val('note',it.id)||{text:it.note,color:'#fff1ce'};if(note&&note.text){var nt=el('p','nhi-card-note',note.text);nt.style.background=(note.color&&note.color!=='#dbeefe')?note.color:'#fff1ce';if(window.NHI_STUDY)window.NHI_STUDY.formatText(nt,val('fmt',it.id)||{},'note');f.appendChild(nt);}
         var englishBox=window.NHI_ENGLISH?window.NHI_ENGLISH.mount(f,it.id,it.vi,it.ko,{format:val('fmt',it.id)||{},unremembered:!!val('enHard',it.id),toggle:function(on){put('enHard',it.id,on?1:null);}}):null;
         if(nt&&englishBox){var details=el('div','nhi-card-details');nt.before(details);details.appendChild(nt);details.appendChild(englishBox);}
-        if(window.NHI_IMAGES){try{var illustration=window.NHI_IMAGES.figure(it,val('img',it.id),function(img){put('img',it.id,img);});if(illustration){f.classList.add('nhi-with-image');f.appendChild(illustration);}}catch(imageErr){console.warn('Nhi picture unavailable',imageErr);}}
+        if(window.NHI_IMAGES){try{var illustration=window.NHI_IMAGES.figure(it,val('img',it.id),function(img){put('img',it.id,img);});if(illustration){
+          f.classList.add('nhi-with-image');f.appendChild(illustration);
+          illustration.tabIndex=0;
+          illustration.setAttribute('aria-label','Chọn ảnh; nhấn Delete hoặc Backspace để xóa khỏi thẻ');
+          illustration.addEventListener('click',function(e){
+            e.stopPropagation();illustration.focus();illustration.classList.add('nhi-image-selected');
+          });
+          illustration.addEventListener('blur',function(){illustration.classList.remove('nhi-image-selected');});
+          illustration.addEventListener('keydown',function(e){
+            if(e.key!=='Delete'&&e.key!=='Backspace')return;
+            e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();
+            var current=val('img',it.id)||{};
+            put('img',it.id,Object.assign({},current,{hidden:true}));
+            render();
+          });
+        }}catch(imageErr){console.warn('Nhi picture unavailable',imageErr);}}
       } else f.appendChild(hlText(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : '')), it, 'vi', true));
-      f.addEventListener('click', function (e) { if (e.target.closest('figure,.nhi-english-v5,button,input,a,.nhi-card-dictionaries')) return; if (s.editing || e.target.closest('.ph.tap')) return; flip(); });
+      f.addEventListener('click', function (e) {
+        if(e.target.closest('figure,.nhi-english-v5,button,input,a,.nhi-card-dictionaries,[contenteditable]'))return;
+        if(s.editing || e.target.closest('.ph.tap'))return;
+        // Empty left/right quarters navigate. Center and text flip the card.
+        if(e.target.closest('.answer,.vi-under,.nhi-card-note,.hanja,.prompt')){flip();return;}
+        var rect=f.getBoundingClientRect(), part=(e.clientX-rect.left)/Math.max(rect.width,1);
+        if(part<=.25)go(-1);else if(part>=.75)go(1);else flip();
+      });
       c.appendChild(f);
       var nav = el('div', 'pnav');
       var pv = ibtn('parrow', 'left', function () { go(-1); }, 'Thẻ trước (←)'); pv.disabled = s.pos === 0; nav.appendChild(pv);
