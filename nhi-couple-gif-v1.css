@@ -1,0 +1,76 @@
+/* Exact GIF presentation on the seasonal cover, preserving all original frames. */
+#cover #nhiPickOriginalGif{
+ position:fixed;z-index:18;bottom:max(20px,env(safe-area-inset-bottom,0px));
+ left:max(16px,env(safe-area-inset-left,0px));display:inline-flex;align-items:center;gap:6px;
+ min-height:35px;padding:5px 12px;border-radius:999px;
+ border:1px solid rgba(112,80,91,.24);color:#744d63;
+ background:rgba(255,251,248,.75);font:700 12px system-ui,sans-serif;
+ box-shadow:0 2px 6px #49404b1c;backdrop-filter:blur(10px);cursor:pointer;
+}
+#cover #nhiPickOriginalGif:hover{background:#fff4f7;transform:translateY(-2px)}
+:root[data-theme="dark"] #cover #nhiPickOriginalGif{
+ background:rgba(13,33,29,.76);color:#ffe1eb;border-color:#ffffff3d;
+}
+#cover #nhiPickOriginalGif span[aria-hidden]{font-size:16px}
+#cover #nhiExactCoupleGif[hidden]{display:none!important}
+#cover #coverHero>.nhi-exact-couple-gif{
+ display:block;position:absolute;inset:0;z-index:8;
+ width:100%;height:100%;max-width:none;object-fit:contain;
+ pointer-events:none;opacity:0;transform:translateY(8px) scale(.98);
+}
+#cover.nhi-gif-loaded.nhi-romance-on #coverHero{
+ width:min(525px,88vw)!important;min-width:0!important;
+ max-width:min(525px,88vw)!important;
+ animation:none!important;
+ filter:drop-shadow(0 10px 16px rgba(60,41,53,.13));
+ transition:width 1.6s cubic-bezier(.18,.67,.24,1)!important;
+}
+#cover.nhi-gif-loaded.nhi-romance-on #coverHero>.nhi-original,
+#cover.nhi-gif-loaded.nhi-romance-on #coverHero>.nhi-luong,
+#cover.nhi-gif-loaded.nhi-romance-on #coverHero>.nhi-kiss-mark{
+ visibility:hidden!important;animation:none!important;
+}
+#cover.nhi-gif-loaded.nhi-romance-on #coverHero>.nhi-exact-couple-gif{
+ opacity:1!important;visibility:visible!important;
+ animation:nhi-gif-arrive 1.9s ease both!important;
+}
+@keyframes nhi-gif-arrive{
+ 0%{opacity:0;transform:translateY(20px) scale(.9)}
+ 65%{opacity:1;transform:translateY(-4px) scale(1.02)}
+ 100%{opacity:1;transform:translateY(0) scale(1)}
+}
+/* The user's actual GIF already contains the Lương ❤️ Nhi lettering.
+   Never display a second copy over the faces. */
+#cover.nhi-gif-loaded.nhi-romance-on #nhiLoveTitle{display:none!important}
+/* When the sun starts the story, the learning UI leaves the scene permanently
+   for this cover visit. The characters are lowered into the optical center. */
+#cover.nhi-romance-on .cover-in>h1,
+#cover.nhi-romance-on .cover-in>.lead,
+#cover.nhi-romance-on #coverGo,
+#cover.nhi-romance-on .cover-in>.cstats{
+ display:none!important;
+}
+#cover.nhi-romance-on .cover-in{
+ transform:translateY(clamp(18px,8vh,86px))!important;
+ transition:transform 2.2s cubic-bezier(.22,.66,.26,1)!important;
+}
+/* Preserve the hand-lettered look when the original GIF is not selected. */
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+#cover .nhi-romance-title{
+ top:max(30px,9vh)!important;
+ font-family:'Great Vibes','Brush Script MT','Snell Roundhand',cursive!important;
+ font-weight:400!important;letter-spacing:.015em!important;
+ font-size:clamp(40px,8vw,76px)!important;
+ color:#4e251e!important;
+ text-shadow:0 2px 4px #fff8,0 3px 10px #fff8!important;
+}
+#cover .nhi-romance-title b{font-size:.7em!important;vertical-align:10%!important}
+@media(max-width:600px){
+ #cover.nhi-gif-loaded.nhi-romance-on #coverHero{width:min(400px,92vw)!important;max-width:92vw!important;}
+ #cover.nhi-romance-on .cover-in{transform:translateY(clamp(12px,5vh,50px))!important}
+ #cover .nhi-romance-title{top:max(30px,7vh)!important;font-size:clamp(34px,9vw,52px)!important}
+ #cover #nhiPickOriginalGif{font-size:11px!important;min-height:32px;padding:4px 10px}
+}
+@media(prefers-reduced-motion:reduce){
+ #cover.nhi-gif-loaded.nhi-romance-on #coverHero>.nhi-exact-couple-gif{animation:none!important;transform:none!important;opacity:1!important}
+}
