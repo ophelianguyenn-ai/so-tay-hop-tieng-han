@@ -14,9 +14,9 @@ const scene=()=>cover.classList.contains('nhi-romance-v2-running');
 function setup(){
  if(ready)return;ready=true;
  const boy=make('div','nhi-luong-v2');boy.id='nhiLuongV2';
- const standing=make('img','nhi-boy-standing');standing.src='nhi-luong-reference-v2.svg'+asset;
+ const standing=make('img','nhi-boy-standing');standing.src='nhi-luong-demo-approved-v3.svg?v=20261114-approved';
  standing.alt='Lương chibi tóc đen áo polo nâu theo mẫu';standing.draggable=false;
- const kissing=make('img','nhi-boy-kissing');kissing.src='nhi-luong-kiss-v2.svg'+asset;
+ const kissing=make('img','nhi-boy-kissing');kissing.src='nhi-luong-demo-approved-v3.svg?v=20261114-approved';
  kissing.alt='';kissing.setAttribute('aria-hidden','true');kissing.draggable=false;
  boy.append(standing,kissing);hero.append(boy);
  const flowers=make('div','nhi-illustrated-flowers');flowers.setAttribute('aria-hidden','true');cover.append(flowers);
