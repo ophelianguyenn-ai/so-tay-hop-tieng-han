@@ -57,6 +57,14 @@ function dictionaryButtons(root,value){
    const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
    if(reduce){dictionary(selected,kind);return;}
    b.disabled=true;b.classList.add('nhi-burst');
+   for(let ring=0;ring<2;ring++){
+    const wave=make('i','nhi-dict-shockwave');wave.setAttribute('aria-hidden','true');
+    wave.style.left=(b.offsetLeft+b.offsetWidth/2)+'px';
+    wave.style.top=(b.offsetTop+b.offsetHeight/2)+'px';
+    wave.style.setProperty('--ring-delay',(ring*.13)+'s');
+    wave.style.setProperty('--ring-color',kind==='ko-vi'?'#ff83aa':'#78d5f4');
+    pair.append(wave);setTimeout(()=>wave.remove(),1000);
+   }
    for(let i=0;i<42;i++){
     const spark=make('i','nhi-pop-spark');spark.setAttribute('aria-hidden','true');
     const angle=2*Math.PI*i/42,distance=42+(i%6)*15;
@@ -73,7 +81,7 @@ function dictionaryButtons(root,value){
   b.className='nhi-dict-bubble';b.dataset.dict=kind;
   b.title=label;b.setAttribute('aria-label',label);
   b.innerHTML='<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path d="M31 3C14 3 3 16 3 32c0 11 7 21 17 26l-2 5 14-6c17-1 29-12 29-28C61 14 48 3 31 3Z" fill="'+dark+'"/><path d="M17 19C23 12 32 10 39 11" stroke="'+light+'" stroke-width="5" stroke-linecap="round" opacity=".8" fill="none"/><text x="32" y="40" text-anchor="middle" fill="'+(kind==='ko-vi'?'#fff':'#14283f')+'" font-family="Arial,sans-serif" font-size="21" font-weight="800">'+word+'</text></svg>';
-  for(let sparkle=0;sparkle<4;sparkle++){const fleck=make('i','nhi-glitter');fleck.setAttribute('aria-hidden','true');b.append(fleck);}
+  // Keep the original plain bubble surface; glitter appears only during the pop.
   pair.append(b);
  }
  root.append(pair);
