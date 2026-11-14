@@ -48,7 +48,7 @@ try{
  assert(await page.$$eval('.pundo',e=>e.length)===1,'Delete should expose one undo');
  await page.click('.pundo');assert(await page.$eval('.pcard',e=>e.dataset.item)===before,'Undo restored wrong card');
  await page.keyboard.press('Delete');await page.keyboard.press('ArrowRight');assert(await page.$$eval('.pundo',e=>e.length)===0,'Undo did not expire on third card');
- await page.click('#setBtn');await page.click('#fxChk');await page.click('#setSheet [data-close]');
+ await page.click('#setBtn');await page.click('#fxChk');await page.click('#setSheet button[data-close]');
  await page.keyboard.press('1');await page.waitForSelector('#nhi-hard-mascot');
  assert(await page.$eval('.pcard',e=>e.contains(document.getElementById('nhi-hard-mascot'))),'Mascot is detached from card');
  await page.keyboard.press('ArrowRight');assert(await page.$('#nhi-hard-mascot')===null,'Mascot survived card transition');
