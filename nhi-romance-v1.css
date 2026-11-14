@@ -1,0 +1,100 @@
+/* Lương & Nhi: interactive storybook cover on top of the existing seasonal garden. */
+#cover .hero#coverHero{position:relative!important;isolation:isolate;overflow:visible!important;
+  width:min(250px,55vw)!important;min-width:150px}
+#cover #coverHero>.nhi-original{width:100%;height:auto;display:block;position:relative;z-index:2;
+  filter:drop-shadow(0 12px 13px rgba(49,36,49,.19));will-change:transform}
+#cover #coverHero .nhi-luong{display:block;position:absolute;z-index:3;width:90%;height:auto;
+  top:8%;right:-72%;pointer-events:none;opacity:0;transform:translateX(70vw) scale(.9);
+  filter:drop-shadow(0 10px 12px rgba(36,36,43,.18))}
+#cover .nhi-love-hotspot{position:absolute!important;z-index:8;border:0;background:transparent;
+  box-shadow:none!important;outline-offset:4px;padding:0!important;cursor:pointer;min-width:44px;min-height:44px;
+  -webkit-tap-highlight-color:transparent;border-radius:50%;color:transparent}
+#cover .nhi-love-hotspot:focus-visible{outline:3px solid #ff8ea9!important}
+#cover .nhi-love-hotspot:hover{background:radial-gradient(circle,#fff8c777,transparent 72%)}
+#cover #nhiSunKiss{top:7%;left:70%;width:10%;height:14%;border-radius:50%}
+#cover #nhiBridgeMusic{top:67%;left:32%;width:23%;height:21%;border-radius:22px}
+#cover #nhiBridgeMusic:hover{background:radial-gradient(ellipse,#ffe5ea77,transparent 74%)}
+#cover #nhiBouquetLove{position:absolute;z-index:6;left:29%;top:57%;width:40%;height:26%;
+ border:0;border-radius:40%;background:transparent;color:transparent;cursor:pointer}
+#cover #nhiBouquetLove:focus-visible{outline:2px dashed #f07d9b;outline-offset:3px}
+#cover #nhiBouquetLove:hover{background:radial-gradient(ellipse,#ffe8a847,transparent 80%)}
+#cover .nhi-story-layer{position:fixed;inset:0;overflow:hidden;z-index:6;pointer-events:none;isolation:isolate}
+#cover .nhi-love-heart{position:absolute;top:50%;left:50%;opacity:0;
+  color:var(--heart-color,#fa658c);font-size:var(--heart-size,24px);
+  text-shadow:0 3px 9px #e6687865;animation:nhi-hearts-fly var(--heart-time,6s) var(--heart-delay,0s) ease-out forwards}
+@keyframes nhi-hearts-fly{
+  0%{opacity:0;transform:translate(var(--start-x,0px),var(--start-y,0px)) scale(.15) rotate(-25deg)}
+  16%{opacity:1;transform:translate(calc(var(--start-x,0px) + 7px),calc(var(--start-y,0px) - 15px)) scale(1.17)}
+  75%{opacity:.92}
+  100%{opacity:0;transform:translate(var(--end-x,0px),var(--end-y,-500px)) scale(.72) rotate(var(--turn,55deg))}
+}
+#cover.nhi-romance-on #coverHero>.nhi-original{animation:nhi-girl-affection 19s ease-in-out both!important}
+#cover.nhi-romance-on #coverHero .nhi-luong{
+ opacity:1;animation:nhi-luong-enters 19s cubic-bezier(.3,.6,.3,1) both!important
+}
+@keyframes nhi-luong-enters{
+  0%{opacity:0;transform:translate(70vw,40px) rotate(4deg) scale(.8)}
+  23%{opacity:1;transform:translate(-8px,0) rotate(-2deg) scale(1)}
+  36%{transform:translate(-39px,-6px) rotate(-8deg) scale(1.03)}
+  43%{transform:translate(-54px,-9px) rotate(-11deg) scale(1.05)}
+  54%{transform:translate(-19px,-2px) rotate(-2deg) scale(1)}
+  65%{transform:translate(-57px,-9px) rotate(-12deg) scale(1.05)}
+  73%{transform:translate(-30px,0) rotate(0deg) scale(1)}
+  83%{transform:translate(-22px,-6px) rotate(3deg) scale(1.02)}
+  92%,100%{opacity:1;transform:translate(-22px,0) rotate(0deg) scale(1)}
+}
+@keyframes nhi-girl-affection{
+  0%,24%{transform:translateX(0) rotate(0)}
+  38%,44%{transform:translateX(9px) rotate(5deg)}
+  55%{transform:translateX(0) rotate(-1deg)}
+  65%,71%{transform:translateX(11px) rotate(5deg)}
+  85%,100%{transform:translateX(0) rotate(0)}
+}
+#cover .nhi-romance-title{position:fixed;z-index:9;top:21%;left:50%;
+ transform:translate(-50%,22px) scale(.75);font-family:Georgia,serif;
+ font-weight:900;font-size:clamp(27px,6.5vw,62px);letter-spacing:.02em;
+ white-space:nowrap;color:#9d3459;text-shadow:0 3px 0 #fff4,0 4px 12px #fffaf1;
+ opacity:0;pointer-events:none}
+#cover .nhi-romance-title.nhi-visible{animation:nhi-love-title 2.8s cubic-bezier(.24,1.2,.3,1) forwards}
+#cover .nhi-romance-title b{font-family:"Apple Color Emoji","Segoe UI Emoji",sans-serif;font-size:.82em}
+@keyframes nhi-love-title{0%{opacity:0;transform:translate(-50%,32px) scale(.78);filter:blur(6px)}
+  64%{opacity:1;transform:translate(-50%,-4px) scale(1.08);filter:blur(0)}
+  100%{opacity:1;transform:translate(-50%,0) scale(1);filter:none}}
+#cover .nhi-kiss-mark{position:absolute;z-index:7;top:32%;right:-13%;pointer-events:none;
+ font-size:52px;opacity:0;filter:drop-shadow(0 3px 10px #f04f8488)}
+#cover.nhi-romance-on .nhi-kiss-mark{animation:nhi-double-kiss 19s ease-in-out forwards}
+@keyframes nhi-double-kiss{0%,34%,43%,61%,70%,100%{opacity:0;transform:translateY(12px) scale(.4)}
+  38%,66%{opacity:1;transform:translateY(-8px) scale(1.2)}}
+#cover .nhi-couple-bubble{position:absolute;z-index:10;top:-8%;padding:8px 17px;
+ border:2px solid #f6adc9;background:#fff8fd;color:#a23368;
+ font:800 19px system-ui,sans-serif;border-radius:26px;box-shadow:0 8px 14px #8a41533c;
+ opacity:0;pointer-events:none;white-space:nowrap}
+#cover .nhi-couple-bubble::after{content:"";position:absolute;bottom:-9px;left:45%;
+ width:13px;height:13px;background:#fff8fd;border-right:2px solid #f6adc9;
+ border-bottom:2px solid #f6adc9;transform:rotate(45deg)}
+#cover .nhi-girl-bubble{left:-25%}
+#cover .nhi-boy-bubble{right:-87%;border-color:#86d2eb;background:#edfbff;color:#237391}
+#cover .nhi-boy-bubble::after{background:#edfbff;border-color:#86d2eb}
+#cover .nhi-couple-bubble.nhi-speaking{animation:nhi-say-hi .48s cubic-bezier(.18,1.4,.4,1) both}
+@keyframes nhi-say-hi{from{opacity:0;transform:translateY(16px) scale(.65)}
+ to{opacity:1;transform:translateY(0) scale(1)}}
+#cover .nhi-rose{position:absolute;top:-70px;left:var(--rose-x);font-size:var(--rose-size,27px);
+ animation:nhi-falling-rose var(--rose-duration,8s) var(--rose-delay,0s) linear forwards;
+ filter:drop-shadow(0 4px 4px #96234444)}
+@keyframes nhi-falling-rose{0%{opacity:0;transform:translate3d(0,-60px,0) rotate(0)}
+  6%{opacity:1}90%{opacity:1}
+  100%{opacity:0;transform:translate3d(var(--rose-drift,70px),115vh,0) rotate(var(--rose-turn,540deg))}}
+@media(max-width:620px){
+ #cover #coverHero .nhi-luong{right:-56%;width:82%;top:13%}
+ #cover .nhi-girl-bubble{left:-3%}
+ #cover .nhi-boy-bubble{right:-60%;font-size:15px}
+ #cover .nhi-romance-title{top:21%}
+ #cover #nhiSunKiss{top:6%;left:67%;width:17%;height:14%}
+ #cover #nhiBridgeMusic{top:67%;left:30%;width:32%;height:19%}
+}
+@media(prefers-reduced-motion:reduce){
+ #cover.nhi-romance-on #coverHero .nhi-luong{opacity:1;animation:none!important;transform:translateX(-20px)}
+ #cover.nhi-romance-on #coverHero>.nhi-original{animation:none!important}
+ #cover .nhi-romance-title.nhi-visible{opacity:1;animation:none;transform:translateX(-50%)}
+ #cover .nhi-love-heart,#cover .nhi-rose{display:none}
+}
