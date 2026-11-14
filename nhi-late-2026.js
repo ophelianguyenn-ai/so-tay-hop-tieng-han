@@ -73,17 +73,23 @@ function compactEditor(editor){
 function update(){
  document.querySelectorAll('#planBox .nhi-editor-window-v5').forEach(compactEditor);
  document.querySelectorAll('#planBox .nhi-english-v5').forEach(setupEnglish);
- document.querySelectorAll('#planBox .cicons button[title*="Phát âm / Dừng"]').forEach(b=>{
-  if(b.dataset.neonReader || !window.NHI_STUDY)return;
-  b.dataset.neonReader='true';
-  b.innerHTML=window.NHI_STUDY.icon('headphones');
-  b.classList.add('nhi-neon-speaker');
+ // Preserve the original speaker drawn by the main app; never replace it.
+ document.querySelectorAll('#planBox .pcard').forEach(card=>{
+  const stage=card.querySelector('.pfront');
+  const photo=stage&&stage.querySelector('.card-illustration');
+  if(!stage||!photo){card.classList.remove('nhi-side-art');return;}
+  const p=stage.getBoundingClientRect(), i=photo.getBoundingClientRect();
+  const side=i.width>75 && i.left>(p.left+p.width*.5) && i.right<=p.right+20;
+  card.classList.toggle('nhi-side-art',side);
+  if(side)card.style.setProperty('--nhi-photo-half',Math.round(i.width/2+8)+'px');
+  else card.style.removeProperty('--nhi-photo-half');
  });
 }
 function init(){
  iconFont();update();
  const plan=document.getElementById('planBox');
  if(plan)new MutationObserver(update).observe(plan,{childList:true,subtree:true});
+ window.addEventListener('resize',update,{passive:true});
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
