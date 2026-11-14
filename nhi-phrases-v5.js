@@ -85,5 +85,16 @@ function align(it,all){
  }
  return output.length?output:[[vi,ko]];
 }
-window.NHI_PHRASES_V5={align};
+function expand(it,all){
+ const base=Array.isArray(it.pairs)&&it.pairs.length>1?it.pairs.map(p=>p.slice()):[];
+ const auto=align(it,all);
+ if(!base.length)return auto;
+ for(const pair of auto){
+  const vi=pair[0]||'',ko=pair[1]||'';
+  if(base.some(p=>(vi&&p[0]&&(lower(p[0]).includes(lower(vi))||lower(vi).includes(lower(p[0]))))||(ko&&p[1]&&(p[1].includes(ko)||ko.includes(p[1])))))continue;
+  base.push(pair);
+ }
+ return base;
+}
+window.NHI_PHRASES_V5={align,expand};
 })();

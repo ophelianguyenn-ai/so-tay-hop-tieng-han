@@ -2977,8 +2977,8 @@ button,input,select,textarea{font-family:var(--ui)}
     var SEG = {};
     function segs(it) {
       if (!SEG[it.id]) {
-        if ((it.wholePair || it.pairs.length <= 1) && window.NHI_PHRASES_V5) {
-          it.pairs = window.NHI_PHRASES_V5.align(it, ITEMS);
+        if (window.NHI_PHRASES_V5) {
+          it.pairs = window.NHI_PHRASES_V5.expand(it, ITEMS);
         }
         SEG[it.id] = {
           vi: locate(it.vi,it.pairs.map(function(p){return p[0];}),true),

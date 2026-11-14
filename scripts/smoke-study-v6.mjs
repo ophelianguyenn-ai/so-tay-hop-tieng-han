@@ -17,8 +17,8 @@ try{
  await page.keyboard.press('Enter');await page.waitForSelector('#planBox .prompt');
  const spoken=await page.evaluate(()=>window.__spoken);assert(spoken.at(-2)?.lang==='ko-KR'&&spoken.at(-1)?.lang==='vi-VN','Face language speech mismatch');
  await page.click('.cicons [title*="Phát âm"]');assert(!await page.evaluate(()=>NHI_SPEECH.active()),'Toolbar did not stop current speech');
- await page.keyboard.press('ArrowRight');assert((await page.$eval('.counter',x=>x.textContent)).startsWith('2 /'),'ArrowRight failed');
- await page.keyboard.press('ArrowLeft');assert((await page.$eval('.counter',x=>x.textContent)).startsWith('1 /'),'ArrowLeft failed');
+ await page.keyboard.press('ArrowRight');assert((await page.$eval('#planBox .counter',x=>x.textContent)).startsWith('2 /'),'ArrowRight failed');
+ await page.keyboard.press('ArrowLeft');assert((await page.$eval('#planBox .counter',x=>x.textContent)).startsWith('1 /'),'ArrowLeft failed');
  // Notes/formatting save, display and survive a face change.
  await page.click('.cicons [title*="Sửa thẻ"]');
  const bounds=await page.$eval('.editbox',e=>{const r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom,height:innerHeight,position:getComputedStyle(e).position};});
