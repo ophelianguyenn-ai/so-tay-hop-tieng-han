@@ -44,6 +44,7 @@ try{
  await page.waitForFunction(()=>!document.querySelector('.nhi-picture-picker'));
  assert(await page.$eval('.card-illustration img',e=>e.src.startsWith('data:image/')),'Pasted image not saved');
  // One undo action exists on the immediate successor and expires at the next navigation.
+ await page.keyboard.press('ArrowRight');
  const before=await page.$eval('.pcard',e=>e.dataset.item);await page.keyboard.press('Delete');
  assert(await page.$$eval('.pundo',e=>e.length)===1,'Delete should expose one undo');
  await page.click('.pundo');assert(await page.$eval('.pcard',e=>e.dataset.item)===before,'Undo restored wrong card');
