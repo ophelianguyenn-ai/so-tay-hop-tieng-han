@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - 'index.html'
+      - 'study-update-v6.js'
+      - 'study-update-v6.css'
+      - 'recorded-voices-v11.js'
+      - 'scripts/smoke-study-v6.mjs'
       - 'card-images-v11.js'
       - 'technical-visuals-v12.js'
       - 'hanja-extra-v12.js'
@@ -23,6 +27,8 @@ on:
       - 'nhi-phrases-v5.js'
       - 'nhi-english-v5.js'
       - '.github/workflows/smoke-cards.yml'
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -57,3 +63,6 @@ jobs:
         run: node scripts/smoke-ux-v5.mjs
       - name: Verify English original survives compare, synonyms and neural download
         run: node scripts/smoke-english-v7.mjs
+
+      - name: Verify face speech, hotkeys, notes, dictionary, clipboard images and English review
+        run: node scripts/smoke-study-v6.mjs

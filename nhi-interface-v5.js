@@ -29,7 +29,7 @@ function makeCover(){
 function getContext(){
  const editor=$('#planBox .editbox.nhi-editor-window-v5');if(shown(editor))return ['editor',editor];
  const picker=$('.nhi-picture-picker');if(shown(picker))return ['picker',picker];
- const ai=$('#aiPanel');if(document.body.classList.contains('ai-open')&&ai)return ['ai',ai];
+ // The AI is a persistent side panel, not an outside-click modal.
  return null;
 }
 function closeContext(name,box){

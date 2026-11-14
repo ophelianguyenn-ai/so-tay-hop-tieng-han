@@ -1,0 +1,36 @@
+/* Card tools and modal surfaces, sized from the available study area. */
+#planBox .prompt:not(.ko),#planBox .vi-under,#cPrompt:not(.ko),#cAnswer:not(.ko){font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif!important}
+.nhi-english-v5 .nhi-en-translation{font-weight:750!important}
+.nhi-en-word{cursor:pointer;border-radius:3px}.nhi-en-word:hover,.nhi-en-word:focus-visible{background:var(--accent-soft)}.nhi-en-word.copied{background:#c8f4d4;color:#173821}
+.nhi-en-head,.nhi-en-head-actions,.nhi-en-tools,.cicons{flex-wrap:wrap;gap:6px}
+.nhi-en-forgot{display:flex;align-items:center;gap:5px;font-size:13px}.nhi-en-forgot input{width:17px;height:17px}
+.nhi-dict-button{font-size:16px!important;width:auto!important;min-width:40px}
+.nhi-dictionary-dialog{width:min(960px,96vw);height:min(840px,92dvh);border:2px solid var(--line);border-radius:20px;background:var(--surface);color:var(--ink);padding:16px;overflow:auto}
+.nhi-dictionary-dialog::backdrop{background:#10233188;backdrop-filter:blur(5px)}
+.nhi-dictionary-dialog iframe{display:block;width:100%;height:calc(100% - 130px);min-height:260px;border:1px solid var(--line);border-radius:12px;margin-top:10px;background:white}
+.nhi-dialog-head{display:flex;gap:12px;align-items:center;justify-content:space-between}
+#planBox .pcard{container-type:inline-size;overflow:visible!important;min-width:0}
+#planBox .pcard .pfront{min-width:0;width:100%;overflow-wrap:anywhere}
+#planBox .pcard .prompt{font-size:clamp(19px,4.5cqi,28px)!important}
+#planBox .pcard .answer.ko{font-size:clamp(23px,5.5cqi,40px)!important}
+#planBox .pcard:has(.nhi-editor-window-v5),#planBox .pcard:has(.nhi-picture-picker){transform:none!important;animation:none!important;filter:none!important;container-type:normal}
+#planBox .nhi-editor-window-v5,.nhi-picture-picker{position:fixed!important;inset:auto!important;top:4dvh!important;left:50%!important;transform:translateX(-50%)!important;z-index:210!important;width:min(740px,94vw)!important;max-height:90dvh!important;overflow:auto!important;margin:0!important;padding:48px 20px 20px!important;background:var(--surface)!important;color:var(--ink);border:2px solid var(--line);border-radius:20px;box-shadow:0 0 0 100vmax #10233166,0 20px 70px #0005;text-align:left}
+.nhi-picture-picker{z-index:220!important}
+.nhi-picture-head{position:sticky;top:-48px;background:var(--surface);z-index:2;padding:10px 0}
+.nhi-format-tools{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:8px;font-size:12px}.nhi-format-tools button{padding:2px 9px;min-height:32px}.nhi-format-tools input[type=color]{width:34px;height:32px;padding:0;border:0}
+.nhi-format-preview{white-space:pre-wrap;border:1px dashed var(--line);padding:10px;border-radius:9px;font-size:15px;margin:7px 0 18px}
+.nhi-card-note{font:400 15px/1.5 "Times New Roman",Times,serif!important;color:#233645!important;padding:12px 16px;border-radius:12px;width:100%;white-space:pre-wrap;text-align:left;overflow-wrap:anywhere}
+.nhi-reader-toolbar{display:flex;flex-wrap:wrap;gap:5px;padding:8px 12px;border-bottom:1px solid var(--line);flex-shrink:0}.nhi-reader-toolbar button,.nhi-reader-toolbar select{font-size:12px;min-height:30px;padding:4px 7px}.nhi-read-message{display:block;margin-top:8px;font-size:12px;padding:3px 8px}.nhi-reader-toolbar select{border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+#nhi-hard-mascot{position:absolute!important;left:12px!important;top:50%!important;transform:translateY(-50%)!important;width:clamp(68px,15cqi,125px)!important;height:auto!important;display:block!important;z-index:5!important;margin:0!important;padding:0!important;opacity:1;background:transparent!important;border:0!important;box-shadow:none!important;animation:nhi-mascot-enter .55s ease both!important;pointer-events:none!important}
+#nhi-hard-mascot img{width:100%!important;max-width:100%!important;height:auto!important;display:block!important;filter:drop-shadow(0 7px 8px #0002)}
+#nhi-hard-mascot .nhi-hard-caption{font:500 11px/1.4 var(--ui)!important;text-align:center;background:var(--surface);border-radius:9px;padding:5px;white-space:normal}
+#nhi-hard-mascot.nhi-mascot-leave{animation:nhi-mascot-exit .65s ease both!important}
+#planBox .pcard.nhi-mascot-active .pfront{padding-left:clamp(95px,20cqi,155px)!important;padding-right:12px!important}
+@keyframes nhi-mascot-enter{from{opacity:0;translate:-12px 8px}to{opacity:1;translate:0 0}}
+@keyframes nhi-mascot-exit{from{opacity:1;translate:0 0}to{opacity:0;translate:-12px 8px}}
+@media(min-width:900px){body.ai-open .app{width:calc(100% - var(--nhi-ai-width) - 32px)!important;max-width:1000px!important;margin-left:16px!important;margin-right:calc(var(--nhi-ai-width) + 16px)!important}body.ai-open .topbar{padding-right:calc(var(--nhi-ai-width) + 16px)!important}body.ai-open .menu{right:calc(var(--nhi-ai-width) + 12px)!important}}
+@media(prefers-reduced-motion:reduce){#nhi-hard-mascot,#nhi-hard-mascot.nhi-mascot-leave{animation:none!important}}
+
+.pcardwrap:has(.nhi-editor-window-v5),.pcardwrap:has(.nhi-picture-picker){perspective:none!important;transform:none!important}
+#planBox .pcard{position:relative!important}
+#planBox .cmeta{min-width:0}.nhi-en-head-actions{display:flex}

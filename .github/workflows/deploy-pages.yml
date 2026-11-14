@@ -32,6 +32,7 @@ jobs:
           # Only publish files required by the app. Never upload .github,
           # scripts, Netlify settings, internal notes or credentials.
           files=(
+            study-update-v6.js study-update-v6.css
             index.html nhi-neck-options.html sw.js manifest.webmanifest
             lessons.json technical-images.json audio-manifest.json
             qrcode.js garden-v10.js

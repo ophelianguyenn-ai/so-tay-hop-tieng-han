@@ -74,7 +74,7 @@ try{
   return {serif:getComputedStyle(document.body).fontFamily.includes('Times New Roman'),
    plain:rows.length===2&&rows.every(row=>{const css=getComputedStyle(row);return css.backgroundColor==='rgba(0, 0, 0, 0)'&&css.borderTopWidth==='0px'&&css.boxShadow==='none';})};
  });
- if(!appearance.serif||!appearance.plain)throw Error('Serif or plain comparison styling missing: '+JSON.stringify(appearance));
+ if(appearance.serif||!appearance.plain)throw Error('Sans Vietnamese or plain comparison styling missing: '+JSON.stringify(appearance));
  const noDevice=await page.evaluate(async text=>{
   const old=speechSynthesis.getVoices;speechSynthesis.getVoices=()=>[];speechSynthesis.dispatchEvent(new Event('voiceschanged'));
   const selectors=['voiceKo','voiceVi','voiceEn'].every(id=>!document.getElementById(id).disabled&&document.getElementById(id).options[0].textContent.includes('Neural'));

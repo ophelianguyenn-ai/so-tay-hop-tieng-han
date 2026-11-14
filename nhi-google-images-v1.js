@@ -36,16 +36,14 @@ var state=E('p','nhi-picture-status');state.setAttribute('role','status');root.a
 var tiles=E('div','nhi-picture-results');root.appendChild(tiles);
 var manual=E('div','nhi-google-manual');manual.appendChild(E('label',null,'Dán liên kết trực tiếp của ảnh (HTTPS):'));
 var url=E('input','field');url.type='url';url.placeholder='https://.../image.jpg';manual.appendChild(url);
-var add=E('button','ghost','Lưu ảnh từ liên kết');add.type='button';add.addEventListener('click',function(){var u=https(url.value.trim());if(!u){state.textContent='Đường dẫn ảnh phải bắt đầu bằng https://';return;}save({url:u,source:u,caption:it.vi||it.ko||''});});manual.appendChild(add);
+var pending=0;
+url.setAttribute('aria-label','Liên kết ảnh HTTPS');
+url.addEventListener('input',function(){clearTimeout(pending);pending=setTimeout(function(){var u=https(url.value.trim());if(!u)return;var image=new Image();image.referrerPolicy='no-referrer';state.textContent='Đang tải ảnh…';image.onload=function(){if(https(url.value.trim())!==u)return;save({url:u,source:u,caption:it.vi||it.ko||''});};image.onerror=function(){state.textContent='Liên kết chưa tải được ảnh. Hãy dùng liên kết trực tiếp hoặc dán ảnh đã sao chép.';};image.src=u;},450);});
+root.addEventListener('paste',function(e){var item=Array.from(e.clipboardData&&e.clipboardData.items||[]).find(function(x){return x.type.startsWith('image/');});if(item){e.preventDefault();upload(item.getAsFile(),it,save,state);}});
+root.tabIndex=-1;setTimeout(function(){if(root.isConnected)root.focus();},50);
+manual.appendChild(E('p','hint','Sao chép hình ở ngoài, quay lại cửa sổ này và nhấn Ctrl+V / ⌘V để thêm ảnh.'));
 manual.appendChild(E('label',null,'Hoặc tải hình JPG/PNG/WebP từ thiết bị:'));
 var file=E('input');file.type='file';file.accept='image/jpeg,image/png,image/webp';file.addEventListener('change',function(){upload(file.files&&file.files[0],it,save,state);file.value='';});manual.appendChild(file);root.appendChild(manual);
-var details=E('details','nhi-google-advanced');details.appendChild(E('summary',null,'Đã có Google Custom Search API? Bật chọn ảnh một chạm'));
-details.appendChild(E('p','nhi-google-note','API này đã ngừng tiếp nhận khách hàng mới. Phần này chỉ dành cho tài khoản có sẵn API key và Search Engine ID (cx).'));
-var key=E('input','field');key.type='password';key.placeholder='Google Search API key';key.value=config.key;key.autocomplete='off';
-var cx=E('input','field');cx.placeholder='Search Engine ID (cx)';cx.value=config.cx;cx.autocomplete='off';
-details.appendChild(key);details.appendChild(cx);
-var store=E('button','ghost','Lưu trên thiết bị');store.type='button';store.addEventListener('click',function(){config.key=key.value.trim();config.cx=cx.value.trim();try{localStorage.setItem(KEY,JSON.stringify(config));}catch(e){}state.textContent='Đã lưu cài đặt Google trên thiết bị.';});
-details.appendChild(store);root.appendChild(details);
 var token=0;
 form.addEventListener('submit',async function(e){
 e.preventDefault();var q=input.value.trim();link.href=searchUrl(q);tiles.replaceChildren();if(!q)return;

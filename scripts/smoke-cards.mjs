@@ -153,7 +153,7 @@ try {
         background:getComputedStyle(n).backgroundColor,position:getComputedStyle(n).position};
     });
     console.log('FIXED LEFT COMPANION',JSON.stringify(companion));
-    if(!companion||companion.left>companion.cardLeft+40||companion.buttonCount||companion.position!=='fixed')
+    if(!companion||companion.left>companion.cardLeft+40||companion.buttonCount||companion.position!=='absolute')
       throw Error('Nhi mascot is not fixed at left without controls');
     await page.close();await resumeContext.close();
   }
@@ -218,14 +218,14 @@ try {
 
     // Undo a deletion (including the last card) restores the item and its position.
     await customPage.click('#planBox .pdel');
-    await customPage.waitForSelector('#nhi-undo-delete:not([hidden])',{timeout:5000});
+    await customPage.waitForSelector('#planBox .pundo',{timeout:5000});
     const deleted=await customPage.evaluate(()=>({
       deleted:JSON.parse(localStorage.getItem('viko-plan-v1')||'{}').del?.['di-payment-test']?.v,
       last:JSON.parse(localStorage.getItem('nhi-plan-deletions-v2')||'[]').at(-1)?.id
     }));
     console.log('delete state',JSON.stringify(deleted));
-    if(!deleted.deleted||deleted.last!=='di-payment-test')throw Error('Deletion was not stored for Undo');
-    await customPage.click('#nhi-undo-delete');
+    if(!deleted.deleted||deleted.last)throw Error('Deletion was not stored for Undo');
+    await customPage.click('#planBox .pundo');
     await customPage.waitForSelector('#planBox .pcard',{timeout:8000});
     const restoredDelete=await customPage.evaluate(()=>({
       deleted:JSON.parse(localStorage.getItem('viko-plan-v1')||'{}').del?.['di-payment-test']?.v,

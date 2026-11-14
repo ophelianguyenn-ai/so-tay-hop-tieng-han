@@ -62,6 +62,7 @@ function comparisonRows(box,id,vi,ko){
   button.title='Chọn bản dịch từ '+(lang==='vi'?'tiếng Việt':'tiếng Hàn')+' làm tiếng Anh chính';
   const text=document.createElement('span');text.textContent=flag+' “'+result[lang]+'”';
   const action=document.createElement('small');action.textContent=active?'✓ Chính':'Chọn';
+  if(window.NHI_STUDY)window.NHI_STUDY.wordElements(text,result[lang]);
   button.append(text,action);button.onclick=()=>{
    const key=entryKey(vi,ko),previous=choices[key];
    choices[key]={en:result[lang],ipa:'',source:'comparison',language:lang};
@@ -233,10 +234,10 @@ function display(box,entry,id,vi,ko){
  if(!box)return;
  entry=choices[entryKey(vi,ko)]||entry;
  const en=clean(entry&&entry.en),ipa=clean(entry&&entry.ipa);
- box.querySelector('.nhi-en-translation').textContent=en||'Đang chuẩn bị bản dịch tiếng Anh…';
+ const translation=box.querySelector('.nhi-en-translation');translation.textContent=en||'Đang chuẩn bị bản dịch tiếng Anh…';if(en&&window.NHI_STUDY)window.NHI_STUDY.wordElements(translation,en);
  const span=box.querySelector('.nhi-en-ipa');span.textContent=ipa?'/'+ipa.replace(/^\/|\/$/g,'')+'/':'';span.hidden=!ipa;
  const play=box.querySelector('.nhi-en-speak');
- play.hidden=!en;play.onclick=()=>speakEnglish(en);
+ play.hidden=!en;play.onclick=()=>window.NHI_SPEECH?window.NHI_SPEECH.toggle(en,'en-US'):speakEnglish(en);
 
  box.querySelector('.nhi-en-status').textContent='';
  comparisonRows(box,id,vi,ko);
@@ -270,11 +271,12 @@ function editEnglish(box,id,vi,ko) {
   });
   box.appendChild(form);field.focus();
 }
-function mount(parent,id,vi,ko){
+function mount(parent,id,vi,ko,options){
  if(!parent)return;
  const before=parent.querySelector('.nhi-english-v5');if(before)before.remove();
  const box=document.createElement('section');box.className='nhi-english-v5';box.setAttribute('aria-label','Tiếng Anh');
  box.innerHTML='<div class="nhi-en-head"><strong>EN · Tiếng Anh</strong><span class="nhi-en-head-actions"><button type="button" class="nhi-en-speak" aria-label="Nghe tiếng Anh">🔊 Nghe</button><button type="button" class="nhi-en-edit" aria-label="Chỉnh sửa bản dịch tiếng Anh">✎ Sửa</button></span></div><p class="nhi-en-translation"></p><p class="nhi-en-ipa"></p><p class="nhi-en-status" aria-live="polite"></p><div class="nhi-en-tools"><button type="button" class="nhi-en-review" title="Khi bấm, nội dung tiếng Việt và tiếng Hàn sẽ được gửi đến Google Translate để đối chiếu tự động. Đây không phải kiểm duyệt chuyên gia.">✓ Đối chiếu</button></div>';
+ if(options){const label=document.createElement('label');label.className='nhi-en-forgot';const check=document.createElement('input');check.type='checkbox';check.checked=!!options.unremembered;check.onchange=()=>options.toggle(check.checked);label.append(check,document.createTextNode('Chưa nhớ tiếng Anh'));box.querySelector('.nhi-en-tools').append(label);}
  parent.appendChild(box);
  display(box,verifiedEntry(id,vi,ko),id,vi,ko);
  if(!data||!Object.keys(data).length){
