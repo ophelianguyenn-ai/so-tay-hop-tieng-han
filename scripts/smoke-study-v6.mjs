@@ -55,6 +55,8 @@ try{
  await page.keyboard.press('ArrowRight');assert(await page.$('#nhi-hard-mascot')===null,'Mascot survived card transition');
  await page.click('#aiBtn');await page.waitForFunction(()=>document.body.classList.contains('ai-open'));
  await page.waitForSelector('.nhi-reader-toolbar');
+ await page.waitForFunction(()=>document.querySelector('#aiPanel').getBoundingClientRect().right<=innerWidth+1);
+ console.log('CHAT INPUT BOUNDS',await page.$eval('#aiInput',e=>{const r=e.getBoundingClientRect();return {top:r.top,bottom:r.bottom,width:r.width,height:r.height,viewport:innerHeight};}));
  await page.click('#aiInput');await page.type('#aiInput','Giải thích từ này');await page.keyboard.press('Enter');
  await page.waitForFunction(()=>document.querySelector('#aiLog').textContent.includes('Giải thích từ này'));
  console.log('CHAT CONTROL BOUNDS',await page.$eval('#aiClose',e=>{const r=e.getBoundingClientRect();return {display:getComputedStyle(e).display,top:r.top,bottom:r.bottom,width:r.width,height:r.height,viewport:innerHeight};}));
