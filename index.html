@@ -3539,16 +3539,14 @@ button,input,select,textarea{font-family:var(--ui)}
         if(part<=.25)go(-1);else if(part>=.75)go(1);else flip();
       });
       c.appendChild(f);
-      var nav = el('div', 'pnav');
-      var pv = ibtn('parrow', 'left', function () { go(-1); }, 'Thẻ trước (←)'); pv.disabled = s.pos === 0; nav.appendChild(pv);
-      nav.appendChild(ibtn('pflip', 'flip', flip, 'Lật thẻ (Enter)'));
-      nav.appendChild(ibtn('parrow', 'right', function () { go(1); }, 'Thẻ sau (→)'));
-      c.appendChild(nav);
-      var r = el('div', 'prate'), picked = s.picked[s.pos];
-      [['hard', 'Khó', '1'], ['mid', 'Bình thường', '2']].forEach(function (x) {
-        var b = btn(x[0] + (picked === x[0] ? ' picked' : ''), x[1], function () { rate(x[0]); }); b.appendChild(el('kbd', null, x[2])); r.appendChild(b);
-      });
-      if (undoHistory.length) r.appendChild(btn('pundo', '↶ Hoàn tác', undoDelete, 'Khôi phục thẻ vừa xóa (Ctrl+Z)'));
+      var r = el('div', 'prate nhi-rating-v3'), picked = s.picked[s.pos];
+      var pv = ibtn('parrow nhi-prev-v3', 'left', function () { go(-1); }, 'Thẻ trước (←)');
+      pv.disabled = s.pos === 0;pv.setAttribute('aria-label','Thẻ trước');r.appendChild(pv);
+      var hard = btn('hard' + (picked === 'hard' ? ' picked' : ''), 'Khó', function () { rate('hard'); });
+      hard.appendChild(el('kbd',null,'1'));r.appendChild(hard);
+      var nx = ibtn('parrow nhi-next-v3', 'right', function () { go(1); }, 'Thẻ sau (→)');
+      nx.setAttribute('aria-label','Thẻ sau');r.appendChild(nx);
+      if (undoHistory.length) r.appendChild(btn('pundo','↶ Hoàn tác',undoDelete,'Khôi phục thẻ vừa xóa (Ctrl+Z)'));
       r.appendChild(ibtn('pdel', 'trash', function () { del(it.id); anim = 'next'; saveSess(); render(); }, 'Xoá từ này khỏi danh sách (Delete)'));
       c.appendChild(r);
       if (s.imagePicker && window.NHI_IMAGES && window.NHI_IMAGES.picker) {
