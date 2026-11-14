@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 540" width="250" height="540" role="img" aria-label="Chàng trai Lương mặc áo polo nâu, mỉm cười và nghiêng người sang trái">
+<defs>
+ <linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0d9"/><stop offset=".55" stop-color="#edbb97"/><stop offset="1" stop-color="#cc8b73"/></linearGradient>
+ <linearGradient id="shirt" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#684337"/><stop offset=".47" stop-color="#442d29"/><stop offset="1" stop-color="#281a1d"/></linearGradient>
+ <linearGradient id="pants" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#333741"/><stop offset="1" stop-color="#17191d"/></linearGradient>
+ <linearGradient id="hair" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#525055"/><stop offset=".6" stop-color="#1b1e23"/><stop offset="1" stop-color="#11171b"/></linearGradient>
+ <pattern id="rib" width="13" height="20" patternUnits="userSpaceOnUse"><path d="M3 0v20" stroke="#d9ad9c" stroke-opacity=".13" stroke-width="2"/></pattern>
+</defs>
+<!-- Shadow and legs -->
+<ellipse cx="124" cy="525" rx="102" ry="12" fill="#243b38" opacity=".16"/>
+<path d="M67 304q-8 85-16 184l-6 19 59 7 15-168 18 2 23 166 59-3-22-210z" fill="url(#pants)" stroke="#242024" stroke-width="5" stroke-linejoin="round"/>
+<path d="M89 345q-4 88-13 142M166 348l21 149" stroke="#74777b" stroke-opacity=".36" stroke-width="5" fill="none"/>
+<path d="M53 482q-16 9-28 26-4 7 3 11h75q7-4-2-20L91 483z" fill="#272933" stroke="#1a222a" stroke-width="4"/>
+<path d="M160 486q-3 16 6 30h67q7-9-11-23l-20-10z" fill="#242b31" stroke="#181c20" stroke-width="4"/>
+<path d="M24 514h81M165 514h69" stroke="#ede9e1" stroke-width="5" stroke-linecap="round"/>
+<!-- Left raised sleeve and welcoming arm -->
+<path d="M75 201Q49 186 39 204L15 256Q7 273 2 272q-9-1-13-12-4-8-12-6 7 19 26 27 13 6 26-13L62 240Z" transform="translate(26 -30)" fill="url(#skin)" stroke="#8b6055" stroke-width="3" stroke-linejoin="round"/>
+<g transform="translate(28 -30)"><path d="M-1 270q-7-8-10-15M0 272q5-3 9-10M-8 267l-7-4" fill="none" stroke="#b88473" stroke-width="2" stroke-linecap="round"/></g>
+<!-- Torso and collar -->
+<path d="M83 176q-26 0-34 26l-15 111q64 30 163-2l-16-106q-8-28-42-29l-24 19Z" fill="url(#shirt)" stroke="#3c2425" stroke-width="5"/>
+<path d="M83 176q-26 0-34 26l-15 111q64 30 163-2l-16-106q-8-28-42-29l-24 19Z" fill="url(#rib)" opacity=".66"/>
+<path d="M75 176q-18 0-25 21L39 248l38 11 20-49z" fill="#56372f" stroke="#342224" stroke-width="3"/>
+<path d="M151 176q36 0 45 31l11 58-33 9-15-59z" fill="url(#shirt)" stroke="#3c2425" stroke-width="4"/>
+<!-- Right arm with hand in pocket -->
+<path d="M180 260q4 26 1 42-3 13-17 20l-9-9q7-14 12-44" fill="url(#skin)" stroke="#9b6c59" stroke-width="3"/>
+<path d="M170 307q-6 5-12 8" stroke="#e5b398" stroke-width="7" stroke-linecap="round"/>
+<!-- Neck -->
+<path d="M100 149v46q14 12 31-1l-3-43" fill="url(#skin)" stroke="#a87461" stroke-width="3"/>
+<path d="M88 178q7 18 24 27l-18 26-18-30zM139 177q-7 18-26 28l17 24 23-32z" fill="#67483c" stroke="#2f2525" stroke-width="3"/>
+<path d="M113 207q-1 40-1 70" stroke="#241d1c" stroke-width="5"/>
+<circle cx="112" cy="230" r="3" fill="#bda69b"/><circle cx="112" cy="249" r="3" fill="#bda69b"/>
+<!-- Head, positioned three-quarter profile to left -->
+<path d="M73 68q10-42 50-41 57-1 62 52 5 54-22 79-22 22-56 18-29-6-41-38l-8-19-12-5q-7-7 1-13l17-13q0-13 9-20z"
+ fill="url(#skin)" stroke="#876257" stroke-width="4" stroke-linejoin="round"/>
+<path d="M163 111q18-14 25-2 9 18-10 29-5 3-13-1" fill="url(#skin)" stroke="#916859" stroke-width="3"/>
+<path d="M171 118q5-7 10-4-2 9-9 11" stroke="#bc8876" stroke-width="2" fill="none"/>
+<!-- Structured short black hair -->
+<path d="M61 99Q49 53 84 32q11-25 42-20 33-13 57 23 19 29 3 74l-13-8q-6-30-25-39-30 13-54-7-5 24-34 44z" fill="url(#hair)" stroke="#172025" stroke-width="4" stroke-linejoin="round"/>
+<path d="M68 63Q85 32 110 32M100 25q21 13 42 13M142 30q22 18 32 44M67 92q13-11 19-33" stroke="#8d8988" stroke-width="5" opacity=".48" fill="none" stroke-linecap="round"/>
+<path d="M80 111q11-6 23-2M132 110q10-5 20 0" fill="none" stroke="#483930" stroke-width="3" stroke-linecap="round"/>
+<path d="M85 120q8-5 15 0M134 120q6-3 13 0" fill="none" stroke="#2b292c" stroke-width="3" stroke-linecap="round"/>
+<circle cx="96" cy="119" r="2" fill="#fff9ea"/><circle cx="144" cy="118" r="2" fill="#fff9ea"/>
+<path d="M110 127q-5 9-3 12l11 2" stroke="#ba7c6d" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+<path d="M98 152q14 7 29-2" fill="none" stroke="#994e50" stroke-width="3" stroke-linecap="round"/>
+<ellipse cx="75" cy="144" rx="11" ry="5" fill="#e39388" opacity=".3"/><ellipse cx="157" cy="145" rx="9" ry="5" fill="#e39388" opacity=".26"/>
+<!-- bead bracelet -->
+<circle cx="47" cy="235" r="6" fill="#75523e"/><circle cx="54" cy="239" r="6" fill="#5e4032"/><circle cx="61" cy="241" r="6" fill="#8d5b43"/>
+</svg>
