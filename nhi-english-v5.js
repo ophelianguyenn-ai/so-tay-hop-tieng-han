@@ -64,7 +64,7 @@ function comparisonRows(box,id,vi,ko){
   const action=document.createElement('input');action.type='checkbox';action.checked=active;action.setAttribute('aria-label','Chọn bản dịch từ '+(lang==='vi'?'tiếng Việt':'tiếng Hàn'));
   const flagIcon=document.createElement('span');flagIcon.className='nhi-comparison-flag';flagIcon.textContent=flag;flagIcon.setAttribute('aria-label',lang==='vi'?'Từ tiếng Việt':'Từ tiếng Hàn');
   if(window.NHI_STUDY)window.NHI_STUDY.wordElements(text,result[lang]);
-  const checkLabel=document.createElement('label');checkLabel.className='nhi-choice-check';checkLabel.append(action,document.createTextNode(' Chọn'));
+  const checkLabel=document.createElement('label');checkLabel.className='nhi-choice-check';checkLabel.append(action);
    button.append(flagIcon,text,checkLabel);action.onchange=()=>{
    const key=entryKey(vi,ko),previous=choices[key];
    if(action.checked)choices[key]={en:result[lang],ipa:'',source:'comparison',language:lang};else delete choices[key];
@@ -75,7 +75,7 @@ function comparisonRows(box,id,vi,ko){
   holder.appendChild(button);
  }
  const original=verifiedEntry(id,vi,ko);
- if(choices[entryKey(vi,ko)]&&original){
+ if(false&&choices[entryKey(vi,ko)]&&original){
   const restore=document.createElement('button');restore.type='button';restore.className='nhi-en-original';restore.textContent='↩ Bản gốc';restore.title=original.en;
   restore.onclick=()=>{
    const key=entryKey(vi,ko),previous=choices[key];delete choices[key];
@@ -230,6 +230,32 @@ async function speakEnglish(t){
  if(window.NHI_AUDIO){await window.NHI_AUDIO.ready;if(window.NHI_AUDIO.play(t,'en',1))return;}
 }
 
+/* Look up the real IPA for isolated English vocabulary, without inventing pronunciations.
+   Cache successful results and leave multiword phrases unchanged. */
+const ipaLookupCache=new Map();
+async function showSingleWordIPA(box,english){
+ const word=clean(english);
+ if(!/^[A-Za-z]+(?:[-'][A-Za-z]+)?$/.test(word))return;
+ const label=box.querySelector('.nhi-en-ipa');
+ if(!label)return;
+ const key=word.toLowerCase();
+ try{
+  let reading=ipaLookupCache.get(key);
+  if(!reading){
+   const response=await fetch('https://api.dictionaryapi.dev/api/v2/entries/en/'+encodeURIComponent(key));
+   if(!response.ok)return;
+   const entries=await response.json();
+   const entry=Array.isArray(entries)?entries[0]:null;
+   reading=clean(entry?.phonetic)||clean(entry?.phonetics?.find(p=>clean(p.text))?.text);
+   if(!reading)return;
+   ipaLookupCache.set(key,reading);
+  }
+  if(clean(box.querySelector('.nhi-en-translation')?.textContent)!==word)return;
+  if(label.dataset.manual==='true')return;
+  label.textContent='/'+reading.replace(/^\/|\/$/g,'')+'/';
+  label.hidden=false;
+ }catch(_e){/* Offline: do not guess phonetic transcription. */}
+}
 function display(box,entry,id,vi,ko){
  // Cards are constructed off-DOM, then appended; populate immediately.
  // isConnected is false during the first render, even though the box is valid.
@@ -237,7 +263,7 @@ function display(box,entry,id,vi,ko){
  entry=choices[entryKey(vi,ko)]||entry;
  const en=clean(entry&&entry.en),ipa=clean(entry&&entry.ipa);
  const translation=box.querySelector('.nhi-en-translation');translation.textContent=en||'Đang chuẩn bị bản dịch tiếng Anh…';if(en&&window.NHI_STUDY){window.NHI_STUDY.wordElements(translation,en);window.NHI_STUDY.formatText(translation,entry?.format||box._format||{},'en');}
- const span=box.querySelector('.nhi-en-ipa');span.textContent=ipa?'/'+ipa.replace(/^\/|\/$/g,'')+'/':'';span.hidden=!ipa;
+ const span=box.querySelector('.nhi-en-ipa');span.dataset.manual=ipa?'true':'false';span.textContent=ipa?'/'+ipa.replace(/^\/|\/$/g,'')+'/':'';span.hidden=!ipa;if(!ipa&&en)showSingleWordIPA(box,en);
  const play=box.querySelector('.nhi-en-speak');
  play.hidden=!en;play.onclick=()=>window.NHI_SPEECH?window.NHI_SPEECH.toggle(en,'en-US'):speakEnglish(en);
 
