@@ -65,3 +65,24 @@
  #planBox .pcard>.prate{margin-inline:5px!important;margin-bottom:8px!important}
  #planBox .pcard>.pfront{padding-inline:6px!important}
 }
+
+/* Compact input surfaces while preserving room for multi-line content. */
+#planBox .nhi-editor-window-v5 .flabel{width:fit-content!important;max-width:100%!important;
+ min-width:min(100%,260px)!important;align-items:stretch!important}
+#planBox .nhi-editor-window-v5 .nhi-rich-field,
+#planBox .nhi-editor-window-v5 textarea.field[name="pairs"]{
+ display:block!important;min-width:min(100%,245px)!important;max-width:100%!important;
+ width:var(--nhi-field-width, min(100%,320px))!important;
+ height:auto;min-height:54px;box-sizing:border-box!important;
+ overflow-wrap:anywhere;white-space:pre-wrap;resize:vertical}
+#planBox .nhi-editor-window-v5 textarea.field[name="pairs"]{min-height:74px}
+#planBox .nhi-editor-window-v5 .hanja-editor legend{position:relative;top:-7px;margin-bottom:0!important}
+#planBox .nhi-editor-window-v5 .hanja-editor{padding-top:14px!important}
+#planBox .pcard .pfront:not(.nhi-with-image){display:flex!important;flex-direction:column!important;
+ align-items:center!important;justify-content:flex-start!important}
+#planBox .pcard .pfront:not(.nhi-with-image)>.nhi-card-details{margin-block:auto!important;max-width:100%!important}
+#planBox .pcard .pfront:not(.nhi-with-image)>.nhi-card-note{margin-block:auto!important}
+#planBox .nhi-neon-speaker>svg{width:27px!important;height:27px!important;display:block!important}
+@media (min-width:720px){
+ #planBox .pcard .pfront:not(.nhi-with-image){padding-top:4px!important;padding-bottom:4px!important}
+}
