@@ -59,7 +59,7 @@
 #planBox .nhi-card-details>.nhi-card-note,#planBox .pfront>.nhi-card-note{
   width:max-content!important;max-width:min(100%,72ch)!important;min-height:0!important;height:auto!important;
   padding:7px 13px!important;border-radius:10px!important;box-sizing:border-box!important;
-  background-color:#fff0c8!important;border:1px solid #e2b96d!important;
+  background-color:#fff0c8;border:1px solid #e2b96d!important;
   justify-self:center!important;font-family:"Times New Roman",Times,serif!important;
   color:#5c4219!important;line-height:1.35!important;white-space:pre-wrap}
 #planBox .nhi-card-details>.nhi-english-v5{grid-column:1!important;width:100%!important;
@@ -149,3 +149,11 @@
 @media(prefers-reduced-motion:reduce){
  .nhi-dict-bubble,.nhi-thinking-button,.nhi-en-choice{animation:none!important;transition:none!important}
 }
+
+/* Keep the supplied thinking-face emoji crisp, independent of image files. */
+.nhi-emoji-think{font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif!important;font-size:30px!important;line-height:1!important;display:grid;place-items:center;width:100%;height:100%;flex:0 0 auto!important}
+.nhi-choice-check{display:inline-flex;gap:4px;align-items:center;justify-content:flex-end;
+  white-space:nowrap;font:600 13px var(--ui)!important;color:var(--muted);flex:0 0 auto!important;cursor:pointer}
+.nhi-en-choice[aria-pressed=true] .nhi-choice-check{color:#087b60}
+.nhi-choice-check input{margin:0}
+@media(hover:hover){.nhi-en-choice:hover .nhi-choice-check{color:var(--accent-t)}}
