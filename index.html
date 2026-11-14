@@ -3508,7 +3508,16 @@ button,input,select,textarea{font-family:var(--ui)}
          var a = hlText(el('p', 'answer ko' + (it.ko.length > 40 ? ' long' : '')), it, 'ko', true); a.lang = 'ko'; koRow.appendChild(a);
          var dictionaries=el('div','nhi-card-dictionaries');if(window.NHI_STUDY)window.NHI_STUDY.dictionaryButtons(dictionaries,function(){return s.selectedKo||it.ko;});koRow.appendChild(dictionaries);f.appendChild(koRow);
 
-        if (hj && s.hanja) { var hx = el('p', 'hanja', hj[0]); hx.lang = 'ko'; hx.appendChild(el('small', null, '(' + hj[1] + ')')); f.appendChild(hx); }
+        if (hj && s.hanja) {
+          var characters=String(hj[0]||'').replace(/[^\p{Script=Han}]/gu,'');
+          var hex=[...characters].map(function(ch){return ch.codePointAt(0).toString(16).toUpperCase();}).join(' ');
+          var hx=el('a','hanja nhi-hanja-lookup',hj[0]);
+          hx.href='https://hvdic.thivien.net/?HEXCodes='+encodeURIComponent(hex)+'&PronMode=0&Simplified=ON&Traditional=ON';
+          hx.target='_blank';hx.rel='noopener noreferrer';hx.lang='zh-Hant';
+          hx.title='Bấm để tra '+hj[0]+' tại Từ điển Hán Nôm Thi Viện';
+          hx.appendChild(el('small',null,'('+hj[1]+')'));
+          f.appendChild(hx);
+        }
         f.appendChild(hlText(el('p', 'vi-under'), it, 'vi', true));
         
         var note=val('note',it.id)||{text:it.note,color:'#fff1ce'};if(note&&note.text){var nt=el('p','nhi-card-note',note.text);nt.style.background=(note.color&&note.color!=='#dbeefe')?note.color:'#fff1ce';if(window.NHI_STUDY)window.NHI_STUDY.formatText(nt,val('fmt',it.id)||{},'note');f.appendChild(nt);}
@@ -3548,8 +3557,8 @@ button,input,select,textarea{font-family:var(--ui)}
       var nx = ibtn('parrow nhi-next-v3', 'right', function () { go(1); }, 'Thẻ sau (→)');
       nx.setAttribute('aria-label','Thẻ sau');r.appendChild(nx);
       if (undoHistory.length) r.appendChild(btn('pundo','↶ Hoàn tác',undoDelete,'Khôi phục thẻ vừa xóa (Ctrl+Z)'));
-      r.appendChild(ibtn('pdel', 'trash', function () { del(it.id); anim = 'next'; saveSess(); render(); }, 'Xoá từ này khỏi danh sách (Delete)'));
       c.appendChild(r);
+      c.appendChild(ibtn('pdel nhi-card-corner-trash', 'trash', function () { del(it.id); anim = 'next'; saveSess(); render(); }, 'Xoá từ này khỏi danh sách (Delete)'));
       if (s.imagePicker && window.NHI_IMAGES && window.NHI_IMAGES.picker) {
         c.appendChild(window.NHI_IMAGES.picker(it, function (image) {
           put('img', it.id, image);
