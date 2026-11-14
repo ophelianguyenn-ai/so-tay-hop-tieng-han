@@ -3167,7 +3167,7 @@ button,input,select,textarea{font-family:var(--ui)}
       function stat(num, label, cls) { var x = el('span', 'tstat' + (cls ? ' ' + cls : '')); x.appendChild(el('b', null, num)); x.appendChild(document.createTextNode(label)); st.appendChild(x); }
       stat(s.due.length, 'bài đến hạn');
       stat(s.late.length, 'bài quá hạn', s.late.length ? 'late' : '');
-      stat(s.cards, 'thẻ');
+      /* The cover and welcome area no longer show the aggregate card count. */
       box.appendChild(txt);
       var m = el('div', 'nhi-calendar-girl'); m.innerHTML = girl(n ? 'smile' : 'grin', true); box.appendChild(m);
       box.appendChild(st);
