@@ -83,3 +83,24 @@
  text-shadow:1px 2px 0 #a03f5e50,0 4px 7px #c96a7944!important;
  font-family:system-ui,sans-serif;font-weight:900;pointer-events:none!important;
 }
+
+/* GIF already contains illustrated hearts: avoid adding floating overlays. */
+#cover.nhi-gif-loaded #nhiRomanceHearts{display:none!important}
+#cover.nhi-gif-loaded #coverHero .nhi-girl-bubble{
+  top:22%!important;left:2%!important;font-size:clamp(12px,2vw,18px)!important;
+}
+#cover.nhi-gif-loaded #coverHero .nhi-boy-bubble{
+  top:22%!important;right:4%!important;font-size:clamp(12px,2vw,18px)!important;
+}
+/* Non-text entry control retained after the heading and "Vào học thôi" vanish. */
+#cover #nhiRomanceEnter{
+ position:fixed;z-index:20;top:18px;left:18px;
+ width:42px;height:42px;min-height:42px;border-radius:50%;
+ border:1px solid #ffffffaa;color:#653848;background:rgba(255,248,250,.83);
+ box-shadow:0 3px 14px #6b354836;cursor:pointer;
+ display:none;align-items:center;justify-content:center;font:900 25px system-ui;
+ backdrop-filter:blur(8px);
+}
+#cover.nhi-romance-on #nhiRomanceEnter{display:flex}
+#cover #nhiRomanceEnter:hover{transform:translateX(3px);background:#fff}
+#cover #nhiRomanceEnter:focus-visible{outline:3px solid #f381a4;outline-offset:3px}
