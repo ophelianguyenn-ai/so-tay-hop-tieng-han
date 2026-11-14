@@ -1,0 +1,188 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+/* Lương / Nhi illustrated stage. The original GIF is used ONLY as a drawing reference. */
+#cover #coverHero{position:relative!important;isolation:isolate;overflow:visible!important;
+  width:min(280px,58vw)!important;min-width:155px!important;max-width:280px!important}
+#cover #coverHero>.nhi-original{
+  position:relative!important;z-index:3!important;display:block!important;
+  width:100%!important;height:auto!important;
+  filter:drop-shadow(0 7px 8px #48353620);
+  transform-origin:62% 84%;
+}
+#cover #coverHero>.nhi-luong-v2{
+  position:absolute;z-index:5;top:-12%;right:-39%;
+  width:79%;height:auto;aspect-ratio:260/370;
+  opacity:0;pointer-events:none;
+  transform:translateX(75vw) scale(.23);
+  transform-origin:55% 82%;
+  filter:drop-shadow(0 8px 10px #55464026);
+  will-change:transform,opacity;
+}
+#cover #coverHero .nhi-luong-v2 img{
+ position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+ pointer-events:none;user-select:none;
+}
+#cover #coverHero .nhi-boy-kissing{opacity:0}
+#cover.nhi-v2-preview #coverHero>.nhi-luong-v2{
+ opacity:1;transform:translate(0,5px) scale(.95)}
+#cover.nhi-romance-v2-running #coverHero>.nhi-luong-v2{
+  animation:nhi-v2-boy-walk-kiss 15.5s cubic-bezier(.22,.68,.32,1) both!important;
+}
+#cover.nhi-romance-v2-running #coverHero>.nhi-original{
+ animation:nhi-v2-girl-answer 15.5s ease-in-out both!important;
+}
+#cover.nhi-v2-kissing #coverHero .nhi-boy-kissing{opacity:1!important}
+#cover.nhi-v2-kissing #coverHero .nhi-boy-standing{opacity:0!important}
+@keyframes nhi-v2-boy-walk-kiss{
+  0%{opacity:0;transform:translate(80vw,20px) scale(.23) rotate(0)}
+  10%{opacity:1;transform:translate(48vw,1px) scale(.42) rotate(-1deg)}
+  17%{transform:translate(35vw,-3px) scale(.55) rotate(2deg)}
+  24%{transform:translate(23vw,2px) scale(.67) rotate(-1deg)}
+  31%{transform:translate(12vw,-4px) scale(.8) rotate(1deg)}
+  38%{transform:translate(35px,2px) scale(.92) rotate(-1deg)}
+  45%{transform:translate(1px,-2px) scale(1) rotate(0deg)}
+  51%{transform:translate(0,0) scale(1) rotate(-1deg)}
+  56%,63%{transform:translate(-49px,-13px) scale(1.04) rotate(-10deg)}
+  70%{transform:translate(-20px,0) scale(1) rotate(-2deg)}
+  76%{transform:translate(-43px,-9px) scale(1.03) rotate(-8deg)}
+  83%{transform:translate(-9px,-1px) scale(1) rotate(1deg)}
+  91%{transform:translate(-12px,-5px) scale(1.005) rotate(2deg)}
+  100%{opacity:1;transform:translate(-11px,0) scale(1) rotate(0)}
+}
+@keyframes nhi-v2-girl-answer{
+  0%,48%{transform:translate(0,0) rotate(0deg)}
+  56%,63%{transform:translate(7px,-1px) rotate(3deg)}
+  70%{transform:translate(-1px,0) rotate(-1deg)}
+  76%{transform:translate(6px,0) rotate(2deg)}
+  84%,100%{transform:translate(0,0) rotate(0deg)}
+}
+#cover.nhi-romance-v2-running .cover-in>h1,
+#cover.nhi-romance-v2-running .cover-in>.lead,
+#cover.nhi-romance-v2-running #coverGo,
+#cover .cover-in>.cstats,
+#coverStats{display:none!important}
+#cover.nhi-romance-v2-running .cover-in{
+ transform:translateY(clamp(15px,6vh,70px))!important;
+ transition:transform 1.8s cubic-bezier(.18,.65,.28,1)!important;
+}
+#cover .nhi-romance-title-v2{
+ position:fixed;top:max(30px,10vh);left:50%;
+ z-index:9;pointer-events:none;transform:translate(-50%,14px) scale(.9);
+ opacity:0;white-space:nowrap;text-align:center;
+ color:#542a25;font:400 clamp(43px,7.5vw,75px)/1.15 'Great Vibes','Brush Script MT',cursive;
+ text-shadow:0 3px 8px #fffaf4cc,0 1px 1px #ac625a65;
+ letter-spacing:.01em;filter:blur(5px);
+}
+#cover .nhi-romance-title-v2 span{
+ font-family:'Apple Color Emoji','Segoe UI Emoji',sans-serif;font-size:.63em;
+ vertical-align:8%;filter:drop-shadow(0 2px 3px #b35e6b4d)}
+#cover.nhi-v2-done .nhi-romance-title-v2{
+ animation:nhi-v2-show-love 2.6s cubic-bezier(.2,.9,.25,1) forwards;
+}
+@keyframes nhi-v2-show-love{
+ 0%{opacity:0;filter:blur(5px);transform:translate(-50%,18px) scale(.87)}
+ 60%{opacity:1;filter:blur(0);transform:translate(-50%,-3px) scale(1.04)}
+ 100%{opacity:1;filter:blur(0);transform:translate(-50%,0) scale(1)}
+}
+#cover .nhi-illustrated-hearts,
+#cover .nhi-illustrated-flowers{
+ position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden;
+}
+#cover .nhi-drawn-heart{
+ position:absolute;left:var(--start-x);bottom:26vh;
+ display:block;width:var(--heart-size);height:var(--heart-size);
+ opacity:0;filter:drop-shadow(0 3px 3px #d590a14d);
+ animation:nhi-v2-float-heart var(--heart-duration) var(--heart-delay) ease-out forwards;
+}
+#cover .nhi-drawn-heart svg,#cover .nhi-drawn-petal svg{width:100%;height:100%;display:block}
+@keyframes nhi-v2-float-heart{
+ 0%{opacity:0;transform:translateY(8vh) scale(.35) rotate(-15deg)}
+ 22%{opacity:.85;transform:translateY(-4vh) scale(1.08) rotate(6deg)}
+ 74%{opacity:.78}
+ 100%{opacity:0;transform:translate(var(--end-dx),-54vh) scale(.75) rotate(28deg)}
+}
+#cover .nhi-drawn-petal{
+ position:absolute;left:var(--petal-left);top:-40px;
+ width:var(--petal-size);height:calc(var(--petal-size)*1.3);
+ opacity:0;filter:drop-shadow(0 2px 2px #cf8b9740);
+ animation:nhi-v2-petal-fall var(--petal-time) var(--petal-delay) linear forwards;
+}
+@keyframes nhi-v2-petal-fall{
+ 0%{opacity:0;transform:translate(0,-10px) rotate(0)}
+ 15%{opacity:.87}85%{opacity:.79}
+ 100%{opacity:0;transform:translate(var(--petal-wind),105vh) rotate(475deg)}
+}
+#cover #coverHero>.nhi-kiss-glimmer{
+ position:absolute;top:32%;right:5%;width:26px;height:26px;opacity:0;
+ z-index:7;pointer-events:none;filter:drop-shadow(0 2px 4px #e490ad99);
+}
+#cover #coverHero>.nhi-kiss-glimmer svg{width:100%;height:100%}
+#cover.nhi-v2-kissing #coverHero>.nhi-kiss-glimmer{
+ animation:nhi-v2-kiss-heart 1.35s ease-out infinite;
+}
+@keyframes nhi-v2-kiss-heart{
+ 0%{opacity:0;transform:translateY(9px) scale(.3)}
+ 35%{opacity:1;transform:translateY(-4px) scale(1)}
+ 100%{opacity:0;transform:translateY(-28px) scale(.7)}
+}
+#cover .nhi-v2-chat{
+ position:absolute;z-index:11;top:-9%;padding:6px 14px;border-radius:25px;
+ border:2px solid #e8abc2;box-shadow:0 4px 12px #46333b24;
+ background:#fff7fa;color:#a94b69;font:800 clamp(12px,1.6vw,17px) system-ui,sans-serif;
+ white-space:nowrap;opacity:0;pointer-events:none;transform:translateY(8px) scale(.8);
+}
+#cover .nhi-v2-girl-chat{left:-15%}
+#cover .nhi-v2-boy-chat{right:-74%;background:#edfbff;color:#327991;border-color:#9fd7e8}
+#cover.nhi-v2-talking .nhi-v2-chat{
+ animation:nhi-v2-talk 4.4s cubic-bezier(.2,.72,.27,1) both;
+}
+#cover.nhi-v2-talking .nhi-v2-boy-chat{animation-delay:.35s}
+@keyframes nhi-v2-talk{
+ 0%,100%{opacity:0;transform:translateY(8px) scale(.8)}
+ 16%,80%{opacity:1;transform:translateY(0) scale(1)}
+}
+#cover .nhi-v2-hotspot{
+ position:absolute;z-index:15;display:block;border:0!important;
+ background:transparent!important;box-shadow:none!important;
+ padding:0!important;cursor:pointer;min-height:40px;min-width:40px;
+ -webkit-tap-highlight-color:transparent;
+}
+#cover .nhi-v2-hotspot:focus-visible{outline:3px solid #e49eae;outline-offset:3px}
+#cover #nhiSunKiss{position:fixed;left:64%;top:4%;width:28%;height:27%;border-radius:50%}
+#cover #nhiBridgeMusic{position:fixed;left:31%;top:65%;width:29%;height:25%}
+#cover #nhiBouquetLove{position:absolute;top:58%;left:30%;width:33%;height:28%;border-radius:35%}
+#cover #nhiSunKiss::after{
+ content:"♡";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+ color:#fff4d0;text-shadow:0 2px 6px #8b6762;font:600 20px Georgia,serif;
+}
+#cover #nhiBridgeMusic::after{
+ content:"♪";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+ color:#fff0d1;text-shadow:0 2px 5px #705e4c;font:600 21px Georgia,serif;
+}
+#cover #nhiBridgeMusic[aria-pressed="true"]::after{content:"♫"}
+#cover .nhi-v2-enter{
+ display:none;position:fixed;top:20px;left:20px;z-index:20;
+ width:40px;height:40px;min-height:40px;padding:0;place-items:center;
+ border:1px solid #f4c1ce;border-radius:50%;color:#a54a6a;
+ background:#fff9f1de;backdrop-filter:blur(8px);
+ box-shadow:0 3px 10px #49323b21;cursor:pointer;
+}
+#cover .nhi-v2-enter span{font:800 24px system-ui;line-height:1}
+#cover.nhi-romance-v2-running .nhi-v2-enter{display:grid}
+#cover .nhi-v2-enter:hover{transform:translateX(2px);background:#fff7fb}
+@media(max-width:660px){
+ #cover #coverHero{width:min(250px,60vw)!important}
+ #cover #coverHero>.nhi-luong-v2{right:-45%;width:81%;top:-11%}
+ #cover .nhi-v2-girl-chat{left:-3%}
+ #cover .nhi-v2-boy-chat{right:-65%}
+ #cover .nhi-romance-title-v2{top:max(24px,9vh);font-size:clamp(37px,10vw,56px)}
+ #cover.nhi-romance-v2-running .cover-in{transform:translateY(clamp(10px,4vh,44px))!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #cover.nhi-romance-v2-running #coverHero>.nhi-luong-v2{
+ animation:none!important;opacity:1!important;transform:translate(-10px,0) scale(1)!important}
+ #cover.nhi-romance-v2-running #coverHero>.nhi-original{animation:none!important}
+ #cover.nhi-v2-done .nhi-romance-title-v2{
+ animation:none!important;opacity:1!important;filter:none!important;
+ transform:translateX(-50%)!important}
+ #cover .nhi-drawn-heart,#cover .nhi-drawn-petal{display:none!important}
+}
