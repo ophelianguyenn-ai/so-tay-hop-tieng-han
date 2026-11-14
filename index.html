@@ -3411,7 +3411,8 @@ button,input,select,textarea{font-family:var(--ui)}
       var nl=el('label','flabel');nl.appendChild(el('span',null,'Ghi chú dưới nghĩa'));var notes=el('textarea','field');notes.name='note';notes.rows=3;notes.value=(val('note',it.id)||{}).text||it.note||'';nl.appendChild(notes);f.appendChild(nl);
       var nc=el('input');nc.type='hidden';nc.name='noteColor';nc.value=(val('note',it.id)||{}).color||'#dbeefe';f.appendChild(nc);
       vi.parentElement.after(nl);
-      var formatting=window.NHI_STUDY?window.NHI_STUDY.editor(f,{ko:ko,vi:vi,note:notes,en:en},Object.assign({},val('fmt',it.id)||{},enEntry.format||{},{_sizes:Object.assign({},(val('fmt',it.id)||{})._sizes||{},(enEntry.format||{})._sizes||{})}),{noteColor:nc}):null;
+      var savedFormat=Object.assign({},val('fmt',it.id)||{});if(enEntry.format){savedFormat.en=enEntry.format.en||savedFormat.en;savedFormat._sizes=Object.assign({},savedFormat._sizes||{},Number((enEntry.format._sizes||{}).en)?{en:enEntry.format._sizes.en}:{});}
+      var formatting=window.NHI_STUDY?window.NHI_STUDY.editor(f,{ko:ko,vi:vi,note:notes,en:en},savedFormat,{noteColor:nc}):null;
       var pl=el('label','flabel');pl.appendChild(el('span',null,'Cặp từ Việt | Hàn (mỗi dòng một cặp, có thể sửa khi tách tự động chưa đúng)'));var pairs=el('textarea','field');pairs.name='pairs';pairs.rows=4;pairs.value=it.pairs.filter(function(p){return p[0]&&p[1];}).map(function(p){return p.join(' | ');}).join('\n');pl.appendChild(pairs);f.appendChild(pl);var originalPairText=pairs.value;
       var row = el('div', 'btnrow'), ok = el('button', 'primary', 'Lưu'); ok.type = 'submit'; row.appendChild(ok);
       row.appendChild(btn('ghost', 'Huỷ', function () { sess.editing = false; render(); }));
@@ -3495,7 +3496,8 @@ button,input,select,textarea{font-family:var(--ui)}
         f.appendChild(hlText(el('p', 'vi-under'), it, 'vi', true));
         var dictionaries=el('div','nhi-card-dictionaries');if(window.NHI_STUDY)window.NHI_STUDY.dictionaryButtons(dictionaries,function(){return s.selectedKo||it.ko;});f.appendChild(dictionaries);
         var note=val('note',it.id)||{text:it.note,color:'#dbeefe'};if(note&&note.text){var nt=el('p','nhi-card-note',note.text);nt.style.background=note.color||'#dbeefe';if(window.NHI_STUDY)window.NHI_STUDY.formatText(nt,val('fmt',it.id)||{},'note');f.appendChild(nt);}
-        if(window.NHI_ENGLISH)window.NHI_ENGLISH.mount(f,it.id,it.vi,it.ko,{format:val('fmt',it.id)||{},unremembered:!!val('enHard',it.id),toggle:function(on){put('enHard',it.id,on?1:null);}});
+        var englishBox=window.NHI_ENGLISH?window.NHI_ENGLISH.mount(f,it.id,it.vi,it.ko,{format:val('fmt',it.id)||{},unremembered:!!val('enHard',it.id),toggle:function(on){put('enHard',it.id,on?1:null);}}):null;
+        if(nt&&englishBox){var details=el('div','nhi-card-details');nt.before(details);details.appendChild(nt);details.appendChild(englishBox);}
         if(window.NHI_IMAGES){try{var illustration=window.NHI_IMAGES.figure(it,val('img',it.id));if(illustration){f.classList.add('nhi-with-image');f.appendChild(illustration);}}catch(imageErr){console.warn('Nhi picture unavailable',imageErr);}}
       } else f.appendChild(hlText(el('p', 'prompt' + (it.vi.length > 55 ? ' long' : '')), it, 'vi', true));
       f.addEventListener('click', function (e) { if (e.target.closest('figure,.nhi-english-v5,button,input,a,.nhi-card-dictionaries')) return; if (s.editing || e.target.closest('.ph.tap')) return; flip(); });
