@@ -70,10 +70,19 @@ function fit(){
   return;
  }
  const top=card.getBoundingClientRect().top;
- if(top<0||top>innerHeight-280){
-  document.body.classList.remove('nhi-viewport-fit');return;
+ // Never force a minimum card height larger than the space actually visible.
+ // That used to hide the final "Khó" control on shorter laptop screens.
+ if(top<0||top>innerHeight-210){
+  document.body.classList.remove('nhi-viewport-fit');
+  card.style.removeProperty('--nhi-card-fit');
+  return;
  }
- const usable=Math.max(310,Math.round(innerHeight-top-10));
+ const usable=Math.max(0,Math.floor(innerHeight-top-8));
+ if(usable<210){
+  document.body.classList.remove('nhi-viewport-fit');
+  card.style.removeProperty('--nhi-card-fit');
+  return;
+ }
  card.style.setProperty('--nhi-card-fit',usable+'px');
  document.body.classList.add('nhi-viewport-fit');
 }
