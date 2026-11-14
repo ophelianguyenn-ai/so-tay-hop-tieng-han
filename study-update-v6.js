@@ -5,7 +5,7 @@ const make=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.classNa
 function button(text,fn){const b=make('button','ghost',text);b.type='button';b.onclick=fn;return b;}
 const palettes=[['#dbeefe','Xanh biển'],['#fce1ed','Hồng'],['#fff3c4','Vàng'],['#ffe4cc','Cam'],['#ffdddd','Đỏ nhạt'],['#e6e0fa','Tím'],['#ddf4e4','Xanh lá']];
 function icon(kind){
- const svg=kind==='headphones'?'<path d="M8 32v-7a24 24 0 0 1 48 0v7M13 25h5v29h-5a7 7 0 0 1-7-7V32a7 7 0 0 1 7-7zm38 0h-5v29h5a7 7 0 0 0 7-7V32a7 7 0 0 0-7-7z" fill="none" stroke="#00bda5" stroke-width="4"/><path d="M11 22a21 21 0 0 1 42 0" fill="none" stroke="#12bafa" stroke-width="3"/>':'<g stroke="#171717" stroke-width="3" stroke-linejoin="round"><path d="M9 45L44 10l12 12-35 35-16 4z" fill="#ffd343"/><path d="M44 10l4-4q4-4 8 0l6 6q4 4 0 8l-6 4z" fill="#ed493b"/><path d="M9 45l12 12-16 4z" fill="#f4cd7e"/><path d="M6 54l6 5-7 2z" fill="#4e4f55"/><path d="M15 48l34-34M20 53l34-34" fill="none"/></g>';
+ const svg=kind==='headphones'?'<defs><linearGradient id="nhiNeonPhones" x1="0" y1="1" x2="1" y2="0"><stop stop-color="#19ed73"/><stop offset=".54" stop-color="#00cbd4"/><stop offset="1" stop-color="#10aaf8"/></linearGradient></defs><circle cx="34" cy="34" r="31" fill="#211e20"/><path d="M11 38v-9a23 23 0 0 1 46 0v9" fill="none" stroke="#10d7f6" stroke-width="3.8" stroke-linecap="round"/><path d="M15 38v-7a19 19 0 0 1 38 0v7" fill="none" stroke="url(#nhiNeonPhones)" stroke-width="2.6" stroke-linecap="round"/><rect x="10" y="33" width="14" height="24" rx="6" fill="#161a20" stroke="url(#nhiNeonPhones)" stroke-width="3.8"/><rect x="44" y="33" width="14" height="24" rx="6" fill="#161a20" stroke="url(#nhiNeonPhones)" stroke-width="3.8"/><path d="M24 38v14M44 38v14" fill="none" stroke="#01eab9" stroke-width="2" stroke-linecap="round"/><g fill="#15cfe0"><circle cx="34" cy="6" r="2"/><circle cx="8" cy="20" r="1.5"/><circle cx="61" cy="23" r="2"/></g>':'<g stroke="#171717" stroke-width="3" stroke-linejoin="round"><path d="M9 45L44 10l12 12-35 35-16 4z" fill="#ffd343"/><path d="M44 10l4-4q4-4 8 0l6 6q4 4 0 8l-6 4z" fill="#ed493b"/><path d="M9 45l12 12-16 4z" fill="#f4cd7e"/><path d="M6 54l6 5-7 2z" fill="#4e4f55"/><path d="M15 48l34-34M20 53l34-34" fill="none"/></g>';
  return '<svg viewBox="0 0 68 68" aria-hidden="true" focusable="false">'+svg+'</svg>';
 }
 function dictionaryIcon(kind){return '<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><rect width="64" height="64" rx="4" fill="#073dbb"/><text x="7" y="47" fill="#00ed68" font-family="Arial,sans-serif" font-size="43" font-weight="900">'+(kind==='ko-vi'?'V':'K')+'</text><g fill="white" font-family="sans-serif" font-size="14" font-weight="700"><text x="47" y="20">가</text><text x="47" y="37">あ</text><text x="47" y="54">文</text></g></svg>';}
@@ -57,22 +57,23 @@ function dictionaryButtons(root,value){
    const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
    if(reduce){dictionary(selected,kind);return;}
    b.disabled=true;b.classList.add('nhi-burst');
-   for(let i=0;i<9;i++){
+   for(let i=0;i<42;i++){
     const spark=make('i','nhi-pop-spark');spark.setAttribute('aria-hidden','true');
-    const angle=2*Math.PI*i/9,distance=24+(i%3)*8;
+    const angle=2*Math.PI*i/42,distance=42+(i%6)*15;
     spark.style.setProperty('--dx',Math.cos(angle)*distance+'px');
     spark.style.setProperty('--dy',Math.sin(angle)*distance+'px');
-    spark.style.setProperty('--spark-color',dark);
+    spark.style.setProperty('--spark-color',i%4===0?'#fff7a0':i%3===0?'#ffffff':dark);spark.style.setProperty('--spark-size',(3+i%5*1.8)+'px');spark.style.setProperty('--spark-duration',(.55+(i%5)*.10)+'s');
     spark.style.left=(b.offsetLeft+b.offsetWidth/2)+'px';
     spark.style.top=(b.offsetTop+b.offsetHeight/2)+'px';
-    pair.append(spark);setTimeout(()=>spark.remove(),440);
+    pair.append(spark);setTimeout(()=>spark.remove(),1020);
    }
-   setTimeout(()=>{dictionary(selected,kind);},270);
-   setTimeout(()=>{b.classList.remove('nhi-burst');b.disabled=false;},470);
+   setTimeout(()=>{dictionary(selected,kind);},530);
+   setTimeout(()=>{b.classList.remove('nhi-burst');b.disabled=false;},970);
   });
   b.className='nhi-dict-bubble';b.dataset.dict=kind;
   b.title=label;b.setAttribute('aria-label',label);
   b.innerHTML='<svg viewBox="0 0 64 64" aria-hidden="true" focusable="false"><path d="M31 3C14 3 3 16 3 32c0 11 7 21 17 26l-2 5 14-6c17-1 29-12 29-28C61 14 48 3 31 3Z" fill="'+dark+'"/><path d="M17 19C23 12 32 10 39 11" stroke="'+light+'" stroke-width="5" stroke-linecap="round" opacity=".8" fill="none"/><text x="32" y="40" text-anchor="middle" fill="'+(kind==='ko-vi'?'#fff':'#14283f')+'" font-family="Arial,sans-serif" font-size="21" font-weight="800">'+word+'</text></svg>';
+  for(let sparkle=0;sparkle<4;sparkle++){const fleck=make('i','nhi-glitter');fleck.setAttribute('aria-hidden','true');b.append(fleck);}
   pair.append(b);
  }
  root.append(pair);
