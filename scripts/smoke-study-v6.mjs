@@ -48,6 +48,7 @@ try{
  assert(await page.$$eval('.pundo',e=>e.length)===1,'Delete should expose one undo');
  await page.click('.pundo');assert(await page.$eval('.pcard',e=>e.dataset.item)===before,'Undo restored wrong card');
  await page.keyboard.press('Delete');await page.keyboard.press('ArrowRight');assert(await page.$$eval('.pundo',e=>e.length)===0,'Undo did not expire on third card');
+ await page.click('#setBtn');await page.click('#fxChk');await page.click('#setSheet [data-close]');
  await page.keyboard.press('1');await page.waitForSelector('#nhi-hard-mascot');
  assert(await page.$eval('.pcard',e=>e.contains(document.getElementById('nhi-hard-mascot'))),'Mascot is detached from card');
  await page.keyboard.press('ArrowRight');assert(await page.$('#nhi-hard-mascot')===null,'Mascot survived card transition');
@@ -56,6 +57,10 @@ try{
  await page.click('#aiInput');await page.type('#aiInput','Giải thích từ này');await page.keyboard.press('Enter');
  await page.waitForFunction(()=>document.querySelector('#aiLog').textContent.includes('Giải thích từ này'));
  await page.click('#aiClose');
+ await page.click('#planBox .shead button:first-child');
+ await page.evaluate(()=>[...document.querySelectorAll('#planBox button')].find(b=>b.textContent.includes('Ôn chưa nhớ tiếng Anh')).click());
+ await page.waitForSelector('#planBox .pcard');
+ assert((await page.$eval('#planBox .counter',e=>e.textContent)).endsWith('/ 1'),'English review includes unrelated cards');
  assert(errors.length===0,'Page runtime errors: '+errors.join('; '));
  console.log('STUDY V6 PASS',JSON.stringify({spoken,editor:bounds,notes:true,formatting:true,englishReview:true,dictionaries:true,pasteImage:true,undo:true,keyboard:true,mascot:true,chatEnter:true}));
 }finally{await browser.close();}
