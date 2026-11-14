@@ -2958,6 +2958,7 @@ button,input,select,textarea{font-family:var(--ui)}
     function del(id) {
       if (!ITEMS[id] || val('del', id)) return;
       var inSession = !!(sess && sess.queue[sess.pos] === id);
+      ++ratingToken;ratingPending=false;pendingRatingFinish=null;
       stopSpeech(); if(window.NHI_HARD_MASCOT)window.NHI_HARD_MASCOT.clear(); undoHistory=[];
       undoHistory.push({ id: id, t: Date.now(), del: val('del', id), hard: val('hard', id),
         inSession: inSession, kind: inSession ? sess.kind : '', title: inSession ? sess.title : '',
@@ -3574,7 +3575,7 @@ button,input,select,textarea{font-family:var(--ui)}
         if(button)button.setAttribute('aria-pressed', 'true');
       }
       function finish(){
-        if (token !== ratingToken || sess !== s || s.pos !== pos) { ratingPending = false; return; }
+        if (token !== ratingToken || sess !== s || s.pos !== pos) return;
         ratingPending = false; pendingRatingFinish=null;
         if(window.NHI_HARD_MASCOT)window.NHI_HARD_MASCOT.clear();
         s.stats[k] = (s.stats[k] || 0) + 1; s.picked[pos] = k;

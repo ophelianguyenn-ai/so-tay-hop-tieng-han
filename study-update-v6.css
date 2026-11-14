@@ -14,7 +14,7 @@
 #planBox .pcard .prompt{font-size:clamp(19px,4.5cqi,28px)!important}
 #planBox .pcard .answer.ko{font-size:clamp(23px,5.5cqi,40px)!important}
 #planBox .pcard:has(.nhi-editor-window-v5),#planBox .pcard:has(.nhi-picture-picker){transform:none!important;animation:none!important;filter:none!important;container-type:normal}
-#planBox .nhi-editor-window-v5,.nhi-picture-picker{position:fixed!important;inset:auto!important;top:4dvh!important;left:50%!important;transform:translateX(-50%)!important;z-index:210!important;width:min(740px,94vw)!important;max-height:90dvh!important;overflow:auto!important;margin:0!important;padding:48px 20px 20px!important;background:var(--surface)!important;color:var(--ink);border:2px solid var(--line);border-radius:20px;box-shadow:0 0 0 100vmax #10233166,0 20px 70px #0005;text-align:left}
+html body #planBox .pcard .nhi-editor-window-v5,html body .nhi-picture-picker{position:fixed!important;inset:auto!important;top:4dvh!important;left:50%!important;transform:translateX(-50%)!important;z-index:210!important;width:min(740px,94vw)!important;max-height:90dvh!important;overflow:auto!important;margin:0!important;padding:48px 20px 20px!important;background:var(--surface)!important;color:var(--ink);border:2px solid var(--line);border-radius:20px;box-shadow:0 0 0 100vmax #10233166,0 20px 70px #0005;text-align:left}
 .nhi-picture-picker{z-index:220!important}
 .nhi-picture-head{position:sticky;top:-48px;background:var(--surface);z-index:2;padding:10px 0}
 .nhi-format-tools{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:8px;font-size:12px}.nhi-format-tools button{padding:2px 9px;min-height:32px}.nhi-format-tools input[type=color]{width:34px;height:32px;padding:0;border:0}

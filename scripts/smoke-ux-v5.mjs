@@ -59,7 +59,7 @@ try{
  await page.waitForSelector('#planBox .editbox',{timeout:5000});
  const beforeOutside=await page.evaluate(()=>{
    var e=document.querySelector('#planBox .editbox'),r=e?.getBoundingClientRect(),target=document.elementFromPoint(4,430);
-   return {diag:window.NHI_V5_CHECK?.context(),events:window.NHI_V5_CHECK?.events?.slice(-6),rect:r?{x:r.x,y:r.y,w:r.width,h:r.height}:null,
+   return {position:e&&getComputedStyle(e).position,css:[...document.styleSheets].map(x=>x.href),ancestors:e&&[e.parentElement,e.parentElement.parentElement,e.parentElement.parentElement.parentElement].map(x=>({class:x.className,transform:getComputedStyle(x).transform,perspective:getComputedStyle(x).perspective,container:getComputedStyle(x).containerType})),diag:window.NHI_V5_CHECK?.context(),events:window.NHI_V5_CHECK?.events?.slice(-6),rect:r?{x:r.x,y:r.y,w:r.width,h:r.height}:null,
     target:target?.tagName+'#'+target?.id+'.'+target?.className,contains:e?.contains(target)};
  });
  console.log('V5 OUTSIDE BEFORE',JSON.stringify(beforeOutside));
