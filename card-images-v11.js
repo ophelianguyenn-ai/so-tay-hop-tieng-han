@@ -2,7 +2,48 @@
 'use strict';var presets={};fetch('technical-images.json').then(function(r){return r.json();}).then(function(d){presets=d;}).catch(function(){});
 function node(tag,text){var n=document.createElement(tag);if(text)n.textContent=text;return n;}
 function safe(url){return /^pictures\/[a-z-]+\.webp$/.test(url)||/^https:\/\//i.test(url)||/^data:image\/(jpeg|png|webp);base64,/.test(url);}
-function figure(it,value){var v=value||presets[it.ko];if(!v||v.hidden||!safe(v.url||''))return null;var f=node('figure');f.className='card-illustration';var im=node('img');im.src=v.url;im.alt=v.caption||it.vi;im.loading='lazy';im.referrerPolicy='no-referrer';im.onerror=function(){im.hidden=true;};f.appendChild(im);var cap=node('figcaption',v.caption||it.vi);if(v.source&&/^https:\/\//.test(v.source)){cap.appendChild(node('br'));var a=node('a',v.credit||'Nguồn ảnh');a.href=v.source;a.target='_blank';a.rel='noopener noreferrer';cap.appendChild(a);}f.appendChild(cap);return f;}
+function figure(it,value,onResize){
+  var v=value||presets[it.ko];if(!v||v.hidden||!safe(v.url||''))return null;
+  var f=node('figure');f.className='card-illustration';
+  var im=node('img');im.src=v.url;im.alt=v.caption||it.vi;im.loading='lazy';im.referrerPolicy='no-referrer';im.draggable=false;
+  im.onerror=function(){im.hidden=true;};f.appendChild(im);
+  var cap=node('figcaption',v.caption||it.vi);
+  if(v.source&&/^https:\/\//.test(v.source)){cap.appendChild(node('br'));var link=node('a',v.credit||'Nguồn ảnh');link.href=v.source;link.target='_blank';link.rel='noopener noreferrer';cap.appendChild(link);}
+  f.appendChild(cap);
+  if(typeof onResize==='function'){
+    var width=Math.max(110,Math.min(680,Number(v.width)||220));
+    f.dataset.resizable='true';f.setAttribute('aria-label','Kéo trực tiếp trên hình để thay đổi kích thước');
+    im.title='Giữ và kéo trên hình để thu nhỏ hoặc phóng to';
+    im.style.touchAction='none';
+    function paint(){
+      f.style.setProperty('--nhi-image-width',width+'px');
+      var parent=f.closest('.pfront');if(parent)parent.style.setProperty('--nhi-image-width',width+'px');
+    }
+    var drag=null;
+    im.addEventListener('pointerdown',function(e){
+      if(e.pointerType==='mouse'&&e.button!==0)return;
+      e.preventDefault();e.stopPropagation();
+      paint();
+      drag={id:e.pointerId,x:e.clientX,y:e.clientY,width:width};
+      f.classList.add('nhi-image-dragging');im.setPointerCapture(e.pointerId);
+    });
+    im.addEventListener('pointermove',function(e){
+      if(!drag||e.pointerId!==drag.id)return;
+      var parent=f.closest('.pfront'),maxWidth=parent?Math.max(160,Math.min(680,parent.clientWidth*.75)):680;
+      width=Math.max(110,Math.min(maxWidth,drag.width+Math.max(e.clientX-drag.x,e.clientY-drag.y)));
+      paint();e.stopPropagation();
+    });
+    function finish(e){
+      if(!drag)return;
+      drag=null;f.classList.remove('nhi-image-dragging');
+      onResize(Object.assign({},v,{width:Math.round(width)}));
+      if(e)e.stopPropagation();
+    }
+    im.addEventListener('pointerup',finish);im.addEventListener('pointercancel',finish);
+    requestAnimationFrame(paint);
+  }
+  return f;
+}
 function editor(it,value,save){var box=node('fieldset');box.className='image-editor';box.appendChild(node('legend','Hình ảnh minh họa'));var current=value||presets[it.ko]||{},draft=Object.assign({},current);
 var preview=node('div');box.appendChild(preview);function paint(){preview.replaceChildren();var f=figure(it,draft);if(f)preview.appendChild(f);}paint();
 function field(label,val){var l=node('label',label),i=node('input');i.className='field';i.value=val||'';l.appendChild(i);box.appendChild(l);return i;}
