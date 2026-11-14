@@ -157,3 +157,54 @@
 .nhi-en-choice[aria-pressed=true] .nhi-choice-check{color:#087b60}
 .nhi-choice-check input{margin:0}
 @media(hover:hover){.nhi-en-choice:hover .nhi-choice-check{color:var(--accent-t)}}
+
+/* November 14 refinement: matching AI toolbar controls and reliable laptop fitting. */
+#aiPanel .aihead > #aiClose,
+#aiPanel .aihead > #aiCfgBtn,
+#aiPanel .aihead > #aiNewBtn {
+  box-sizing:border-box!important;
+  width:36px!important;height:36px!important;
+  flex:0 0 36px!important;
+  border:2px solid var(--line)!important;
+  border-radius:10px!important;
+  box-shadow:0 2px 0 var(--edge)!important;
+}
+#aiPanel .aihead > #aiClose:hover,
+#aiPanel .aihead > #aiCfgBtn:hover,
+#aiPanel .aihead > #aiNewBtn:hover {
+  border-color:var(--accent-t)!important;color:var(--accent-t)!important;
+}
+#aiPanel .ai-font-control { height:36px!important;gap:4px!important; }
+#aiPanel .ai-font-control>span {
+  display:grid!important;place-items:center!important;
+  width:24px!important;height:36px!important;
+  font-size:15px!important;font-weight:800!important;
+}
+#aiPanel .ai-font-control select {
+  height:36px!important;border:2px solid var(--line)!important;
+  box-shadow:0 2px 0 var(--edge)!important;
+}
+#planBox .cicons>.hjbtn { box-sizing:border-box!important;border-width:2px!important; }
+#planBox .nhi-card-details>.nhi-card-note,
+#planBox .pfront>.nhi-card-note {
+  display:table!important;width:fit-content!important;
+  max-width:min(100%,72ch)!important;justify-self:center!important;
+  overflow-wrap:anywhere!important;
+}
+#planBox .pfront>.vi-under {
+  font-family:"Times New Roman",Times,serif!important;
+  text-align:center!important;
+}
+.nhi-english-v5 .nhi-en-choice:hover *,
+.nhi-english-v5 .nhi-en-choice:focus-within * {
+  text-decoration:none!important;
+}
+@media(min-width:720px) and (min-height:600px) {
+  body.nhi-viewport-fit #planBox .pcard>.prate { margin-top:auto!important; }
+  body.nhi-viewport-fit #planBox .pcard>.pfront { scrollbar-gutter:stable; }
+}
+@media(max-width:580px){
+ #aiPanel .aihead>#aiClose,#aiPanel .aihead>#aiCfgBtn,#aiPanel .aihead>#aiNewBtn {
+   width:32px!important; height:32px!important;flex-basis:32px!important;
+ }
+}
