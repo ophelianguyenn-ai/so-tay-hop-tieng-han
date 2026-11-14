@@ -56,7 +56,7 @@ function setup(){
 }
 function reset(){
  sceneId++;scheduled.forEach(clearTimeout);scheduled=[];
- cover.classList.remove('nhi-romance-v2-running','nhi-v2-kissing','nhi-v2-done','nhi-v2-talking','nhi-v2-preview');
+ cover.classList.remove('nhi-romance-v2-running','nhi-v2-kissing','nhi-v2-done','nhi-v2-talking','nhi-v2-preview','nhi-v2-idle');
  document.querySelector('.nhi-illustrated-hearts')?.replaceChildren();
  document.querySelector('.nhi-illustrated-flowers')?.replaceChildren();
 }
@@ -78,7 +78,7 @@ function heartBurst(count){
 }
 function petalSVG(index){
  // Original storybook illustration rather than emoji or stock rose.
- if(index%4===0)return '<svg viewBox="0 0 34 44" aria-hidden="true"><path d="M18 3C7 8 1 20 4 32q10 15 22 5C35 27 32 12 18 3Z" fill="#f9b3bf" stroke="#e08fa0" stroke-width="1.4"/><path d="M10 31q13-13 9-25" stroke="#ec8f9c" fill="none" stroke-width="1.7"/></svg>';
+ if(index%4===0)return '<svg viewBox="0 0 48 54" aria-hidden="true"><path d="M24 29q-4 10-1 23" stroke="#6d9e75" stroke-width="2.5" fill="none"/><path d="M24 40q-9-12-18-5 10 10 17 10M24 44q8-13 17-9-7 11-17 12" fill="#95bc87" stroke="#6a9b73" stroke-width="1.3"/><path d="M24 11C9-1 1 14 9 25 0 32 13 40 22 32 31 42 44 29 38 22 47 13 35 3 24 11Z" fill="#f6afc0" stroke="#dc829f" stroke-width="2"/><path d="M24 14q-17-5-12 10 4 14 15 8 17-6 8-17-8-8-11-1Z" fill="#f8c8cf" stroke="#e69eae" stroke-width="1.5"/><path d="M17 22q6-13 15 0 2 9-8 10-9 0-7-10Z" fill="#f2a2b6" stroke="#db7e9c" stroke-width="1.4"/><path d="M19 24q5-6 10 0-2 5-8 4" fill="none" stroke="#fff0eb" stroke-width="2" stroke-linecap="round"/></svg>';
  return '<svg viewBox="0 0 34 44" aria-hidden="true"><path d="M17 3C5 5 0 16 5 30c5 11 14 14 23 3C31 23 30 8 17 3Z" fill="'+(['#f6c2c7','#f3abbf','#f9c9b8'][index%3])+'" stroke="#d995a3" stroke-width="1.5"/><path d="M11 29q12-10 9-21" fill="none" stroke="#e49caa" stroke-width="1.7"/></svg>';
 }
 function petals(count){
@@ -108,6 +108,7 @@ function start(){
  delay(()=>{if(run===sceneId){cover.classList.add('nhi-v2-kissing');heartBurst(7);petals(8);}},7200);
  delay(()=>{if(run===sceneId)cover.classList.remove('nhi-v2-kissing');},9900);
  delay(()=>{if(run===sceneId)cover.classList.add('nhi-v2-done');},12800);
+ delay(()=>{if(run===sceneId)cover.classList.add('nhi-v2-idle');},16100);
 }
 function tone(ctx,hz,start,len,volume){
  const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=hz;
