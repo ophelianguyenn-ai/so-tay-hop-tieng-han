@@ -136,3 +136,105 @@ html body #planBox .pcard .pfront .nhi-en-choice:hover *{
  padding:9px 11px!important;
  }
 }
+
+/* Rating toolbar: blue Difficulty left, two narrow adjacent pink arrows right. */
+html body #planBox .pcard>.prate.nhi-rating-v3{
+  width:min(100%,470px)!important;
+  max-width:470px!important;
+  gap:0!important;
+  padding:6px 8px!important;
+  justify-content:center!important;
+  min-height:58px!important;
+  margin:10px auto 13px!important;
+}
+html body #planBox .pcard>.prate.nhi-rating-v3>.hard{
+  order:0!important;
+  flex:0 1 145px!important;
+  min-width:82px!important;
+  max-width:145px!important;
+  height:44px!important;
+  margin-right:13px!important;
+  background:linear-gradient(165deg,#bfeaff,#70c5f2)!important;
+  border:2px solid #389dd5!important;
+  color:#14547f!important;
+  box-shadow:0 4px 0 #3e9bcf!important;
+}
+html body #planBox .pcard>.prate.nhi-rating-v3>.hard:hover{
+  background:linear-gradient(165deg,#d5f2ff,#91d6f5)!important;
+}
+html body #planBox .pcard>.prate.nhi-rating-v3>.nhi-prev-v3,
+html body #planBox .pcard>.prate.nhi-rating-v3>.nhi-next-v3{
+  flex:0 0 clamp(41px,7vw,63px)!important;
+  min-width:41px!important;
+  max-width:63px!important;
+  width:clamp(41px,7vw,63px)!important;
+  height:44px!important;
+  border-radius:12px!important;
+}
+html body #planBox .pcard>.prate.nhi-rating-v3>.nhi-prev-v3{
+  order:1!important;
+  margin-right:2px!important;
+}
+html body #planBox .pcard>.prate.nhi-rating-v3>.nhi-next-v3{
+  order:2!important;
+}
+html body #planBox .pcard>.prate.nhi-rating-v3>.pundo{
+  order:3!important;
+}
+/* Trash is a child of card itself, never part of the centered toolbar. */
+html body #planBox .pcard{
+  position:relative!important;
+  padding-bottom:max(16px,env(safe-area-inset-bottom,0px))!important;
+}
+html body #planBox .pcard>.pdel.nhi-card-corner-trash{
+  position:absolute!important;
+  right:9px!important;
+  bottom:9px!important;
+  width:31px!important;height:31px!important;
+  min-width:31px!important;min-height:31px!important;
+  max-width:31px!important;max-height:31px!important;
+  display:grid!important;place-items:center!important;
+  border:1px solid #e0acb3!important;
+  background:var(--surface)!important;
+  color:#ad6979!important;
+  border-radius:9px!important;
+  box-shadow:0 2px 3px #543b4a14!important;
+  z-index:6!important;
+  padding:4px!important;
+}
+html body #planBox .pcard>.pdel.nhi-card-corner-trash svg{
+  width:17px!important;height:17px!important;
+}
+html body #planBox .pcard>.pdel.nhi-card-corner-trash:hover{
+  color:#bb3e64!important;
+  border-color:#c87794!important;
+  background:#ffedf1!important;
+}
+html body #planBox .pcard .hanja.nhi-hanja-lookup{
+  display:table!important;
+  width:max-content!important;
+  max-width:100%!important;
+  margin-inline:auto!important;
+  color:var(--ink)!important;
+  text-decoration:none!important;
+  cursor:pointer!important;
+  outline-offset:3px!important;
+}
+html body #planBox .pcard .hanja.nhi-hanja-lookup:hover{
+  background:color-mix(in srgb,var(--accent-soft) 65%,#bfddff)!important;
+  color:var(--accent-t)!important;
+  text-decoration:none!important;
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--accent-t) 32%,transparent);
+}
+html body #planBox .pcard .hanja.nhi-hanja-lookup small{
+  text-decoration:none!important;
+}
+@media(max-width:500px){
+ html body #planBox .pcard>.prate.nhi-rating-v3{
+  padding:5px 6px!important;
+ }
+ html body #planBox .pcard>.prate.nhi-rating-v3>.hard{
+  margin-right:9px!important;
+  flex:0 1 120px!important;
+ }
+}
